@@ -12,7 +12,7 @@ export default function Categories() {
   return (
     <>
       <Helmet>
-        <title> Categories | Minimal UI</title>
+        <title> Categories</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

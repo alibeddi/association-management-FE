@@ -12,7 +12,7 @@ export default function Dashboard() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI</title>
+        <title> Dashboard</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

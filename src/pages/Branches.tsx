@@ -12,7 +12,7 @@ export default function Branches() {
   return (
     <>
       <Helmet>
-        <title> Branches | Minimal UI</title>
+        <title> Branches</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

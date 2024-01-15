@@ -1,39 +1,36 @@
-import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
-  Card,
-  Table,
   Button,
-  Tooltip,
-  TableBody,
+  Card,
   Container,
   IconButton,
+  Table,
+  TableBody,
   TableContainer,
+  Tooltip
 } from '@mui/material';
 // routes
+import { useSettingsContext } from 'src/components/settings';
 import { PATH_DASHBOARD } from '../routes/paths';
 // @types
-import { IVehicleGeneral } from '../@types/vehicle';
 // IVehicleGeneral
 import { _vehicleList } from '../_mock/arrays';
 // components
-import Iconify from '../components/iconify';
-import Scrollbar from '../components/scrollbar';
 import ConfirmDialog from '../components/confirm-dialog';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
-import { useSettingsContext } from '../components/settings';
+import Iconify from '../components/iconify';
+import Scrollbar from '../components/scrollbar';
 import {
-  useTable,
-  getComparator,
   emptyRows,
-  TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
+  TableNoData,
   TablePaginationCustom,
+  TableSelectedAction,
+  useTable
 } from '../components/table';
 // sections
 import { VehicleTableRow, VehicleTableToolbar } from '../sections/@dashboard/vehicle/list';
@@ -176,7 +173,7 @@ export default function UserListPage() {
   return (
     <>
       <Helmet>
-        <title> Vehicle: List | Minimal UI</title>
+        <title> Vehicle: List</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
