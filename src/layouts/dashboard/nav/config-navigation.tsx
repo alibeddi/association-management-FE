@@ -18,6 +18,7 @@ const ICONS = {
   reservations: icon('ic_reservations'),
   pricing: icon('ic_pricing'),
   settings: icon('ic_settings'),
+  groupPermissions: icon('ic_settings'),
 };
 
 const navConfig = [
@@ -66,6 +67,11 @@ const navConfig = [
           { title: 'users', path: PATH_DASHBOARD.settings.users },
           { title: 'bookableExtras', path: PATH_DASHBOARD.settings.bookableExtras },
         ],
+      },
+      {
+        title: 'group permissions',
+        path: PATH_DASHBOARD.groupPermissions,
+        icon: ICONS.settings,
       },
     ],
   },

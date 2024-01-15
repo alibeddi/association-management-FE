@@ -39,4 +39,5 @@ export const PATH_DASHBOARD = {
     users: path(ROOTS_DASHBOARD, '/settings/users'),
     bookableExtras: path(ROOTS_DASHBOARD, '/settings/bookableExtras'),
   },
+  groupPermissions: path(ROOTS_DASHBOARD, '/permissions'),
 };
