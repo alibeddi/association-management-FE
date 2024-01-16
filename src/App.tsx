@@ -9,48 +9,53 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 
 // ----------------------------------------------------------------------
 
-import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { BrowserRouter } from 'react-router-dom';
 // routes
+import { Provider } from 'react-redux';
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
 // locales
 import ThemeLocalization from './locales';
 // components
-import SnackbarProvider from './components/snackbar';
-import ScrollToTop from './components/scroll-to-top';
 import { MotionLazyContainer } from './components/animate';
-import { ThemeSettings, SettingsProvider } from './components/settings';
+import ScrollToTop from './components/scroll-to-top';
+import { SettingsProvider, ThemeSettings } from './components/settings';
+import SnackbarProvider from './components/snackbar';
 
 // Check our docs
 // https://docs.minimals.cc/authentication/ts-version
 
 import { AuthProvider } from './auth/JwtContext';
+import { store } from './redux/store';
 
 // ----------------------------------------------------------------------
 
 export default function App() {
   return (
-    <AuthProvider>
-      <HelmetProvider>
-        <SettingsProvider>
-          <BrowserRouter>
-            <ScrollToTop />
-            <MotionLazyContainer>
-              <ThemeProvider>
-                <ThemeSettings>
-                  <ThemeLocalization>
-                    <SnackbarProvider>
-                      <Router />
-                    </SnackbarProvider>
-                  </ThemeLocalization>
-                </ThemeSettings>
-              </ThemeProvider>
-            </MotionLazyContainer>
-          </BrowserRouter>
-        </SettingsProvider>
-      </HelmetProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <HelmetProvider>
+          <SettingsProvider>
+            <BrowserRouter>
+              <ScrollToTop />
+              <MotionLazyContainer>
+                <ThemeProvider>
+                  <ThemeSettings>
+                    <ThemeLocalization>
+                      <SnackbarProvider>
+                        <Router />
+                      </SnackbarProvider>
+                    </ThemeLocalization>
+                  </ThemeSettings>
+                </ThemeProvider>
+              </MotionLazyContainer>
+            </BrowserRouter>
+          </SettingsProvider>
+        </HelmetProvider>
+      </AuthProvider>
+      O
+    </Provider>
   );
 }

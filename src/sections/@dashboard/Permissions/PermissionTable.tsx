@@ -102,10 +102,10 @@ const PermissionTable = ({
                   </Typography>
                 </TableCell>
                 {actions?.map((column, columnIndex) => {
-                  const hasPermission =
-                    user?.role?.code?.toUpperCase() === 'SUPERADMIN'
-                      ? superAdminPermissions?.includes(`${row}_${column}`)
-                      : user?.permissions.includes(`${row}_${column}`);
+                  const hasPermission = true;
+                  // user?.role?.code?.toUpperCase() === 'SUPERADMIN'
+                  //   ? superAdminPermissions?.includes(`${row}_${column}`)
+                  //   : user?.permissions.includes(`${row}_${column}`);
                   const isAllowed = !(
                     hasPermission &&
                     ((isGroupPermissions && editGroupPermission) || !isGroupPermissions)
@@ -123,13 +123,9 @@ const PermissionTable = ({
                             : 0,
                       }}
                     >
-                      {!['idle', 'loading'].includes(status) ? (
+                      {!['idle', 'loading'].includes('status') ? (
                         <CheckboxComponent
-                          checked={
-                            permissionsAsString
-                              ? permissionsAsString.includes(`${row}_${column}`)
-                              : false
-                          }
+                          checked={false}
                           disabled={isAllowed}
                           model={row}
                           action={column}
