@@ -31,7 +31,19 @@ const slice = createSlice({
   name: 'permissions',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getPermissions.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(getPermissions.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.permissions = action.payload;
+      })
+      .addCase(getPermissions.rejected, (state, action) => {
+        state.status = IStatus.FAILED;
+      });
+  },
 });
 
 // eslint-disable-next-line no-empty-pattern

@@ -15,6 +15,19 @@ const initialState: PermissionState = {
   status: IStatus.IDLE,
 };
 
+export const getAllGroupPermissions = createAsyncThunk('group-permissions/GETALL', async () => {
+  let data;
+  try {
+    const response = await axios.get(`/group-permissions`);
+    data = await response.data;
+    if (response.status === 200) {
+      return data.data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+});
 
 export const getGroupPermission = createAsyncThunk(
   'group-permissions/GET',
@@ -35,10 +48,35 @@ export const getGroupPermission = createAsyncThunk(
 );
 
 const slice = createSlice({
-  name: 'permissions',
+  name: 'permissions_groups',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    // GET ALL
+    builder
+      .addCase(getAllGroupPermissions.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(getAllGroupPermissions.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.groupPermissions = action.payload;
+      })
+      .addCase(getAllGroupPermissions.rejected, (state, action) => {
+        state.status = IStatus.FAILED;
+      });
+    // GET ONE
+    builder
+      .addCase(getGroupPermission.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(getGroupPermission.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.groupPermission = action.payload;
+      })
+      .addCase(getGroupPermission.rejected, (state, action) => {
+        state.status = IStatus.FAILED;
+      });
+  },
 });
 
 // eslint-disable-next-line no-empty-pattern
