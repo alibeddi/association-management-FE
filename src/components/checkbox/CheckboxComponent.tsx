@@ -41,8 +41,8 @@ export default function CheckboxComponent({
       getAssignPermission({
         id: model.toString()?.concat('_').concat(action.toString()),
         checkingState,
-        permissions: groupPermissions?.permissions?.map((el) => ({
-          id: (el as { name: string })?.name,
+        permissions: groupPermissions?.permissions?.map((el: { name: string }) => ({
+          id: el?.name,
           checkingState: true,
         })),
       })
@@ -66,7 +66,6 @@ export default function CheckboxComponent({
     </>
   );
 }
-function getAssignPermission(arg0: { id: string; checkingState: boolean; permissions: any; }): any {
+function getAssignPermission(arg0: { id: string; checkingState: boolean; permissions: any }): any {
   throw new Error('Function not implemented.');
 }
-

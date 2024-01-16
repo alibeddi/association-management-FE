@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   Divider,
   Skeleton,
   Table,
@@ -10,24 +9,20 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { User } from 'src/@types/User';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import CheckboxComponent from 'src/components/checkbox/CheckboxComponent';
 import Scrollbar from 'src/components/scrollbar';
 import { TableNoData } from 'src/components/table';
 import { useLocales } from 'src/locales';
-import { RootState, useSelector } from 'src/redux/store';    
-import { IAgencyUser } from '../../@types/agencyUser';
-import { IGroupPermissions } from '../../@types/permissions';
-import IsAuthorized from '../../utils/isAuthorized';
-import separateWords from '../../utils/manipulateStrings';
-import { PERMISSIONS } from '../../utils/permissions';
-import { underscoreToCamelCase } from '../../utils/uppercaseAndTrim';
-// import CheckboxComponent from '../checkbox/CheckBoxComponent';
+import { RootState, useSelector } from 'src/redux/store';
+import { PermissionGroup } from 'src/@types/PermissionGroup';
 
 type Props = {
   actions: string[];
   entities: string[];
   permissionsAsString: string[] | undefined;
-  groupPermissions: IGroupPermissions | null | IAgencyUser;
+  groupPermissions: PermissionGroup | null | User;
   superAdminPermissions?: string[];
   isGroupPermissions?: boolean;
 };
@@ -43,7 +38,8 @@ const PermissionTable = ({
   const { translate, currentLang } = useLocales();
   const { status } = useSelector((state: RootState) => state.permissions);
   const { user } = useAuthContext();
-  const editGroupPermission = IsAuthorized(PERMISSIONS.group.editPermission);
+  // const editGroupPermission = IsAuthorized(PERMISSIONS.group.editPermission);
+  const editGroupPermission = true;
   const isNotFound = !actions.length && !entities.length;
   return (
     <TableContainer sx={{ height: '600px' }}>
@@ -102,7 +98,7 @@ const PermissionTable = ({
                   }}
                 >
                   <Typography variant="subtitle1" noWrap>
-                    {`${translate(underscoreToCamelCase(separateWords(row)))}`}
+                    {`${translate(row)}`}
                   </Typography>
                 </TableCell>
                 {actions?.map((column, columnIndex) => {
