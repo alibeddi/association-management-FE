@@ -118,7 +118,35 @@ function Permissions() {
                 }}
               >
                 <Scrollbar>
-                  {permissionGroups.map((group: PermissionGroup) => (
+                  {[
+                    {
+                      _id: '1',
+                      name: 'group1',
+                      permissions: [
+                        { _id: '1', model: 'user', method: 'create' },
+                        { _id: '2', model: 'permissions', method: 'create' },
+                        { _id: '3', model: 'user', method: 'delete' },
+                      ],
+                    },
+                    {
+                      _id: '2',
+                      name: 'group2',
+                      permissions: [
+                        { _id: '1', model: 'user', method: 'create' },
+                        { _id: '2', model: 'permissions', method: 'create' },
+                        { _id: '3', model: 'user', method: 'delete' },
+                      ],
+                    },
+                    {
+                      _id: '3',
+                      name: 'group3',
+                      permissions: [
+                        { _id: '1', model: 'user', method: 'create' },
+                        { _id: '2', model: 'permissions', method: 'create' },
+                        { _id: '3', model: 'user', method: 'delete' },
+                      ],
+                    },
+                  ].map((group: PermissionGroup) => (
                     <GroupButton
                       isEdit={isEdit}
                       setIsEdit={setIsEdit}
@@ -155,7 +183,16 @@ function Permissions() {
           </Card>
           <PermissionTable
             actions={['create', 'delete', 'update', 'get', 'export', 'all', 'jsdc', 'jdhbc']}
-            entities={['user', 'permissions', 'branch', 'tasks', 'notens', 'calendar', 'notens', 'calendar']}
+            entities={[
+              'user',
+              'permissions',
+              'branch',
+              'tasks',
+              'notens',
+              'calendar',
+              'notens',
+              'calendar',
+            ]}
             groupPermissions={permissionGroup}
           />
         </Grid>
