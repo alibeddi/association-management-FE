@@ -1,5 +1,5 @@
 export interface Permission {
-  _id?: string;
+  _id: string;
   model: string;
   method: string;
   deletedAt?: Date;

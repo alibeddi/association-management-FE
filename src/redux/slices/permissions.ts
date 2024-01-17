@@ -40,7 +40,7 @@ const slice = createSlice({
         state.status = IStatus.SUCCEEDED;
         state.permissions = action.payload;
       })
-      .addCase(getPermissions.rejected, (state, action) => {
+      .addCase(getPermissions.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

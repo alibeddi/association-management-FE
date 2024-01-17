@@ -53,5 +53,5 @@ const slice = createSlice({
 });
 
 // Reducer
-export const reducer = slice.reducer;
+export const { reducer } = slice;
 export default slice;

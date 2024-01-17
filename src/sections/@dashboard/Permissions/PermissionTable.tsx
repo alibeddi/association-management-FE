@@ -9,37 +9,21 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { User } from 'src/@types/User';
-import { useAuthContext } from 'src/auth/useAuthContext';
+import { PermissionGroup } from 'src/@types/PermissionGroup';
 import CheckboxComponent from 'src/components/checkbox/CheckboxComponent';
 import Scrollbar from 'src/components/scrollbar';
 import { TableNoData } from 'src/components/table';
 import { useLocales } from 'src/locales';
-import { RootState, useSelector } from 'src/redux/store';
-import { PermissionGroup } from 'src/@types/PermissionGroup';
 
 type Props = {
   actions: string[];
   entities: string[];
-  permissionsAsString: string[] | undefined;
-  groupPermissions: PermissionGroup | null | User;
-  superAdminPermissions?: string[];
-  isGroupPermissions?: boolean;
+  groupPermissions: PermissionGroup | null;
 };
 
-const PermissionTable = ({
-  actions,
-  entities,
-  groupPermissions,
-  permissionsAsString,
-  superAdminPermissions,
-  isGroupPermissions = false,
-}: Props) => {
+const PermissionTable = ({ actions, entities, groupPermissions }: Props) => {
   const { translate, currentLang } = useLocales();
-  const { status } = useSelector((state: RootState) => state.permissions);
-  const { user } = useAuthContext();
-  // const editGroupPermission = IsAuthorized(PERMISSIONS.group.editPermission);
-  const editGroupPermission = true;
+
   const isNotFound = !actions.length && !entities.length;
   return (
     <TableContainer sx={{ height: '600px' }}>
@@ -101,42 +85,32 @@ const PermissionTable = ({
                     {`${translate(row)}`}
                   </Typography>
                 </TableCell>
-                {actions?.map((column, columnIndex) => {
-                  const hasPermission = true;
-                  // user?.role?.code?.toUpperCase() === 'SUPERADMIN'
-                  //   ? superAdminPermissions?.includes(`${row}_${column}`)
-                  //   : user?.permissions.includes(`${row}_${column}`);
-                  const isAllowed = !(
-                    hasPermission &&
-                    ((isGroupPermissions && editGroupPermission) || !isGroupPermissions)
-                  );
-                  return (
-                    <TableCell
-                      key={column}
-                      align="center"
-                      style={{
-                        width: 'fit-content',
-                        border: '1px solid #e6e6e6',
-                        borderBottomRightRadius:
-                          rowIndex === entities.length - 1 && columnIndex === actions.length - 1
-                            ? '10px'
-                            : 0,
-                      }}
-                    >
-                      {!['idle', 'loading'].includes('status') ? (
-                        <CheckboxComponent
-                          checked={false}
-                          disabled={isAllowed}
-                          model={row}
-                          action={column}
-                          groupPermissions={groupPermissions}
-                        />
-                      ) : (
-                        <Skeleton animation="wave" variant="text" />
-                      )}
-                    </TableCell>
-                  );
-                })}
+                {actions?.map((column, columnIndex) => (
+                  <TableCell
+                    key={column}
+                    align="center"
+                    style={{
+                      width: 'fit-content',
+                      border: '1px solid #e6e6e6',
+                      borderBottomRightRadius:
+                        rowIndex === entities.length - 1 && columnIndex === actions.length - 1
+                          ? '10px'
+                          : 0,
+                    }}
+                  >
+                    {!['idle', 'loading'].includes('status') ? (
+                      <CheckboxComponent
+                        checked={false}
+                        // disabled={isAllowed}
+                        model={row}
+                        action={column}
+                        groupPermissions={groupPermissions}
+                      />
+                    ) : (
+                      <Skeleton animation="wave" variant="text" />
+                    )}
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
             <TableNoData isNotFound={isNotFound} />

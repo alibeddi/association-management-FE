@@ -3,19 +3,20 @@ import { PermissionGroup } from 'src/@types/PermissionGroup';
 import { IStatus } from 'src/@types/status';
 import axios from '../../utils/axios';
 
+//  permissionGroup, permissionGroup
 type PermissionState = {
-  groupPermissions: PermissionGroup[];
-  groupPermission: PermissionGroup | null;
+  permissionGroups: PermissionGroup[];
+  permissionGroup: PermissionGroup | null;
   status: IStatus;
 };
 
 const initialState: PermissionState = {
-  groupPermissions: [],
-  groupPermission: null,
+  permissionGroups: [],
+  permissionGroup: null,
   status: IStatus.IDLE,
 };
 
-export const getAllGroupPermissions = createAsyncThunk('group-permissions/GETALL', async () => {
+export const getAllPermissionGroups = createAsyncThunk('group-permissions/GETALL', async () => {
   let data;
   try {
     const response = await axios.get(`/group-permissions`);
@@ -29,13 +30,31 @@ export const getAllGroupPermissions = createAsyncThunk('group-permissions/GETALL
   }
 });
 
-export const getGroupPermission = createAsyncThunk(
+export const getPermissionGroup = createAsyncThunk(
   'group-permissions/GET',
   async (payload: { id: string }) => {
     const { id } = payload;
     let data;
     try {
       const response = await axios.get(`/group-permissions/${id}`);
+      data = await response.data;
+      if (response.status === 200) {
+        return data.data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
+
+export const deleteGroupPermissionById = createAsyncThunk(
+  'group-permissions/DELETE',
+  async (payload: { id: string }) => {
+    const { id } = payload;
+    let data;
+    try {
+      const response = await axios.delete(`/group-permissions/${id}`);
       data = await response.data;
       if (response.status === 200) {
         return data.data;
@@ -54,26 +73,39 @@ const slice = createSlice({
   extraReducers: (builder) => {
     // GET ALL
     builder
-      .addCase(getAllGroupPermissions.pending, (state) => {
+      .addCase(getAllPermissionGroups.pending, (state) => {
         state.status = IStatus.LOADING;
       })
-      .addCase(getAllGroupPermissions.fulfilled, (state, action) => {
+      .addCase(getAllPermissionGroups.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.groupPermissions = action.payload;
+        state.permissionGroups = action.payload;
       })
-      .addCase(getAllGroupPermissions.rejected, (state, action) => {
+      .addCase(getAllPermissionGroups.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
     // GET ONE
     builder
-      .addCase(getGroupPermission.pending, (state) => {
+      .addCase(getPermissionGroup.pending, (state) => {
         state.status = IStatus.LOADING;
       })
-      .addCase(getGroupPermission.fulfilled, (state, action) => {
+      .addCase(getPermissionGroup.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.groupPermission = action.payload;
+        state.permissionGroup = action.payload;
       })
-      .addCase(getGroupPermission.rejected, (state, action) => {
+      .addCase(getPermissionGroup.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+
+    // DELETE
+    builder
+      .addCase(deleteGroupPermissionById.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(deleteGroupPermissionById.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.permissionGroup = action.payload;
+      })
+      .addCase(deleteGroupPermissionById.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

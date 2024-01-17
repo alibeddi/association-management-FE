@@ -8,7 +8,7 @@ type CheckboxComponentProps = {
   checked: boolean | null;
   model: string | number;
   action: string | number;
-  disabled: boolean;
+  disabled?: boolean;
   groupPermissions?: any;
 };
 
@@ -17,7 +17,7 @@ export default function CheckboxComponent({
   model,
   action,
   groupPermissions,
-  disabled,
+  disabled = false,
 }: CheckboxComponentProps) {
   const [checking, setChecking] = useState(checked);
   const [showSkeleton, setShowSkeleton] = useState(true);
