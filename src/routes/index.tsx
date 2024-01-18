@@ -16,6 +16,7 @@ import {
   Dashboard,
   Vehicles,
   PermissionGroup,
+  OperatorList,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -72,7 +73,15 @@ export default function Router() {
             { path: 'calendar', element: <Dashboard /> },
           ],
         },
-        { path: 'customers', element: <Dashboard /> },
+        {
+          path: 'operators',
+          element: <OperatorList />,
+          children: [
+            { element: <Navigate to="/dashboard/operators" replace />, index: true },
+            { path: ':id', element: <Dashboard /> },
+            { path: 'calendar', element: <Dashboard /> },
+          ],
+        },
 
         {
           path: 'settings',
@@ -82,14 +91,6 @@ export default function Router() {
             { path: 'users', element: <Dashboard /> },
             { path: 'bookableExtras', element: <Dashboard /> },
           ],
-        },
-        {
-          path: 'permissions',
-          element: (
-            <AuthGuard>
-              <PermissionGroup />
-            </AuthGuard>
-          ),
         },
       ],
     },

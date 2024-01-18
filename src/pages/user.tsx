@@ -1,9 +1,9 @@
 import { Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { useSettingsContext } from 'src/components/settings';
-import Permissions from 'src/sections/@dashboard/Permissions';
+import UserListPage from 'src/sections/@dashboard/user';
 
-export default function PermissionGroup() {
+export default function UserList() {
   const { themeStretch } = useSettingsContext();
   return (
     <>
@@ -11,7 +11,7 @@ export default function PermissionGroup() {
         <title>Group Permissions</title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Permissions />
+        <UserListPage />
       </Container>
     </>
   );

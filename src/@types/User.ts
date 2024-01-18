@@ -1,5 +1,5 @@
-import { Permission } from "./Permission";
-import { PermissionGroup } from "./PermissionGroup";
+import { Permission } from './Permission';
+import { PermissionGroup } from './PermissionGroup';
 
 export interface User {
   firstName: string;
@@ -10,5 +10,21 @@ export interface User {
   permissionGroup: PermissionGroup;
   extraPermission: Permission[];
   deletedAt: Date | null;
-  correctPassword(candidatePassword: string, clientPassword: string): Promise<Boolean>;
 }
+
+export type IUserAccountGeneral = {
+  id: string;
+  avatarUrl: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  country: string;
+  state: string;
+  city: string;
+  zipCode: string;
+  company: string;
+  isVerified: boolean;
+  status: string;
+  role: string;
+};

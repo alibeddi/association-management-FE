@@ -10,7 +10,7 @@ const icon = (name: string) => (
 );
 
 const ICONS = {
-  customers: icon('ic_customers'),
+  operators: icon('ic_operators'),
   fleet: icon('ic_vehicle'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
@@ -57,7 +57,11 @@ const navConfig = [
           { title: 'calendar', path: PATH_DASHBOARD.reservation.calendar },
         ],
       },
-      { title: 'customers', path: PATH_DASHBOARD.customers, icon: ICONS.customers },
+      {
+        title: 'operators',
+        path: PATH_DASHBOARD.operators,
+        icon: ICONS.operators,
+      },
       {
         title: 'settings',
         path: PATH_DASHBOARD.settings.root,

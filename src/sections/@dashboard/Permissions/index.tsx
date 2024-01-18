@@ -201,6 +201,7 @@ function Permissions() {
         <Stack alignItems="end" sx={{ mt: 3 }}>
           <CardActions>
             <LoadingButton
+              sx={{ py: 1.5 }}
               variant="contained"
               color="success"
               onClick={() => {
