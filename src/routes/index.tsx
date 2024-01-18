@@ -92,6 +92,10 @@ export default function Router() {
             { path: 'bookableExtras', element: <Dashboard /> },
           ],
         },
+        {
+          path: 'permissions',
+          element: <PermissionGroup />,
+        },
       ],
     },
     {
@@ -101,3 +105,4 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
+// permissions

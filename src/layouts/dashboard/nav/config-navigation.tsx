@@ -18,7 +18,7 @@ const ICONS = {
   reservations: icon('ic_reservations'),
   pricing: icon('ic_pricing'),
   settings: icon('ic_settings'),
-  groupPermissions: icon('ic_settings'),
+  groupPermissions: icon('ic_lock'),
 };
 
 const navConfig = [
@@ -75,7 +75,7 @@ const navConfig = [
       {
         title: 'group permissions',
         path: PATH_DASHBOARD.groupPermissions,
-        icon: ICONS.settings,
+        icon: ICONS.groupPermissions,
       },
     ],
   },
