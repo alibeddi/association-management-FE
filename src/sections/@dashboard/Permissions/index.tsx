@@ -13,8 +13,9 @@ import Scrollbar from 'src/components/scrollbar/Scrollbar';
 import { useLocales } from 'src/locales';
 import { getAllPermissionGroups, getPermissionGroup } from 'src/redux/slices/groupPermissions';
 import { getPermissions } from 'src/redux/slices/permissions';
-import { dispatch, RootState, useSelector } from 'src/redux/store';
+import { RootState, dispatch, useSelector } from 'src/redux/store';
 import { PATH_DASHBOARD } from 'src/routes/paths';
+import { extractEntitiesAndActions } from 'src/utils/extractEntitiesAndActions';
 import * as Yup from 'yup';
 import GroupButton from './GroupButtons';
 import PermissionTable from './PermissionTable';
@@ -26,6 +27,9 @@ function Permissions() {
   const { permissionGroups, permissionGroup } = useSelector(
     (state: RootState) => state.permissions_groups
   );
+  const { permissions } = useSelector((state: RootState) => state.permissions);
+  console.log(permissions);
+
   const [selectedItem, setSelectedItem] = useState<string>('');
   const [searchParams] = useSearchParams();
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -62,7 +66,8 @@ function Permissions() {
     dispatch(getAllPermissionGroups());
     dispatch(getPermissions());
   }, []);
-
+  const formattedPermissions = extractEntitiesAndActions(permissions.docs);
+  console.log(formattedPermissions);
   useEffect(() => {
     if (!selectedItem && permissionGroups[0]?._id !== undefined)
       navigate({
@@ -182,17 +187,8 @@ function Permissions() {
             </FormProvider>
           </Card>
           <PermissionTable
-            actions={['create', 'delete', 'update', 'get', 'export', 'all', 'jsdc', 'jdhbc']}
-            entities={[
-              'user',
-              'permissions',
-              'branch',
-              'tasks',
-              'notens',
-              'calendar',
-              'notens',
-              'calendar',
-            ]}
+            actions={formattedPermissions.actions}
+            entities={formattedPermissions.entities}
             groupPermissions={permissionGroup}
           />
         </Grid>
