@@ -48,6 +48,7 @@ export default function CheckboxComponent({
       })
     );
   };
+
   return (
     <>
       {showSkeleton ? (

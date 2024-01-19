@@ -14,16 +14,18 @@ import CheckboxComponent from 'src/components/checkbox/CheckboxComponent';
 import Scrollbar from 'src/components/scrollbar';
 import { TableNoData } from 'src/components/table';
 import { useLocales } from 'src/locales';
+import { RootState, useSelector } from 'src/redux/store';
 
 type Props = {
   actions: string[];
   entities: string[];
   groupPermissions: PermissionGroup | null;
+  permissionsAsString: string[];
 };
 
-const PermissionTable = ({ actions, entities, groupPermissions }: Props) => {
+const PermissionTable = ({ actions, entities, groupPermissions, permissionsAsString }: Props) => {
   const { translate, currentLang } = useLocales();
-
+  const { status } = useSelector((state: RootState) => state.permissions);
   const isNotFound = !actions.length && !entities.length;
   return (
     <TableContainer sx={{ height: '600px' }}>
@@ -98,10 +100,14 @@ const PermissionTable = ({ actions, entities, groupPermissions }: Props) => {
                           : 0,
                     }}
                   >
-                    {!['idle', 'loading'].includes('status') ? (
+                    {!['idle', 'loading'].includes(status) ? (
                       <CheckboxComponent
-                        checked={false}
-                        // disabled={isAllowed}
+                        checked={
+                          permissionsAsString
+                            ? permissionsAsString.includes(`${row}_${column}`)
+                            : false
+                        }
+                        disabled={!permissionsAsString.includes(`${row}_${column}`)}
                         model={row}
                         action={column}
                         groupPermissions={groupPermissions}

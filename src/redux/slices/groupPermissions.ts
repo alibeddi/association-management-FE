@@ -105,6 +105,9 @@ const slice = createSlice({
       .addCase(deleteGroupPermissionById.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
         state.permissionGroup = action.payload;
+        state.permissionGroups.docs = state.permissionGroups.docs.filter(
+          (group) => group._id !== action.meta.arg.id
+        );
       })
       .addCase(deleteGroupPermissionById.rejected, (state) => {
         state.status = IStatus.FAILED;

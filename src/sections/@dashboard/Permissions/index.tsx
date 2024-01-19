@@ -4,6 +4,7 @@ import { Box, Button, Card, CardActions, CardHeader, Container, Grid, Stack } fr
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Permission } from 'src/@types/Permission';
 import { PermissionGroup } from 'src/@types/PermissionGroup';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import ConfirmDialog from 'src/components/confirm-dialog';
@@ -13,11 +14,11 @@ import Scrollbar from 'src/components/scrollbar/Scrollbar';
 import { useLocales } from 'src/locales';
 import { getAllPermissionGroups, getPermissionGroup } from 'src/redux/slices/groupPermissions';
 import { getPermissions } from 'src/redux/slices/permissions';
-import { RootState, dispatch, useSelector } from 'src/redux/store';
+import { dispatch, RootState, useSelector } from 'src/redux/store';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import { extractEntitiesAndActions } from 'src/utils/extractEntitiesAndActions';
 import * as Yup from 'yup';
-import GroupButton from './GroupButtons';
+import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';
 
 function Permissions() {
@@ -27,9 +28,8 @@ function Permissions() {
   const { permissionGroups, permissionGroup } = useSelector(
     (state: RootState) => state.permissions_groups
   );
-  console.log(permissionGroups);
+
   const { permissions } = useSelector((state: RootState) => state.permissions);
-  console.log(permissions);
 
   const [selectedItem, setSelectedItem] = useState<string>('');
   const [searchParams] = useSearchParams();
@@ -64,19 +64,36 @@ function Permissions() {
     }
   };
   useEffect(() => {
-    dispatch(getAllPermissionGroups());
     dispatch(getPermissions());
+    dispatch(getAllPermissionGroups());
   }, []);
+  function extractEntitiesAndActionsStrings(data: Permission[]) {
+    const resultStrings: string[] = [];
+
+    data.forEach((item: Permission) => {
+      if (item.model && item.method) {
+        const entityActionString = `${item.model}_${item.method}`;
+        if (!resultStrings.includes(entityActionString)) {
+          resultStrings.push(entityActionString);
+        }
+      }
+    });
+
+    return resultStrings;
+  }
   const formattedPermissions = extractEntitiesAndActions(permissions.docs);
-  console.log(formattedPermissions);
+  const permissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
+  console.log({ permissionsAsString });
+
   useEffect(() => {
-    if (!selectedItem && permissionGroups.docs[0]?._id !== undefined)
+    if (!selectedItem && permissionGroups.docs[0]?._id) {
       navigate({
         pathname: PATH_DASHBOARD.groupPermissions,
         search: `?${createSearchParams({
           group: permissionGroups.docs[0]?._id,
         })}`,
       });
+    }
     if (searchParams.get('group') === permissionGroups.docs[0]?._id) {
       dispatch(getPermissionGroup({ id: permissionGroups.docs[0]?._id }));
       setSelectedItem(permissionGroups.docs[0]?._id);
@@ -124,35 +141,7 @@ function Permissions() {
                 }}
               >
                 <Scrollbar>
-                  {[
-                    {
-                      _id: '1',
-                      name: 'group1',
-                      permissions: [
-                        { _id: '1', model: 'user', method: 'create' },
-                        { _id: '2', model: 'permissions', method: 'create' },
-                        { _id: '3', model: 'user', method: 'delete' },
-                      ],
-                    },
-                    {
-                      _id: '2',
-                      name: 'group2',
-                      permissions: [
-                        { _id: '1', model: 'user', method: 'create' },
-                        { _id: '2', model: 'permissions', method: 'create' },
-                        { _id: '3', model: 'user', method: 'delete' },
-                      ],
-                    },
-                    {
-                      _id: '3',
-                      name: 'group3',
-                      permissions: [
-                        { _id: '1', model: 'user', method: 'create' },
-                        { _id: '2', model: 'permissions', method: 'create' },
-                        { _id: '3', model: 'user', method: 'delete' },
-                      ],
-                    },
-                  ].map((group: PermissionGroup) => (
+                  {permissionGroups.docs.map((group: PermissionGroup) => (
                     <GroupButton
                       isEdit={isEdit}
                       setIsEdit={setIsEdit}
@@ -191,6 +180,7 @@ function Permissions() {
             actions={formattedPermissions.actions}
             entities={formattedPermissions.entities}
             groupPermissions={permissionGroup}
+            permissionsAsString={permissionsAsString}
           />
         </Grid>
       </Card>
