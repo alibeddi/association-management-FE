@@ -21,12 +21,20 @@ type Props = {
   entities: string[];
   groupPermissions: PermissionGroup | null;
   permissionsAsString: string[];
+  defaultPermissionsAsString: string[];
 };
 
-const PermissionTable = ({ actions, entities, groupPermissions, permissionsAsString }: Props) => {
+const PermissionTable = ({
+  actions,
+  entities,
+  groupPermissions,
+  permissionsAsString,
+  defaultPermissionsAsString,
+}: Props) => {
   const { translate, currentLang } = useLocales();
   const { status } = useSelector((state: RootState) => state.permissions);
   const isNotFound = !actions.length && !entities.length;
+
   return (
     <TableContainer sx={{ height: '600px' }}>
       <Scrollbar>
@@ -107,7 +115,7 @@ const PermissionTable = ({ actions, entities, groupPermissions, permissionsAsStr
                             ? permissionsAsString.includes(`${row}_${column}`)
                             : false
                         }
-                        disabled={!permissionsAsString.includes(`${row}_${column}`)}
+                        disabled={!defaultPermissionsAsString.includes(`${row}_${column}`)}
                         model={row}
                         action={column}
                         groupPermissions={groupPermissions}

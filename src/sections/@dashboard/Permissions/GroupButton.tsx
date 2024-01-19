@@ -2,7 +2,6 @@ import { Button, IconButton, MenuItem, Stack } from '@mui/material';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Permission } from 'src/@types/Permission';
 import { PermissionGroup } from 'src/@types/PermissionGroup';
 import ConfirmDialog from 'src/components/confirm-dialog';
 import Iconify from 'src/components/iconify';
@@ -14,7 +13,7 @@ import { PATH_DASHBOARD } from 'src/routes/paths';
 
 type Props = {
   group: PermissionGroup;
-  defaultValues: Permission[];
+  defaultValues: { group: string };
   isEdit: Boolean;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
   selectedItem?: string;
@@ -35,9 +34,15 @@ const GroupButton = ({
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { permissionGroup } = useSelector((state: RootState) => state.permissions_groups);
-  // TODO: build a function IsAuthorized that checks if the current user is authorized to perform in action in the table of permissions
-  const deleteGroupPermission = true;
-  const editGroupPermission = true;
+
+  // TODO: Refactorooooo
+  const deleteGroupPermission = group.permissions.find(
+    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'DELETE'
+  );
+  const editGroupPermission = group.permissions.find(
+    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'EDIT'
+  );
+
   const isRowMenu = deleteGroupPermission || editGroupPermission;
 
   const handleOpenConfirm = () => {
@@ -55,7 +60,7 @@ const GroupButton = ({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
-
+  console.log({ defaultValues });
   useEffect(() => {
     if (isEdit && permissionGroup) {
       reset(defaultValues);

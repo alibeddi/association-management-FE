@@ -7,13 +7,13 @@ import axios from '../../utils/axios';
 //  permissionGroup, permissionGroup
 type PermissionState = {
   permissionGroups: PaginationModel<PermissionGroup>;
-  permissionGroup: PermissionGroup | null;
+  permissionGroup: PermissionGroup;
   status: IStatus;
 };
 
 const initialState: PermissionState = {
   permissionGroups: { docs: [], meta: {} as Meta },
-  permissionGroup: null,
+  permissionGroup: {} as PermissionGroup,
   status: IStatus.IDLE,
 };
 
@@ -56,6 +56,40 @@ export const deleteGroupPermissionById = createAsyncThunk(
     let data;
     try {
       const response = await axios.delete(`/permission-groups/${id}`);
+      data = await response.data;
+      if (response.status === 200) {
+        return data.data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
+export const updateGroupPermission = createAsyncThunk(
+  'group-permissions/EDIT',
+  async (payload: { id: string; body: object }) => {
+    const { id, body } = payload;
+    let data;
+    try {
+      const response = await axios.patch(`/permission-groups/${id}`, body);
+      data = await response.data;
+      if (response.status === 200) {
+        return data.data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
+export const createGroupPermission = createAsyncThunk(
+  'group-permissions/EDIT',
+  async (payload: { id: string; body: object }) => {
+    const { id, body } = payload;
+    let data;
+    try {
+      const response = await axios.patch(`/permission-groups/${id}`, body);
       data = await response.data;
       if (response.status === 200) {
         return data.data;
@@ -110,6 +144,18 @@ const slice = createSlice({
         );
       })
       .addCase(deleteGroupPermissionById.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // EDIT
+    builder
+      .addCase(updateGroupPermission.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(updateGroupPermission.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.permissionGroup = action.payload;
+      })
+      .addCase(updateGroupPermission.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
