@@ -19,7 +19,7 @@ const initialState: PermissionState = {
 export const getAllPermissionGroups = createAsyncThunk('group-permissions/GETALL', async () => {
   let data;
   try {
-    const response = await axios.get(`/group-permissions`);
+    const response = await axios.get(`/permission-groups`);
     data = await response.data;
     if (response.status === 200) {
       return data.data;
@@ -36,7 +36,7 @@ export const getPermissionGroup = createAsyncThunk(
     const { id } = payload;
     let data;
     try {
-      const response = await axios.get(`/group-permissions/${id}`);
+      const response = await axios.get(`/permission-groups/${id}`);
       data = await response.data;
       if (response.status === 200) {
         return data.data;
@@ -54,7 +54,7 @@ export const deleteGroupPermissionById = createAsyncThunk(
     const { id } = payload;
     let data;
     try {
-      const response = await axios.delete(`/group-permissions/${id}`);
+      const response = await axios.delete(`/permission-groups/${id}`);
       data = await response.data;
       if (response.status === 200) {
         return data.data;

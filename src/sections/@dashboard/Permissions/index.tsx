@@ -60,8 +60,8 @@ function Permissions() {
   };
   useEffect(() => {
     dispatch(getAllPermissionGroups());
-    if (user?.role?.code?.toUpperCase() === 'SUPERADMIN') dispatch(getPermissions());
-  }, [user?.role?.code]);
+    dispatch(getPermissions());
+  }, []);
 
   useEffect(() => {
     if (!selectedItem && permissionGroups[0]?._id !== undefined)
