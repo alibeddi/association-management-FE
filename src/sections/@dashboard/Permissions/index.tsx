@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, CardActions, CardHeader, Container, Grid, Stack } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Permission } from 'src/@types/Permission';
@@ -41,9 +41,11 @@ function Permissions() {
   const createGroupPermission = permissionGroup?.permissions?.find(
     (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'DELETE'
   );
+  // TODO: when u have not the permission to edit but ure a super admin
   const editGroupPermission = permissionGroup?.permissions?.find(
-    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'DELETE'
+    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'EDIT'
   );
+
   type FormValuesProps = {
     group: string;
   };
@@ -69,7 +71,7 @@ function Permissions() {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = methods;
   const { enqueueSnackbar } = useSnackbar();
 
@@ -138,6 +140,7 @@ function Permissions() {
       setSelectedItem(permissionGroups.docs[0]?._id);
     }
   }, [permissionGroups, searchParams, navigate, selectedItem]);
+
   return (
     <Container maxWidth={false}>
       <CustomBreadcrumbs
@@ -198,7 +201,7 @@ function Permissions() {
               )}
               {((!isEdit && createGroupPermission) || (isEdit && editGroupPermission)) && (
                 <CardActions>
-                  <Button type="submit" variant="outlined">
+                  <Button disabled={!isDirty} type="submit" variant="outlined">
                     {`${translate(isEdit ? 'edit' : 'create')}`}
                   </Button>
                   <Button
