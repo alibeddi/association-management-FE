@@ -27,6 +27,7 @@ function Permissions() {
   const { permissionGroups, permissionGroup } = useSelector(
     (state: RootState) => state.permissions_groups
   );
+  console.log(permissionGroups);
   const { permissions } = useSelector((state: RootState) => state.permissions);
   console.log(permissions);
 
@@ -69,16 +70,16 @@ function Permissions() {
   const formattedPermissions = extractEntitiesAndActions(permissions.docs);
   console.log(formattedPermissions);
   useEffect(() => {
-    if (!selectedItem && permissionGroups[0]?._id !== undefined)
+    if (!selectedItem && permissionGroups.docs[0]?._id !== undefined)
       navigate({
         pathname: PATH_DASHBOARD.groupPermissions,
         search: `?${createSearchParams({
-          group: permissionGroups[0]?._id,
+          group: permissionGroups.docs[0]?._id,
         })}`,
       });
-    if (searchParams.get('group') === permissionGroups[0]?._id) {
-      dispatch(getPermissionGroup({ id: permissionGroups[0]?._id }));
-      setSelectedItem(permissionGroups[0]?._id);
+    if (searchParams.get('group') === permissionGroups.docs[0]?._id) {
+      dispatch(getPermissionGroup({ id: permissionGroups.docs[0]?._id }));
+      setSelectedItem(permissionGroups.docs[0]?._id);
     }
   }, [permissionGroups, searchParams, navigate, selectedItem]);
   return (

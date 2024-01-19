@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Meta, PaginationModel } from 'src/@types/Pagination';
 import { PermissionGroup } from 'src/@types/PermissionGroup';
 import { IStatus } from 'src/@types/status';
 import axios from '../../utils/axios';
 
 //  permissionGroup, permissionGroup
 type PermissionState = {
-  permissionGroups: PermissionGroup[];
+  permissionGroups: PaginationModel<PermissionGroup>;
   permissionGroup: PermissionGroup | null;
   status: IStatus;
 };
 
 const initialState: PermissionState = {
-  permissionGroups: [],
+  permissionGroups: { docs: [], meta: {} as Meta },
   permissionGroup: null,
   status: IStatus.IDLE,
 };

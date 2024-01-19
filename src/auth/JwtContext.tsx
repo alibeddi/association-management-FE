@@ -99,7 +99,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/auth/my');
+        const response = await axios.get('/auth/me');
 
         const { user } = response.data;
 
