@@ -60,7 +60,6 @@ const GroupButton = ({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
-  console.log({ defaultValues });
   useEffect(() => {
     if (isEdit && permissionGroup) {
       reset(defaultValues);

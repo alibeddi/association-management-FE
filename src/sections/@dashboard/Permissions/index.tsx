@@ -13,6 +13,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import Scrollbar from 'src/components/scrollbar/Scrollbar';
 import { useLocales } from 'src/locales';
 import {
+  createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
   updateGroupPermission,
@@ -78,29 +79,26 @@ function Permissions() {
   const onSubmit = async ({ group }: { group: string }) => {
     if (isEdit) {
       dispatch(updateGroupPermission({ id: permissionGroup?._id, body: { name: group } })).then(
-        (res) => {
-          console.log({ res });
+        (res: any) => {
           if (res?.meta?.requestStatus === 'fulfilled') {
             reset({ group: '' });
             setIsEdit(false);
             enqueueSnackbar(`${translate(res?.payload.message)}`);
+          } else {
+            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
           }
-          //  else {
-          //   enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-          // }
         }
       );
+    } else {
+      dispatch(createNewGroupPermission({ name: group })).then((res: any) => {
+        if (res?.meta?.requestStatus === 'fulfilled') {
+          enqueueSnackbar(`${translate(res?.payload.message)}`);
+          reset();
+        } else {
+          enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+        }
+      });
     }
-    // else {
-    //   dispatch(createGroups({ name: group })).then((res: any) => {
-    //     if (res?.meta?.requestStatus === 'fulfilled') {
-    //       enqueueSnackbar(`${translate(res?.payload.message)}`);
-    //       reset();
-    //     } else {
-    //       enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-    //     }
-    //   });
-    // }
   };
 
   useEffect(() => {
@@ -124,7 +122,6 @@ function Permissions() {
   const formattedPermissions = extractEntitiesAndActions(permissions.docs);
   const permissionsAsString = extractEntitiesAndActionsStrings(permissionGroup?.permissions);
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
-  console.log({ isEdit });
 
   useEffect(() => {
     if (!selectedItem && permissionGroups.docs[0]?._id) {
