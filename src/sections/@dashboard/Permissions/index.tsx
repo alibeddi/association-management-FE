@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { PermissionGroup } from 'src/@types/PermissionGroup';
+import { useAuthContext } from 'src/auth/useAuthContext';
 import ConfirmDialog from 'src/components/confirm-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -35,17 +36,21 @@ function Permissions() {
   const { permissions } = useSelector((state: RootState) => state.permissions);
   const [selectedItem, setSelectedItem] = useState<string>('');
   const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup.permissions);
-  console.log({ selectedPermissions, permissionGroup: permissionGroup.permissions });
   const [searchParams] = useSearchParams();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const { user } = useAuthContext();
+  console.log({ user });
+  const userPermissions = user?.permissionGroup[0].permissions;
   // TODO: isAuthorized function
-  const createGroupPermission = permissionGroup?.permissions?.find(
-    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'DELETE'
+  const createGroupPermission = userPermissions.find(
+    (permission: { model: string; method: string }) =>
+      permission.model === 'PERMISSION_GROUP' && permission.method === 'DELETE'
   );
   // TODO: when u have not the permission to edit but ure a super admin
-  const editGroupPermission = permissionGroup?.permissions?.find(
-    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'EDIT'
+  const editGroupPermission = userPermissions.find(
+    (permission: { model: string; method: string }) =>
+      permission.model === 'PERMISSION_GROUP' && permission.method === 'EDIT'
   );
 
   type FormValuesProps = {
@@ -125,7 +130,7 @@ function Permissions() {
       setSelectedPermissions(permissionGroups.docs[0]?.permissions);
     }
   }, [permissionGroups, searchParams, navigate, selectedItem]);
-
+  console.log({ isEdit, createGroupPermission, editGroupPermission });
   return (
     <Container maxWidth={false}>
       <CustomBreadcrumbs
@@ -194,8 +199,7 @@ function Permissions() {
                     variant="outlined"
                     color="error"
                     onClick={() => {
-                      // TODO: reset the group name plzzzz
-                      console.log('reset group name');
+                      reset({ group: '' });
                       setIsEdit(false);
                     }}
                   >

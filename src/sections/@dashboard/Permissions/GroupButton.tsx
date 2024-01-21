@@ -68,6 +68,29 @@ const GroupButton = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, permissionGroup]);
+  const handleEditButton = () => {
+    setIsEdit(true);
+    dispatch(getPermissionGroup({ id: group?._id }));
+    setSelectedItem(group._id);
+    navigate({
+      pathname: PATH_DASHBOARD.groupPermissions,
+      search: `?${createSearchParams({
+        group: group._id.toString(),
+      })}`,
+    });
+    handleClosePopover();
+  };
+  const handleGroupButtonClick = () => {
+    dispatch(getPermissionGroup({ id: group?._id }));
+    setSelectedItem(group._id);
+    setSelectedPermissions(group.permissions);
+    navigate({
+      pathname: PATH_DASHBOARD.groupPermissions,
+      search: `?${createSearchParams({
+        group: group._id,
+      })}`,
+    });
+  };
   return (
     <>
       <Stack
@@ -87,17 +110,7 @@ const GroupButton = ({
           }}
           variant={selectedItem === group._id ? 'contained' : undefined}
           color={selectedItem === group._id ? 'success' : undefined}
-          onClick={() => {
-            dispatch(getPermissionGroup({ id: group?._id }));
-            setSelectedItem(group._id);
-            setSelectedPermissions(group.permissions);
-            navigate({
-              pathname: PATH_DASHBOARD.groupPermissions,
-              search: `?${createSearchParams({
-                group: group._id,
-              })}`,
-            });
-          }}
+          onClick={handleGroupButtonClick}
         >
           <>{group.name}</>
         </Button>
@@ -118,20 +131,7 @@ const GroupButton = ({
         sx={{ width: 140 }}
       >
         {editGroupPermission && (
-          <MenuItem
-            onClick={() => {
-              setIsEdit(true);
-              dispatch(getPermissionGroup({ id: group?._id }));
-              setSelectedItem(group._id);
-              navigate({
-                pathname: PATH_DASHBOARD.groupPermissions,
-                search: `?${createSearchParams({
-                  group: group._id.toString(),
-                })}`,
-              });
-              handleClosePopover();
-            }}
-          >
+          <MenuItem onClick={handleEditButton}>
             <Iconify icon="eva:edit-fill" />
             {`${translate('Edit')}`}
           </MenuItem>

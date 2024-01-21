@@ -101,7 +101,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         const response = await axios.get('/auth/me');
 
-        const { user } = response.data;
+        const user = response.data.data;
 
         dispatch({
           type: Types.INITIAL,

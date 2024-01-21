@@ -7,7 +7,7 @@ export interface User {
   email: string;
   phone: string;
   password: string;
-  permissionGroup: PermissionGroup;
+  permissionGroup: PermissionGroup[];
   extraPermission: Permission[];
   deletedAt: Date | null;
 }
