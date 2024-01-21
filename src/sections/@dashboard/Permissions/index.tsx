@@ -36,7 +36,7 @@ function Permissions() {
   );
   const { permissions } = useSelector((state: RootState) => state.permissions);
   const [selectedItem, setSelectedItem] = useState<string>('');
-  const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup.permissions);
+  const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup?.permissions);
   const [searchParams] = useSearchParams();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
