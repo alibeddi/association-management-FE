@@ -39,18 +39,6 @@ export default function CheckboxComponent({
     setChecking(checked);
   }, [checked]);
 
-  // const handleCheckRole = (checkingState: boolean) => {
-  //   setChecking((value) => !value);
-  //   const permissionId = permissions.docs.find(
-  //     (permission) => permission.model === model && permission.method === action
-  //   );
-  //   dispatch(
-  //     assignGroupPermissions({
-  //       id: permissionId?._id,
-  //       checkingState,
-  //     })
-  //   );
-  // };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const foundPermission = permissions.docs.find(
       (permission) => permission.model === model && permission.method === action

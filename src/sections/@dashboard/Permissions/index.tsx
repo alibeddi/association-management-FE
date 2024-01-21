@@ -26,6 +26,7 @@ import { extractEntitiesAndActionsStrings } from 'src/utils/extractEntitiesAndAc
 import * as Yup from 'yup';
 import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';
+import { hasPermission } from './utils';
 
 function Permissions() {
   const navigate = useNavigate();
@@ -40,18 +41,9 @@ function Permissions() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const { user } = useAuthContext();
-  console.log({ user });
   const userPermissions = user?.permissionGroup[0].permissions;
-  // TODO: isAuthorized function
-  const createGroupPermission = userPermissions.find(
-    (permission: { model: string; method: string }) =>
-      permission.model === 'PERMISSION_GROUP' && permission.method === 'DELETE'
-  );
-  // TODO: when u have not the permission to edit but ure a super admin
-  const editGroupPermission = userPermissions.find(
-    (permission: { model: string; method: string }) =>
-      permission.model === 'PERMISSION_GROUP' && permission.method === 'EDIT'
-  );
+  const createGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
+  const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
 
   type FormValuesProps = {
     group: string;
@@ -130,7 +122,6 @@ function Permissions() {
       setSelectedPermissions(permissionGroups.docs[0]?.permissions);
     }
   }, [permissionGroups, searchParams, navigate, selectedItem]);
-  console.log({ isEdit, createGroupPermission, editGroupPermission });
   return (
     <Container maxWidth={false}>
       <CustomBreadcrumbs

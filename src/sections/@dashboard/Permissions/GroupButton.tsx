@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Permission } from 'src/@types/Permission';
 import { PermissionGroup } from 'src/@types/PermissionGroup';
+import { useAuthContext } from 'src/auth/useAuthContext';
 import ConfirmDialog from 'src/components/confirm-dialog';
 import Iconify from 'src/components/iconify';
 import MenuPopover from 'src/components/menu-popover';
@@ -11,6 +12,7 @@ import { useLocales } from 'src/locales';
 import { deleteGroupPermissionById, getPermissionGroup } from 'src/redux/slices/groupPermissions';
 import { RootState, dispatch, useSelector } from 'src/redux/store';
 import { PATH_DASHBOARD } from 'src/routes/paths';
+import { hasPermission } from './utils';
 
 type Props = {
   group: PermissionGroup;
@@ -37,14 +39,12 @@ const GroupButton = ({
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { permissionGroup } = useSelector((state: RootState) => state.permissions_groups);
+  const { user } = useAuthContext();
+  const userPermissions = user?.permissionGroup[0].permissions;
 
-  // TODO: Refactorooooo
-  const deleteGroupPermission = group.permissions.find(
-    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'DELETE'
-  );
-  const editGroupPermission = group.permissions.find(
-    (permission) => permission.model === 'PERMISSION_GROUP' && permission.method === 'EDIT'
-  );
+  const deleteGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
+  // TODO: || isSuperAdmin add it when we implement roles in the project
+  const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
 
   const isRowMenu = deleteGroupPermission || editGroupPermission;
   const handleOpenConfirm = () => {
