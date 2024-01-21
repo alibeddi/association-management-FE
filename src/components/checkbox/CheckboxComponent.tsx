@@ -1,26 +1,31 @@
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Checkbox, Skeleton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { dispatch } from '../../redux/store';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Permission } from 'src/@types/Permission';
+import { RootState, dispatch, useSelector } from '../../redux/store';
 
 type CheckboxComponentProps = {
   checked: boolean | null;
   model: string | number;
   action: string | number;
   disabled?: boolean;
-  groupPermissions?: any;
+
+  setSelectedPermissions: Dispatch<SetStateAction<Permission[]>>;
+  selectedPermissions: Permission[];
 };
 
 export default function CheckboxComponent({
   checked,
   model,
   action,
-  groupPermissions,
+  setSelectedPermissions,
+  selectedPermissions,
   disabled = false,
 }: CheckboxComponentProps) {
   const [checking, setChecking] = useState(checked);
   const [showSkeleton, setShowSkeleton] = useState(true);
+  const { permissions } = useSelector((state: RootState) => state.permissions);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -34,19 +39,33 @@ export default function CheckboxComponent({
     setChecking(checked);
   }, [checked]);
 
-  const handleCheckRole = (checkingState: boolean) => {
-    setChecking((value) => !value);
-
-    dispatch(
-      getAssignPermission({
-        id: model.toString()?.concat('_').concat(action.toString()),
-        checkingState,
-        permissions: groupPermissions?.permissions?.map((el: { name: string }) => ({
-          id: el?.name,
-          checkingState: true,
-        })),
-      })
+  // const handleCheckRole = (checkingState: boolean) => {
+  //   setChecking((value) => !value);
+  //   const permissionId = permissions.docs.find(
+  //     (permission) => permission.model === model && permission.method === action
+  //   );
+  //   dispatch(
+  //     assignGroupPermissions({
+  //       id: permissionId?._id,
+  //       checkingState,
+  //     })
+  //   );
+  // };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const foundPermission = permissions.docs.find(
+      (permission) => permission.model === model && permission.method === action
     );
+    console.log(foundPermission, foundPermission && selectedPermissions.includes(foundPermission));
+    if (foundPermission) {
+      if (selectedPermissions.includes(foundPermission)) {
+        const newPermissions = selectedPermissions.filter(
+          (item) => item._id !== foundPermission._id
+        );
+        setSelectedPermissions(newPermissions);
+      } else {
+        setSelectedPermissions((prev: Permission[]) => [...prev, foundPermission]);
+      }
+    }
   };
 
   return (
@@ -57,16 +76,11 @@ export default function CheckboxComponent({
         <Checkbox
           disabled={disabled}
           checked={checking === null || checking === undefined ? false : checking}
-          onChange={(e) => {
-            handleCheckRole(e.target.checked);
-          }}
+          onChange={handleChange}
           icon={<LockIcon />}
           checkedIcon={<LockOpenIcon />}
         />
       )}
     </>
   );
-}
-function getAssignPermission(arg0: { id: string; checkingState: boolean; permissions: any }): any {
-  throw new Error('Function not implemented.');
 }

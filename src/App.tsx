@@ -24,9 +24,6 @@ import ScrollToTop from './components/scroll-to-top';
 import { SettingsProvider, ThemeSettings } from './components/settings';
 import SnackbarProvider from './components/snackbar';
 
-// Check our docs
-// https://docs.minimals.cc/authentication/ts-version
-
 import { AuthProvider } from './auth/JwtContext';
 import { store } from './redux/store';
 
@@ -55,7 +52,6 @@ export default function App() {
           </SettingsProvider>
         </HelmetProvider>
       </AuthProvider>
-      O
     </Provider>
   );
 }

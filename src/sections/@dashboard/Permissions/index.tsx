@@ -5,7 +5,6 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Permission } from 'src/@types/Permission';
 import { PermissionGroup } from 'src/@types/PermissionGroup';
 import ConfirmDialog from 'src/components/confirm-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -19,9 +18,10 @@ import {
   updateGroupPermission,
 } from 'src/redux/slices/groupPermissions';
 import { getPermissions } from 'src/redux/slices/permissions';
-import { dispatch, RootState, useSelector } from 'src/redux/store';
+import { RootState, dispatch, useSelector } from 'src/redux/store';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import { extractEntitiesAndActions } from 'src/utils/extractEntitiesAndActions';
+import { extractEntitiesAndActionsStrings } from 'src/utils/extractEntitiesAndActionsStrings';
 import * as Yup from 'yup';
 import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';
@@ -32,9 +32,10 @@ function Permissions() {
   const { permissionGroups, permissionGroup } = useSelector(
     (state: RootState) => state.permissions_groups
   );
-
   const { permissions } = useSelector((state: RootState) => state.permissions);
   const [selectedItem, setSelectedItem] = useState<string>('');
+  const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup.permissions);
+  console.log({ selectedPermissions, permissionGroup: permissionGroup.permissions });
   const [searchParams] = useSearchParams();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -105,22 +106,8 @@ function Permissions() {
     dispatch(getPermissions());
     dispatch(getAllPermissionGroups());
   }, []);
-  function extractEntitiesAndActionsStrings(data: Permission[]) {
-    const resultStrings: string[] = [];
 
-    data?.forEach((item: Permission) => {
-      if (item.model && item.method) {
-        const entityActionString = `${item.model}_${item.method}`;
-        if (!resultStrings.includes(entityActionString)) {
-          resultStrings.push(entityActionString);
-        }
-      }
-    });
-
-    return resultStrings;
-  }
   const formattedPermissions = extractEntitiesAndActions(permissions.docs);
-  const permissionsAsString = extractEntitiesAndActionsStrings(permissionGroup?.permissions);
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
 
   useEffect(() => {
@@ -135,6 +122,7 @@ function Permissions() {
     if (searchParams.get('group') === permissionGroups.docs[0]?._id) {
       dispatch(getPermissionGroup({ id: permissionGroups.docs[0]?._id }));
       setSelectedItem(permissionGroups.docs[0]?._id);
+      setSelectedPermissions(permissionGroups.docs[0]?.permissions);
     }
   }, [permissionGroups, searchParams, navigate, selectedItem]);
 
@@ -189,6 +177,7 @@ function Permissions() {
                       key={group?._id}
                       selectedItem={selectedItem}
                       setSelectedItem={setSelectedItem}
+                      setSelectedPermissions={setSelectedPermissions}
                     />
                   ))}
                 </Scrollbar>
@@ -205,6 +194,7 @@ function Permissions() {
                     variant="outlined"
                     color="error"
                     onClick={() => {
+                      // TODO: reset the group name plzzzz
                       console.log('reset group name');
                       setIsEdit(false);
                     }}
@@ -218,9 +208,9 @@ function Permissions() {
           <PermissionTable
             actions={formattedPermissions.actions}
             entities={formattedPermissions.entities}
-            groupPermissions={permissionGroup}
-            permissionsAsString={permissionsAsString}
             defaultPermissionsAsString={defaultPermissionsAsString}
+            setSelectedPermissions={setSelectedPermissions}
+            selectedPermissions={selectedPermissions}
           />
         </Grid>
       </Card>
@@ -232,7 +222,21 @@ function Permissions() {
               variant="contained"
               color="success"
               onClick={() => {
-                console.log('first');
+                const updatedPermissions = selectedPermissions.map((permission) => permission._id);
+                dispatch(
+                  updateGroupPermission({
+                    id: permissionGroup?._id,
+                    body: { permissions: updatedPermissions },
+                  })
+                ).then((res: any) => {
+                  if (res?.meta?.requestStatus === 'fulfilled') {
+                    reset({ group: '' });
+                    setIsEdit(false);
+                    enqueueSnackbar(`${translate(res?.payload.message)}`);
+                  } else {
+                    enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+                  }
+                });
               }}
               loading={isSubmitting}
             >

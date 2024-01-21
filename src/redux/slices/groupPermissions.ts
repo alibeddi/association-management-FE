@@ -4,7 +4,6 @@ import { PermissionGroup } from 'src/@types/PermissionGroup';
 import { IStatus } from 'src/@types/status';
 import axios from '../../utils/axios';
 
-//  permissionGroup, permissionGroup
 type PermissionState = {
   permissionGroups: PaginationModel<PermissionGroup>;
   permissionGroup: PermissionGroup;

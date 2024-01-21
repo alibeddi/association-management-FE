@@ -9,32 +9,34 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { PermissionGroup } from 'src/@types/PermissionGroup';
+import { Dispatch, SetStateAction } from 'react';
+import { Permission } from 'src/@types/Permission';
 import CheckboxComponent from 'src/components/checkbox/CheckboxComponent';
 import Scrollbar from 'src/components/scrollbar';
 import { TableNoData } from 'src/components/table';
 import { useLocales } from 'src/locales';
 import { RootState, useSelector } from 'src/redux/store';
+import { extractEntitiesAndActionsStrings } from 'src/utils/extractEntitiesAndActionsStrings';
 
 type Props = {
   actions: string[];
   entities: string[];
-  groupPermissions: PermissionGroup | null;
-  permissionsAsString: string[];
   defaultPermissionsAsString: string[];
+  setSelectedPermissions: Dispatch<SetStateAction<Permission[]>>;
+  selectedPermissions: Permission[];
 };
 
 const PermissionTable = ({
   actions,
   entities,
-  groupPermissions,
-  permissionsAsString,
   defaultPermissionsAsString,
+  setSelectedPermissions,
+  selectedPermissions,
 }: Props) => {
   const { translate, currentLang } = useLocales();
   const { status } = useSelector((state: RootState) => state.permissions);
   const isNotFound = !actions.length && !entities.length;
-
+  const permissionsAsString = extractEntitiesAndActionsStrings(selectedPermissions);
   return (
     <TableContainer sx={{ height: '600px' }}>
       <Scrollbar>
@@ -118,7 +120,8 @@ const PermissionTable = ({
                         disabled={!defaultPermissionsAsString.includes(`${row}_${column}`)}
                         model={row}
                         action={column}
-                        groupPermissions={groupPermissions}
+                        setSelectedPermissions={setSelectedPermissions}
+                        selectedPermissions={selectedPermissions}
                       />
                     ) : (
                       <Skeleton animation="wave" variant="text" />

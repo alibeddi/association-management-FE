@@ -2,13 +2,14 @@ import { Button, IconButton, MenuItem, Stack } from '@mui/material';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { Permission } from 'src/@types/Permission';
 import { PermissionGroup } from 'src/@types/PermissionGroup';
 import ConfirmDialog from 'src/components/confirm-dialog';
 import Iconify from 'src/components/iconify';
 import MenuPopover from 'src/components/menu-popover';
 import { useLocales } from 'src/locales';
 import { deleteGroupPermissionById, getPermissionGroup } from 'src/redux/slices/groupPermissions';
-import { dispatch, RootState, useSelector } from 'src/redux/store';
+import { RootState, dispatch, useSelector } from 'src/redux/store';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
   setIsEdit: Dispatch<SetStateAction<boolean>>;
   selectedItem?: string;
   setSelectedItem: Dispatch<SetStateAction<string>>;
+  setSelectedPermissions: Dispatch<SetStateAction<Permission[]>>;
 };
 
 const GroupButton = ({
@@ -27,6 +29,7 @@ const GroupButton = ({
   setIsEdit,
   selectedItem,
   setSelectedItem,
+  setSelectedPermissions,
 }: Props) => {
   const { translate } = useLocales();
   const navigate = useNavigate();
@@ -44,7 +47,6 @@ const GroupButton = ({
   );
 
   const isRowMenu = deleteGroupPermission || editGroupPermission;
-
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -88,6 +90,7 @@ const GroupButton = ({
           onClick={() => {
             dispatch(getPermissionGroup({ id: group?._id }));
             setSelectedItem(group._id);
+            setSelectedPermissions(group.permissions);
             navigate({
               pathname: PATH_DASHBOARD.groupPermissions,
               search: `?${createSearchParams({
