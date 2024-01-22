@@ -16,7 +16,6 @@ export default function Login() {
         <Typography variant="h4">Sign in to مقراتنا</Typography>
       </Stack>
       <AuthLoginForm />
-      <AuthWithSocial />
     </LoginLayout>
   );
 }
