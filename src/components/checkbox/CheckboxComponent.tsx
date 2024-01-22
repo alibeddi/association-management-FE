@@ -3,10 +3,10 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Checkbox, Skeleton } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Permission } from 'src/@types/Permission';
-import { RootState, dispatch, useSelector } from '../../redux/store';
+import { RootState, useSelector } from '../../redux/store';
 
 type CheckboxComponentProps = {
-  checked: boolean | null;
+  checked: boolean;
   model: string | number;
   action: string | number;
   disabled?: boolean;
@@ -40,9 +40,11 @@ export default function CheckboxComponent({
   }, [checked]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecking((value) => !value);
     const foundPermission = permissions.docs.find(
       (permission) => permission.model === model && permission.method === action
     );
+    setChecking(!checking);
     if (foundPermission) {
       if (selectedPermissions.includes(foundPermission)) {
         const newPermissions = selectedPermissions.filter(
@@ -62,7 +64,7 @@ export default function CheckboxComponent({
       ) : (
         <Checkbox
           disabled={disabled}
-          checked={checking === null || checking === undefined ? false : checking}
+          checked={checking}
           onChange={handleChange}
           icon={<LockIcon />}
           checkedIcon={<LockOpenIcon />}
