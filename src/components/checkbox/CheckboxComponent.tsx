@@ -43,7 +43,6 @@ export default function CheckboxComponent({
     const foundPermission = permissions.docs.find(
       (permission) => permission.model === model && permission.method === action
     );
-    console.log(foundPermission, foundPermission && selectedPermissions.includes(foundPermission));
     if (foundPermission) {
       if (selectedPermissions.includes(foundPermission)) {
         const newPermissions = selectedPermissions.filter(
