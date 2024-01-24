@@ -17,25 +17,12 @@ type Props = {
 export default function LoginLayout({ children, illustration, title }: Props) {
   return (
     <StyledRoot>
-      <Logo
-        sx={{
-          zIndex: 9,
-          position: 'absolute',
-          mt: { xs: 1.5, md: 5 },
-          ml: { xs: 2, md: 5 },
-        }}
-      />
-
       <StyledSection>
-        <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
-          {title || 'Hi, Welcome back'}
-        </Typography>
-
         <Image
           disabledEffect
           visibleByDefault
           alt="auth"
-          src={illustration || '/assets/illustrations/illustration_dashboard.png'}
+          src={illustration || '/assets/illustrations/At the office-rafiki.png'}
           sx={{ maxWidth: 720 }}
         />
 

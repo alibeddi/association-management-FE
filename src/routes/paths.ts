@@ -32,11 +32,12 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/reservation/list'),
     calendar: path(ROOTS_DASHBOARD, '/reservation/calendar'),
   },
-  customers: path(ROOTS_DASHBOARD, '/customers'),
+  operators: path(ROOTS_DASHBOARD, '/operators'),
   settings: {
     root: path(ROOTS_DASHBOARD, '/settings'),
     agency: path(ROOTS_DASHBOARD, '/settings/agency'),
     users: path(ROOTS_DASHBOARD, '/settings/users'),
     bookableExtras: path(ROOTS_DASHBOARD, '/settings/bookableExtras'),
   },
+  groupPermissions: path(ROOTS_DASHBOARD, '/permissions'),
 };

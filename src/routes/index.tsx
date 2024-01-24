@@ -1,5 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // auth
+import GroupPermissionGuard from 'src/auth/GroupPermissionsGuard';
 import AuthGuard from '../auth/AuthGuard';
 import GuestGuard from '../auth/GuestGuard';
 // layouts
@@ -9,11 +10,13 @@ import DashboardLayout from '../layouts/dashboard';
 import { PATH_AFTER_LOGIN } from '../config-global';
 //
 import {
-  Page404,
-  LoginPage,
   Branches,
   Categories,
   Dashboard,
+  LoginPage,
+  OperatorList,
+  Page404,
+  PermissionGroup,
   Vehicles,
 } from './elements';
 
@@ -71,7 +74,15 @@ export default function Router() {
             { path: 'calendar', element: <Dashboard /> },
           ],
         },
-        { path: 'customers', element: <Dashboard /> },
+        {
+          path: 'operators',
+          element: <OperatorList />,
+          children: [
+            { element: <Navigate to="/dashboard/operators" replace />, index: true },
+            { path: ':id', element: <Dashboard /> },
+            { path: 'calendar', element: <Dashboard /> },
+          ],
+        },
 
         {
           path: 'settings',
@@ -82,6 +93,14 @@ export default function Router() {
             { path: 'bookableExtras', element: <Dashboard /> },
           ],
         },
+        {
+          path: 'permissions',
+          element: (
+            <GroupPermissionGuard>
+              <PermissionGroup />
+            </GroupPermissionGuard>
+          ),
+        },
       ],
     },
     {
@@ -91,3 +110,4 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
+// permissions

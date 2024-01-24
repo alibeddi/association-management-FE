@@ -24,7 +24,7 @@ export default function RHFTextField({
   ...other
 }: Props) {
   const { translate } = useLocales();
-  const { control, setValue } = useFormContext();
+  const { control } = useFormContext();
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
   };

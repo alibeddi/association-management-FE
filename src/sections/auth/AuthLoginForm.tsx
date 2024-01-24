@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import * as Yup from 'yup';
 // form
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 // @mui
-import { Link, Stack, Alert, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { Alert, IconButton, InputAdornment, Stack } from '@mui/material';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // components
-import Iconify from '../../components/iconify';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
+import Iconify from '../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -26,13 +26,13 @@ export default function AuthLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: '',
+    password: '',
   };
 
   const methods = useForm<FormValuesProps>({
@@ -64,7 +64,7 @@ export default function AuthLoginForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3}>
+      <Stack spacing={3} sx={{ mb: 2 }}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
         <RHFTextField name="email" label="Email address" />
@@ -85,12 +85,6 @@ export default function AuthLoginForm() {
         />
       </Stack>
 
-      <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        <Link variant="body2" color="inherit" underline="always">
-          Forgot password?
-        </Link>
-      </Stack>
-
       <LoadingButton
         fullWidth
         color="inherit"
@@ -105,6 +99,7 @@ export default function AuthLoginForm() {
             bgcolor: 'text.primary',
             color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
           },
+          mt:4
         }}
       >
         Login

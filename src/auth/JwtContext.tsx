@@ -99,9 +99,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/api/account/my-account');
+        const response = await axios.get('/auth/me');
 
-        const { user } = response.data;
+        const user = response.data.data;
 
         dispatch({
           type: Types.INITIAL,
@@ -137,13 +137,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // LOGIN
   const login = useCallback(async (email: string, password: string) => {
-    const response = await axios.post('/api/account/login', {
+    const response = await axios.post('/auth/login', {
       email,
       password,
     });
-    const { accessToken, user } = response.data;
+    const { token, user } = response.data.data;
 
-    setSession(accessToken);
+    setSession(token);
 
     dispatch({
       type: Types.LOGIN,
@@ -156,7 +156,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // REGISTER
   const register = useCallback(
     async (email: string, password: string, firstName: string, lastName: string) => {
-      const response = await axios.post('/api/account/register', {
+      const response = await axios.post('/auth/register', {
         email,
         password,
         firstName,
