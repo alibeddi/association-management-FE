@@ -77,6 +77,10 @@ const navConfig = [
         path: PATH_DASHBOARD.groupPermissions,
         icon: ICONS.groupPermissions,
       },
+      {
+        title: 'calendar',
+        path: PATH_DASHBOARD.calender
+      }
     ],
   },
 ];
