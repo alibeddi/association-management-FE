@@ -35,7 +35,7 @@ export const PATH_DASHBOARD = {
   operators: path(ROOTS_DASHBOARD, '/operators'),
   settings: {
     root: path(ROOTS_DASHBOARD, '/settings'),
-    agency: path(ROOTS_DASHBOARD, '/settings/agency'),
+    kpis: path(ROOTS_DASHBOARD, '/settings/kpis'),
     users: path(ROOTS_DASHBOARD, '/settings/users'),
     bookableExtras: path(ROOTS_DASHBOARD, '/settings/bookableExtras'),
   },

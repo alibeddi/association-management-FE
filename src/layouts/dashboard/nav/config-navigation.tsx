@@ -67,7 +67,7 @@ const navConfig = [
         path: PATH_DASHBOARD.settings.root,
         icon: ICONS.settings,
         children: [
-          { title: 'agency', path: PATH_DASHBOARD.settings.agency },
+          { title: 'kpis', path: PATH_DASHBOARD.settings.kpis },
           { title: 'users', path: PATH_DASHBOARD.settings.users },
           { title: 'bookableExtras', path: PATH_DASHBOARD.settings.bookableExtras },
         ],

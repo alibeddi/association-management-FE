@@ -33,10 +33,9 @@ const PermissionTable = ({
   setSelectedPermissions,
   selectedPermissions,
 }: Props) => {
-  console.log(selectedPermissions);
   const { translate, currentLang } = useLocales();
   const { status } = useSelector((state: RootState) => state.permissions);
-  const isNotFound = !selectedPermissions?.length;
+  const isNotFound = !actions.length && !entities.length;
   const permissionsAsString = extractEntitiesAndActionsStrings(selectedPermissions);
   return (
     <TableContainer sx={{ height: '600px' }}>

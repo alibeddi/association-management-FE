@@ -13,11 +13,12 @@ import {
   Branches,
   Categories,
   Dashboard,
+  Kpis,
   LoginPage,
   OperatorList,
   Page404,
   PermissionGroup,
-  Vehicles
+  Vehicles,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -87,8 +88,8 @@ export default function Router() {
         {
           path: 'settings',
           children: [
-            { element: <Navigate to="/dashboard/settings/agency" replace />, index: true },
-            { path: 'agency', element: <Dashboard /> },
+            { element: <Navigate to="/dashboard/settings/kpis" replace />, index: true },
+            { path: 'kpis', element: <Kpis /> },
             { path: 'users', element: <Dashboard /> },
             { path: 'bookableExtras', element: <Dashboard /> },
           ],
