@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Meta, PaginationModel } from 'src/@types/Pagination';
-import { PermissionGroup } from 'src/@types/PermissionGroup';
-import { IStatus } from 'src/@types/status';
+import { Meta, PaginationModel } from '../../@types/Pagination';
+import { PermissionGroup } from '../../@types/PermissionGroup';
+import { IStatus } from '../../@types/status';
 import axios from '../../utils/axios';
 
 type PermissionState = {
@@ -166,7 +166,7 @@ const slice = createSlice({
       .addCase(updateGroupPermission.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
         state.permissionGroup = action.payload.data;
-        state.permissionGroups.docs = state.permissionGroups.docs.map((group) =>
+        state.permissionGroups.docs = state.permissionGroups.docs.map((group:PermissionGroup) =>
           group._id === action.payload.data._id ? action.payload.data : group
         );
       })

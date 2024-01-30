@@ -1,6 +1,5 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // auth
-import GroupPermissionGuard from 'src/auth/GroupPermissionsGuard';
 import AuthGuard from '../auth/AuthGuard';
 import GuestGuard from '../auth/GuestGuard';
 // layouts
@@ -9,6 +8,7 @@ import DashboardLayout from '../layouts/dashboard';
 // config
 import { PATH_AFTER_LOGIN } from '../config-global';
 //
+import GroupPermissionGuard from '../auth/GroupPermissionsGuard';
 import {
   Branches,
   Categories,
@@ -17,7 +17,7 @@ import {
   OperatorList,
   Page404,
   PermissionGroup,
-  Vehicles,
+  Vehicles
 } from './elements';
 
 // ----------------------------------------------------------------------

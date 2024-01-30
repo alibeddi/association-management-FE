@@ -15,30 +15,16 @@ import {
   Tabs,
   Tooltip,
 } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from 'src/routes/paths';
-// @types
-import { IUserAccountGeneral } from 'src/@types/User';
-// _mock_
-import { _userList } from 'src/_mock/arrays';
-// components
-import ConfirmDialog from 'src/components/confirm-dialog';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
-import {
-  emptyRows,
-  getComparator,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableNoData,
-  TablePaginationCustom,
-  TableSelectedAction,
-  useTable,
-} from 'src/components/table';
 import UserTableToolbar from './userTableToolbar';
 import UserTableRow from './userTableRow';
+import { emptyRows, getComparator, TableEmptyRows, TableHeadCustom, TableNoData, TablePaginationCustom, TableSelectedAction, useTable } from '../../../components/table';
+import { _userList } from '../../../_mock/arrays';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import { IUserAccountGeneral } from '../../../@types/User';
 
 // ----------------------------------------------------------------------
 
@@ -143,7 +129,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+    const deleteRow = tableData.filter((row: { id: string; }) => row.id !== id);
     setSelected([]);
     setTableData(deleteRow);
 
@@ -155,7 +141,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+    const deleteRows = tableData.filter((row: { id: string; }) => !selectedRows.includes(row.id));
     setSelected([]);
     setTableData(deleteRows);
 
@@ -233,10 +219,10 @@ export default function UserListPage() {
             dense={dense}
             numSelected={selected.length}
             rowCount={tableData.length}
-            onSelectAllRows={(checked) =>
+            onSelectAllRows={(checked: any) =>
               onSelectAllRows(
                 checked,
-                tableData.map((row) => row.id)
+                tableData.map((row: any) => row.id)
               )
             }
             action={
@@ -257,10 +243,10 @@ export default function UserListPage() {
                 rowCount={tableData.length}
                 numSelected={selected.length}
                 onSort={onSort}
-                onSelectAllRows={(checked) =>
+                onSelectAllRows={(checked: any) =>
                   onSelectAllRows(
                     checked,
-                    tableData.map((row) => row.id)
+                    tableData.map((row: any) => row.id)
                   )
                 }
               />

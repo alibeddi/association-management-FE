@@ -2,16 +2,16 @@ import { Button, IconButton, MenuItem, Stack } from '@mui/material';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Permission } from 'src/@types/Permission';
-import { PermissionGroup } from 'src/@types/PermissionGroup';
-import { useAuthContext } from 'src/auth/useAuthContext';
-import ConfirmDialog from 'src/components/confirm-dialog';
-import Iconify from 'src/components/iconify';
-import MenuPopover from 'src/components/menu-popover';
-import { useLocales } from 'src/locales';
-import { deleteGroupPermissionById, getPermissionGroup } from 'src/redux/slices/groupPermissions';
-import { RootState, dispatch, useSelector } from 'src/redux/store';
-import { PATH_DASHBOARD } from 'src/routes/paths';
+import { Permission } from '../../../@types/Permission';
+import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import Iconify from '../../../components/iconify';
+import MenuPopover from '../../../components/menu-popover';
+import { useLocales } from '../../../locales';
+import { deleteGroupPermissionById, getPermissionGroup } from '../../../redux/slices/groupPermissions';
+import { dispatch, RootState, useSelector } from '../../../redux/store';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 import { hasPermission } from './utils';
 
 type Props = {

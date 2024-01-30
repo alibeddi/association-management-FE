@@ -11,15 +11,11 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-// @types
-import { IUserAccountGeneral } from 'src/@types/User';
-// components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import MenuPopover from 'src/components/menu-popover';
-import ConfirmDialog from 'src/components/confirm-dialog';
-
-// ----------------------------------------------------------------------
+import { IUserAccountGeneral } from '../../../@types/User';
+import Iconify from '../../../components/iconify';
+import Label from '../../../components/label';
+import MenuPopover from '../../../components/menu-popover';
+import ConfirmDialog from '../../../components/confirm-dialog';
 
 type Props = {
   row: IUserAccountGeneral;

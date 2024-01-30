@@ -1,4 +1,4 @@
-import { Permission } from 'src/@types/Permission';
+import { Permission } from "../../../@types/Permission";
 
 export function hasPermission(userPermissions: Permission[], model: string, method: string) {
   return userPermissions?.some(
