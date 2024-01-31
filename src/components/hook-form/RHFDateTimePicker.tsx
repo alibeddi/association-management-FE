@@ -60,7 +60,7 @@ export default function RHFDateTimePicker({
       name={name}
       defaultValue={null}
       control={control}
-      render={({ field: { value }, fieldState: { error } }) => {
+      render={({ field: { value }, fieldState: { error } }:any) => {
         const pickerValue = getPickerValue(value);
         return (
           <Stack sx={{ display: 'flex', flexDirection: 'column', gap: 0.2 }}>

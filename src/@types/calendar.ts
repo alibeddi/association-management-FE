@@ -10,8 +10,9 @@ export type ICalendarEvent = {
   description: string;
   color: string;
   allDay: boolean;
-  start: Date | string | null;
-  end: Date | string | null;
+  startDate: Date | string | null;
+  endDate: Date | string | null;
+  backgroundColor?: string;
 };
 
 export type ICalendarState = {

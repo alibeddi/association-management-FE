@@ -2,7 +2,7 @@
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
 import { FormHelperText, Stack, TextFieldProps, Tooltip } from '@mui/material';
-import { DatePicker, DateView } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 // translation
 import { useLocales } from '../../locales';
 
@@ -13,7 +13,7 @@ type Props = TextFieldProps & {
   min?: number;
   inputFormat?: string;
   isDisabled?: boolean;
-  views?: DateView[] | undefined;
+  views?: any[] | undefined;
 };
 
 export default function RHFDate({
@@ -70,7 +70,7 @@ export default function RHFDate({
                   },
                 },
               }}
-              onChange={(newValue: Date | null) => {
+              onChange={(newValue: any) => {
                 field.onChange(newValue);
               }}
               format={inputFormat || 'dd/MM/yyyy'}

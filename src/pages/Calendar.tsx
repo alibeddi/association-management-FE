@@ -1,5 +1,5 @@
 import FullCalendar from '@fullcalendar/react'; // => request placed at the top
-import { DateSelectArg, EventClickArg, EventDropArg, EventInput } from '@fullcalendar/core';
+import { DateSelectArg, EventClickArg, EventDropArg, EventInput,formatDate } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -71,17 +71,20 @@ export default function CalendarPage() {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const [selectedRange, setSelectedRange] = useState<{
-    start: Date;
+    start: Date ;
     end: Date;
-  } | null>(null);
+  } | null>({
+    start: new Date(),
+    end: new Date()
+  });
 
-  // const selectedEvent = useSelector(() => {
-  //   if (selectedEventId) {
-  //     return events.find((event) => event.id === selectedEventId);
-  //   }
+  const selectedEvent = useSelector(() => {
+    if (selectedEventId) {
+      return events.find((event) => event.id === selectedEventId);
+    }
 
-  //   return null;
-  // });
+    return null;
+  });
 
   const picker = useDateRangePicker(null, null);
 
@@ -161,10 +164,12 @@ export default function CalendarPage() {
 
       calendarApi.unselect();
     }
+    console.log({arg});
+    
     handleOpenModal();
     setSelectedRange({
-      start: arg.start,
-      end: arg.end,
+      start: arg.start || new Date().toISOString(),
+      end: arg.end || new Date().toISOString(),
     });
   };
 
@@ -175,13 +180,14 @@ export default function CalendarPage() {
 
   const handleResizeEvent = ({ event }: EventResizeDoneArg) => {
     try {
+
       dispatch(
         updateCalendarWorkTime({
         id:event.id,
         body:{
           allDay: event.allDay,
-          start: event.start,
-          end: event.end,
+          startDate: event.start ,
+          endDate: event.end
         }
         })
       );
@@ -197,8 +203,8 @@ export default function CalendarPage() {
           id:event.id,
           body:{
             allDay: event.allDay,
-            start: event.start,
-            end: event.end,
+            startDate: event.start ,
+            endDate: event.end ,
           }
           })
       );
@@ -208,6 +214,7 @@ export default function CalendarPage() {
   };
 
   const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {
+    console.log("you're here you try to create event!")
     if (selectedEventId) {
       dispatch(updateCalendarWorkTime({id:selectedEventId, body:newEvent}));
       enqueueSnackbar('Update success!');
@@ -319,6 +326,7 @@ export default function CalendarPage() {
               eventClick={handleSelectEvent}
               eventResize={handleResizeEvent}
               height={isDesktop ? 720 : 'auto'}
+              eventColor='#1890FF'
               plugins={[
                 listPlugin,
                 dayGridPlugin,
@@ -331,18 +339,17 @@ export default function CalendarPage() {
         </Card>
       </Container>
 
-      {/* <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
+      <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
         <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
-
         <CalendarForm
-          event={selectedEvent}
-          range={selectedRange}
-          onCancel={handleCloseModal}
-          onCreateUpdateEvent={handleCreateUpdateEvent}
-          onDeleteEvent={handleDeleteEvent}
-          colorOptions={COLOR_OPTIONS}
-        />
-      </Dialog> */}
+              event={selectedEvent}
+              range={selectedRange}
+              onCancel={handleCloseModal}
+              onCreateUpdateEvent={handleCreateUpdateEvent}
+              onDeleteEvent={handleDeleteEvent}
+              colorOptions={COLOR_OPTIONS}
+            /> 
+      </Dialog> 
 
       <CalendarFilterDrawer
         events={events}
@@ -369,9 +376,11 @@ export default function CalendarPage() {
 const useGetEvents = () => {
   const dispatch = useDispatch();
 
-  const workTimesStore = useSelector((state) => state.workTimes);
-  const {workTimes:data} = workTimesStore;
+  const workTimes = useSelector((state) => state.workTimes.workTimes);
 
+  
+  const {docs:data} = workTimes;
+  
   const getAllEvents = useCallback(() => {
     dispatch(getMyCalendarWorkTime());
   }, [dispatch]);
@@ -379,14 +388,14 @@ const useGetEvents = () => {
   useEffect(() => {
     getAllEvents();
   }, [getAllEvents]);
+  const events:EventInput[] = data.map((event) => ({
+    id:event._id,
+    start:event.startDate || new Date(),
+    end: event.endDate || new Date(),
+    backgroundColor: event?.backgroundColor || '#00AB55',
+  }));
 
-  // const events = data.map((event) => ({
-  //   ...event,
-  //   textColor: event.color,
-  // }));
-
-  // return events;
-  return [];
+return events;
 };
 
 // ----------------------------------------------------------------------
@@ -421,6 +430,5 @@ function applyFilter({
         fTimestamp(event.end as Date) <= fTimestamp(filterEndDate)
     );
   }
-
   return inputData;
 }

@@ -43,8 +43,8 @@ const getInitialValues = (
     description: '',
     color: '#1890FF',
     allDay: false,
-    start: range ? new Date(range.start).toISOString() : new Date().toISOString(),
-    end: range ? new Date(range.end).toISOString() : new Date().toISOString(),
+    startDate: range ? new Date(range.start).toISOString() : new Date().toISOString(),
+    endDate: range ? new Date(range.end).toISOString() : new Date().toISOString(),
   };
 
   if (event || range) {
@@ -64,6 +64,8 @@ export default function CalendarForm({
   onDeleteEvent,
   onCancel,
 }: Props) {
+  console.log({range});
+  
   const hasEventData = !!event;
 
   const EventSchema = Yup.object().shape({
@@ -93,8 +95,8 @@ export default function CalendarForm({
         description: data.description,
         color: data.color,
         allDay: data.allDay,
-        start: data.start,
-        end: data.end,
+        startDate: data.startDate,
+        endDate: data.endDate,
       };
       onCreateUpdateEvent(newEvent);
       onCancel();
@@ -105,10 +107,10 @@ export default function CalendarForm({
   };
 
   const isDateError =
-    !values.allDay && values.start && values.end
-      ? isBefore(new Date(values.end), new Date(values.start))
+    !values.allDay && values.startDate && values.endDate
+      ? isBefore(new Date(values.endDate), new Date(values.startDate))
       : false;
-
+console.log({isDateError})
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3} sx={{ px: 3 }}>
@@ -117,9 +119,21 @@ export default function CalendarForm({
         <RHFTextField name="description" label="Description" multiline rows={3} />
 
         <RHFSwitch name="allDay" label="All day" />
-
         <Controller
-          name="start"
+        name="startDate"
+        control={control}
+        render={({ field }) => (
+          <MobileDateTimePicker
+            {...field}
+            onChange={(newValue: Date | null) => field.onChange(newValue)}
+            label="Start date"
+            inputFormat="dd/MM/yyyy hh:mm a"
+            renderInput={(params) => <TextField {...params} fullWidth />}
+          />
+        )}
+        />
+        {/* <Controller
+          name="startDate"
           control={control}
           render={({ field }) => (
             // <MobileDateTimePicker
@@ -134,14 +148,14 @@ export default function CalendarForm({
               onChange={(newValue: Date | null) => field.onChange(newValue)}
               label="Start date"
               value={field.value ? new Date(field.value) : null}
-              name="start"
+              name="startDate"
               format="yyyy/MM/dd HH:mm"
             />
           )}
-        />
+        /> */}
 
-        <Controller
-          name="end"
+        {/* <Controller
+          name="endDate"
           control={control}
           render={({ field }) => (
             // <MobileDateTimePicker
@@ -158,18 +172,26 @@ export default function CalendarForm({
             //   //   />
             //   // )}
             // />
-            <MobileDateTimePicker
+          //   <MobileDateTimePicker
+          // {...field}
+          // onChange={(newValue: Date | null) => field.onChange(newValue)}
+          // label="Start date"
+          // value={field.value ? new Date(field.value) : null}
+
+          // format="yyyy/MM/dd HH:mm"
+          // />
+          <MobileDateTimePicker
           {...field}
           onChange={(newValue: Date | null) => field.onChange(newValue)}
           label="Start date"
           value={field.value ? new Date(field.value) : null}
-          name="start"
+          name="startDate"
           format="yyyy/MM/dd HH:mm"
-          />
-          )}
         />
+          )}
+        /> */}
 
-        <Controller
+        {/* <Controller
           name="color"
           control={control}
           render={({ field }) => (
@@ -179,9 +201,9 @@ export default function CalendarForm({
               colors={colorOptions}
             />
           )}
-        />
+        /> */}
       </Stack>
-
+{/* 
       <DialogActions>
         {hasEventData && (
           <Tooltip title="Delete Event">
@@ -200,7 +222,7 @@ export default function CalendarForm({
         <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
           {hasEventData ? 'Update' : 'Add'}
         </LoadingButton>
-      </DialogActions>
+      </DialogActions> */}
     </FormProvider>
   );
 }
