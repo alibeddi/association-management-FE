@@ -1,5 +1,8 @@
+import { Container } from '@mui/material';
 import React from 'react';
 
 export default function KpiForm() {
-  return <div>KpitrkiythjnForm</div>;
+  return <Container maxWidth={false}>
+    jfdkhvjhdfv
+  </Container>;
 }
