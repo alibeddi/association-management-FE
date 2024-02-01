@@ -71,21 +71,16 @@ export default function CalendarPage() {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const [selectedRange, setSelectedRange] = useState<{
-    start: Date ;
-    end: Date;
-  } | null>({
-    start: new Date(),
-    end: new Date()
-  });
+    startDate: Date ;
+    endDate: Date;
+  } | null>(null);
 
   const selectedEvent = useSelector(() => {
     if (selectedEventId) {
       return events.find((event) => event.id === selectedEventId);
     }
-
     return null;
   });
-
   const picker = useDateRangePicker(null, null);
 
   const [date, setDate] = useState(new Date());
@@ -164,18 +159,23 @@ export default function CalendarPage() {
 
       calendarApi.unselect();
     }
-    console.log({arg});
-    
     handleOpenModal();
     setSelectedRange({
-      start: arg.start || new Date().toISOString(),
-      end: arg.end || new Date().toISOString(),
+      startDate: arg.start,
+      endDate: arg.end,
     });
   };
 
   const handleSelectEvent = (arg: EventClickArg) => {
     handleOpenModal();
     setSelectedEventId(arg.event.id);
+    if(arg?.event?.start && arg?.event?.end){
+      setSelectedRange({
+        startDate:arg.event.start ,
+        endDate:arg.event.end
+      })
+    }
+   
   };
 
   const handleResizeEvent = ({ event }: EventResizeDoneArg) => {
@@ -185,7 +185,6 @@ export default function CalendarPage() {
         updateCalendarWorkTime({
         id:event.id,
         body:{
-          allDay: event.allDay,
           startDate: event.start ,
           endDate: event.end
         }
@@ -202,7 +201,6 @@ export default function CalendarPage() {
         updateCalendarWorkTime({
           id:event.id,
           body:{
-            allDay: event.allDay,
             startDate: event.start ,
             endDate: event.end ,
           }
@@ -214,7 +212,6 @@ export default function CalendarPage() {
   };
 
   const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {
-    console.log("you're here you try to create event!")
     if (selectedEventId) {
       dispatch(updateCalendarWorkTime({id:selectedEventId, body:newEvent}));
       enqueueSnackbar('Update success!');
@@ -222,6 +219,7 @@ export default function CalendarPage() {
       dispatch(createCalendarWorkTime(newEvent));
       enqueueSnackbar('Create success!');
     }
+    dispatch(getMyCalendarWorkTime())
   };
 
   const handleDeleteEvent = () => {
@@ -229,6 +227,7 @@ export default function CalendarPage() {
       if (selectedEventId) {
         handleCloseModal();
         dispatch(deleteCalendarWorkTime({id:selectedEventId}));
+        dispatch(getMyCalendarWorkTime())
         enqueueSnackbar('Delete success!');
       }
     } catch (error) {
@@ -327,6 +326,7 @@ export default function CalendarPage() {
               eventResize={handleResizeEvent}
               height={isDesktop ? 720 : 'auto'}
               eventColor='#1890FF'
+              eventBackgroundColor='#1890FF'
               plugins={[
                 listPlugin,
                 dayGridPlugin,
@@ -347,7 +347,6 @@ export default function CalendarPage() {
               onCancel={handleCloseModal}
               onCreateUpdateEvent={handleCreateUpdateEvent}
               onDeleteEvent={handleDeleteEvent}
-              colorOptions={COLOR_OPTIONS}
             /> 
       </Dialog> 
 
@@ -355,7 +354,6 @@ export default function CalendarPage() {
         events={events}
         picker={picker}
         openFilter={openFilter}
-        colorOptions={COLOR_OPTIONS}
         onResetFilter={handleResetFilter}
         filterEventColor={filterEventColor}
         onCloseFilter={() => setOpenFilter(false)}
@@ -392,7 +390,8 @@ const useGetEvents = () => {
     id:event._id,
     start:event.startDate || new Date(),
     end: event.endDate || new Date(),
-    backgroundColor: event?.backgroundColor || '#00AB55',
+    textColor: "#378006",
+    title: "working hour"
   }));
 
 return events;

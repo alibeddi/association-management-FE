@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
-import { TextFieldProps, Tooltip, FormHelperText, Stack } from '@mui/material';
+import { TextFieldProps, Tooltip, FormHelperText, Stack, TextField } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 
 // translation
@@ -33,7 +33,7 @@ export default function RHFDateTimePicker({
   const { control, setValue } = useFormContext();
   const [isOpened, setIsOpened] = useState(false);
 
-  const handlePickerChange = (value: Date | null) => {
+  const handlePickerChange = (value: unknown) => {
     setValue(name, value, { shouldValidate: true });
   };
   const currentDate = new Date();
@@ -71,33 +71,34 @@ export default function RHFDateTimePicker({
                 onChange={handlePickerChange}
                 minutesStep={['endDate', 'startDate'].includes(name) ? 15 : 5}
                 onOpen={() => setIsOpened(true)}
-                slotProps={{
-                  textField: {
-                    error: false,
-                  },
-                }}
-                sx={{
-                  '& .MuiInputLabel-root': {
-                    color: error && typeof error?.message === 'string' ? '#FF5630' : undefined,
-                  },
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor:
-                        error && typeof error?.message === 'string' ? '#FF5630' : undefined,
-                    },
-                    '&:hover fieldset': {
-                      borderColor:
-                        error && typeof error?.message === 'string' ? '#FF5630' : undefined,
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'black',
-                    },
-                    '& .MuiInputLabel-root.Mui-focused': {
-                      color: 'black',
-                    },
-                  },
-                }}
-                format="dd/MM/yyyy HH:mm"
+                renderInput={(props) => <TextField {...props} />}
+                // slotProps={{
+                //   textField: {
+                //     error: false,
+                //   },
+                // }}
+                // sx={{
+                //   '& .MuiInputLabel-root': {
+                //     color: error && typeof error?.message === 'string' ? '#FF5630' : undefined,
+                //   },
+                //   '& .MuiOutlinedInput-root': {
+                //     '& fieldset': {
+                //       borderColor:
+                //         error && typeof error?.message === 'string' ? '#FF5630' : undefined,
+                //     },
+                //     '&:hover fieldset': {
+                //       borderColor:
+                //         error && typeof error?.message === 'string' ? '#FF5630' : undefined,
+                //     },
+                //     '&.Mui-focused fieldset': {
+                //       borderColor: 'black',
+                //     },
+                //     '& .MuiInputLabel-root.Mui-focused': {
+                //       color: 'black',
+                //     },
+                //   },
+                // }}
+                // format="dd/MM/yyyy HH:mm"
               />
             </Tooltip>
 

@@ -1,7 +1,7 @@
 // form
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
-import { FormHelperText, Stack, TextFieldProps, Tooltip } from '@mui/material';
+import { FormHelperText, Stack, TextField, TextFieldProps, Tooltip } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 // translation
 import { useLocales } from '../../locales';
@@ -14,6 +14,7 @@ type Props = TextFieldProps & {
   inputFormat?: string;
   isDisabled?: boolean;
   views?: any[] | undefined;
+  format:string;
 };
 
 export default function RHFDate({
@@ -51,29 +52,11 @@ export default function RHFDate({
               onOpen={() => {
                 setValue(name, field.value ? new Date(field?.value) : new Date(today));
               }}
-              sx={{
-                '& .MuiInputLabel-root': {
-                  color: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                  },
-                  '&:hover fieldset': {
-                    borderColor: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'black',
-                  },
-                  '& .MuiInputLabel-root.Mui-focused': {
-                    color: 'black',
-                  },
-                },
-              }}
+              renderInput={(props)=> <TextField {...props} />}
               onChange={(newValue: any) => {
                 field.onChange(newValue);
               }}
-              format={inputFormat || 'dd/MM/yyyy'}
+              // format={inputFormat || 'dd/MM/yyyy h m'}
             />
           </Tooltip>
 

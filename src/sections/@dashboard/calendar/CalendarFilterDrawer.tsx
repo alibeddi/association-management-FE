@@ -29,7 +29,6 @@ type Props = {
   events: EventInput[];
   onResetFilter: VoidFunction;
   onCloseFilter: VoidFunction;
-  colorOptions: string[];
   filterEventColor: string[];
   picker: DateRangePickerProps;
   onSelectEvent: (eventId: string) => void;
@@ -40,7 +39,6 @@ export default function CalendarFilterDrawer({
   events,
   picker,
   openFilter,
-  colorOptions,
   onCloseFilter,
   onResetFilter,
   onSelectEvent,
@@ -104,13 +102,12 @@ export default function CalendarFilterDrawer({
       >
         Colors
       </Typography>
-
+{/* 
       <ColorMultiPicker
-        colors={colorOptions}
         selected={filterEventColor}
         onChangeColor={onFilterEventColor}
         sx={{ mx: 2 }}
-      />
+      /> */}
 
       <Typography
         variant="caption"
@@ -128,6 +125,7 @@ export default function CalendarFilterDrawer({
           label="Start date"
           value={picker.startDate}
           onChange={picker.onChangeStartDate}
+          renderInput={(props)=> <TextField {...props} />}
           // renderInput={(params) => <TextField size="small" {...params} />}
         />
 
@@ -135,6 +133,8 @@ export default function CalendarFilterDrawer({
           label="End date"
           value={picker.endDate}
           onChange={picker.onChangeEndDate}
+          renderInput={(props)=> <TextField {...props} />}
+
           // renderInput={(params) => (
           //   <TextField
           //     size="small"

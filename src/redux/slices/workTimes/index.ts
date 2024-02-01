@@ -39,6 +39,7 @@ const initialState: WorkTimeState = {
         })
         .addCase(createCalendarWorkTime.fulfilled, (state, {payload}) => {
           state.status = IStatus.SUCCEEDED;
+    
           state.workTimes.docs = [...state.workTimes.docs,payload]
         })
         .addCase(createCalendarWorkTime.rejected, (state) => {
