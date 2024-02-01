@@ -1,18 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
-import {
-  Button,
-  Card,
-  Divider,
-  IconButton,
-  Tab,
-  Table,
-  TableBody,
-  TableContainer,
-  Tabs,
-  Tooltip,
-} from '@mui/material';
+import { Button, Card, IconButton, Table, TableBody, TableContainer, Tooltip } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import { IKpi } from '../../../../@types/Kpi';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
@@ -28,11 +18,11 @@ import {
   TableSelectedAction,
   useTable,
 } from '../../../../components/table';
+import { deleteOnekpi, getKpis } from '../../../../redux/slices/kpis';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import KpiTableRow from './KpiTableRow';
 import KpiTableToolbar from './KpiTableToolbar';
-import { getKpis } from '../../../../redux/slices/kpis';
 
 // ----------------------------------------------------------------------
 
@@ -84,14 +74,16 @@ export default function KpiListPage() {
   } = useTable();
 
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     dispatch(getKpis());
   }, []);
 
   const { kpis } = useSelector((state: RootState) => state.kpis);
-  const [tableData, setTableData] = useState(kpis.docs);
-  console.log(kpis.docs);
+  const { docs: dataList, meta } = kpis;
+  console.log({ dataList });
+  const [tableData, setTableData] = useState(dataList);
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('all');
@@ -101,7 +93,7 @@ export default function KpiListPage() {
   const [filterStatus, setFilterStatus] = useState('all');
 
   const dataFiltered = applyFilter({
-    inputData: kpis.docs,
+    inputData: dataList,
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
@@ -141,21 +133,32 @@ export default function KpiListPage() {
     setPage(0);
     setFilterRole(event.target.value);
   };
-
+  // +=========================================================================+
   const handleDeleteRow = (id: string) => {
-    const deleteRow = kpis.docs.filter((row: { _id: string }) => row._id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
+    console.log('hghjgdjhsfgjshdgfjhsdgfjhsgdfhj');
 
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
+    dispatch(deleteOnekpi({ kpiId: id }))
+    //.then((res: any) => {
+    //   // RESONSE ERROR
+    //   console.log({ res });
+    //   if (res?.meta?.requestStatus === 'fulfilled') {
+    //     enqueueSnackbar(`${res?.payload.message}`);
+    //   } else {
+    //     enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
+    //   }
+    // });
+    // const deleteRow = dataList.filter((row: { _id: string }) => row._id !== id);
+    // setSelected([]);
+    // setTableData(deleteRow);
+    // if (page > 0) {
+    //   if (dataInPage.length < 2) {
+    //     setPage(page - 1);
+    //   }
+    // }
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = kpis.docs.filter((row: { _id: string }) => !selectedRows.includes(row._id));
+    const deleteRows = dataList.filter((row: { _id: string }) => !selectedRows.includes(row._id));
     setSelected([]);
     setTableData(deleteRows);
 
@@ -165,7 +168,7 @@ export default function KpiListPage() {
       } else if (selectedRows.length === dataFiltered.length) {
         setPage(0);
       } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((kpis.docs.length - selectedRows.length) / rowsPerPage) - 1;
+        const newPage = Math.ceil((dataList.length - selectedRows.length) / rowsPerPage) - 1;
         setPage(newPage);
       }
     }
@@ -187,8 +190,7 @@ export default function KpiListPage() {
         heading="Kpi List"
         links={[
           { name: 'Dashboard', href: PATH_DASHBOARD.root },
-          { name: 'Kpi', href: PATH_DASHBOARD.operators },
-          { name: 'List' },
+          { name: 'Kpi', href: PATH_DASHBOARD.settings.kpis },
         ]}
         action={
           <Button
@@ -203,21 +205,6 @@ export default function KpiListPage() {
       />
 
       <Card>
-        <Tabs
-          value={filterStatus}
-          onChange={handleFilterStatus}
-          sx={{
-            px: 2,
-            bgcolor: 'background.neutral',
-          }}
-        >
-          {STATUS_OPTIONS.map((tab) => (
-            <Tab key={tab} label={tab} value={tab} />
-          ))}
-        </Tabs>
-
-        <Divider />
-
         <KpiTableToolbar
           isFiltered={isFiltered}
           filterName={filterName}
@@ -232,11 +219,11 @@ export default function KpiListPage() {
           <TableSelectedAction
             dense={dense}
             numSelected={selected.length}
-            rowCount={kpis.docs.length}
+            rowCount={dataList.length}
             onSelectAllRows={(checked: any) =>
               onSelectAllRows(
                 checked,
-                kpis.docs.map((row: any) => row.id)
+                dataList.map((row: any) => row.id)
               )
             }
             action={
@@ -254,13 +241,13 @@ export default function KpiListPage() {
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={kpis.docs.length}
+                rowCount={dataList.length}
                 numSelected={selected.length}
                 onSort={onSort}
                 onSelectAllRows={(checked: any) =>
                   onSelectAllRows(
                     checked,
-                    kpis.docs.map((row: any) => row.id)
+                    dataList.map((row: any) => row.id)
                   )
                 }
               />
@@ -281,7 +268,7 @@ export default function KpiListPage() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(page, rowsPerPage, kpis.docs.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, dataList.length)}
                 />
 
                 <TableNoData isNotFound={isNotFound} />
@@ -296,7 +283,6 @@ export default function KpiListPage() {
           rowsPerPage={rowsPerPage}
           onPageChange={onChangePage}
           onRowsPerPageChange={onChangeRowsPerPage}
-          //
           dense={dense}
           onChangeDense={onChangeDense}
         />

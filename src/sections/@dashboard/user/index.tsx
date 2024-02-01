@@ -17,7 +17,16 @@ import {
 } from '@mui/material';
 import UserTableToolbar from './userTableToolbar';
 import UserTableRow from './userTableRow';
-import { emptyRows, getComparator, TableEmptyRows, TableHeadCustom, TableNoData, TablePaginationCustom, TableSelectedAction, useTable } from '../../../components/table';
+import {
+  emptyRows,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableNoData,
+  TablePaginationCustom,
+  TableSelectedAction,
+  useTable,
+} from '../../../components/table';
 import { _userList } from '../../../_mock/arrays';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -83,7 +92,7 @@ export default function UserListPage() {
   const [filterRole, setFilterRole] = useState('all');
 
   const [openConfirm, setOpenConfirm] = useState(false);
-
+  console.log({ openConfirm });
   const [filterStatus, setFilterStatus] = useState('all');
 
   const dataFiltered = applyFilter({
@@ -129,7 +138,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    const deleteRow = tableData.filter((row: { id: string; }) => row.id !== id);
+    const deleteRow = tableData.filter((row: { id: string }) => row.id !== id);
     setSelected([]);
     setTableData(deleteRow);
 
@@ -141,7 +150,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = tableData.filter((row: { id: string; }) => !selectedRows.includes(row.id));
+    const deleteRows = tableData.filter((row: { id: string }) => !selectedRows.includes(row.id));
     setSelected([]);
     setTableData(deleteRows);
 
