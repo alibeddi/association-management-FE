@@ -81,7 +81,11 @@ export default function KpiTableRow({ row, selected, onEditRow, onSelectRow, onD
             />
           </Tooltip>
         </TableCell>
-        <TableCell align="left">{options}</TableCell>
+        <TableCell align="left">
+          <Tooltip title={'kfdlnv'}>
+            <p>jhdgfrjdgs</p>
+          </Tooltip>
+        </TableCell>
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
