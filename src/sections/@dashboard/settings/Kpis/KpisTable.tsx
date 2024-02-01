@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
@@ -13,7 +13,7 @@ import {
   Tabs,
   Tooltip,
 } from '@mui/material';
-import { IUserAccountGeneral } from '../../../../@types/User';
+import { IKpi } from '../../../../@types/Kpi';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import Iconify from '../../../../components/iconify';
@@ -28,12 +28,11 @@ import {
   TableSelectedAction,
   useTable,
 } from '../../../../components/table';
+import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { _userList } from '../../../../_mock/arrays';
 import KpiTableRow from './KpiTableRow';
 import KpiTableToolbar from './KpiTableToolbar';
-import { RootState, useSelector } from '../../../../redux/store';
-import { IKpi } from '../../../../@types/Kpi';
+import { getKpis } from '../../../../redux/slices/kpis';
 
 // ----------------------------------------------------------------------
 
@@ -54,16 +53,17 @@ const ROLE_OPTIONS = [
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'label', label: 'Label', align: 'left' },
+  { id: 'frontType', label: 'Frontend Type', align: 'left' },
+  { id: 'backType', label: 'Backend Type', align: 'left' },
+  { id: 'isRequired', label: 'Required', align: 'center' },
+  { id: 'options', label: 'Options', align: 'left' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function UserListPage() {
+export default function KpiListPage() {
   const {
     dense,
     page,
@@ -84,9 +84,14 @@ export default function UserListPage() {
   } = useTable();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getKpis());
+  }, []);
+
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const [tableData, setTableData] = useState(kpis.docs);
-
+  console.log(kpis.docs);
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('all');
@@ -96,7 +101,7 @@ export default function UserListPage() {
   const [filterStatus, setFilterStatus] = useState('all');
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: kpis.docs,
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
@@ -138,7 +143,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    const deleteRow = tableData.filter((row: { _id: string }) => row._id !== id);
+    const deleteRow = kpis.docs.filter((row: { _id: string }) => row._id !== id);
     setSelected([]);
     setTableData(deleteRow);
 
@@ -150,7 +155,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = tableData.filter((row: { _id: string }) => !selectedRows.includes(row._id));
+    const deleteRows = kpis.docs.filter((row: { _id: string }) => !selectedRows.includes(row._id));
     setSelected([]);
     setTableData(deleteRows);
 
@@ -160,7 +165,7 @@ export default function UserListPage() {
       } else if (selectedRows.length === dataFiltered.length) {
         setPage(0);
       } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+        const newPage = Math.ceil((kpis.docs.length - selectedRows.length) / rowsPerPage) - 1;
         setPage(newPage);
       }
     }
@@ -227,11 +232,11 @@ export default function UserListPage() {
           <TableSelectedAction
             dense={dense}
             numSelected={selected.length}
-            rowCount={tableData.length}
+            rowCount={kpis.docs.length}
             onSelectAllRows={(checked: any) =>
               onSelectAllRows(
                 checked,
-                tableData.map((row: any) => row.id)
+                kpis.docs.map((row: any) => row.id)
               )
             }
             action={
@@ -249,13 +254,13 @@ export default function UserListPage() {
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={tableData.length}
+                rowCount={kpis.docs.length}
                 numSelected={selected.length}
                 onSort={onSort}
                 onSelectAllRows={(checked: any) =>
                   onSelectAllRows(
                     checked,
-                    tableData.map((row: any) => row.id)
+                    kpis.docs.map((row: any) => row.id)
                   )
                 }
               />
@@ -276,7 +281,7 @@ export default function UserListPage() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, kpis.docs.length)}
                 />
 
                 <TableNoData isNotFound={isNotFound} />

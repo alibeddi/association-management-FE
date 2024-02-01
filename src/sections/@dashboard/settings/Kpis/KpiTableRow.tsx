@@ -63,6 +63,9 @@ export default function KpiTableRow({ row, selected, onEditRow, onSelectRow, onD
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {frontType}
         </TableCell>
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          {backType}
+        </TableCell>
 
         <TableCell align="center">
           <Iconify
