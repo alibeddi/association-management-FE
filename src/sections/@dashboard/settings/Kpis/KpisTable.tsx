@@ -26,8 +26,6 @@ import KpiTableToolbar from './KpiTableToolbar';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
-
 const ROLE_OPTIONS = [
   'all',
   'ux designer',

@@ -7,6 +7,7 @@ import {
   MenuItem,
   TableCell,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { IKpi } from '../../../../@types/Kpi';
@@ -68,15 +69,17 @@ export default function KpiTableRow({ row, selected, onEditRow, onSelectRow, onD
         </TableCell>
 
         <TableCell align="center">
-          <Iconify
-            icon={isRequired ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-            sx={{
-              width: 20,
-              height: 20,
-              color: 'success.main',
-              ...(!isRequired && { color: 'warning.main' }),
-            }}
-          />
+          <Tooltip title={isRequired ? 'Required' : 'Optional'}>
+            <Iconify
+              icon={isRequired ? 'mdi:required' : 'icon-park-outline:optional'}
+              sx={{
+                width: 20,
+                height: 20,
+                color: 'success.main',
+                ...(!isRequired && { color: 'warning.main' }),
+              }}
+            />
+          </Tooltip>
         </TableCell>
         <TableCell align="left">{options}</TableCell>
         <TableCell align="right">
