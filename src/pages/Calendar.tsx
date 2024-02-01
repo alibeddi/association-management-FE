@@ -180,7 +180,6 @@ export default function CalendarPage() {
 
   const handleResizeEvent = ({ event }: EventResizeDoneArg) => {
     try {
-
       dispatch(
         updateCalendarWorkTime({
         id:event.id,
@@ -195,9 +194,9 @@ export default function CalendarPage() {
     }
   };
 
-  const handleDropEvent = ({ event }: EventDropArg) => {
+  const handleDropEvent = async ({ event }: EventDropArg) => {
     try {
-      dispatch(
+      await dispatch(
         updateCalendarWorkTime({
           id:event.id,
           body:{
@@ -205,8 +204,9 @@ export default function CalendarPage() {
             endDate: event.end ,
           }
           })
-      );
+      )
     } catch (error) {
+      console.log("error : 123 ",error)
       console.error(error);
     }
   };
@@ -235,13 +235,13 @@ export default function CalendarPage() {
     }
   };
 
-  const handleFilterEventColor = (eventColor: string) => {
-    const checked = filterEventColor.includes(eventColor)
-      ? filterEventColor.filter((value) => value !== eventColor)
-      : [...filterEventColor, eventColor];
+  // const handleFilterEventColor = (eventColor: string) => {
+  //   const checked = filterEventColor.includes(eventColor)
+  //     ? filterEventColor.filter((value) => value !== eventColor)
+  //     : [...filterEventColor, eventColor];
 
-    setFilterEventColor(checked);
-  };
+  //   setFilterEventColor(checked);
+  // };
 
   const handleResetFilter = () => {
     const { setStartDate, setEndDate } = picker;
@@ -280,7 +280,6 @@ export default function CalendarPage() {
               name: 'Calendar',
             },
           ]}
-          moreLink={['https://fullcalendar.io/docs/react']}
           action={
             <Button
               variant="contained"
@@ -349,7 +348,7 @@ export default function CalendarPage() {
               onDeleteEvent={handleDeleteEvent}
             /> 
       </Dialog> 
-
+{/* 
       <CalendarFilterDrawer
         events={events}
         picker={picker}
@@ -357,14 +356,14 @@ export default function CalendarPage() {
         onResetFilter={handleResetFilter}
         filterEventColor={filterEventColor}
         onCloseFilter={() => setOpenFilter(false)}
-        onFilterEventColor={handleFilterEventColor}
+        // onFilterEventColor={handleFilterEventColor}
         onSelectEvent={(eventId) => {
           if (eventId) {
             handleOpenModal();
             setSelectedEventId(eventId);
           }
         }}
-      />
+      /> */}
     </>
   );
 }

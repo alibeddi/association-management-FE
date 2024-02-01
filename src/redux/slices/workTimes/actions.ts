@@ -55,18 +55,18 @@ try {
 });
 export const updateCalendarWorkTime = createAsyncThunk('workTimes/update',
 async({id,body}:{id:string,body:ICalendarEvent})=>{
-
 let data;
 try {
   const response = await axios.patch(`/worktimes/${id}`,body);
+  console.log({response});
   data = await response.data;
   if(response.status === 200){
     return data;
   }
-  throw new Error(response.statusText);
+  throw new Error(response.data);
 } catch (err) {
-  return Promise.reject(err.message ? err.message : data?.message);
-
+  console.error("error : ",err.message)
+  throw new  Error(err.message ? err.message : data?.message);
 }
 
 
