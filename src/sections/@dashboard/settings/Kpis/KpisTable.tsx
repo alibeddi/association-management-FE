@@ -82,8 +82,6 @@ export default function KpiListPage() {
 
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const { docs: dataList, meta } = kpis;
-  console.log({ dataList });
-  const [tableData, setTableData] = useState(dataList);
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('all');
@@ -133,34 +131,26 @@ export default function KpiListPage() {
     setPage(0);
     setFilterRole(event.target.value);
   };
-  // +=========================================================================+
   const handleDeleteRow = (id: string) => {
-    console.log('hghjgdjhsfgjshdgfjhsdgfjhsgdfhj');
+    dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        enqueueSnackbar(`${res?.payload.message}`);
+      } else {
+        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
+      }
+    });
 
-    dispatch(deleteOnekpi({ kpiId: id }))
-    //.then((res: any) => {
-    //   // RESONSE ERROR
-    //   console.log({ res });
-    //   if (res?.meta?.requestStatus === 'fulfilled') {
-    //     enqueueSnackbar(`${res?.payload.message}`);
-    //   } else {
-    //     enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
-    //   }
-    // });
-    // const deleteRow = dataList.filter((row: { _id: string }) => row._id !== id);
-    // setSelected([]);
-    // setTableData(deleteRow);
-    // if (page > 0) {
-    //   if (dataInPage.length < 2) {
-    //     setPage(page - 1);
-    //   }
-    // }
+    setSelected([]);
+
+    if (page > 0) {
+      if (dataInPage.length < 2) {
+        setPage(page - 1);
+      }
+    }
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = dataList.filter((row: { _id: string }) => !selectedRows.includes(row._id));
     setSelected([]);
-    setTableData(deleteRows);
 
     if (page > 0) {
       if (selectedRows.length === dataInPage.length) {
