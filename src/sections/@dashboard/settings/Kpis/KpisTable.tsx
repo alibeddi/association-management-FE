@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { IUserAccountGeneral } from '../../../../@types/User';
+import ConfirmDialog from '../../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
@@ -29,11 +30,10 @@ import {
 } from '../../../../components/table';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { _userList } from '../../../../_mock/arrays';
-import UserTableRow from '../../user/userTableRow';
-import UserTableToolbar from '../../user/userTableToolbar';
-import ConfirmDialog from '../../../../components/confirm-dialog';
-import KpiTableToolbar from './KpiTableToolbar';
 import KpiTableRow from './KpiTableRow';
+import KpiTableToolbar from './KpiTableToolbar';
+import { RootState, useSelector } from '../../../../redux/store';
+import { IKpi } from '../../../../@types/Kpi';
 
 // ----------------------------------------------------------------------
 
@@ -84,8 +84,8 @@ export default function UserListPage() {
   } = useTable();
 
   const navigate = useNavigate();
-
-  const [tableData, setTableData] = useState(_userList);
+  const { kpis } = useSelector((state: RootState) => state.kpis);
+  const [tableData, setTableData] = useState(kpis.docs);
 
   const [filterName, setFilterName] = useState('');
 
@@ -138,7 +138,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    const deleteRow = tableData.filter((row: { id: string }) => row.id !== id);
+    const deleteRow = tableData.filter((row: { _id: string }) => row._id !== id);
     setSelected([]);
     setTableData(deleteRow);
 
@@ -150,7 +150,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = tableData.filter((row: { id: string }) => !selectedRows.includes(row.id));
+    const deleteRows = tableData.filter((row: { _id: string }) => !selectedRows.includes(row._id));
     setSelected([]);
     setTableData(deleteRows);
 
@@ -265,11 +265,11 @@ export default function UserListPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <KpiTableRow
-                      key={row.id}
+                      key={row._id}
                       row={row}
-                      selected={selected.includes(row.id)}
-                      onSelectRow={() => onSelectRow(row.id)}
-                      onDeleteRow={() => handleDeleteRow(row.id)}
+                      selected={selected.includes(row._id)}
+                      onSelectRow={() => onSelectRow(row._id)}
+                      onDeleteRow={() => handleDeleteRow(row._id)}
                       onEditRow={() => handleEditRow(row.name)}
                     />
                   ))}
@@ -332,7 +332,7 @@ function applyFilter({
   filterStatus,
   filterRole,
 }: {
-  inputData: IUserAccountGeneral[];
+  inputData: IKpi[];
   comparator: (a: any, b: any) => number;
   filterName: string;
   filterStatus: string;
@@ -350,16 +350,16 @@ function applyFilter({
 
   if (filterName) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (kpi) => kpi.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }
 
   if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
+    inputData = inputData.filter((kpi) => kpi.name === filterStatus);
   }
 
   if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
+    inputData = inputData.filter((kpi) => kpi.name === filterRole);
   }
 
   return inputData;
