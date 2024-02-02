@@ -30,6 +30,7 @@ type Props = {
   onPrevDate: VoidFunction;
   onOpenFilter: VoidFunction;
   onChangeView?: (newView: ICalendarViewValue) => void;
+  addEvent: () => void;
 };
 
 export default function CalendarToolbar({
@@ -40,6 +41,7 @@ export default function CalendarToolbar({
   onPrevDate,
   onChangeView,
   onOpenFilter,
+  addEvent
 }: Props) {
   const isDesktop = useResponsive('up', 'sm');
 
@@ -80,7 +82,13 @@ export default function CalendarToolbar({
            </Button>
         )}  */}
         <Stack>
-          {" "}
+           <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              onClick={addEvent}
+            >
+              New Event
+            </Button>
         </Stack>
         <Stack direction="row" alignItems="center" spacing={1}>
           <IconButton onClick={onPrevDate}>

@@ -1,17 +1,26 @@
 import FullCalendar from '@fullcalendar/react'; // => request placed at the top
-import { DateSelectArg, EventClickArg, EventDropArg, EventInput,formatDate } from '@fullcalendar/core';
+import {
+  DateSelectArg,
+  EventClickArg,
+  EventDropArg,
+  EventInput,
+  formatDate,
+} from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
-import listPlugin from '@fullcalendar/list';
-import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid';
-import timelinePlugin from '@fullcalendar/timeline';
 //
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 // actions
-import { getMyCalendarWorkTime,updateCalendarWorkTime,createCalendarWorkTime,deleteCalendarWorkTime } from 'src/redux/slices/workTimes/actions';
+import {
+  getMyCalendarWorkTime,
+  updateCalendarWorkTime,
+  createCalendarWorkTime,
+  deleteCalendarWorkTime,
+} from 'src/redux/slices/workTimes/actions';
 // @mui
 import { Card, Button, Container, DialogTitle, Dialog } from '@mui/material';
+import { IStatus } from 'src/@types/status';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 
@@ -71,7 +80,7 @@ export default function CalendarPage() {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const [selectedRange, setSelectedRange] = useState<{
-    startDate: Date ;
+    startDate: Date;
     endDate: Date;
   } | null>(null);
 
@@ -169,76 +178,76 @@ export default function CalendarPage() {
   const handleSelectEvent = (arg: EventClickArg) => {
     handleOpenModal();
     setSelectedEventId(arg.event.id);
-    if(arg?.event?.start && arg?.event?.end){
+    if (arg?.event?.start && arg?.event?.end) {
       setSelectedRange({
-        startDate:arg.event.start ,
-        endDate:arg.event.end
-      })
+        startDate: arg.event.start,
+        endDate: arg.event.end,
+      });
     }
-   
   };
 
   const handleResizeEvent = ({ event }: EventResizeDoneArg) => {
     try {
-     
       dispatch(
         updateCalendarWorkTime({
-        id:event.id,
-        body:{
-          startDate: event.start ,
-          endDate: event.end
-        }
+          id: event.id,
+          body: {
+            startDate: event.start,
+            endDate: event.end,
+          },
         })
       );
-      
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDropEvent =  async ({ event }: EventDropArg) => {
+  const handleDropEvent = async ({ event }: EventDropArg) => {
+    
     try {
-      dispatch(updateCalendarWorkTime({
-        id:event.id,
-        body:{
-          startDate: event.start ,
-          endDate: event.end ,
-        }
-     }))
-     .then(() => {
-        console.log('218');
-     })
-     .catch(err => {
-        enqueueSnackbar(err?.message || "something went wrong");
-        console.log("error : 123 ",err);
-        console.error(err);
-     });
+      await dispatch(
+        updateCalendarWorkTime({
+          id: event.id,
+          body: {
+            startDate: event.start,
+            endDate: event.end,
+          },
+        })
+      )
+        .then((res: any) => {
+          const {status, message} = res.payload;
+          if(status === "fail"){
+            enqueueSnackbar(message || 'something went wrong', {
+              variant: 'warning',
+            })
+          }
+        
+        })
+        .catch((err: any) => console.log(err));
     } catch (error) {
-      enqueueSnackbar(error?.message || "something went wrong");
-      console.log("error : 123 ",error)
-      console.error(error);
-      throw new Error(error)
+      enqueueSnackbar(error?.message || 'something went wrong');
+      throw new Error(error);
     }
     dispatch(getMyCalendarWorkTime())
   };
 
   const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {
     if (selectedEventId) {
-      dispatch(updateCalendarWorkTime({id:selectedEventId, body:newEvent}));
+      dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }));
       enqueueSnackbar('Update success!');
     } else {
       dispatch(createCalendarWorkTime(newEvent));
       enqueueSnackbar('Create success!');
     }
-    dispatch(getMyCalendarWorkTime())
+    dispatch(getMyCalendarWorkTime());
   };
 
   const handleDeleteEvent = () => {
     try {
       if (selectedEventId) {
         handleCloseModal();
-        dispatch(deleteCalendarWorkTime({id:selectedEventId}));
-        dispatch(getMyCalendarWorkTime())
+        dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
+        dispatch(getMyCalendarWorkTime());
         enqueueSnackbar('Delete success!');
       }
     } catch (error) {
@@ -271,7 +280,7 @@ export default function CalendarPage() {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <CustomBreadcrumbs
+        {/* <CustomBreadcrumbs
           heading="Calendar"
           links={[
             {
@@ -282,27 +291,26 @@ export default function CalendarPage() {
               name: 'Calendar',
             },
           ]}
-          action={
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              onClick={handleOpenModal}
-            >
-              New Event
-            </Button>
-          }
-        />
+          // action={
+          //   <Button
+          //     variant="contained"
+          //     startIcon={<Iconify icon="eva:plus-fill" />}
+          //     onClick={handleOpenModal}
+          //   >
+          //     New Event
+          //   </Button>
+          // }
+        /> */}
 
         <Card>
           <StyledCalendar>
             <CalendarToolbar
               date={date}
-              // view={view}
               onNextDate={handleClickDateNext}
               onPrevDate={handleClickDatePrev}
               onToday={handleClickToday}
-              // onChangeView={handleChangeView}
               onOpenFilter={() => setOpenFilter(true)}
+              addEvent={handleOpenModal}
             />
 
             <FullCalendar
@@ -326,11 +334,9 @@ export default function CalendarPage() {
               eventClick={handleSelectEvent}
               eventResize={handleResizeEvent}
               height={isDesktop ? 720 : 'auto'}
-              eventColor='#1890FF'
-              eventBackgroundColor='#1890FF'
-              plugins={[
-                timeGridPlugin,
-              ]}
+              eventColor="#1890FF"
+              eventBackgroundColor="#1890FF"
+              plugins={[timeGridPlugin, interactionPlugin]}
             />
           </StyledCalendar>
         </Card>
@@ -339,13 +345,13 @@ export default function CalendarPage() {
       <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
         <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
         <CalendarForm
-              event={selectedEvent}
-              range={selectedRange}
-              onCancel={handleCloseModal}
-              onCreateUpdateEvent={handleCreateUpdateEvent}
-              onDeleteEvent={handleDeleteEvent}
-            /> 
-      </Dialog> 
+          event={selectedEvent}
+          range={selectedRange}
+          onCancel={handleCloseModal}
+          onCreateUpdateEvent={handleCreateUpdateEvent}
+          onDeleteEvent={handleDeleteEvent}
+        />
+      </Dialog>
     </>
   );
 }
@@ -357,9 +363,8 @@ const useGetEvents = () => {
 
   const workTimes = useSelector((state) => state.workTimes.workTimes);
 
-  
-  const {docs:data} = workTimes;
-  
+  const { docs: data } = workTimes;
+
   const getAllEvents = useCallback(() => {
     dispatch(getMyCalendarWorkTime());
   }, [dispatch]);
@@ -367,15 +372,15 @@ const useGetEvents = () => {
   useEffect(() => {
     getAllEvents();
   }, [getAllEvents]);
-  const events:EventInput[] = data.map((event) => ({
-    id:event._id,
-    start:event.startDate || new Date(),
+  const events: EventInput[] = data.map((event) => ({
+    id: event._id,
+    start: event.startDate || new Date(),
     end: event.endDate || new Date(),
-    textColor: "#378006",
-    title: "working hour"
+    textColor: '#378006',
+    title: 'working hour',
   }));
 
-return events;
+  return events;
 };
 
 // ----------------------------------------------------------------------

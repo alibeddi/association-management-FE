@@ -5,6 +5,7 @@ import merge from 'lodash/merge';
 import { EventInput } from '@fullcalendar/core';
 // form
 import { useForm, Controller } from 'react-hook-form';
+import { ErrorMessage } from "@hookform/error-message"
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions } from '@mui/material';
@@ -12,14 +13,17 @@ import { LoadingButton } from '@mui/lab';
 import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // time
-import { addOneHour } from 'src/utils';
+import { addOneHour, isStartOfHour } from 'src/utils';
 import {  isBefore } from 'date-fns';
+//
+import {ErrorMessageCustom} from 'src/components/errors';
 // @types
 import { ICalendarEvent } from '../../../@types/calendar';
 // components
 import Iconify from '../../../components/iconify';
 import { ColorSinglePicker } from '../../../components/color-utils';
 import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-form';
+
 
 
 
@@ -59,6 +63,7 @@ const getInitialValues = (
 
 // ----------------------------------------------------------------------
 
+///
 export default function CalendarForm({
   event,
   range,
@@ -68,8 +73,8 @@ export default function CalendarForm({
 }: Props) {
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
-    startDate: Yup.date().required(),
-    endDate: Yup.date().required(),
+    startDate: Yup.date().required().test('is-begining-of-hour','Invalid Start Date Format: Please ensure that the start date is set to the beginning of the hour with minute 00',  (value) => isStartOfHour(value)) ,
+    endDate: Yup.date().required().test('is-begining-of-hour','Invalid end Date Format: Please ensure that the start date is set to the beginning of the hour with minute 00',  (value) => isStartOfHour(value))
   });
   const methods = useForm({
     resolver: yupResolver(EventSchema),
@@ -81,7 +86,7 @@ export default function CalendarForm({
     watch,
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
 
   const values = watch();
@@ -116,27 +121,47 @@ export default function CalendarForm({
           name="startDate"
           control={control}
           render={({ field }) => (
+            <>
             <MobileDateTimePicker
               {...field}
               onChange={(newValue: unknown) => field.onChange(newValue)}
               label="Start date"
               value={field.value ? new Date(field.value) : null}
-              renderInput={(params)=> <TextField {...params} />}
-            />)}
-      
+              renderInput={(params)=> <TextField error={!!errors.startDate} {...params} />}
+            />
+            {
+              !!errors.startDate &&        <ErrorMessage
+              errors={errors}
+              name="startDate"
+              render={({ message }) => (<ErrorMessageCustom error={message} />)}
+            /> 
+            }
+            </>)}
         /> 
            <Controller
           name="endDate"
           control={control}
           render={({ field }) => (
+            <>
             <MobileDateTimePicker
               {...field}
               onChange={(newValue: unknown) => field.onChange(newValue)}
               label="end date"
               value={field.value ? (new Date(field.value)): null}
               renderInput={(params)=> <TextField {...params} />}
-            />)}
-      
+            />
+            
+            
+            
+              {
+                !!errors.endDate &&        <ErrorMessage
+                errors={errors}
+                name="startDate"
+                render={({ message }) => (<ErrorMessageCustom error={message} />)}
+              /> 
+              }
+            
+      </>)}
         /> 
         
       </Stack> 
