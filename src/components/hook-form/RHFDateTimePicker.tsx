@@ -33,7 +33,7 @@ export default function RHFDateTimePicker({
   const { control, setValue } = useFormContext();
   const [isOpened, setIsOpened] = useState(false);
 
-  const handlePickerChange = (value: unknown) => {
+  const handlePickerChange = (value: Date | null) => {
     setValue(name, value, { shouldValidate: true });
   };
   const currentDate = new Date();
@@ -60,7 +60,7 @@ export default function RHFDateTimePicker({
       name={name}
       defaultValue={null}
       control={control}
-      render={({ field: { value }, fieldState: { error } }:any) => {
+      render={({ field: { value }, fieldState: { error } }) => {
         const pickerValue = getPickerValue(value);
         return (
           <Stack sx={{ display: 'flex', flexDirection: 'column', gap: 0.2 }}>
@@ -72,33 +72,6 @@ export default function RHFDateTimePicker({
                 minutesStep={['endDate', 'startDate'].includes(name) ? 15 : 5}
                 onOpen={() => setIsOpened(true)}
                 renderInput={(props) => <TextField {...props} />}
-                // slotProps={{
-                //   textField: {
-                //     error: false,
-                //   },
-                // }}
-                // sx={{
-                //   '& .MuiInputLabel-root': {
-                //     color: error && typeof error?.message === 'string' ? '#FF5630' : undefined,
-                //   },
-                //   '& .MuiOutlinedInput-root': {
-                //     '& fieldset': {
-                //       borderColor:
-                //         error && typeof error?.message === 'string' ? '#FF5630' : undefined,
-                //     },
-                //     '&:hover fieldset': {
-                //       borderColor:
-                //         error && typeof error?.message === 'string' ? '#FF5630' : undefined,
-                //     },
-                //     '&.Mui-focused fieldset': {
-                //       borderColor: 'black',
-                //     },
-                //     '& .MuiInputLabel-root.Mui-focused': {
-                //       color: 'black',
-                //     },
-                //   },
-                // }}
-                // format="dd/MM/yyyy HH:mm"
               />
             </Tooltip>
 

@@ -16,13 +16,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { addOneHour, isStartOfHour } from 'src/utils';
 import { isBefore } from 'date-fns';
 //
-import { ErrorMessageCustom } from 'src/components/errors';
+import { ErrorMessageCustom } from '../../../components/errors';
 // @types
 import { ICalendarEvent } from '../../../@types/calendar';
 // components
 import Iconify from '../../../components/iconify';
 import { ColorSinglePicker } from '../../../components/color-utils';
-import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-form';
+import FormProvider, { RHFTextField, RHFSwitch, RHFDateTimePicker } from '../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -71,8 +71,15 @@ export default function CalendarForm({
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
     startDate: Yup.date().required(),
-    endDate: Yup.date().required(),
+    endDate: Yup.date().required().when('startDate', {
+      is: (startDate:Date) => startDate != null,
+      then: Yup.date().min(
+        Yup.ref('startDate'),
+        'End date must be at least one minute after start date'
+      ),
+    }),
   });
+  
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues: getInitialValues(event, range),
@@ -90,7 +97,6 @@ export default function CalendarForm({
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      console.log('data => : ', { data });
       const newEvent = {
         startDate: data.startDate,
         endDate: data.endDate,
@@ -117,19 +123,15 @@ export default function CalendarForm({
             control={control}
             render={({ field }) => (
               <>
-                <MobileDateTimePicker
-                  {...field}
-                  onChange={(newValue: unknown) => field.onChange(newValue)}
-                  label="Start date"
-                  value={field.value ? new Date(field.value) : null}
-                  renderInput={(params) => <TextField error={!!errors.startDate} {...params} />}
-                />
+              <RHFDateTimePicker name='startDate' label="start date" />
+
                 {!!errors.startDate && (
                   <ErrorMessage
                     errors={errors}
                     name="startDate"
                     render={({ message }) => <ErrorMessageCustom error={message} />}
-                  />
+                  /> 
+
                 )}
               </>
             )}
@@ -139,14 +141,7 @@ export default function CalendarForm({
             control={control}
             render={({ field }) => (
               <>
-                <MobileDateTimePicker
-                  {...field}
-                  onChange={(newValue: unknown) => field.onChange(newValue)}
-                  label="end date"
-                  value={field.value ? new Date(field.value) : null}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-
+                <RHFDateTimePicker name='endDate' label="end date" />
                 {!!errors.endDate && (
                   <ErrorMessage
                     errors={errors}

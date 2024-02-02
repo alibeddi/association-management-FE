@@ -102,12 +102,6 @@ export default function CalendarFilterDrawer({
       >
         Colors
       </Typography>
-{/* 
-      <ColorMultiPicker
-        selected={filterEventColor}
-        onChangeColor={onFilterEventColor}
-        sx={{ mx: 2 }}
-      /> */}
 
       <Typography
         variant="caption"
@@ -126,7 +120,6 @@ export default function CalendarFilterDrawer({
           value={picker.startDate}
           onChange={picker.onChangeStartDate}
           renderInput={(props)=> <TextField {...props} />}
-          // renderInput={(params) => <TextField size="small" {...params} />}
         />
 
         <DatePicker
@@ -135,14 +128,6 @@ export default function CalendarFilterDrawer({
           onChange={picker.onChangeEndDate}
           renderInput={(props)=> <TextField {...props} />}
 
-          // renderInput={(params) => (
-          //   <TextField
-          //     size="small"
-          //     {...params}
-          //     error={picker.isError}
-          //     helperText={picker.isError && 'End date must be later than start date'}
-          //   />
-          // )}
         />
       </Stack>
 

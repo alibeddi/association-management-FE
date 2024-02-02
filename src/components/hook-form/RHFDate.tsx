@@ -56,7 +56,6 @@ export default function RHFDate({
               onChange={(newValue: any) => {
                 field.onChange(newValue);
               }}
-              // format={inputFormat || 'dd/MM/yyyy h m'}
             />
           </Tooltip>
 

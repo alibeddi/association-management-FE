@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ICalendarEvent } from 'src/@types/calendar';
-import { splitIntervalIntoHours } from 'src/utils';
+import { splitIntervalIntoHours } from '../../../utils';
 import axios from '../../../utils/axios';
 
 export const getMyCalendarWorkTime = createAsyncThunk('workTimes/GETALL', async () => {

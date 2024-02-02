@@ -10,7 +10,6 @@ type WorkTimeState = {
 workTimes: PaginationModel<ICalendarEvent>;
 workTime: ICalendarEvent;
 status: IStatus;
-error?: any
 }
 
 const initialState: WorkTimeState = {
@@ -59,8 +58,6 @@ const initialState: WorkTimeState = {
         })
         .addCase(updateCalendarWorkTime.rejected, (state,action) => {
           state.status = IStatus.FAILED;
-          console.log({action})
-          state.error = action.payload
         })
         // deleteCalendarWorkTime reducers
         .addCase(deleteCalendarWorkTime.pending, (state) => {

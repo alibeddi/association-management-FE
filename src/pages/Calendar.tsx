@@ -20,7 +20,6 @@ import {
 } from 'src/redux/slices/workTimes/actions';
 // @mui
 import { Card, Button, Container, DialogTitle, Dialog } from '@mui/material';
-import { IStatus } from 'src/@types/status';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 

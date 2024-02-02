@@ -64,26 +64,6 @@ export default function RHFDesktopDateTimePicker({
                 onChange={handlePickerChange}
                 onOpen={() => setIsOpened(true)}
                 renderInput={(props)=> <TextField {...props} />}
-                // sx={{
-                //   '& .MuiInputLabel-root': {
-                //     color: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                //   },
-                //   '& .MuiOutlinedInput-root': {
-                //     '& fieldset': {
-                //       borderColor: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                //     },
-                //     '&:hover fieldset': {
-                //       borderColor: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                //     },
-                //     '&.Mui-focused fieldset': {
-                //       borderColor: 'black',
-                //     },
-                //     '& .MuiInputLabel-root.Mui-focused': {
-                //       color: 'black',
-                //     },
-                //   },
-                // }}
-                // format="dd/MM/yyyy HH:mm"
               />
             </Tooltip>
 
