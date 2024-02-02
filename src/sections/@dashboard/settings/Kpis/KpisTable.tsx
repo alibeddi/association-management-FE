@@ -1,62 +1,63 @@
-import { useEffect, useState } from 'react';
-import {
-  createSearchParams,
-  Link as RouterLink,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
-// @mui
-import { Button, Card, IconButton, Table, TableBody, TableContainer, Tooltip } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { IKpi } from '../../../../@types/Kpi';
-import ConfirmDialog from '../../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
-import Iconify from '../../../../components/iconify';
-import Scrollbar from '../../../../components/scrollbar';
+import { Helmet } from 'react-helmet-async';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+// @mui
 import {
-  emptyRows,
-  getComparator,
-  TableEmptyRows,
+  Card,
+  Table,
+  Button,
+  TableBody,
+  Container,
+  TableContainer,
+  Tooltip,
+  IconButton,
+} from '@mui/material';
+// routes
+
+// types
+import { IKpi } from '../../../../@types/Kpi';
+// components
+
+// sections
+import { PricingGroupTableToolbar } from '../../sections/pricingGroups/list';
+import KpiTableRow from './KpiTableRow';
+import { RootState, useDispatch, useSelector } from '../../../../redux/store';
+import { useLocales } from '../../../../locales';
+import { getKpis } from '../../../../redux/slices/kpis';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
+import {
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
   useTable,
 } from '../../../../components/table';
-import { deleteOnekpi, getKpis } from '../../../../redux/slices/kpis';
-import { dispatch, RootState, useSelector } from '../../../../redux/store';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import KpiTableRow from './KpiTableRow';
-import KpiTableToolbar from './KpiTableToolbar';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import Iconify from '../../../../components/iconify';
+import Scrollbar from '../../../../components/scrollbar';
+import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
-
-const ROLE_OPTIONS = [
-  'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
-];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'label', label: 'Label', align: 'left' },
-  { id: 'frontType', label: 'Frontend Type', align: 'left' },
-  { id: 'backType', label: 'Backend Type', align: 'left' },
-  { id: 'isRequired', label: 'Required', align: 'center' },
-  { id: 'options', label: 'Options', align: 'left' },
-  { id: '' },
+  { id: 'customer.firstName', label: 'Name', align: 'left' },
+  { id: 'customer.idCardNumber', label: 'ID Card', align: 'center' },
+  { id: 'customer.passportNumber', label: 'Passport', align: 'center' },
+  {
+    id: 'customer.drivingLicenseNumber',
+    label: 'Driving License',
+    align: 'center',
+  },
+  { id: 'customer.phone', label: 'Phone', align: 'center' },
+  { id: 'customer.nationality', label: 'Nationality', align: 'center' },
+  { id: 'customer.createdAt', label: 'Created At', align: 'center' },
+  { label: '', align: 'center' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function KpiListPage() {
+export default function CustomerListPage() {
   const {
     dense,
     page,
@@ -72,76 +73,40 @@ export default function KpiListPage() {
     //
     onSort,
     onChangeDense,
-    // onChangePage,
+    onChangePage,
     onChangeRowsPerPage,
-  } = useTable();
+  } = useTable({ defaultOrderBy: 'customer.createdAt', defaultOrder: 'desc' });
 
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const currentPage = searchParams.get('page');
-  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
-  const { kpis } = useSelector((state: RootState) => state.kpis);
-  const { docs: dataList, meta } = kpis;
+  const { enqueueSnackbar } = useSnackbar();
+  const { translate } = useLocales();
+
+  const [tableData, setTableData] = useState<IKpi[]>([]);
+  const [filterName, setFilterName] = useState('');
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [banMany, setBanMany] = useState(true);
+  const [rowId, setRowId] = useState('');
+
+  const { kpis } = useSelector((state: RootState) => state?.kpis);
 
   useEffect(() => {
-    dispatch(getKpis({ page: 1 }));
-    navigate({
-      pathname: PATH_DASHBOARD.settings.kpis,
-      search: `?${createSearchParams({
-        page: currentPage || page.toString() || '1',
-      })}`,
-    });
-  }, [navigate]);
+    dispatch(
+      getKpis({ page, limit: rowsPerPage, sortBy: orderBy, sort: order, filter: filterName })
+    );
+  }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
 
-  const onChangePage = (event: React.MouseEvent | null, page: number) => {
-    dispatch(getKpis({ page }));
-    navigate({
-      pathname: PATH_DASHBOARD.settings.kpis,
-      search: `?${createSearchParams({
-        page: page.toString(),
-      })}`,
-    });
-  };
+  useEffect(() => {
+    setTableData(kpis.docs);
+  }, [kpis.docs]);
 
-  const [filterName, setFilterName] = useState('');
+  const isFiltered = filterName !== '';
 
-  const [filterRole, setFilterRole] = useState('all');
+  const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
 
-  const [openConfirm, setOpenConfirm] = useState(false);
-
-  const [filterStatus, setFilterStatus] = useState('all');
-
-  const dataFiltered = applyFilter({
-    inputData: dataList,
-    comparator: getComparator(order, orderBy),
-    filterName,
-    filterRole,
-    filterStatus,
-  });
-
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-  const denseHeight = dense ? 52 : 72;
-
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
-
-  const isNotFound =
-    (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
-    (!dataFiltered.length && !!filterStatus);
-
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
-
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
-  };
-
-  const handleFilterStatus = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
-    setPage(0);
-    setFilterStatus(newValue);
+  const handleViewRow = (row: any) => {
+    navigate(PATH_DASHBOARD.settings.kpiView);
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,156 +114,106 @@ export default function KpiListPage() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
-    setFilterRole(event.target.value);
-  };
-  const handleDeleteRow = (id: string) => {
-    dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${res?.payload.message}`);
-      } else {
-        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
-      }
-    });
-
-    setSelected([]);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
-  const handleDeleteRows = (selectedRows: string[]) => {
-    setSelected([]);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((dataList.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
-
-  const handleEditRow = (id: string) => {
-    navigate(PATH_DASHBOARD.operators);
-  };
-
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('all');
-    setFilterStatus('all');
+  };
+
+  const handleOpenConfirm = (id?: string) => {
+    setOpenConfirm(true);
+    if (id) {
+      setRowId(id);
+      setBanMany(false);
+    } else {
+      setBanMany(true);
+    }
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
   };
 
   return (
     <>
-      <CustomBreadcrumbs
-        heading="Kpi List"
-        links={[
-          { name: 'Dashboard', href: PATH_DASHBOARD.root },
-          { name: 'Kpi', href: PATH_DASHBOARD.settings.kpis },
-        ]}
-        action={
-          <Button
-            component={RouterLink}
-            to={PATH_DASHBOARD.operators}
-            variant="contained"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            New User
-          </Button>
-        }
-      />
+      <Helmet>
+        <title>{`${translate('Customers')}`}</title>
+      </Helmet>
 
-      <Card>
-        <KpiTableToolbar
-          isFiltered={isFiltered}
-          filterName={filterName}
-          filterRole={filterRole}
-          optionsRole={ROLE_OPTIONS}
-          onFilterName={handleFilterName}
-          onFilterRole={handleFilterRole}
-          onResetFilter={handleResetFilter}
-        />
-
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
-            dense={dense}
-            numSelected={selected.length}
-            rowCount={dataList.length}
-            onSelectAllRows={(checked: any) =>
-              onSelectAllRows(
-                checked,
-                dataList.map((row: any) => row.id)
-              )
-            }
-            action={
-              <Tooltip title="Delete">
-                <IconButton color="primary" onClick={handleOpenConfirm}>
-                  <Iconify icon="eva:trash-2-outline" />
-                </IconButton>
-              </Tooltip>
-            }
+      <Container maxWidth={false}>
+        <CustomBreadcrumbs heading="kpis" links={[{ name: 'kpis' }]} />
+        <Card>
+          <PricingGroupTableToolbar
+            isFiltered={isFiltered}
+            filterName={filterName}
+            onFilterName={handleFilterName}
+            onResetFilter={handleResetFilter}
+            placeholder={`${translate('Search by Name, ID Card, Phone or Driving License...')}`}
           />
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              dense={dense}
+              numSelected={selected.length}
+              rowCount={tableData.length}
+              onSelectAllRows={(checked) =>
+                onSelectAllRows(
+                  checked,
+                  tableData.map((row) => row._id)
+                )
+              }
+              action={
+                <Tooltip title={`${translate('Ban')}`}>
+                  <IconButton color="primary" onClick={() => handleOpenConfirm()}>
+                    <Iconify icon="ion:ban" />
+                  </IconButton>
+                </Tooltip>
+              }
+            />
 
-          <Scrollbar>
-            <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={order}
-                orderBy={orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={dataList.length}
-                numSelected={selected.length}
-                onSort={onSort}
-                onSelectAllRows={(checked: any) =>
-                  onSelectAllRows(
-                    checked,
-                    dataList.map((row: any) => row.id)
-                  )
-                }
-              />
+            <Scrollbar>
+              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={tableData.length}
+                  numSelected={selected.length}
+                  onSort={onSort}
+                  onSelectAllRows={(checked: any) =>
+                    onSelectAllRows(
+                      checked,
+                      tableData.map((row) => row._id)
+                    )
+                  }
+                />
 
-              <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
+                <TableBody>
+                  {tableData?.map((row: any) => (
                     <KpiTableRow
-                      key={row._id}
+                      key={row.customer.id}
                       row={row}
-                      selected={selected.includes(row._id)}
-                      onSelectRow={() => onSelectRow(row._id)}
-                      onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={() => handleEditRow(row.name)}
+                      selected={selected.includes(row.customer.id)}
+                      onViewRow={() => handleViewRow(row.customer)}
+                      onSelectRow={() => onSelectRow(row.customer.id)}
+                      // handleOpenConfirm={() => handleOpenConfirm(row.customer.id)}
                     />
                   ))}
 
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(page, rowsPerPage, dataList.length)}
-                />
+                  <TableNoData isNotFound={isNotFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
 
-                <TableNoData isNotFound={isNotFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-
-        <TablePaginationCustom
-          count={meta?.totalDocs}
-          page={meta.page}
-          rowsPerPage={rowsPerPage}
-          onPageChange={onChangePage}
-          onRowsPerPageChange={onChangeRowsPerPage}
-          dense={dense}
-          onChangeDense={onChangeDense}
-        />
-      </Card>
+          <TablePaginationCustom
+            count={kpis.meta.totalDocs || 0}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={onChangePage}
+            onRowsPerPageChange={onChangeRowsPerPage}
+            dense={dense}
+            onChangeDense={onChangeDense}
+          />
+        </Card>
+      </Container>
 
       <ConfirmDialog
         open={openConfirm}
@@ -314,7 +229,7 @@ export default function KpiListPage() {
             variant="contained"
             color="error"
             onClick={() => {
-              handleDeleteRows(selected);
+              // handleDeleteRows(selected);
               handleCloseConfirm();
             }}
           >
@@ -324,46 +239,4 @@ export default function KpiListPage() {
       />
     </>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({
-  inputData,
-  comparator,
-  filterName,
-  filterStatus,
-  filterRole,
-}: {
-  inputData: IKpi[];
-  comparator: (a: any, b: any) => number;
-  filterName: string;
-  filterStatus: string;
-  filterRole: string;
-}) {
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el) => el[0]);
-
-  if (filterName) {
-    inputData = inputData.filter(
-      (kpi) => kpi.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-    );
-  }
-
-  if (filterStatus !== 'all') {
-    inputData = inputData.filter((kpi) => kpi.name === filterStatus);
-  }
-
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((kpi) => kpi.name === filterRole);
-  }
-
-  return inputData;
 }

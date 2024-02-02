@@ -25,6 +25,7 @@ export default function TablePaginationCustom({
   sx,
   ...other
 }: Props & TablePaginationProps) {
+  console.log({ ...other });
   return (
     <Box sx={{ position: 'relative', ...sx }}>
       <TablePagination rowsPerPageOptions={rowsPerPageOptions} component="div" {...other} />

@@ -18,7 +18,14 @@ const initialState: PermissionState = {
 // GET ALL
 export const getKpis = createAsyncThunk(
   'Kpi/GETALL',
-  async (payload: { page: number; sort?: string; filter?: string; filterValue?: string }) => {
+  async (payload: {
+    page: number;
+    limit: number;
+    sortBy?: string;
+    sort?: string;
+    filter?: string;
+    filterValue?: string;
+  }) => {
     let data;
     const { page, sort, filter, filterValue } = payload;
     const limit = 10;

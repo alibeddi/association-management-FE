@@ -36,6 +36,8 @@ export const PATH_DASHBOARD = {
   settings: {
     root: path(ROOTS_DASHBOARD, '/settings'),
     kpis: path(ROOTS_DASHBOARD, '/settings/kpis'),
+    kpiEdit: path(ROOTS_DASHBOARD, '/settings/kpis/edit'),
+    kpiView: path(ROOTS_DASHBOARD, '/settings/kpis/view'),
     users: path(ROOTS_DASHBOARD, '/settings/users'),
     bookableExtras: path(ROOTS_DASHBOARD, '/settings/bookableExtras'),
   },

@@ -11,6 +11,9 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+// utils
+import { fDate } from '../../../../utils/formatTime';
+// components
 import { IKpi } from '../../../../@types/Kpi';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
@@ -22,10 +25,18 @@ type Props = {
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  onViewRow: VoidFunction;
 };
 
-export default function KpiTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }: Props) {
-  const { name, label, frontType, backType, isRequired, options } = row;
+export default function KpiTableRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onDeleteRow,
+  onViewRow,
+}: Props) {
+  const { name, label, frontType, backType, isRequired, options, createdAt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -108,6 +119,7 @@ export default function KpiTableRow({ row, selected, onEditRow, onSelectRow, onD
             <Box>No options...</Box>
           )}
         </TableCell>
+        <TableCell align="right">{fDate(createdAt)}</TableCell>
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
