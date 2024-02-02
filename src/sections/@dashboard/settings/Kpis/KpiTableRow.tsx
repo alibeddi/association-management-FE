@@ -1,6 +1,7 @@
 import { useState } from 'react';
 // @mui
 import {
+  Box,
   Button,
   Checkbox,
   IconButton,
@@ -82,8 +83,25 @@ export default function KpiTableRow({ row, selected, onEditRow, onSelectRow, onD
           </Tooltip>
         </TableCell>
         <TableCell align="left">
-          <Tooltip title={'kfdlnv'}>
-            <p>jhdgfrjdgs</p>
+          <Tooltip
+            title={
+              <>
+                {options.map((option, index) => (
+                  <p key={index}>{option}</p>
+                ))}
+              </>
+            }
+          >
+            <Box
+              sx={{
+                maxWidth: 100,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {options.join(', ')}
+            </Box>
           </Tooltip>
         </TableCell>
         <TableCell align="right">
