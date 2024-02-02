@@ -16,19 +16,28 @@ const initialState: PermissionState = {
   status: IStatus.IDLE,
 };
 // GET ALL
-export const getKpis = createAsyncThunk('Kpi/GETALL', async () => {
-  let data;
-  try {
-    const response = await axios.get(`/kpis`);
-    data = await response.data;
-    if (response.status === 200) {
-      return data.data;
+export const getKpis = createAsyncThunk(
+  'Kpi/GETALL',
+  async (payload: { page: number; sort?: string; filter?: string; filterValue?: string }) => {
+    let data;
+    const { page, sort, filter, filterValue } = payload;
+    const limit = 10;
+    const query = `?limit=${limit}&page=${page}${sort ? `&sort=${sort}` : ''}${
+      filter && filterValue ? `&${filter}=${filterValue}` : ''
+    }`;
+
+    try {
+      const response = await axios.get(`/kpis${query}`);
+      data = await response.data;
+      if (response.status === 200) {
+        return data.data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
     }
-    throw new Error(response.statusText);
-  } catch (err) {
-    return Promise.reject(err.message ? err.message : data?.message);
   }
-});
+);
 
 // DELETE ONE
 export const deleteOnekpi = createAsyncThunk('kpi/DELETE', async (payload: { kpiId: string }) => {
@@ -69,9 +78,7 @@ const slice = createSlice({
         state.status = IStatus.FAILED;
       })
       .addCase(deleteOnekpi.fulfilled, (state, action) => {
-        console.log('I am HERE ^-^');
         state.status = IStatus.SUCCEEDED;
-        console.log(action.meta.arg.kpiId);
         state.kpis.docs = state.kpis.docs.filter((kpi) => kpi._id !== action.meta.arg.kpiId);
       })
       .addCase(deleteOnekpi.rejected, (state) => {

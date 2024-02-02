@@ -74,12 +74,10 @@ export default function KpiListPage() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    dispatch(getKpis());
-  }, []);
-
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const { docs: dataList, meta } = kpis;
+
+  console.log({ meta });
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('all');
@@ -87,6 +85,10 @@ export default function KpiListPage() {
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState('all');
+
+  useEffect(() => {
+    dispatch(getKpis({ page: 2 }));
+  }, []);
 
   const dataFiltered = applyFilter({
     inputData: dataList,
