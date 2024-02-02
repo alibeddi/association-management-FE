@@ -83,26 +83,30 @@ export default function KpiTableRow({ row, selected, onEditRow, onSelectRow, onD
           </Tooltip>
         </TableCell>
         <TableCell align="left">
-          <Tooltip
-            title={
-              <>
-                {options.map((option, index) => (
-                  <p key={index}>{option}</p>
-                ))}
-              </>
-            }
-          >
-            <Box
-              sx={{
-                maxWidth: 100,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
+          {options?.length > 0 ? (
+            <Tooltip
+              title={
+                <>
+                  {options.map((option, index) => (
+                    <p key={index}>{option}</p>
+                  ))}
+                </>
+              }
             >
-              {options.join(', ')}
-            </Box>
-          </Tooltip>
+              <Box
+                sx={{
+                  maxWidth: 100,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {options.join(', ')}
+              </Box>
+            </Tooltip>
+          ) : (
+            <Box>No options...</Box>
+          )}
         </TableCell>
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
