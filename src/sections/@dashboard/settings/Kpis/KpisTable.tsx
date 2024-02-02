@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import {
+  createSearchParams,
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 // @mui
 import { Button, Card, IconButton, Table, TableBody, TableContainer, Tooltip } from '@mui/material';
 import { useSnackbar } from 'notistack';
@@ -67,17 +72,38 @@ export default function KpiListPage() {
     //
     onSort,
     onChangeDense,
-    onChangePage,
+    // onChangePage,
     onChangeRowsPerPage,
   } = useTable();
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const currentPage = searchParams.get('page');
   const { enqueueSnackbar } = useSnackbar();
 
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const { docs: dataList, meta } = kpis;
 
-  console.log({ meta });
+  useEffect(() => {
+    dispatch(getKpis({ page: 1 }));
+    navigate({
+      pathname: PATH_DASHBOARD.settings.kpis,
+      search: `?${createSearchParams({
+        page: currentPage || page.toString() || '1',
+      })}`,
+    });
+  }, [navigate]);
+
+  const onChangePage = (event: React.MouseEvent | null, page: number) => {
+    dispatch(getKpis({ page }));
+    navigate({
+      pathname: PATH_DASHBOARD.settings.kpis,
+      search: `?${createSearchParams({
+        page: page.toString(),
+      })}`,
+    });
+  };
+
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('all');
@@ -85,10 +111,6 @@ export default function KpiListPage() {
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState('all');
-
-  useEffect(() => {
-    dispatch(getKpis({ page: 2 }));
-  }, []);
 
   const dataFiltered = applyFilter({
     inputData: dataList,
@@ -268,8 +290,8 @@ export default function KpiListPage() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={dataFiltered.length}
-          page={page}
+          count={meta?.totalDocs}
+          page={meta.page}
           rowsPerPage={rowsPerPage}
           onPageChange={onChangePage}
           onRowsPerPageChange={onChangeRowsPerPage}
