@@ -63,10 +63,10 @@ try {
   if(response.status === 200){
     return data;
   }
-  throw new Error(response.data);
+  console.log({data});
+  throw new Error(data);
 } catch (err) {
-  console.error("error : ",err.message)
-  throw new  Error(err.message ? err.message : data?.message);
+  throw new Error(err ? err : data?.message);
 }
 
 

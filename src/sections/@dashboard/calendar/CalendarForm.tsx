@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
+import * as dayjs from "dayjs";
 import merge from 'lodash/merge';
-import { add, isBefore } from 'date-fns';
+
 import { EventInput } from '@fullcalendar/core';
 // form
 import { useForm, Controller } from 'react-hook-form';
@@ -10,12 +11,16 @@ import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions } fro
 import { LoadingButton } from '@mui/lab';
 import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// time
+import { addOneHour } from 'src/utils';
+import {  isBefore } from 'date-fns';
 // @types
 import { ICalendarEvent } from '../../../@types/calendar';
 // components
 import Iconify from '../../../components/iconify';
 import { ColorSinglePicker } from '../../../components/color-utils';
 import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-form';
+
 
 
 // ----------------------------------------------------------------------
@@ -39,10 +44,10 @@ const getInitialValues = (
   event: EventInput | null | undefined,
   range: { startDate: Date; endDate: Date } | null
 ) => {
-
+  const currentTime = new Date();
   const initialEvent: FormValuesProps = {
-    startDate: range ? new Date(range.startDate) : new Date(),
-    endDate: range ? new Date(range.endDate) : new Date(),
+    startDate: range ? new Date(range.startDate) : currentTime,
+    endDate: range  ? new Date(range.endDate) : addOneHour(currentTime),
   };
 
   if (event || range) {
@@ -62,7 +67,6 @@ export default function CalendarForm({
   onCancel,
 }: Props) {
   const hasEventData = !!event;
-  console.log(range)
   const EventSchema = Yup.object().shape({
     startDate: Yup.date().required(),
     endDate: Yup.date().required(),
@@ -134,43 +138,6 @@ export default function CalendarForm({
             />)}
       
         /> 
-{/* 
-        {/* <Controller
-          name="endDate"
-          control={control}
-          render={({ field }) => (
-            // <MobileDateTimePicker
-            //   {...field}
-            //   onChange={(newValue: Date | null) => field.onChange(newValue)}
-            //   label="End date"
-            //   format="dd/MM/yyyy hh:mm a"
-            //   // renderInput={(params) => (
-            //   //   <TextField
-            //   //     {...params}
-            //   //     fullWidth
-            //   //     error={!!isDateError}
-            //   //     helperText={isDateError && 'End date must be later than start date'}
-            //   //   />
-            //   // )}
-            // />
-          //   <MobileDateTimePicker
-          // {...field}
-          // onChange={(newValue: Date | null) => field.onChange(newValue)}
-          // label="Start date"
-          // value={field.value ? new Date(field.value) : null}
-
-          // format="yyyy/MM/dd HH:mm"
-          // />
-          <MobileDateTimePicker
-          {...field}
-          onChange={(newValue: Date | null) => field.onChange(newValue)}
-          label="Start date"
-          value={field.value ? new Date(field.value) : null}
-          name="startDate"
-          format="yyyy/MM/dd HH:mm"
-        />
-          )}
-        /> */}
         
       </Stack> 
       </LocalizationProvider>

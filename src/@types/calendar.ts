@@ -2,7 +2,7 @@ import { EventInput } from '@fullcalendar/core';
 
 // ----------------------------------------------------------------------
 
-export type ICalendarViewValue = 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay' | 'listWeek';
+export type ICalendarViewValue = 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay' | 'listWeek' ;
 
 export type ICalendarEvent = {
   _id?:string;

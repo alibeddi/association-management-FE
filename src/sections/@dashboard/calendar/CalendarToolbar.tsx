@@ -24,12 +24,12 @@ const VIEW_OPTIONS = [
 
 type Props = {
   date: Date;
-  view: ICalendarViewValue;
+  view?: ICalendarViewValue;
   onToday: VoidFunction;
   onNextDate: VoidFunction;
   onPrevDate: VoidFunction;
   onOpenFilter: VoidFunction;
-  onChangeView: (newView: ICalendarViewValue) => void;
+  onChangeView?: (newView: ICalendarViewValue) => void;
 };
 
 export default function CalendarToolbar({
@@ -53,7 +53,7 @@ export default function CalendarToolbar({
     setOpenPopover(null);
   };
 
-  const selectedItem = VIEW_OPTIONS.filter((item) => item.value === view)[0];
+  // const selectedItem = VIEW_OPTIONS.filter((item) => item.value === view)[0];
 
   return (
     <>
@@ -63,11 +63,11 @@ export default function CalendarToolbar({
         justifyContent="space-between"
         sx={{ p: 2.5, pr: 2 }}
       >
-        {isDesktop && (
+        {/* {isDesktop && (
           <Button
             color="inherit"
             onClick={handleOpenPopover}
-            startIcon={<Iconify icon={selectedItem.icon} />}
+            // startIcon={<Iconify icon={selectedItem.icon} />}
             endIcon={<Iconify icon="eva:chevron-down-fill" />}
             sx={{
               py: 0.5,
@@ -77,9 +77,11 @@ export default function CalendarToolbar({
             }}
           >
             {selectedItem.label}
-          </Button>
-        )}
-
+           </Button>
+        )}  */}
+        <Stack>
+          {" "}
+        </Stack>
         <Stack direction="row" alignItems="center" spacing={1}>
           <IconButton onClick={onPrevDate}>
             <Iconify icon="eva:arrow-ios-back-fill" />
@@ -103,7 +105,7 @@ export default function CalendarToolbar({
         </Stack>
       </Stack>
 
-      <MenuPopover
+      {/* <MenuPopover
         open={openPopover}
         onClose={handleClosePopover}
         arrow="top-left"
@@ -114,7 +116,7 @@ export default function CalendarToolbar({
             key={viewOption.value}
             onClick={() => {
               handleClosePopover();
-              onChangeView(viewOption.value);
+              // onChangeView(viewOption.value);
             }}
             sx={{
               ...(viewOption.value === view && {
@@ -126,7 +128,7 @@ export default function CalendarToolbar({
             {viewOption.label}
           </MenuItem>
         ))}
-      </MenuPopover>
+      </MenuPopover> */}
     </>
   );
 }

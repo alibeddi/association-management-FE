@@ -2,7 +2,7 @@ import FullCalendar from '@fullcalendar/react'; // => request placed at the top
 import { DateSelectArg, EventClickArg, EventDropArg, EventInput,formatDate } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
 //
@@ -89,14 +89,14 @@ export default function CalendarPage() {
 
   const [filterEventColor, setFilterEventColor] = useState<string[]>([]);
 
-  const [view, setView] = useState<ICalendarViewValue>(isDesktop ? 'dayGridMonth' : 'listWeek');
+  const [view, setView] = useState<ICalendarViewValue>('timeGridWeek');
 
   useEffect(() => {
     const calendarEl = calendarRef.current;
     if (calendarEl) {
       const calendarApi = calendarEl.getApi();
 
-      const newView = isDesktop ? 'dayGridMonth' : 'listWeek';
+      const newView = 'timeGridWeek';
       calendarApi.changeView(newView);
       setView(newView);
     }
@@ -180,6 +180,7 @@ export default function CalendarPage() {
 
   const handleResizeEvent = ({ event }: EventResizeDoneArg) => {
     try {
+     
       dispatch(
         updateCalendarWorkTime({
         id:event.id,
@@ -189,26 +190,36 @@ export default function CalendarPage() {
         }
         })
       );
+      
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDropEvent = async ({ event }: EventDropArg) => {
+  const handleDropEvent =  async ({ event }: EventDropArg) => {
     try {
-      await dispatch(
-        updateCalendarWorkTime({
-          id:event.id,
-          body:{
-            startDate: event.start ,
-            endDate: event.end ,
-          }
-          })
-      )
+      dispatch(updateCalendarWorkTime({
+        id:event.id,
+        body:{
+          startDate: event.start ,
+          endDate: event.end ,
+        }
+     }))
+     .then(() => {
+        console.log('218');
+     })
+     .catch(err => {
+        enqueueSnackbar(err?.message || "something went wrong");
+        console.log("error : 123 ",err);
+        console.error(err);
+     });
     } catch (error) {
+      enqueueSnackbar(error?.message || "something went wrong");
       console.log("error : 123 ",error)
       console.error(error);
+      throw new Error(error)
     }
+    dispatch(getMyCalendarWorkTime())
   };
 
   const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {
@@ -234,15 +245,6 @@ export default function CalendarPage() {
       console.error(error);
     }
   };
-
-  // const handleFilterEventColor = (eventColor: string) => {
-  //   const checked = filterEventColor.includes(eventColor)
-  //     ? filterEventColor.filter((value) => value !== eventColor)
-  //     : [...filterEventColor, eventColor];
-
-  //   setFilterEventColor(checked);
-  // };
-
   const handleResetFilter = () => {
     const { setStartDate, setEndDate } = picker;
 
@@ -295,11 +297,11 @@ export default function CalendarPage() {
           <StyledCalendar>
             <CalendarToolbar
               date={date}
-              view={view}
+              // view={view}
               onNextDate={handleClickDateNext}
               onPrevDate={handleClickDatePrev}
               onToday={handleClickToday}
-              onChangeView={handleChangeView}
+              // onChangeView={handleChangeView}
               onOpenFilter={() => setOpenFilter(true)}
             />
 
@@ -313,7 +315,7 @@ export default function CalendarPage() {
               eventResizableFromStart
               ref={calendarRef}
               initialDate={date}
-              initialView={view}
+              initialView={'timeGridWeek'}
               dayMaxEventRows={3}
               eventDisplay="block"
               events={dataFiltered}
@@ -327,11 +329,7 @@ export default function CalendarPage() {
               eventColor='#1890FF'
               eventBackgroundColor='#1890FF'
               plugins={[
-                listPlugin,
-                dayGridPlugin,
-                timelinePlugin,
                 timeGridPlugin,
-                interactionPlugin,
               ]}
             />
           </StyledCalendar>
@@ -348,22 +346,6 @@ export default function CalendarPage() {
               onDeleteEvent={handleDeleteEvent}
             /> 
       </Dialog> 
-{/* 
-      <CalendarFilterDrawer
-        events={events}
-        picker={picker}
-        openFilter={openFilter}
-        onResetFilter={handleResetFilter}
-        filterEventColor={filterEventColor}
-        onCloseFilter={() => setOpenFilter(false)}
-        // onFilterEventColor={handleFilterEventColor}
-        onSelectEvent={(eventId) => {
-          if (eventId) {
-            handleOpenModal();
-            setSelectedEventId(eventId);
-          }
-        }}
-      /> */}
     </>
   );
 }
