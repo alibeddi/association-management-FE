@@ -1,17 +1,17 @@
 import { useSnackbar } from 'notistack';
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import {
-  Card,
-  Table,
   Button,
-  TableBody,
+  Card,
   Container,
+  IconButton,
+  Table,
+  TableBody,
   TableContainer,
   Tooltip,
-  IconButton,
 } from '@mui/material';
 // routes
 
@@ -20,12 +20,10 @@ import { IKpi } from '../../../../@types/Kpi';
 // components
 
 // sections
-import { PricingGroupTableToolbar } from '../../sections/pricingGroups/list';
-import KpiTableRow from './KpiTableRow';
-import { RootState, useDispatch, useSelector } from '../../../../redux/store';
-import { useLocales } from '../../../../locales';
-import { getKpis } from '../../../../redux/slices/kpis';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import ConfirmDialog from '../../../../components/confirm-dialog';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import Iconify from '../../../../components/iconify';
+import Scrollbar from '../../../../components/scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
@@ -33,10 +31,11 @@ import {
   TableSelectedAction,
   useTable,
 } from '../../../../components/table';
-import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
-import Iconify from '../../../../components/iconify';
-import Scrollbar from '../../../../components/scrollbar';
-import ConfirmDialog from '../../../../components/confirm-dialog';
+import { useLocales } from '../../../../locales';
+import { getKpis } from '../../../../redux/slices/kpis';
+import { RootState, useDispatch, useSelector } from '../../../../redux/store';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
+import KpiTableRow from './KpiTableRow';
 
 // ----------------------------------------------------------------------
 
@@ -75,7 +74,7 @@ export default function CustomerListPage() {
     onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
-  } = useTable({ defaultOrderBy: 'customer.createdAt', defaultOrder: 'desc' });
+  } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -92,14 +91,16 @@ export default function CustomerListPage() {
   const { kpis } = useSelector((state: RootState) => state?.kpis);
 
   useEffect(() => {
-    dispatch(
-      getKpis({ page, limit: rowsPerPage, sortBy: orderBy, sort: order, filter: filterName })
-    );
+    // dispatch(
+    //   getKpis({ page, limit: rowsPerPage, sortBy: orderBy, sort: order, filter: filterName })
+    // );
+    console.log({ page, rowsPerPage });
+    dispatch(getKpis({ page, limit: rowsPerPage }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
 
   useEffect(() => {
-    setTableData(kpis.docs);
-  }, [kpis.docs]);
+    setTableData(kpis?.docs);
+  }, [kpis]);
 
   const isFiltered = filterName !== '';
 
@@ -110,7 +111,7 @@ export default function CustomerListPage() {
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
+    setPage(1);
     setFilterName(event.target.value);
   };
 
@@ -141,13 +142,13 @@ export default function CustomerListPage() {
       <Container maxWidth={false}>
         <CustomBreadcrumbs heading="kpis" links={[{ name: 'kpis' }]} />
         <Card>
-          <PricingGroupTableToolbar
+          {/* <PricingGroupTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             onFilterName={handleFilterName}
             onResetFilter={handleResetFilter}
             placeholder={`${translate('Search by Name, ID Card, Phone or Driving License...')}`}
-          />
+          /> */}
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
               dense={dense}
@@ -188,12 +189,13 @@ export default function CustomerListPage() {
                 <TableBody>
                   {tableData?.map((row: any) => (
                     <KpiTableRow
-                      key={row.customer.id}
+                      key={row.id}
                       row={row}
-                      selected={selected.includes(row.customer.id)}
-                      onViewRow={() => handleViewRow(row.customer)}
-                      onSelectRow={() => onSelectRow(row.customer.id)}
-                      // handleOpenConfirm={() => handleOpenConfirm(row.customer.id)}
+                      selected={selected.includes(row.id)}
+                      onSelectRow={() => onSelectRow(row.id)}
+                      onDeleteRow={() => {}}
+                      onEditRow={() => {}}
+                      onViewRow={() => {}}
                     />
                   ))}
 
@@ -205,7 +207,7 @@ export default function CustomerListPage() {
 
           <TablePaginationCustom
             count={kpis.meta.totalDocs || 0}
-            page={page}
+            page={page - 1}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
