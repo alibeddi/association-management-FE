@@ -71,7 +71,7 @@ export default function useTable(props?: UseTableProps): ReturnType {
   }, []);
 
   const onChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage + 1);
+    setPage(newPage);
   }, []);
 
   const onChangeRowsPerPage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

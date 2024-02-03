@@ -27,9 +27,8 @@ export const getKpis = createAsyncThunk(
     filterValue?: string;
   }) => {
     let data;
-    const { page, sort, filter, filterValue } = payload;
-    const limit = 10;
-    const query = `?limit=${limit}&page=${page}${sort ? `&sort=${sort}` : ''}${
+    const { page, sort, filter, filterValue, limit } = payload;
+    const query = `?limit=${limit}&page=${page + 1}${sort ? `&sort=${sort}` : ''}${
       filter && filterValue ? `&${filter}=${filterValue}` : ''
     }`;
 

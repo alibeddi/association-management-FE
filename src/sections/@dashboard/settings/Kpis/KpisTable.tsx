@@ -91,10 +91,6 @@ export default function CustomerListPage() {
   const { kpis } = useSelector((state: RootState) => state?.kpis);
 
   useEffect(() => {
-    // dispatch(
-    //   getKpis({ page, limit: rowsPerPage, sortBy: orderBy, sort: order, filter: filterName })
-    // );
-    console.log({ page, rowsPerPage });
     dispatch(getKpis({ page, limit: rowsPerPage }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
 
@@ -111,7 +107,7 @@ export default function CustomerListPage() {
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(1);
+    setPage(0);
     setFilterName(event.target.value);
   };
 
@@ -187,12 +183,12 @@ export default function CustomerListPage() {
                 />
 
                 <TableBody>
-                  {tableData?.map((row: any) => (
+                  {tableData?.map((row: IKpi) => (
                     <KpiTableRow
-                      key={row.id}
+                      key={row._id}
                       row={row}
-                      selected={selected.includes(row.id)}
-                      onSelectRow={() => onSelectRow(row.id)}
+                      selected={selected.includes(row._id)}
+                      onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => {}}
                       onEditRow={() => {}}
                       onViewRow={() => {}}
@@ -207,7 +203,7 @@ export default function CustomerListPage() {
 
           <TablePaginationCustom
             count={kpis.meta.totalDocs || 0}
-            page={page - 1}
+            page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
