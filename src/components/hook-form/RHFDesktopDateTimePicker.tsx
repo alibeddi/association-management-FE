@@ -32,7 +32,7 @@ export default function RHFDesktopDateTimePicker({
   const { control, setValue } = useFormContext();
   const [isOpened, setIsOpened] = useState(false);
  
-  const handlePickerChange = (value: unknown) => {
+  const handlePickerChange = (value: Date | null) => {
     setValue(name, value, { shouldValidate: true });
   };
   const currentDate = new Date();

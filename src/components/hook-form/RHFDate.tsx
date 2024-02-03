@@ -2,7 +2,7 @@
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
 import { FormHelperText, Stack, TextField, TextFieldProps, Tooltip } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker,CalendarPickerView } from '@mui/x-date-pickers';
 // translation
 import { useLocales } from '../../locales';
 
@@ -13,7 +13,7 @@ type Props = TextFieldProps & {
   min?: number;
   inputFormat?: string;
   isDisabled?: boolean;
-  views?: any[] | undefined;
+  views?: CalendarPickerView[] | undefined;
   format:string;
 };
 
@@ -53,7 +53,7 @@ export default function RHFDate({
                 setValue(name, field.value ? new Date(field?.value) : new Date(today));
               }}
               renderInput={(props)=> <TextField {...props} />}
-              onChange={(newValue: any) => {
+              onChange={(newValue: Date | null) => {
                 field.onChange(newValue);
               }}
             />
