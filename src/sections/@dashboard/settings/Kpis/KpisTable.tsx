@@ -92,13 +92,19 @@ export default function KpiListPage() {
 
   useEffect(() => {
     setTableData(kpis?.docs);
+    console.log('is it changed');
   }, [kpis]);
+  console.log({ kpis: kpis.docs, tableData });
 
   const isFiltered = filterName !== '';
 
   const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
 
-  const handleViewRow = (row: any) => {
+  const handleViewRow = (row: IKpi) => {
+    navigate(PATH_DASHBOARD.settings.kpiView);
+  };
+
+  const handleEditRow = (row: IKpi) => {
     navigate(PATH_DASHBOARD.settings.kpiView);
   };
 
@@ -199,8 +205,12 @@ export default function KpiListPage() {
                       onDeleteRow={() => {
                         handleDeleteRow(row._id);
                       }}
-                      onEditRow={() => {}}
-                      onViewRow={() => {}}
+                      onEditRow={() => {
+                        handleEditRow(row);
+                      }}
+                      onViewRow={() => {
+                        handleViewRow(row);
+                      }}
                     />
                   ))}
 

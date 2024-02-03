@@ -81,22 +81,11 @@ export default function KpiTableRow({
         </TableCell>
 
         <TableCell align="center">
-          {/* <Tooltip title={isRequired ? 'Required' : 'Optional'}>
-            <Iconify
-              icon={isRequired ? 'mdi:required' : 'icon-park-outline:optional'}
-              sx={{
-                width: 20,
-                height: 20,
-                color: 'success.main',
-                ...(!isRequired && { color: 'warning.main' }),
-              }}
-            />
-          </Tooltip> */}
           <Box
             sx={{
               color: isRequired ? 'green' : 'red',
               bgcolor: isRequired ? 'lightgreen' : 'pink',
-              borderRadius: '8px'
+              borderRadius: '8px',
             }}
           >
             {isRequired.toString()}
@@ -161,6 +150,15 @@ export default function KpiTableRow({
         >
           <Iconify icon="eva:edit-fill" />
           Edit
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onViewRow();
+            handleClosePopover();
+          }}
+        >
+          <Iconify icon="carbon:view-filled" />
+          View
         </MenuItem>
       </MenuPopover>
 
