@@ -23,19 +23,14 @@ import { Card, Button, Container, DialogTitle, Dialog } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 
-// import { getEvents, createEvent, updateCalendarWorkTime, deleteEvent } from '../redux/slices/calendar';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
 // utils
 import { fTimestamp } from '../utils/formatTime';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // @types
 import { ICalendarEvent, ICalendarViewValue } from '../@types/calendar';
-// components
-import Iconify from '../components/iconify';
+
 import { useSnackbar } from '../components/snackbar';
-import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import { useSettingsContext } from '../components/settings';
 import { useDateRangePicker } from '../components/date-range-picker';
 // sections
@@ -47,19 +42,6 @@ import {
 } from '../sections/@dashboard/calendar';
 
 
-// ----------------------------------------------------------------------
-
-const COLOR_OPTIONS = [
-  '#00AB55', // theme.palette.primary.main,
-  '#1890FF', // theme.palette.info.main,
-  '#54D62C', // theme.palette.success.main,
-  '#FFC107', // theme.palette.warning.main,
-  '#FF4842', // theme.palette.error.main
-  '#04297A', // theme.palette.info.darker
-  '#7A0C2E', // theme.palette.error.darker
-];
-
-// ----------------------------------------------------------------------
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
@@ -130,15 +112,15 @@ export default function CalendarPage() {
     }
   };
 
-  const handleChangeView = (newView: ICalendarViewValue) => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
+  // const handleChangeView = (newView: ICalendarViewValue) => {
+  //   const calendarEl = calendarRef.current;
+  //   if (calendarEl) {
+  //     const calendarApi = calendarEl.getApi();
 
-      calendarApi.changeView(newView);
-      setView(newView);
-    }
-  };
+  //     calendarApi.changeView(newView);
+  //     setView(newView);
+  //   }
+  // };
 
   const handleClickDatePrev = () => {
     const calendarEl = calendarRef.current;
@@ -202,8 +184,6 @@ export default function CalendarPage() {
   };
 
   const handleDropEvent = async ({ event }: EventDropArg) => {
-    
-    try {
       await dispatch(
         updateCalendarWorkTime({
           id: event.id,
@@ -213,7 +193,7 @@ export default function CalendarPage() {
           },
         })
       )
-        .then((res: any) => {
+        .then((res) => {
           const {status, message} = res.payload;
           if(status === "fail"){
             enqueueSnackbar(message || 'something went wrong', {
@@ -223,21 +203,16 @@ export default function CalendarPage() {
         
         })
         .catch((err: any) => console.log(err));
-    } catch (error) {
-      enqueueSnackbar(error?.message || 'something went wrong');
-      throw new Error(error);
-    }
     dispatch(getMyCalendarWorkTime())
   };
 
   const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {
     if (selectedEventId) {
-      dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }));
-      enqueueSnackbar('Update success!');
+      dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }));   
     } else {
       dispatch(createCalendarWorkTime(newEvent));
-      enqueueSnackbar('Create success!');
     }
+    enqueueSnackbar(selectedEventId ? 'Update success!' : 'Create success!');
     dispatch(getMyCalendarWorkTime());
   };
 
@@ -279,28 +254,6 @@ export default function CalendarPage() {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        {/* <CustomBreadcrumbs
-          heading="Calendar"
-          links={[
-            {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            {
-              name: 'Calendar',
-            },
-          ]}
-          // action={
-          //   <Button
-          //     variant="contained"
-          //     startIcon={<Iconify icon="eva:plus-fill" />}
-          //     onClick={handleOpenModal}
-          //   >
-          //     New Event
-          //   </Button>
-          // }
-        /> */}
-
         <Card>
           <StyledCalendar>
             <CalendarToolbar

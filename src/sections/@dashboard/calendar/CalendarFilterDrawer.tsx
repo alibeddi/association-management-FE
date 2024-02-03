@@ -147,7 +147,7 @@ export default function CalendarFilterDrawer({
           <ListItemButton
             key={event.id}
             onClick={() => onSelectEvent(event.id as string)}
-            sx={{ py: 1.5, borderBottom: (theme:any) => `dashed 1px ${theme.palette.divider}` }}
+            sx={{ py: 1.5}}
           >
             <Box
               sx={{
