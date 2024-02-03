@@ -111,17 +111,6 @@ export default function CalendarPage() {
       setDate(calendarApi.getDate());
     }
   };
-
-  // const handleChangeView = (newView: ICalendarViewValue) => {
-  //   const calendarEl = calendarRef.current;
-  //   if (calendarEl) {
-  //     const calendarApi = calendarEl.getApi();
-
-  //     calendarApi.changeView(newView);
-  //     setView(newView);
-  //   }
-  // };
-
   const handleClickDatePrev = () => {
     const calendarEl = calendarRef.current;
     if (calendarEl) {

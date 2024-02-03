@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ICalendarEvent } from 'src/@types/calendar';
+import { ICalendarEvent } from '../../../@types/calendar';
 import { splitIntervalIntoHours } from '../../../utils';
 import axios from '../../../utils/axios';
 

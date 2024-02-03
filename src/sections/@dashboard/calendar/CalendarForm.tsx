@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import * as dayjs from 'dayjs';
 import merge from 'lodash/merge';
 
 import { EventInput } from '@fullcalendar/core';
@@ -13,8 +12,9 @@ import { LoadingButton } from '@mui/lab';
 import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // time
-import { addOneHour, isStartOfHour } from 'src/utils';
 import { isBefore } from 'date-fns';
+import { addOneHour, isStartOfHour } from '../../../utils';
+
 //
 import { ErrorMessageCustom } from '../../../components/errors';
 // @types
