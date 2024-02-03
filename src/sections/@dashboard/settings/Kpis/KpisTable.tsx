@@ -32,7 +32,7 @@ import {
   useTable,
 } from '../../../../components/table';
 import { useLocales } from '../../../../locales';
-import { getKpis } from '../../../../redux/slices/kpis';
+import { deleteOnekpi, getKpis } from '../../../../redux/slices/kpis';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import KpiTableRow from './KpiTableRow';
@@ -40,23 +40,19 @@ import KpiTableRow from './KpiTableRow';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'customer.firstName', label: 'Name', align: 'left' },
-  { id: 'customer.idCardNumber', label: 'ID Card', align: 'center' },
-  { id: 'customer.passportNumber', label: 'Passport', align: 'center' },
-  {
-    id: 'customer.drivingLicenseNumber',
-    label: 'Driving License',
-    align: 'center',
-  },
-  { id: 'customer.phone', label: 'Phone', align: 'center' },
-  { id: 'customer.nationality', label: 'Nationality', align: 'center' },
-  { id: 'customer.createdAt', label: 'Created At', align: 'center' },
+  { id: 'name', label: 'Name', align: 'left' },
+  { id: 'label', label: 'Label', align: 'left' },
+  { id: 'frontType', label: 'Frontend Type', align: 'left' },
+  { id: 'backType', label: 'Backend Type', align: 'left' },
+  { id: 'isRequired', label: 'Required', align: 'center' },
+  { id: 'options', label: 'Options', align: 'left' },
+  { id: 'createdAt', label: 'Created At', align: 'left' },
   { label: '', align: 'center' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function CustomerListPage() {
+export default function KpiListPage() {
   const {
     dense,
     page,
@@ -129,10 +125,21 @@ export default function CustomerListPage() {
     setOpenConfirm(false);
   };
 
+  const handleDeleteRow = (id: string) => {
+    dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
+      console.log({ res });
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        enqueueSnackbar(`${res?.payload.message}`);
+      } else {
+        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
+      }
+    });
+  };
+
   return (
     <>
       <Helmet>
-        <title>{`${translate('Customers')}`}</title>
+        <title>{`${translate('Kpis')}`}</title>
       </Helmet>
 
       <Container maxWidth={false}>
@@ -189,7 +196,9 @@ export default function CustomerListPage() {
                       row={row}
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
-                      onDeleteRow={() => {}}
+                      onDeleteRow={() => {
+                        handleDeleteRow(row._id);
+                      }}
                       onEditRow={() => {}}
                       onViewRow={() => {}}
                     />

@@ -81,7 +81,7 @@ export default function KpiTableRow({
         </TableCell>
 
         <TableCell align="center">
-          <Tooltip title={isRequired ? 'Required' : 'Optional'}>
+          {/* <Tooltip title={isRequired ? 'Required' : 'Optional'}>
             <Iconify
               icon={isRequired ? 'mdi:required' : 'icon-park-outline:optional'}
               sx={{
@@ -91,7 +91,16 @@ export default function KpiTableRow({
                 ...(!isRequired && { color: 'warning.main' }),
               }}
             />
-          </Tooltip>
+          </Tooltip> */}
+          <Box
+            sx={{
+              color: isRequired ? 'green' : 'red',
+              bgcolor: isRequired ? 'lightgreen' : 'pink',
+              borderRadius: '8px'
+            }}
+          >
+            {isRequired.toString()}
+          </Box>
         </TableCell>
         <TableCell align="left">
           {options?.length > 0 ? (
@@ -119,7 +128,7 @@ export default function KpiTableRow({
             <Box>No options...</Box>
           )}
         </TableCell>
-        <TableCell align="right">{fDate(createdAt)}</TableCell>
+        <TableCell align="left">{fDate(createdAt)}</TableCell>
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
