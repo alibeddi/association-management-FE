@@ -12,12 +12,12 @@ import {
   Typography,
 } from '@mui/material';
 // utils
-import { fDate } from '../../../../utils/formatTime';
+import { fDate } from '../../../utils/formatTime';
 // components
-import { IKpi } from '../../../../@types/Kpi';
-import ConfirmDialog from '../../../../components/confirm-dialog';
-import Iconify from '../../../../components/iconify';
-import MenuPopover from '../../../../components/menu-popover';
+import { IKpi } from '../../../@types/Kpi';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import Iconify from '../../../components/iconify';
+import MenuPopover from '../../../components/menu-popover';
 
 type Props = {
   row: IKpi;
@@ -92,11 +92,11 @@ export default function KpiTableRow({
           </Box>
         </TableCell>
         <TableCell align="left">
-          {options?.length > 0 ? (
+          {options && options?.length > 0 ? (
             <Tooltip
               title={
                 <>
-                  {options.map((option, index) => (
+                  {options?.map((option, index) => (
                     <p key={index}>{option}</p>
                   ))}
                 </>
@@ -110,7 +110,7 @@ export default function KpiTableRow({
                   textOverflow: 'ellipsis',
                 }}
               >
-                {options.join(', ')}
+                {options?.join(', ')}
               </Box>
             </Tooltip>
           ) : (

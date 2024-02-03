@@ -63,14 +63,9 @@ const navConfig = [
         icon: ICONS.operators,
       },
       {
-        title: 'settings',
-        path: PATH_DASHBOARD.settings.root,
+        title: 'kpis',
+        path: PATH_DASHBOARD.kpis.root,
         icon: ICONS.settings,
-        children: [
-          { title: 'kpis', path: PATH_DASHBOARD.settings.kpis },
-          { title: 'users', path: PATH_DASHBOARD.settings.users },
-          { title: 'bookableExtras', path: PATH_DASHBOARD.settings.bookableExtras },
-        ],
       },
       {
         title: 'group permissions',

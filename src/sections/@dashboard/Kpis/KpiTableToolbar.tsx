@@ -1,18 +1,19 @@
 // @mui
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
 // components
-import Iconify from '../../../../components/iconify';
+import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  filterName: string;
-  filterRole: string;
-  isFiltered: boolean;
-  optionsRole: string[];
-  onResetFilter: VoidFunction;
-  onFilterName: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  filterName?: string;
+  filterRole?: string;
+  isFiltered?: boolean;
+  optionsRole?: string[];
+  onResetFilter?: VoidFunction;
+  onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFilterRole?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function KpiTableToolbar({
@@ -23,6 +24,7 @@ export default function KpiTableToolbar({
   onFilterName,
   onFilterRole,
   onResetFilter,
+  placeholder,
 }: Props) {
   return (
     <Stack
@@ -36,45 +38,9 @@ export default function KpiTableToolbar({
     >
       <TextField
         fullWidth
-        select
-        label="Role"
-        value={filterRole}
-        onChange={onFilterRole}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: {
-                maxHeight: 260,
-              },
-            },
-          },
-        }}
-        sx={{
-          maxWidth: { sm: 240 },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsRole.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search..."
+        placeholder={placeholder}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

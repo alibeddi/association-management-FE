@@ -13,6 +13,7 @@ import {
   Branches,
   Categories,
   Dashboard,
+  KpiEditNew,
   Kpis,
   LoginPage,
   OperatorList,
@@ -86,12 +87,13 @@ export default function Router() {
         },
 
         {
-          path: 'settings',
+          path: 'kpis',
+          element: <Kpis />,
           children: [
-            { element: <Navigate to="/dashboard/settings/kpis" replace />, index: true },
-            { path: 'kpis', element: <Kpis /> },
-            { path: 'users', element: <Dashboard /> },
-            { path: 'bookableExtras', element: <Dashboard /> },
+            { element: <Navigate to="/dashboard/kpis" replace />, index: true },
+            { path: 'new', element: <KpiEditNew /> },
+            { path: 'edit', element: <KpiEditNew /> },
+            { path: 'view', element: <Kpis /> },
           ],
         },
         {

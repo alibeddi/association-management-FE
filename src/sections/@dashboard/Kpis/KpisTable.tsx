@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
   Button,
@@ -16,26 +16,27 @@ import {
 // routes
 
 // types
-import { IKpi } from '../../../../@types/Kpi';
+import { IKpi } from '../../../@types/Kpi';
 // components
 
 // sections
-import ConfirmDialog from '../../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
-import Iconify from '../../../../components/iconify';
-import Scrollbar from '../../../../components/scrollbar';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
   useTable,
-} from '../../../../components/table';
-import { useLocales } from '../../../../locales';
-import { deleteOnekpi, getKpis } from '../../../../redux/slices/kpis';
-import { RootState, useDispatch, useSelector } from '../../../../redux/store';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+} from '../../../components/table';
+import { useLocales } from '../../../locales';
+import { deleteOnekpi, getKpis } from '../../../redux/slices/kpis';
+import { RootState, useDispatch, useSelector } from '../../../redux/store';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 import KpiTableRow from './KpiTableRow';
+import KpiTableToolbar from './KpiTableToolbar';
 
 // ----------------------------------------------------------------------
 
@@ -87,25 +88,23 @@ export default function KpiListPage() {
   const { kpis } = useSelector((state: RootState) => state?.kpis);
 
   useEffect(() => {
-    dispatch(getKpis({ page, limit: rowsPerPage }));
+    dispatch(getKpis({ page, limit: rowsPerPage, orderBy, order, filterName }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
 
   useEffect(() => {
     setTableData(kpis?.docs);
-    console.log('is it changed');
   }, [kpis]);
-  console.log({ kpis: kpis.docs, tableData });
 
   const isFiltered = filterName !== '';
 
   const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
 
   const handleViewRow = (row: IKpi) => {
-    navigate(PATH_DASHBOARD.settings.kpiView);
+    navigate(PATH_DASHBOARD.kpis.view);
   };
 
   const handleEditRow = (row: IKpi) => {
-    navigate(PATH_DASHBOARD.settings.kpiView);
+    navigate(PATH_DASHBOARD.kpis.edit);
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,7 +132,6 @@ export default function KpiListPage() {
 
   const handleDeleteRow = (id: string) => {
     dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
-      console.log({ res });
       if (res?.meta?.requestStatus === 'fulfilled') {
         enqueueSnackbar(`${res?.payload.message}`);
       } else {
@@ -149,15 +147,28 @@ export default function KpiListPage() {
       </Helmet>
 
       <Container maxWidth={false}>
-        <CustomBreadcrumbs heading="kpis" links={[{ name: 'kpis' }]} />
+        <CustomBreadcrumbs
+          heading="kpis"
+          links={[{ name: 'kpis' }]}
+          action={
+            <Button
+              component={RouterLink}
+              to={PATH_DASHBOARD.kpis.new}
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+            >
+              New Kpi
+            </Button>
+          }
+        />
         <Card>
-          {/* <PricingGroupTableToolbar
+          <KpiTableToolbar
+            onResetFilter={handleResetFilter}
             isFiltered={isFiltered}
             filterName={filterName}
             onFilterName={handleFilterName}
-            onResetFilter={handleResetFilter}
-            placeholder={`${translate('Search by Name, ID Card, Phone or Driving License...')}`}
-          /> */}
+            placeholder="Search by kpi Name..."
+          />
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
               dense={dense}

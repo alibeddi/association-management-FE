@@ -33,13 +33,11 @@ export const PATH_DASHBOARD = {
     calendar: path(ROOTS_DASHBOARD, '/reservation/calendar'),
   },
   operators: path(ROOTS_DASHBOARD, '/operators'),
-  settings: {
-    root: path(ROOTS_DASHBOARD, '/settings'),
-    kpis: path(ROOTS_DASHBOARD, '/settings/kpis'),
-    kpiEdit: path(ROOTS_DASHBOARD, '/settings/kpis/edit'),
-    kpiView: path(ROOTS_DASHBOARD, '/settings/kpis/view'),
-    users: path(ROOTS_DASHBOARD, '/settings/users'),
-    bookableExtras: path(ROOTS_DASHBOARD, '/settings/bookableExtras'),
+  kpis: {
+    root: path(ROOTS_DASHBOARD, '/kpis'),
+    edit: path(ROOTS_DASHBOARD, '/kpis/edit'),
+    view: path(ROOTS_DASHBOARD, '/kpis/view'),
+    new: path(ROOTS_DASHBOARD, '/kpis/new'),
   },
   groupPermissions: path(ROOTS_DASHBOARD, '/permissions'),
 };
