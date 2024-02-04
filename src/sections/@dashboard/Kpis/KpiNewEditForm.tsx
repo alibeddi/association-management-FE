@@ -28,6 +28,9 @@ import { backendTypes, frontendTypes } from '../../../assets/data';
 import FormProvider, { RHFSelect, RHFTextField } from '../../../components/hook-form';
 import { useSnackbar } from '../../../components/snackbar';
 import Label from '../../../components/label/Label';
+import { dispatch } from '../../../redux/store';
+import { createkpi } from '../../../redux/slices/kpis';
+import { useLocales } from '../../../locales';
 
 // ----------------------------------------------------------------------
 interface FormValuesProps {
@@ -45,6 +48,7 @@ type Props = {
 
 export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
   const navigate = useNavigate();
+  const { translate } = useLocales();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -99,9 +103,16 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
   const onSubmit = async (data: FormValuesProps) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      navigate(PATH_DASHBOARD.kpis.root);
+      dispatch(createkpi({ kpi: data })).then((res: any) => {
+        if (res?.meta?.requestStatus === 'fulfilled') {
+          enqueueSnackbar(`${translate(res?.payload.message)}`);
+          reset();
+          navigate(PATH_DASHBOARD.kpis.root);
+        } else {
+          enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+        }
+      });
+      // enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       console.log('DATA', data);
     } catch (error) {
       console.error(error);
@@ -122,9 +133,8 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Name" />
+              <RHFTextField name="name" label="Name *" />
               <RHFTextField name="label" label="Label Name" />
-
               <RHFSelect
                 native
                 name="frontType"
@@ -140,7 +150,7 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
               </RHFSelect>
               <RHFSelect
                 native
-                name="backtype"
+                name="backType"
                 label="Backend Type"
                 placeholder="select your backend type"
               >
@@ -151,7 +161,6 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                   </option>
                 ))}
               </RHFSelect>
-              {/* <RHFTextField name="options" label="create your kpi options..." /> */}
               <Controller
                 control={control}
                 name="options"
@@ -160,7 +169,6 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                 }}
                 render={({ field: { onChange } }) => (
                   <Autocomplete
-                    // defaultValue={useCasesData?.tags ? JSON.parse(useCasesData?.tags) : []}
                     multiple
                     id="tags-filled"
                     options={[]}
@@ -173,7 +181,9 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                     onChange={(event, values) => {
                       onChange(values);
                     }}
-                    renderInput={(params) => <TextField {...params} label="add your option" />}
+                    renderInput={(params) => (
+                      <RHFTextField {...params} label="add your option" name="options" />
+                    )}
                   />
                 )}
               />

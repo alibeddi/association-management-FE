@@ -49,6 +49,24 @@ export const deleteOnekpi = createAsyncThunk('kpi/DELETE', async (payload: { kpi
   const { kpiId } = payload;
   try {
     const response = await axios.delete(`kpis/${kpiId}`);
+    // eslint-disable-next-line prefer-destructuring
+    data = response.data;
+    if (response.status === 200) {
+      return data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+});
+
+// DELETE ONE
+export const createkpi = createAsyncThunk('kpi/POST', async (payload: { kpi: any }) => {
+  let data;
+  const { kpi } = payload;
+  try {
+    const response = await axios.post(`kpis`, kpi);
+    // eslint-disable-next-line prefer-destructuring
     data = response.data;
     if (response.status === 200) {
       return data;
@@ -86,6 +104,19 @@ const slice = createSlice({
         state.kpis.docs = state.kpis.docs.filter((kpi) => kpi._id !== action.meta.arg.kpiId);
       })
       .addCase(deleteOnekpi.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // CREATE ONE
+    builder
+      .addCase(createkpi.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(createkpi.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        console.log(action.payload);
+        state.kpi = action.payload.data;
+      })
+      .addCase(createkpi.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

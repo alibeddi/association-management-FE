@@ -43,7 +43,6 @@ const GroupButton = ({
   const userPermissions = user?.permissionGroup[0].permissions;
 
   const deleteGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
-  // TODO: || isSuperAdmin add it when we implement roles in the project
   const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
 
   const isRowMenu = deleteGroupPermission || editGroupPermission;
