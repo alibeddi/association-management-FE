@@ -19,7 +19,7 @@ import FormProvider, { RHFSelect, RHFSwitch, RHFTextField } from '../../../compo
 import RHFAutocomplete from '../../../components/hook-form/RHFAutocomplete';
 import { useSnackbar } from '../../../components/snackbar';
 import { useLocales } from '../../../locales';
-import { createkpi } from '../../../redux/slices/kpis';
+import { createkpi, updatekpi } from '../../../redux/slices/kpis';
 import { dispatch } from '../../../redux/store';
 
 // ----------------------------------------------------------------------
@@ -91,23 +91,31 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
   const onSubmit = async (data: FormValuesProps) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      dispatch(createkpi({ kpi: data })).then((res: any) => {
-        if (res?.meta?.requestStatus === 'fulfilled') {
-          enqueueSnackbar(`${translate(res?.payload.message)}`);
-          reset();
-          navigate(PATH_DASHBOARD.kpis.root);
-        } else {
-          enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-        }
-      });
-      // enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      console.log('DATA', data);
+      if (isEdit && currentKpi) {
+        dispatch(updatekpi({ kpiId: currentKpi?._id, body: data })).then((res: any) => {
+          if (res?.meta?.requestStatus === 'fulfilled') {
+            enqueueSnackbar(`${translate(res?.payload.message)}`);
+            reset();
+            navigate(PATH_DASHBOARD.kpis.root);
+          } else {
+            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+          }
+        });
+      } else {
+        dispatch(createkpi({ kpi: data })).then((res: any) => {
+          if (res?.meta?.requestStatus === 'fulfilled') {
+            enqueueSnackbar(`${translate(res?.payload.message)}`);
+            reset();
+            navigate(PATH_DASHBOARD.kpis.root);
+          } else {
+            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+          }
+        });
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
-  console.log(defaultValues);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

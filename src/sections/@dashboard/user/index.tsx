@@ -92,7 +92,7 @@ export default function UserListPage() {
   const [filterRole, setFilterRole] = useState('all');
 
   const [openConfirm, setOpenConfirm] = useState(false);
-  console.log({ openConfirm });
+
   const [filterStatus, setFilterStatus] = useState('all');
 
   const dataFiltered = applyFilter({
