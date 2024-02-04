@@ -97,11 +97,11 @@ export default function Router() {
             { path: '', element: <Kpis /> },
             { path: 'new', element: <KpiEditNew isEdit={false} /> },
             {
-              path: 'edit',
-              element: <KpiEditNew />,
+              path: 'edit/:id',
+              element: <KpiEditNew isEdit />,
             },
             {
-              path: 'view',
+              path: 'view/:id',
               element: <KpiEditNew />,
             },
           ],

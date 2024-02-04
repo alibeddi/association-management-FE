@@ -82,8 +82,6 @@ export default function KpiListPage() {
   const [tableData, setTableData] = useState<IKpi[]>([]);
   const [filterName, setFilterName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [banMany, setBanMany] = useState(true);
-  const [rowId, setRowId] = useState('');
 
   const { kpis } = useSelector((state: RootState) => state?.kpis);
 
@@ -100,11 +98,11 @@ export default function KpiListPage() {
   const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
 
   const handleViewRow = (row: IKpi) => {
-    navigate(PATH_DASHBOARD.kpis.view);
+    navigate(`${PATH_DASHBOARD.kpis.view}/${row._id}`, { state: { kpi: row } });
   };
 
   const handleEditRow = (row: IKpi) => {
-    navigate(PATH_DASHBOARD.kpis.edit);
+    navigate(`${PATH_DASHBOARD.kpis.edit}/${row._id}`, { state: { kpi: row } });
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,12 +116,6 @@ export default function KpiListPage() {
 
   const handleOpenConfirm = (id?: string) => {
     setOpenConfirm(true);
-    if (id) {
-      setRowId(id);
-      setBanMany(false);
-    } else {
-      setBanMany(true);
-    }
   };
 
   const handleCloseConfirm = () => {
