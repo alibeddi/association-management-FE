@@ -3,20 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 // form
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Card,
+  Checkbox,
+  Chip,
+  FormControlLabel,
+  Grid,
+  Stack,
+  TextField,
+} from '@mui/material';
 // utils
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // @types
 import { BackType, FrontType, IKpi } from '../../../@types/Kpi';
 // assets
-import { countries } from '../../../assets/data';
+import { backendTypes, frontendTypes } from '../../../assets/data';
 // components
 import FormProvider, { RHFSelect, RHFTextField } from '../../../components/hook-form';
 import { useSnackbar } from '../../../components/snackbar';
+import Label from '../../../components/label/Label';
 
 // ----------------------------------------------------------------------
 interface FormValuesProps {
@@ -71,6 +82,7 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
   const {
     reset,
     handleSubmit,
+    control,
     formState: { isSubmitting },
   } = methods;
 
@@ -110,30 +122,70 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="label" label="label backType" />
-              <RHFTextField name="frontType" label="Phone Number" />
+              <RHFTextField name="name" label="Name" />
+              <RHFTextField name="label" label="Label Name" />
 
-              <RHFSelect native name="isRequired" label="isRequired" placeholder="isRequired">
+              <RHFSelect
+                native
+                name="frontType"
+                label="Frontend Type"
+                placeholder="select your frontend type"
+              >
                 <option value="" />
-                {countries.map((isRequired) => (
-                  <option key={isRequired.code} value={isRequired.label}>
-                    {isRequired.label}
+                {frontendTypes.map((frontType) => (
+                  <option key={frontType.code} value={frontType.label}>
+                    {frontType.label}
                   </option>
                 ))}
               </RHFSelect>
-
-              <RHFTextField name="options" label="options/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="backType" label="backType" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
+              <RHFSelect
+                native
+                name="backtype"
+                label="Backend Type"
+                placeholder="select your backend type"
+              >
+                <option value="" />
+                {backendTypes.map((backType) => (
+                  <option key={backType.code} value={backType.label}>
+                    {backType.label}
+                  </option>
+                ))}
+              </RHFSelect>
+              {/* <RHFTextField name="options" label="create your kpi options..." /> */}
+              <Controller
+                control={control}
+                name="options"
+                rules={{
+                  required: 'Veuillez choisir une réponse',
+                }}
+                render={({ field: { onChange } }) => (
+                  <Autocomplete
+                    // defaultValue={useCasesData?.tags ? JSON.parse(useCasesData?.tags) : []}
+                    multiple
+                    id="tags-filled"
+                    options={[]}
+                    freeSolo
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                      ))
+                    }
+                    onChange={(event, values) => {
+                      onChange(values);
+                    }}
+                    renderInput={(params) => <TextField {...params} label="add your option" />}
+                  />
+                )}
+              />
+              <FormControlLabel
+                control={<Checkbox name="gilad" />}
+                label={<span style={{ fontSize: '1.25rem' }}>Is this Kpi required ?</span>}
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create User' : 'Save Changes'}
+                {!isEdit ? 'Create Kpi' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>
