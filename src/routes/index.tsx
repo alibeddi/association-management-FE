@@ -13,7 +13,8 @@ import {
   Branches,
   Categories,
   Dashboard,
-  KpiEditNew,
+  KpiEdit,
+  KpiNew,
   Kpis,
   LoginPage,
   OperatorList,
@@ -95,14 +96,14 @@ export default function Router() {
           ),
           children: [
             { path: '', element: <Kpis /> },
-            { path: 'new', element: <KpiEditNew isEdit={false} /> },
+            { path: 'new', element: <KpiNew /> },
             {
               path: 'edit/:id',
-              element: <KpiEditNew isEdit />,
+              element: <KpiEdit />,
             },
             {
               path: 'view/:id',
-              element: <KpiEditNew />,
+              element: <KpiNew />,
             },
           ],
         },

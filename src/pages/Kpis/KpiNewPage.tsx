@@ -11,13 +11,13 @@ import UserNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
 
 // ----------------------------------------------------------------------
 
-export default function KpiEditNewPage() {
+export default function KpiNewPage() {
   const { themeStretch } = useSettingsContext();
 
   return (
     <>
       <Helmet>
-        <title> User: Create a new user | Minimal UI</title>
+        <title> Kpi: Create a new Kpi </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

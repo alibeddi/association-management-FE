@@ -22,6 +22,7 @@ export const Branches = Loadable(lazy(() => import('../pages/Branches')));
 export const PermissionGroup = Loadable(lazy(() => import('../pages/PermissionGroup')));
 export const OperatorList = Loadable(lazy(() => import('../pages/user')));
 export const Kpis = Loadable(lazy(() => import('../pages/Kpis/KpisListPage')));
-export const KpiEditNew = Loadable(lazy(() => import('../pages/Kpis/KpiEditNewtPage')));
+export const KpiNew = Loadable(lazy(() => import('../pages/Kpis/KpiNewPage')));
+export const KpiEdit = Loadable(lazy(() => import('../pages/Kpis/KpiEditPage')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

@@ -60,7 +60,7 @@ export const deleteOnekpi = createAsyncThunk('kpi/DELETE', async (payload: { kpi
   }
 });
 
-// DELETE ONE
+// POST ONE
 export const createkpi = createAsyncThunk('kpi/POST', async (payload: { kpi: any }) => {
   let data;
   const { kpi } = payload;
@@ -76,6 +76,43 @@ export const createkpi = createAsyncThunk('kpi/POST', async (payload: { kpi: any
     return Promise.reject(err.message ? err.message : data?.message);
   }
 });
+
+// GET ONE
+export const getOnekpi = createAsyncThunk('kpi/GetONE', async (payload: { kpiId: string }) => {
+  let data;
+  const { kpiId } = payload;
+  try {
+    const response = await axios.get(`kpis/${kpiId}`);
+    // eslint-disable-next-line prefer-destructuring
+    data = response.data;
+    if (response.status === 200) {
+      return data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+});
+
+// UPDATE ONE
+export const updatekpi = createAsyncThunk(
+  'kpi/UPDATE',
+  async (payload: { kpiId: string; body: any }) => {
+    let data;
+    const { kpiId, body } = payload;
+    try {
+      const response = await axios.patch(`kpis/${kpiId}`, body);
+      // eslint-disable-next-line prefer-destructuring
+      data = response.data;
+      if (response.status === 200) {
+        return data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
 
 const slice = createSlice({
   name: 'kpis',
@@ -113,10 +150,33 @@ const slice = createSlice({
       })
       .addCase(createkpi.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        console.log(action.payload);
         state.kpi = action.payload.data;
       })
       .addCase(createkpi.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // GET ONE
+    builder
+      .addCase(getOnekpi.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(getOnekpi.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.kpi = action.payload.data;
+      })
+      .addCase(getOnekpi.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // UPDATE ONE
+    builder
+      .addCase(updatekpi.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(updatekpi.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.kpi = action.payload.data;
+      })
+      .addCase(updatekpi.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

@@ -3,20 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 // form
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import {
-  Autocomplete,
-  Box,
-  Card,
-  Checkbox,
-  Chip,
-  FormControlLabel,
-  Grid,
-  Stack,
-  TextField,
-} from '@mui/material';
+import { Box, Card, Grid, Stack } from '@mui/material';
 // utils
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -25,12 +15,12 @@ import { BackType, FrontType, IKpi } from '../../../@types/Kpi';
 // assets
 import { backendTypes, frontendTypes } from '../../../assets/data';
 // components
-import FormProvider, { RHFSelect, RHFTextField } from '../../../components/hook-form';
+import FormProvider, { RHFSelect, RHFSwitch, RHFTextField } from '../../../components/hook-form';
+import RHFAutocomplete from '../../../components/hook-form/RHFAutocomplete';
 import { useSnackbar } from '../../../components/snackbar';
-import Label from '../../../components/label/Label';
-import { dispatch } from '../../../redux/store';
-import { createkpi } from '../../../redux/slices/kpis';
 import { useLocales } from '../../../locales';
+import { createkpi } from '../../../redux/slices/kpis';
+import { dispatch } from '../../../redux/store';
 
 // ----------------------------------------------------------------------
 interface FormValuesProps {
@@ -43,7 +33,7 @@ interface FormValuesProps {
 }
 type Props = {
   isEdit?: boolean;
-  currentKpi?: IKpi;
+  currentKpi?: IKpi | null;
 };
 
 export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
@@ -82,12 +72,10 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-
   const {
     reset,
     handleSubmit,
-    control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = methods;
 
   useEffect(() => {
@@ -118,6 +106,8 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
       console.error(error);
     }
   };
+
+  console.log(defaultValues);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -161,40 +151,24 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                   </option>
                 ))}
               </RHFSelect>
-              <Controller
-                control={control}
+              <RHFAutocomplete
                 name="options"
-                rules={{
-                  required: 'Veuillez choisir une réponse',
-                }}
-                render={({ field: { onChange } }) => (
-                  <Autocomplete
-                    multiple
-                    id="tags-filled"
-                    options={[]}
-                    freeSolo
-                    renderTags={(value, getTagProps) =>
-                      value.map((option, index) => (
-                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                      ))
-                    }
-                    onChange={(event, values) => {
-                      onChange(values);
-                    }}
-                    renderInput={(params) => (
-                      <RHFTextField {...params} label="add your option" name="options" />
-                    )}
-                  />
-                )}
+                label="options"
+                multiple
+                freeSolo
+                options={[]}
+                ChipProps={{ size: 'small' }}
               />
-              <FormControlLabel
-                control={<Checkbox name="gilad" />}
-                label={<span style={{ fontSize: '1.25rem' }}>Is this Kpi required ?</span>}
-              />
+              <RHFSwitch name="isRequired" label="Is this kpi required" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                disabled={isEdit && !isDirty}
+                loading={isSubmitting}
+              >
                 {!isEdit ? 'Create Kpi' : 'Save Changes'}
               </LoadingButton>
             </Stack>
