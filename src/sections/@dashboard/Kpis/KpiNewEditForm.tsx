@@ -11,7 +11,7 @@ import { Box, Card, Grid, Stack } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // @types
-import { IKpi } from '../../../@types/Kpi';
+import { BackType, FrontType, IKpi } from '../../../@types/Kpi';
 // assets
 import { countries } from '../../../assets/data';
 // components
@@ -39,12 +39,15 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    label: Yup.string().required('label is required'),
-    frontType: Yup.string().required('Phone number is required'),
-    backType: Yup.string().required('backType is required'),
+    label: Yup.string().required('Label is required'),
+    frontType: Yup.string()
+      .required('Front type is required')
+      .oneOf(Object.values(FrontType), 'Invalid front type value'),
+    backType: Yup.string()
+      .required('Back type is required')
+      .oneOf(Object.values(BackType), 'Invalid back type value'),
     isRequired: Yup.boolean().required('isRequired is required'),
-    company: Yup.string().required('Company is required'),
-    options: Yup.string().required('options is required'),
+    options: Yup.array().of(Yup.mixed()),
   });
 
   const defaultValues = useMemo(
