@@ -1,4 +1,4 @@
-import { Navigate, useRoutes } from 'react-router-dom';
+import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 // auth
 import AuthGuard from '../auth/AuthGuard';
 import GuestGuard from '../auth/GuestGuard';
@@ -88,12 +88,22 @@ export default function Router() {
 
         {
           path: 'kpis',
-          element: <Kpis />,
+          element: (
+            <AuthGuard>
+              <Outlet />
+            </AuthGuard>
+          ),
           children: [
-            { element: <Navigate to="/dashboard/kpis" replace />, index: true },
-            { path: 'new', element: <KpiEditNew /> },
-            { path: 'edit', element: <KpiEditNew /> },
-            { path: 'view', element: <Kpis /> },
+            { path: '', element: <Kpis /> },
+            { path: 'new', element: <KpiEditNew isEdit={false} /> },
+            {
+              path: 'edit',
+              element: <KpiEditNew />,
+            },
+            {
+              path: 'view',
+              element: <KpiEditNew />,
+            },
           ],
         },
         {
