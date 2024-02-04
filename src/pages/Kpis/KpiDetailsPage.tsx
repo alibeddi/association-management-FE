@@ -8,7 +8,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import KpiNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
+import UserNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
 import { RootState, dispatch, useSelector } from '../../redux/store';
 import { getOnekpi } from '../../redux/slices/kpis';
 // sections
@@ -26,12 +26,12 @@ export default function KpiEditPage() {
   return (
     <>
       <Helmet>
-        <title> Kpi: Edit </title>
+        <title> Kpi: Deatils </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Edit a Kpi"
+          heading="view a Kpi Details"
           links={[
             {
               name: 'Dashboard',
@@ -41,10 +41,10 @@ export default function KpiEditPage() {
               name: 'Kpi',
               href: PATH_DASHBOARD.kpis.root,
             },
-            { name: 'Edit Kpi' },
+            { name: 'View Kpi' },
           ]}
         />
-        <KpiNewEditForm isEdit currentKpi={kpi} />
+        <UserNewEditForm kpiDetails currentKpi={kpi} />
       </Container>
     </>
   );

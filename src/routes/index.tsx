@@ -15,6 +15,7 @@ import {
   Dashboard,
   KpiEdit,
   KpiNew,
+  KpiView,
   Kpis,
   LoginPage,
   OperatorList,
@@ -103,7 +104,7 @@ export default function Router() {
             },
             {
               path: 'view/:id',
-              element: <KpiNew />,
+              element: <KpiView />,
             },
           ],
         },

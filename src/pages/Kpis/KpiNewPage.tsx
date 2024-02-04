@@ -6,7 +6,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import { useSettingsContext } from '../../components/settings';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
-import UserNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
+import KpiNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
 // sections
 
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@ export default function KpiNewPage() {
             { name: 'New Kpi' },
           ]}
         />
-        <UserNewEditForm />
+        <KpiNewEditForm />
       </Container>
     </>
   );

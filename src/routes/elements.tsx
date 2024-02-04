@@ -24,5 +24,6 @@ export const OperatorList = Loadable(lazy(() => import('../pages/user')));
 export const Kpis = Loadable(lazy(() => import('../pages/Kpis/KpisListPage')));
 export const KpiNew = Loadable(lazy(() => import('../pages/Kpis/KpiNewPage')));
 export const KpiEdit = Loadable(lazy(() => import('../pages/Kpis/KpiEditPage')));
+export const KpiView = Loadable(lazy(() => import('../pages/Kpis/KpiDetailsPage')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

@@ -33,10 +33,11 @@ interface FormValuesProps {
 }
 type Props = {
   isEdit?: boolean;
+  kpiDetails?: boolean;
   currentKpi?: IKpi | null;
 };
 
-export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
+export default function KpiNewEditForm({ isEdit = false, kpiDetails = false, currentKpi }: Props) {
   const navigate = useNavigate();
   const { translate } = useLocales();
 
@@ -131,9 +132,10 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Name *" />
-              <RHFTextField name="label" label="Label Name" />
+              <RHFTextField disabled={kpiDetails} name="name" label="Name *" />
+              <RHFTextField disabled={kpiDetails} name="label" label="Label Name" />
               <RHFSelect
+                disabled={kpiDetails}
                 native
                 name="frontType"
                 label="Frontend Type"
@@ -151,6 +153,7 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                 name="backType"
                 label="Backend Type"
                 placeholder="select your backend type"
+                disabled={kpiDetails}
               >
                 <option value="" />
                 {backendTypes.map((backType) => (
@@ -160,6 +163,7 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                 ))}
               </RHFSelect>
               <RHFAutocomplete
+                disabled={kpiDetails}
                 name="options"
                 label="options"
                 multiple
@@ -167,19 +171,21 @@ export default function KpiNewEditForm({ isEdit = false, currentKpi }: Props) {
                 options={[]}
                 ChipProps={{ size: 'small' }}
               />
-              <RHFSwitch name="isRequired" label="Is this kpi required" />
+              <RHFSwitch disabled={kpiDetails} name="isRequired" label="Is this kpi required" />
             </Box>
 
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton
-                type="submit"
-                variant="contained"
-                disabled={isEdit && !isDirty}
-                loading={isSubmitting}
-              >
-                {!isEdit ? 'Create Kpi' : 'Save Changes'}
-              </LoadingButton>
-            </Stack>
+            {!kpiDetails && (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  disabled={isEdit && !isDirty}
+                  loading={isSubmitting}
+                >
+                  {!isEdit ? 'Create Kpi' : 'Save Changes'}
+                </LoadingButton>
+              </Stack>
+            )}
           </Card>
         </Grid>
       </Grid>
