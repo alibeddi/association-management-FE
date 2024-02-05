@@ -41,7 +41,8 @@ import {
   CalendarToolbar,
   CalendarFilterDrawer,
 } from '../sections/@dashboard/calendar';
-import { IStatus } from '../@types/status';
+import {applyFilter} from '../utils';
+import { useGetEvents } from '../hooks/useGetEvents';
 
 
 
@@ -299,63 +300,8 @@ export default function CalendarPage() {
 
 // ----------------------------------------------------------------------
 
-const useGetEvents = () => {
-  const dispatch = useDispatch();
 
-  const workTimes = useSelector((state) => state.workTimes.workTimes);
-
-  const { docs: data } = workTimes;
-
-  const getAllEvents = useCallback(() => {
-    dispatch(getMyCalendarWorkTime());
-  }, [dispatch]);
-
-  useEffect(() => {
-    getAllEvents();
-  }, [getAllEvents]);
-  const events: EventInput[] = data.map((event) => ({
-    id: event._id,
-    start: event.startDate || new Date(),
-    end: event.endDate || new Date(),
-    textColor: '#378006',
-    title: 'working hour',
-  }));
-
-  return events;
-};
 
 
 // ----------------------------------------------------------------------
 
-function applyFilter({
-  inputData,
-  filterEventColor,
-  filterStartDate,
-  filterEndDate,
-  isError,
-}: {
-  inputData: EventInput[];
-  filterEventColor: string[];
-  filterStartDate: Date | null;
-  filterEndDate: Date | null;
-  isError: boolean;
-}) {
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
-
-  inputData = stabilizedThis.map((el) => el[0]);
-
-  if (filterEventColor.length) {
-    inputData = inputData.filter((event: EventInput) =>
-      filterEventColor.includes(event.color as string)
-    );
-  }
-
-  if (filterStartDate && filterEndDate && !isError) {
-    inputData = inputData.filter(
-      (event: EventInput) =>
-        fTimestamp(event.start as Date) >= fTimestamp(filterStartDate) &&
-        fTimestamp(event.end as Date) <= fTimestamp(filterEndDate)
-    );
-  }
-  return inputData;
-}
