@@ -186,14 +186,8 @@ export default function CalendarPage() {
             endDate: eventDropInfo.event.end,
           },
         })
-      )
-        .then((res:any) => {
-
-          if(res?.error?.message){
-            throw new Error(res.error.message);
-          }
-        enqueueSnackbar('updated with success')
-  })
+      ).unwrap()
+        .then((res) => enqueueSnackbar('updated with success'))
         .catch((err) => {
           enqueueSnackbar(err.message,{
             variant: "error"
@@ -204,14 +198,12 @@ export default function CalendarPage() {
 
   const handleCreateUpdateEvent = async (newEvent: ICalendarEvent) => {
     if (selectedEventId) {
-      await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }));   
+      await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent })).unwrap().then(()=>enqueueSnackbar('Update success!')).catch(err=>enqueueSnackbar(err.message,{variant:"error"}));   
     } else {
-        await dispatch(createCalendarWorkTime(newEvent)).unwrap().then(res=>console.log('res: ',res)).catch(err=>{
+        await dispatch(createCalendarWorkTime(newEvent)).unwrap().then(res=>enqueueSnackbar('Create success!')).catch(err=>{
           enqueueSnackbar(err.message,{variant:"error"})
         })
     }
-    // enqueueSnackbar(selectedEventId ? 'Update success!' : 'Create success!');
-    // dispatch(getMyCalendarWorkTime());
   };
 
   const handleDeleteEvent = () => {
@@ -247,7 +239,7 @@ export default function CalendarPage() {
   return (
     <>
       <Helmet>
-        <title> Calendar | Minimal UI</title>
+        <title> Calendar | Branch Office</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
