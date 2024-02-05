@@ -210,7 +210,6 @@ function Searchbar() {
                         </Box>
                       ))}
                     </div>
-
                     <div>
                       {partsPath.map((part, index) => (
                         <Box

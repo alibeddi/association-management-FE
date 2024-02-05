@@ -71,7 +71,18 @@ export default function KpiTableRow({
           </Typography>
         </TableCell>
 
-        <TableCell align="left">{label}</TableCell>
+        <TableCell align="left">
+          <Box
+            sx={{
+              maxWidth: 125,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {label}
+          </Box>
+        </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {frontType}
