@@ -66,9 +66,10 @@ const initialState: WorkTimeState = {
         .addCase(deleteCalendarWorkTime.pending, (state) => {
           state.status = IStatus.LOADING;
         })
-        .addCase(deleteCalendarWorkTime.fulfilled, (state, action) => {
+        .addCase(deleteCalendarWorkTime.fulfilled, (state, {payload,meta}) => {
           state.status = IStatus.SUCCEEDED;
-          state.workTimes.docs = state.workTimes.docs.filter(item=> item._id !== action.payload._id);
+          const {arg:{id}} = meta;
+          state.workTimes.docs = state.workTimes.docs.filter(item=> item._id !== id);
         })
         .addCase(deleteCalendarWorkTime.rejected, (state) => {
           state.status = IStatus.FAILED;

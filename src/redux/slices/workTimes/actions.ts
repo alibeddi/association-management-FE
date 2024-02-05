@@ -51,7 +51,7 @@ export const createCalendarWorkTime = createAsyncThunk(
         return data;
       }
 
-      throw new Error(response.statusText);
+      throw new Error(data);
     } catch (err) {
       return Promise.reject(err.message ? err.message : data?.message);
     }

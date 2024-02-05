@@ -46,6 +46,7 @@ import { IStatus } from '../@types/status';
 
 
 
+
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -205,19 +206,12 @@ export default function CalendarPage() {
     if (selectedEventId) {
       await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }));   
     } else {
-      await dispatch(createCalendarWorkTime(newEvent)).then((res:any)=>{
-        if(res?.error?.message){
-          const { error:{message}} = res;
-          return Promise.reject(message)
-        }
-        return res;
-      }).catch(err=>{
-        enqueueSnackbar(err,{variant:"error"})
-      
-      })
+        await dispatch(createCalendarWorkTime(newEvent)).unwrap().then(res=>console.log('res: ',res)).catch(err=>{
+          enqueueSnackbar(err.message,{variant:"error"})
+        })
     }
     // enqueueSnackbar(selectedEventId ? 'Update success!' : 'Create success!');
-    dispatch(getMyCalendarWorkTime());
+    // dispatch(getMyCalendarWorkTime());
   };
 
   const handleDeleteEvent = () => {
@@ -225,7 +219,6 @@ export default function CalendarPage() {
       if (selectedEventId) {
         handleCloseModal();
         dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
-        dispatch(getMyCalendarWorkTime());
         enqueueSnackbar('Delete success!');
       }
     } catch (error) {
