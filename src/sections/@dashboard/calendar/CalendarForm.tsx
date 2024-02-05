@@ -4,7 +4,6 @@ import merge from 'lodash/merge';
 import { EventInput } from '@fullcalendar/core';
 // form
 import { useForm, Controller } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions } from '@mui/material';
@@ -15,8 +14,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { isBefore } from 'date-fns';
 import { addOneHour, isStartOfHour } from '../../../utils';
 
-//
-import { ErrorMessageCustom } from '../../../components/errors';
 // @types
 import { ICalendarEvent } from '../../../@types/calendar';
 // components
@@ -125,14 +122,7 @@ export default function CalendarForm({
               <>
               <RHFDateTimePicker name='startDate' label="start date" />
 
-                {!!errors.startDate && (
-                  <ErrorMessage
-                    errors={errors}
-                    name="startDate"
-                    render={({ message }) => <ErrorMessageCustom error={message} />}
-                  /> 
-
-                )}
+              
               </>
             )}
           />
@@ -142,13 +132,6 @@ export default function CalendarForm({
             render={({ field }) => (
               <>
                 <RHFDateTimePicker name='endDate' label="end date" />
-                {!!errors.endDate && (
-                  <ErrorMessage
-                    errors={errors}
-                    name="startDate"
-                    render={({ message }) => <ErrorMessageCustom error={message} />}
-                  />
-                )}
               </>
             )}
           />
