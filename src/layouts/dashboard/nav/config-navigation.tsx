@@ -19,6 +19,7 @@ const ICONS = {
   pricing: icon('ic_pricing'),
   settings: icon('ic_settings'),
   groupPermissions: icon('ic_lock'),
+  calendar: icon('ic_calendar'),
 };
 
 const navConfig = [
@@ -77,6 +78,11 @@ const navConfig = [
         path: PATH_DASHBOARD.groupPermissions,
         icon: ICONS.groupPermissions,
       },
+      {
+        title: 'calendar',
+        path: PATH_DASHBOARD.calender,
+        icon: ICONS.calendar
+      }
     ],
   },
 ];

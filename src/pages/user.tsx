@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { useSettingsContext } from 'src/components/settings';
-import UserListPage from 'src/sections/@dashboard/user';
+import { useSettingsContext } from '../components/settings';
+import UserListPage from '../sections/@dashboard/user';
 
 export default function UserList() {
   const { themeStretch } = useSettingsContext();

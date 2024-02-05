@@ -16,17 +16,17 @@ import {
   Tooltip,
 } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from 'src/routes/paths';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // @types
-import { IUserAccountGeneral } from 'src/@types/User';
+import { IUserAccountGeneral } from '../../../@types/User';
 // _mock_
-import { _userList } from 'src/_mock/arrays';
+import { _userList } from '../../../_mock/arrays';
 // components
-import ConfirmDialog from 'src/components/confirm-dialog';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
+import { useSettingsContext } from '../../../components/settings';
 import {
   emptyRows,
   getComparator,
@@ -36,7 +36,7 @@ import {
   TablePaginationCustom,
   TableSelectedAction,
   useTable,
-} from 'src/components/table';
+} from '../../../components/table';
 import UserTableToolbar from './userTableToolbar';
 import UserTableRow from './userTableRow';
 

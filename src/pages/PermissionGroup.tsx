@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { useSettingsContext } from 'src/components/settings';
-import Permissions from 'src/sections/@dashboard/Permissions';
+import { useSettingsContext } from '../components/settings';
+import Permissions from '../sections/@dashboard/Permissions';
 
 export default function PermissionGroup() {
   const { themeStretch } = useSettingsContext();
