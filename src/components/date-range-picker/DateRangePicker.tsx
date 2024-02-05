@@ -14,7 +14,6 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { CalendarPicker } from '@mui/lab';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
-//
 import { DateRangePickerProps } from './types';
 
 // ----------------------------------------------------------------------
@@ -97,14 +96,14 @@ export default function DateRangePicker({
                 label="Start date"
                 value={startDate}
                 onChange={onChangeStartDate}
-                renderInput={(params:any) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params} />}
               />
 
               <DatePicker
                 label="End date"
                 value={endDate}
                 onChange={onChangeEndDate}
-                renderInput={(params:any) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params} />}
               />
             </>
           )}

@@ -4,6 +4,7 @@ import { Box, Button, Card, CardActions, CardHeader, Container, Grid, Stack } fr
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
 import { useAuthContext } from '../../../auth/useAuthContext';
@@ -23,7 +24,7 @@ import { RootState, dispatch, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { extractEntitiesAndActions } from '../../../utils/extractEntitiesAndActions';
 import { extractEntitiesAndActionsStrings } from '../../../utils/extractEntitiesAndActionsStrings';
-import * as Yup from 'yup';
+
 import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';
 import { hasPermission } from './utils';
