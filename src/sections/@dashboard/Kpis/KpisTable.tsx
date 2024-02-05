@@ -37,6 +37,9 @@ import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import KpiTableRow from './KpiTableRow';
 import KpiTableToolbar from './KpiTableToolbar';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import { hasPermission } from '../Permissions/utils';
+import { MethodCode, ModelCode } from '../../../@types/Permission';
 
 // ----------------------------------------------------------------------
 
@@ -131,6 +134,11 @@ export default function KpiListPage() {
       }
     });
   };
+  const { user } = useAuthContext();
+  const userPermissions = user?.permissionGroup[0].permissions;
+
+  // check current user permissions
+  const isAllowedToCreateKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.CREATE);
 
   return (
     <>
@@ -143,14 +151,16 @@ export default function KpiListPage() {
           heading="kpis"
           links={[{ name: 'kpis' }]}
           action={
-            <Button
-              component={RouterLink}
-              to={PATH_DASHBOARD.kpis.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New Kpi
-            </Button>
+            isAllowedToCreateKpi && (
+              <Button
+                component={RouterLink}
+                to={PATH_DASHBOARD.kpis.new}
+                variant="contained"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+              >
+                New Kpi
+              </Button>
+            )
           }
         />
         <Card>

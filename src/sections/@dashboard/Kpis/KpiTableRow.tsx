@@ -18,6 +18,9 @@ import { IKpi } from '../../../@types/Kpi';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
+import { hasPermission } from '../Permissions/utils';
+import { MethodCode, ModelCode } from '../../../@types/Permission';
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 type Props = {
   row: IKpi;
@@ -41,6 +44,13 @@ export default function KpiTableRow({
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
+  const { user } = useAuthContext();
+  const userPermissions = user?.permissionGroup[0].permissions;
+  
+  // check current user permissions
+  const isAllowedToDeleteKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.DELETE);
+  const isAllowedToEditKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.EDIT);
+  const isAllowedToViewKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.VIEW);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -142,35 +152,41 @@ export default function KpiTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
-        </MenuItem>
+        {isAllowedToDeleteKpi && (
+          <MenuItem
+            onClick={() => {
+              handleOpenConfirm();
+              handleClosePopover();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="eva:trash-2-outline" />
+            Delete
+          </MenuItem>
+        )}
 
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            onViewRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="carbon:view-filled" />
-          View
-        </MenuItem>
+        {isAllowedToEditKpi && (
+          <MenuItem
+            onClick={() => {
+              onEditRow();
+              handleClosePopover();
+            }}
+          >
+            <Iconify icon="eva:edit-fill" />
+            Edit
+          </MenuItem>
+        )}
+        {isAllowedToViewKpi && (
+          <MenuItem
+            onClick={() => {
+              onViewRow();
+              handleClosePopover();
+            }}
+          >
+            <Iconify icon="carbon:view-filled" />
+            View
+          </MenuItem>
+        )}
       </MenuPopover>
 
       <ConfirmDialog

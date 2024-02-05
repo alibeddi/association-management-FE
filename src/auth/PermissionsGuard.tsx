@@ -10,9 +10,9 @@ type Props = {
 export default function PermissionGuard({ children, model, method }: PropsWithChildren<Props>) {
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
-  const listGroupPermission = hasPermission(userPermissions, model, method);
+  const isAllowedToAccessPage = hasPermission(userPermissions, model, method);
 
-  if (!listGroupPermission) {
+  if (!isAllowedToAccessPage) {
     return <h1>Permission denied</h1>;
   }
 
