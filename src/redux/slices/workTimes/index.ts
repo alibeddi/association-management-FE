@@ -52,9 +52,10 @@ const initialState: WorkTimeState = {
         })
         .addCase(updateCalendarWorkTime.fulfilled, (state, {payload}) => {
           state.status = IStatus.SUCCEEDED;
-          const indexUpdateWorkTime = state.workTimes.docs.findIndex(item => item._id === payload._id);
+          const {data:{updatedWorktime}} = payload
+          const indexUpdateWorkTime = state.workTimes.docs.findIndex(item => item._id === updatedWorktime._id);
           if(indexUpdateWorkTime!==-1){
-            state.workTimes.docs[indexUpdateWorkTime] = payload;
+            state.workTimes.docs[indexUpdateWorkTime] = updatedWorktime;
           }
         })
         .addCase(updateCalendarWorkTime.rejected, (state,action) => {
@@ -62,7 +63,6 @@ const initialState: WorkTimeState = {
 
           state.error = action.error.message;
         })
-        // deleteCalendarWorkTime reducers
         .addCase(deleteCalendarWorkTime.pending, (state) => {
           state.status = IStatus.LOADING;
         })
