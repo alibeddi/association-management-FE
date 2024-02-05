@@ -69,7 +69,6 @@ export default function RHFDateTimePicker({
                 label={`${translate(label)}`}
                 value={pickerValue}
                 onChange={handlePickerChange}
-                minutesStep={['endDate', 'startDate'].includes(name) ? 15 : 5}
                 onOpen={() => setIsOpened(true)}
                 renderInput={(props) => <TextField {...props} />}
               />

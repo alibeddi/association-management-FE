@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { isBefore } from 'date-fns';
 import { addOneHour, isStartOfHour } from '../../../utils';
 
+
 // @types
 import { ICalendarEvent } from '../../../@types/calendar';
 // components
@@ -68,13 +69,7 @@ export default function CalendarForm({
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
     startDate: Yup.date().required(),
-    endDate: Yup.date().required().when('startDate', {
-      is: (startDate:Date) => startDate != null,
-      then: Yup.date().min(
-        Yup.ref('startDate'),
-        'End date must be at least one minute after start date'
-      ),
-    }),
+    endDate: Yup.date().required().when('startDate',(startDate, schema) => startDate && schema.min(startDate))
   });
   
   const methods = useForm({
@@ -118,22 +113,14 @@ export default function CalendarForm({
           <Controller
             name="startDate"
             control={control}
-            render={({ field }) => (
-              <>
-              <RHFDateTimePicker name='startDate' label="start date" />
-
-              
-              </>
-            )}
+            render={({ field }) => <RHFDateTimePicker name='startDate' label="start date" />
+            }
           />
           <Controller
             name="endDate"
             control={control}
-            render={({ field }) => (
-              <>
-                <RHFDateTimePicker name='endDate' label="end date" />
-              </>
-            )}
+            render={({ field }) => <RHFDateTimePicker name='endDate' label="end date" />
+          }
           />
         </Stack>
       </LocalizationProvider>

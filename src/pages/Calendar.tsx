@@ -201,11 +201,20 @@ export default function CalendarPage() {
         });
   };
 
-  const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {
+  const handleCreateUpdateEvent = async (newEvent: ICalendarEvent) => {
     if (selectedEventId) {
-      dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }));   
+      await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }));   
     } else {
-      dispatch(createCalendarWorkTime(newEvent));
+      await dispatch(createCalendarWorkTime(newEvent)).then((res:any)=>{
+        if(res?.error?.message){
+          const { error:{message}} = res;
+          return Promise.reject(message)
+        }
+        return res;
+      }).catch(err=>{
+        enqueueSnackbar(err,{variant:"error"})
+      
+      })
     }
     // enqueueSnackbar(selectedEventId ? 'Update success!' : 'Create success!');
     dispatch(getMyCalendarWorkTime());
@@ -329,6 +338,7 @@ const useGetEvents = () => {
 
   return events;
 };
+
 
 // ----------------------------------------------------------------------
 

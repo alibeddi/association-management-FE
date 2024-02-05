@@ -21,6 +21,7 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import { ColorMultiPicker } from '../../../components/color-utils';
 import { DateRangePickerProps } from '../../../components/date-range-picker';
+import { RenderInputParams } from '../../../@types/RenderInputParams';
 
 // ----------------------------------------------------------------------
 
