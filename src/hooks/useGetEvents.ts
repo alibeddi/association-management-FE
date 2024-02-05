@@ -2,14 +2,14 @@ import { EventInput } from "@fullcalendar/core";
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getMyCalendarWorkTime } from "src/redux/slices/workTimes/actions";
+import { getMyCalendarWorkTime } from "../redux/slices/workTimes/actions";
 import { RootState } from "../redux/store";
 
 
 export const useGetEvents = () => {
   const dispatch = useDispatch();
 
-  const workTimes = useSelector((state:RootState) => state.workTimes.workTimes);
+  const  {workTimes} = useSelector((state:RootState) => state.workTimes);
 
   const { docs: data } = workTimes;
 
@@ -20,7 +20,7 @@ export const useGetEvents = () => {
   useEffect(() => {
     getAllEvents();
   }, [getAllEvents]);
-  const events: EventInput[] = data.map((event:any) => ({
+  const events: EventInput[] = data.map((event) => ({
     id: event._id,
     start: event.startDate || new Date(),
     end: event.endDate || new Date(),

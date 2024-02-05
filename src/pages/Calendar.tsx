@@ -265,7 +265,7 @@ export default function CalendarPage() {
               eventResizableFromStart
               ref={calendarRef}
               initialDate={date}
-              initialView='timeGridWeek'
+              initialView={view}
               dayMaxEventRows={3}
               eventDisplay="block"
               events={dataFiltered}
