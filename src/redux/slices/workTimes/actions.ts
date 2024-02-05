@@ -3,6 +3,8 @@ import { ICalendarEvent } from '../../../@types/calendar';
 import { splitIntervalIntoHours } from '../../../utils';
 import axios from '../../../utils/axios';
 
+
+
 export const getMyCalendarWorkTime = createAsyncThunk('workTimes/GETALL', async () => {
   let data;
   try {
@@ -61,7 +63,6 @@ export const updateCalendarWorkTime = createAsyncThunk(
     let data;
     try {
       const {startDate,endDate} = body;
-
       const response = await axios.patch(`/worktimes/${id}`, body);
       data = await response.data;
       if (response.status === 200) {
@@ -70,7 +71,7 @@ export const updateCalendarWorkTime = createAsyncThunk(
       throw new Error(data);
     } catch (err) {
       console.error('error : ', err);
-      throw new Error(err || data?.message);
+      return Promise.reject(err.message ? err : data?.message);
     }
   }
 );

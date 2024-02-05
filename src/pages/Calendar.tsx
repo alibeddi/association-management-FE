@@ -40,6 +40,8 @@ import {
   CalendarToolbar,
   CalendarFilterDrawer,
 } from '../sections/@dashboard/calendar';
+import { IStatus } from '../@types/status';
+
 
 
 
@@ -172,27 +174,33 @@ export default function CalendarPage() {
     }
   };
 
-  const handleDropEvent = async ({ event }: EventDropArg) => {
+  const handleDropEvent = async (eventDropInfo:EventDropArg) => {
+
       await dispatch(
         updateCalendarWorkTime({
-          id: event.id,
+          id: eventDropInfo.event.id,
           body: {
-            startDate: event.start,
-            endDate: event.end,
+            startDate: eventDropInfo.event.start,
+            endDate: eventDropInfo.event.end,
           },
         })
       )
-        .then((res) => {
-          const {status, message} = res.payload;
-          if(status === "fail"){
-            enqueueSnackbar(message || 'something went wrong', {
-              variant: 'warning',
-            })
+        .then((res:any) => {
+
+          if(res?.error?.message){
+            throw new Error(res.error.message);
           }
-        
-        })
-        .catch((err: any) => console.log(err));
-    dispatch(getMyCalendarWorkTime())
+        enqueueSnackbar('updated with success')
+  })
+        .catch((err) => {
+          enqueueSnackbar(err.message,{
+            variant: "error"
+          })
+          eventDropInfo.revert()
+        });
+
+    
+    // dispatch(getMyCalendarWorkTime())
   };
 
   const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {
@@ -201,7 +209,7 @@ export default function CalendarPage() {
     } else {
       dispatch(createCalendarWorkTime(newEvent));
     }
-    enqueueSnackbar(selectedEventId ? 'Update success!' : 'Create success!');
+    // enqueueSnackbar(selectedEventId ? 'Update success!' : 'Create success!');
     dispatch(getMyCalendarWorkTime());
   };
 
@@ -264,7 +272,7 @@ export default function CalendarPage() {
               eventResizableFromStart
               ref={calendarRef}
               initialDate={date}
-              initialView={'timeGridWeek'}
+              initialView='timeGridWeek'
               dayMaxEventRows={3}
               eventDisplay="block"
               events={dataFiltered}
