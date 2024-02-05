@@ -55,7 +55,6 @@ export default function CalendarToolbar({
     setOpenPopover(null);
   };
 
-  // const selectedItem = VIEW_OPTIONS.filter((item) => item.value === view)[0];
 
   return (
     <>
