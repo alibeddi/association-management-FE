@@ -97,30 +97,6 @@ export default function CalendarToolbar({
         </Stack>
       </Stack>
 
-      {/* <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="top-left"
-        sx={{ width: 160 }}
-      >
-        {VIEW_OPTIONS.map((viewOption) => (
-          <MenuItem
-            key={viewOption.value}
-            onClick={() => {
-              handleClosePopover();
-              // onChangeView(viewOption.value);
-            }}
-            sx={{
-              ...(viewOption.value === view && {
-                bgcolor: 'action.selected',
-              }),
-            }}
-          >
-            <Iconify icon={viewOption.icon} />
-            {viewOption.label}
-          </MenuItem>
-        ))}
-      </MenuPopover> */}
     </>
   );
 }
