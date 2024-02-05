@@ -139,10 +139,11 @@ export default function KpiListPage() {
     dispatch(deleteManykpis({ kpiIds: selectedRows })).then((res: any) => {
       if (res?.meta?.requestStatus === 'fulfilled') {
         enqueueSnackbar(`${translate(res?.payload.message)}`);
-        dispatch(getKpis({ page: 1, limit: rowsPerPage, orderBy, order, filterName }));
+        dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
       } else {
         enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
       }
+      setSelected([]);
     });
   };
 

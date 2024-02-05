@@ -67,8 +67,10 @@ export const deleteManykpis = createAsyncThunk(
     let data;
     const { kpiIds } = payload;
     try {
-      const response = await axios.delete(`kpis`, {
-        data: ['65bc90024aed938391ea5690', '65bc8ffd4aed938391ea568b'],
+      const response = await axios.delete('kpis', {
+        data: {
+          data: kpiIds,
+        },
       });
       // eslint-disable-next-line prefer-destructuring
       data = response.data;
