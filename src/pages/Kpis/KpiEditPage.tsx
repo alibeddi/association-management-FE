@@ -29,7 +29,7 @@ export default function KpiEditPage() {
         <title> Kpi: Edit </title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
           heading="Edit a Kpi"
           links={[
