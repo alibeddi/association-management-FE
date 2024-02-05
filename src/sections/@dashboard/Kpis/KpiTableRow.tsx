@@ -84,8 +84,8 @@ export default function KpiTableRow({
           <Box
             sx={{
               color: isRequired ? 'green' : 'red',
-              bgcolor: isRequired ? 'lightgreen' : 'pink',
-              borderRadius: '8px',
+              bgcolor: isRequired ? '#93EF94' : 'pink',
+              borderRadius: '6px',
             }}
           >
             {isRequired.toString()}

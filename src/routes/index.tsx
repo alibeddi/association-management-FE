@@ -8,21 +8,22 @@ import DashboardLayout from '../layouts/dashboard';
 // config
 import { PATH_AFTER_LOGIN } from '../config-global';
 //
-import GroupPermissionGuard from '../auth/GroupPermissionsGuard';
+import PermissionGuard from '../auth/PermissionsGuard';
 import {
   Branches,
   Categories,
   Dashboard,
   KpiEdit,
   KpiNew,
-  KpiView,
   Kpis,
+  KpiView,
   LoginPage,
   OperatorList,
   Page404,
   PermissionGroup,
   Vehicles,
 } from './elements';
+import { MethodCode, ModelCode } from '../@types/Permission';
 
 // ----------------------------------------------------------------------
 
@@ -91,9 +92,9 @@ export default function Router() {
         {
           path: 'kpis',
           element: (
-            <AuthGuard>
+            <PermissionGuard model={ModelCode.KPI} method={MethodCode.LIST}>
               <Outlet />
-            </AuthGuard>
+            </PermissionGuard>
           ),
           children: [
             { path: '', element: <Kpis /> },
@@ -111,9 +112,9 @@ export default function Router() {
         {
           path: 'permissions',
           element: (
-            <GroupPermissionGuard>
+            <PermissionGuard model={ModelCode.PERMISSION_GROUP} method={MethodCode.LIST}>
               <PermissionGroup />
-            </GroupPermissionGuard>
+            </PermissionGuard>
           ),
         },
       ],
