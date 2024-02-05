@@ -4,6 +4,14 @@
     "browser": true,
     "es2021": true
   },
+  "overrides": [
+    {
+      "files": ["webpack.config.js"],
+      "parserOptions": {
+        "project": null
+      }
+    }
+  ],
   "plugins": ["@typescript-eslint", "prettier"],
   "extends": ["airbnb", "airbnb-typescript", "airbnb/hooks", "prettier"],
   "parser": "@typescript-eslint/parser",
@@ -13,7 +21,7 @@
     },
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": "./tsconfig.json",
+    "project": "./tsconfig.eslint.json",
     "warnOnUnsupportedTypeScriptVersion": false
   },
   "settings": {
