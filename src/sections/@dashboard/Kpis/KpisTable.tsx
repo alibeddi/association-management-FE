@@ -32,7 +32,7 @@ import {
   useTable,
 } from '../../../components/table';
 import { useLocales } from '../../../locales';
-import { deleteOnekpi, getKpis } from '../../../redux/slices/kpis';
+import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis';
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import KpiTableRow from './KpiTableRow';
@@ -134,6 +134,18 @@ export default function KpiListPage() {
       }
     });
   };
+
+  const handleDeleteRows = (selectedRows: string[]) => {
+    dispatch(deleteManykpis({ kpiIds: selectedRows })).then((res: any) => {
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        enqueueSnackbar(`${translate(res?.payload.message)}`);
+        dispatch(getKpis({ page: 1, limit: rowsPerPage, orderBy, order, filterName }));
+      } else {
+        enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+      }
+    });
+  };
+
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
 
@@ -183,9 +195,9 @@ export default function KpiListPage() {
                 )
               }
               action={
-                <Tooltip title={`${translate('Ban')}`}>
+                <Tooltip title={`${translate('Delete')}`}>
                   <IconButton color="primary" onClick={() => handleOpenConfirm()}>
-                    <Iconify icon="ion:ban" />
+                    <Iconify icon="material-symbols:delete" />
                   </IconButton>
                 </Tooltip>
               }
@@ -259,7 +271,7 @@ export default function KpiListPage() {
             variant="contained"
             color="error"
             onClick={() => {
-              // handleDeleteRows(selected);
+              handleDeleteRows(selected);
               handleCloseConfirm();
             }}
           >

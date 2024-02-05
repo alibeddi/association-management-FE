@@ -60,6 +60,28 @@ export const deleteOnekpi = createAsyncThunk('kpi/DELETE', async (payload: { kpi
   }
 });
 
+// DELETE MANY
+export const deleteManykpis = createAsyncThunk(
+  'kpi/DELETE-MANY',
+  async (payload: { kpiIds: string[] }) => {
+    let data;
+    const { kpiIds } = payload;
+    try {
+      const response = await axios.delete(`kpis`, {
+        data: ['65bc90024aed938391ea5690', '65bc8ffd4aed938391ea568b'],
+      });
+      // eslint-disable-next-line prefer-destructuring
+      data = response.data;
+      if (response.status === 200) {
+        return data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
+
 // POST ONE
 export const createkpi = createAsyncThunk('kpi/POST', async (payload: { kpi: any }) => {
   let data;
@@ -141,6 +163,18 @@ const slice = createSlice({
         state.kpis.docs = state.kpis.docs.filter((kpi) => kpi._id !== action.meta.arg.kpiId);
       })
       .addCase(deleteOnekpi.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // DELETE OMANY
+    builder
+      .addCase(deleteManykpis.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(deleteManykpis.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        // state.kpis.docs = state.kpis.docs.filter((kpi) => kpi._id !== action.meta.arg.kpiId);
+      })
+      .addCase(deleteManykpis.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
     // CREATE ONE
