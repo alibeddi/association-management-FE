@@ -94,8 +94,8 @@ export default function KpiTableRow({
         <TableCell align="center">
           <Box
             sx={{
-              color: isRequired ? 'green' : 'red',
-              bgcolor: isRequired ? '#93EF94' : 'pink',
+              color: isRequired ? '#3EAB55' : 'red',
+              bgcolor: isRequired ? '#AFE1AF' : 'pink',
               borderRadius: '6px',
             }}
           >
