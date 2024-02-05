@@ -5,24 +5,24 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { PermissionGroup } from 'src/@types/PermissionGroup';
-import { useAuthContext } from 'src/auth/useAuthContext';
-import ConfirmDialog from 'src/components/confirm-dialog';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import Scrollbar from 'src/components/scrollbar/Scrollbar';
-import { useLocales } from 'src/locales';
+import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import FormProvider, { RHFTextField } from '../../../components/hook-form';
+import Scrollbar from '../../../components/scrollbar/Scrollbar';
+import { useLocales } from '../../../locales';
 import {
   createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
   updateGroupPermission,
-} from 'src/redux/slices/groupPermissions';
-import { getPermissions } from 'src/redux/slices/permissions';
-import { RootState, dispatch, useSelector } from 'src/redux/store';
-import { PATH_DASHBOARD } from 'src/routes/paths';
-import { extractEntitiesAndActions } from 'src/utils/extractEntitiesAndActions';
-import { extractEntitiesAndActionsStrings } from 'src/utils/extractEntitiesAndActionsStrings';
+} from '../../../redux/slices/groupPermissions';
+import { getPermissions } from '../../../redux/slices/permissions';
+import { RootState, dispatch, useSelector } from '../../../redux/store';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import { extractEntitiesAndActions } from '../../../utils/extractEntitiesAndActions';
+import { extractEntitiesAndActionsStrings } from '../../../utils/extractEntitiesAndActionsStrings';
 import * as Yup from 'yup';
 import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';

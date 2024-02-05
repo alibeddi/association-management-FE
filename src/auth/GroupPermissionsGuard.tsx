@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { hasPermission } from 'src/sections/@dashboard/Permissions/utils';
+import { hasPermission } from '../sections/@dashboard/Permissions/utils';
 import { useAuthContext } from './useAuthContext';
 
 export default function GroupPermissionGuard({ children }: PropsWithChildren) {

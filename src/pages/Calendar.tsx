@@ -17,7 +17,7 @@ import {
   updateCalendarWorkTime,
   createCalendarWorkTime,
   deleteCalendarWorkTime,
-} from 'src/redux/slices/workTimes/actions';
+} from '../redux/slices/workTimes/actions';
 // @mui
 import { Card, Button, Container, DialogTitle, Dialog } from '@mui/material';
 // redux

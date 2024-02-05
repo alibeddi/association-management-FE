@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ICalendarEvent } from 'src/@types/calendar';
-import { Meta, PaginationModel } from 'src/@types/Pagination';
-import { IStatus } from 'src/@types/status';
+import { ICalendarEvent } from '../../../@types/calendar';
+import { Meta, PaginationModel } from '../../../@types/Pagination';
+import { IStatus } from '../../../@types/status';
 import {getMyCalendarWorkTime,createCalendarWorkTime,deleteCalendarWorkTime,updateCalendarWorkTime} from "./actions";
 
 

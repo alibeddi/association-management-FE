@@ -10,13 +10,13 @@ import {
   Typography,
 } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
-import { Permission } from 'src/@types/Permission';
-import CheckboxComponent from 'src/components/checkbox/CheckboxComponent';
-import Scrollbar from 'src/components/scrollbar';
-import { TableNoData } from 'src/components/table';
-import { useLocales } from 'src/locales';
-import { RootState, useSelector } from 'src/redux/store';
-import { extractEntitiesAndActionsStrings } from 'src/utils/extractEntitiesAndActionsStrings';
+import { Permission } from '../../../@types/Permission';
+import CheckboxComponent from '../../../components/checkbox/CheckboxComponent';
+import Scrollbar from '../../../components/scrollbar';
+import { TableNoData } from '../../../components/table';
+import { useLocales } from '../../../locales';
+import { RootState, useSelector } from '../../../redux/store';
+import { extractEntitiesAndActionsStrings } from '../../../utils/extractEntitiesAndActionsStrings';
 
 type Props = {
   actions: string[];

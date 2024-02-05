@@ -12,12 +12,12 @@ import {
   Typography,
 } from '@mui/material';
 // @types
-import { IUserAccountGeneral } from 'src/@types/User';
+import { IUserAccountGeneral } from '../../../@types/User';
 // components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import MenuPopover from 'src/components/menu-popover';
-import ConfirmDialog from 'src/components/confirm-dialog';
+import Label from '../../../components/label';
+import Iconify from '../../../components/iconify';
+import MenuPopover from '../../../components/menu-popover';
+import ConfirmDialog from '../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // auth
-import GroupPermissionGuard from 'src/auth/GroupPermissionsGuard';
+import GroupPermissionGuard from '../auth/GroupPermissionsGuard';
 import AuthGuard from '../auth/AuthGuard';
 import GuestGuard from '../auth/GuestGuard';
 // layouts
