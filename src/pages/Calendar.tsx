@@ -198,9 +198,6 @@ export default function CalendarPage() {
           })
           eventDropInfo.revert()
         });
-
-    
-    // dispatch(getMyCalendarWorkTime())
   };
 
   const handleCreateUpdateEvent = (newEvent: ICalendarEvent) => {

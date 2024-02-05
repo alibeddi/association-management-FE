@@ -65,22 +65,6 @@ export default function CalendarToolbar({
         justifyContent="space-between"
         sx={{ p: 2.5, pr: 2 }}
       >
-        {/* {isDesktop && (
-          <Button
-            color="inherit"
-            onClick={handleOpenPopover}
-            // startIcon={<Iconify icon={selectedItem.icon} />}
-            endIcon={<Iconify icon="eva:chevron-down-fill" />}
-            sx={{
-              py: 0.5,
-              pl: 1.5,
-              bgcolor: 'action.selected',
-              '& .MuiButton-endIcon': { ml: 0.5 },
-            }}
-          >
-            {selectedItem.label}
-           </Button>
-        )}  */}
         <Stack>
            <Button
               variant="contained"
