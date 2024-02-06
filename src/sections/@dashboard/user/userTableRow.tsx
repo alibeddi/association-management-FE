@@ -12,17 +12,17 @@ import {
   Typography,
 } from '@mui/material';
 // @types
-import { IUserAccountGeneral } from 'src/@types/User';
+import { IUserAccountGeneral, User } from 'src/@types/User';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import MenuPopover from 'src/components/menu-popover';
 import ConfirmDialog from 'src/components/confirm-dialog';
-
+import { fDate } from 'src/utils/formatTime';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IUserAccountGeneral;
+  row: User;
   selected: boolean;
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -36,7 +36,8 @@ export default function UserTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { name, avatarUrl, company, role, isVerified, status } = row;
+  // const { name, avatarUrl, company, role, isVerified, status } = row;
+  const { firstName, lastName, email, createdAt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -67,21 +68,23 @@ export default function UserTableRow({
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+            {/* <Avatar alt={name} src={avatarUrl} /> */}
 
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {firstName} {lastName}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{company}</TableCell>
+        <TableCell align="left">{email}</TableCell>
+        <TableCell align="left">Le Bardo</TableCell>
+        <TableCell align="left">{createdAt ? fDate(createdAt) : ''}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {role}
+          ADMIN
         </TableCell>
 
-        <TableCell align="center">
+        {/* <TableCell align="center">
           <Iconify
             icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
             sx={{
@@ -91,17 +94,17 @@ export default function UserTableRow({
               ...(!isVerified && { color: 'warning.main' }),
             }}
           />
-        </TableCell>
+        </TableCell> */}
 
-        <TableCell align="left">
+        {/* <TableCell align="left">
           <Label
             variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
+            // color={(status === 'banned' && 'error') || 'success'}
             sx={{ textTransform: 'capitalize' }}
           >
-            {status}
+            {createdAt}
           </Label>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

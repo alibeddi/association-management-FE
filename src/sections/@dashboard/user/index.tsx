@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -15,18 +15,23 @@ import {
   Tabs,
   Tooltip,
 } from '@mui/material';
+import { RootState } from 'src/redux/store';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from 'src/redux/slices/user';
+
 // routes
 import { PATH_DASHBOARD } from 'src/routes/paths';
 // @types
 import { IUserAccountGeneral } from 'src/@types/User';
 // _mock_
-import { _userList } from 'src/_mock/arrays';
+// import { _userList } from 'src/_mock/arrays';
 // components
 import ConfirmDialog from 'src/components/confirm-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import {
   emptyRows,
   getComparator,
@@ -42,7 +47,7 @@ import UserTableRow from './userTableRow';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
+const STATUS_OPTIONS = ['all'];
 
 const ROLE_OPTIONS = [
   'all',
@@ -59,16 +64,18 @@ const ROLE_OPTIONS = [
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
+  { id: 'email', label: 'Email', align: 'left' },
+  { id: 'office', label: 'Office', align: 'left' },
+  { id: 'createdAt', label: 'createdAt', align: 'left' },
   { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
-  { id: '' },
+  { id: 'actions', label: 'Actions', align: 'right' },
+  // { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function UserListPage() {
+  const { users } = useSelector((state: RootState) => state.users);
   const {
     dense,
     page,
@@ -89,8 +96,13 @@ export default function UserListPage() {
   } = useTable();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [tableData, setTableData] = useState(_userList);
+  useEffect(() => {
+    dispatch(getUsers({ page, limit: rowsPerPage }));
+  }, [page, rowsPerPage, dispatch]);
+
+  const [tableData, setTableData] = useState(users?.docs);
 
   const [filterName, setFilterName] = useState('');
 
@@ -100,13 +112,7 @@ export default function UserListPage() {
 
   const [filterStatus, setFilterStatus] = useState('all');
 
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(order, orderBy),
-    filterName,
-    filterRole,
-    filterStatus,
-  });
+  const dataFiltered = tableData;
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -143,7 +149,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+    const deleteRow = tableData.filter((row) => row._id !== id);
     setSelected([]);
     setTableData(deleteRow);
 
@@ -155,7 +161,7 @@ export default function UserListPage() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+    const deleteRows = tableData.filter((row) => !selectedRows.includes(row._id));
     setSelected([]);
     setTableData(deleteRows);
 
@@ -170,7 +176,6 @@ export default function UserListPage() {
       }
     }
   };
-
   const handleEditRow = (id: string) => {
     navigate(PATH_DASHBOARD.operators);
   };
@@ -181,6 +186,11 @@ export default function UserListPage() {
     setFilterStatus('all');
   };
 
+  useEffect(() => {
+    setTableData(users?.docs);
+  }, [users]);
+  console.log({ page, rowsPerPage, tableData });
+  console.log({ tableData });
   return (
     <>
       <CustomBreadcrumbs
@@ -190,20 +200,20 @@ export default function UserListPage() {
           { name: 'User', href: PATH_DASHBOARD.operators },
           { name: 'List' },
         ]}
-        action={
-          <Button
-            component={RouterLink}
-            to={PATH_DASHBOARD.operators}
-            variant="contained"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            New User
-          </Button>
-        }
+        // action={
+        //   <Button
+        //     component={RouterLink}
+        //     to={PATH_DASHBOARD.operators}
+        //     variant="contained"
+        //     startIcon={<Iconify icon="eva:plus-fill" />}
+        //   >
+        //     New User
+        //   </Button>
+        // }
       />
 
       <Card>
-        <Tabs
+        {/* <Tabs
           value={filterStatus}
           onChange={handleFilterStatus}
           sx={{
@@ -226,7 +236,7 @@ export default function UserListPage() {
           onFilterName={handleFilterName}
           onFilterRole={handleFilterRole}
           onResetFilter={handleResetFilter}
-        />
+        /> */}
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
@@ -236,7 +246,7 @@ export default function UserListPage() {
             onSelectAllRows={(checked) =>
               onSelectAllRows(
                 checked,
-                tableData.map((row) => row.id)
+                tableData.map((row) => row._id)
               )
             }
             action={
@@ -260,29 +270,22 @@ export default function UserListPage() {
                 onSelectAllRows={(checked) =>
                   onSelectAllRows(
                     checked,
-                    tableData.map((row) => row.id)
+                    tableData.map((row) => row._id)
                   )
                 }
               />
 
               <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={selected.includes(row.id)}
-                      onSelectRow={() => onSelectRow(row.id)}
-                      onDeleteRow={() => handleDeleteRow(row.id)}
-                      onEditRow={() => handleEditRow(row.name)}
-                    />
-                  ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                />
+                {tableData.map((row) => (
+                  <UserTableRow
+                    key={row._id}
+                    row={row}
+                    selected={selected.includes(row._id)}
+                    onSelectRow={() => onSelectRow(row._id)}
+                    onDeleteRow={() => handleDeleteRow(row._id)}
+                    onEditRow={() => handleEditRow(row.firstName)}
+                  />
+                ))}
 
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>
@@ -291,7 +294,7 @@ export default function UserListPage() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={dataFiltered.length}
+          count={users.meta.totalDocs || 0}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={onChangePage}
@@ -326,46 +329,4 @@ export default function UserListPage() {
       />
     </>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({
-  inputData,
-  comparator,
-  filterName,
-  filterStatus,
-  filterRole,
-}: {
-  inputData: IUserAccountGeneral[];
-  comparator: (a: any, b: any) => number;
-  filterName: string;
-  filterStatus: string;
-  filterRole: string;
-}) {
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el) => el[0]);
-
-  if (filterName) {
-    inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-    );
-  }
-
-  if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
-  }
-
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
-  }
-
-  return inputData;
 }
