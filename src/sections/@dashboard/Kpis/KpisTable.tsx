@@ -213,7 +213,7 @@ export default function KpiListPage() {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked: any) =>
+                  onSelectAllRows={(checked: boolean) =>
                     onSelectAllRows(
                       checked,
                       tableData.map((row) => row._id)
