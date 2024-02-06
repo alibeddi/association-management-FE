@@ -19,8 +19,8 @@ import FormProvider, { RHFSelect, RHFSwitch, RHFTextField } from '../../../compo
 import RHFAutocomplete from '../../../components/hook-form/RHFAutocomplete';
 import { useSnackbar } from '../../../components/snackbar';
 import { useLocales } from '../../../locales';
-import { createkpi, updatekpi } from '../../../redux/slices/kpis';
 import { dispatch } from '../../../redux/store';
+import { createkpi, updatekpi } from '../../../redux/slices/kpis/actions';
 
 // ----------------------------------------------------------------------
 interface FormValuesProps {

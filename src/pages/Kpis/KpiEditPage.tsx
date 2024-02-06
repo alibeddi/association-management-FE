@@ -10,7 +10,7 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import KpiNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
 import { RootState, dispatch, useSelector } from '../../redux/store';
-import { getOnekpi } from '../../redux/slices/kpis';
+import { getOnekpi } from '../../redux/slices/kpis/actions';
 // sections
 
 // ----------------------------------------------------------------------

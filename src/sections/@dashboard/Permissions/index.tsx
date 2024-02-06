@@ -18,9 +18,9 @@ import {
   createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
-  updateGroupPermission
-} from '../../../redux/slices/groupPermissions';
-import { getPermissions } from '../../../redux/slices/permissions';
+  updateGroupPermission,
+} from '../../../redux/slices/groupPermissions/actions';
+import { getPermissions } from '../../../redux/slices/permissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { extractEntitiesAndActions } from '../../../utils/extractEntitiesAndActions';

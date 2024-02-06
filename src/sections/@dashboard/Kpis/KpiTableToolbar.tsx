@@ -8,21 +8,15 @@ import Iconify from '../../../components/iconify';
 type Props = {
   placeholder: string;
   filterName?: string;
-  filterRole?: string;
   isFiltered?: boolean;
-  optionsRole?: string[];
   onResetFilter?: VoidFunction;
   onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFilterRole?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function KpiTableToolbar({
   isFiltered,
   filterName,
-  filterRole,
-  optionsRole,
   onFilterName,
-  onFilterRole,
   onResetFilter,
   placeholder,
 }: Props) {

@@ -9,7 +9,10 @@ import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
 import { useLocales } from '../../../locales';
-import { deleteGroupPermissionById, getPermissionGroup } from '../../../redux/slices/groupPermissions';
+import {
+  deleteGroupPermissionById,
+  getPermissionGroup,
+} from '../../../redux/slices/groupPermissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { hasPermission } from './utils';

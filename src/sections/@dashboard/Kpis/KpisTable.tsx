@@ -32,7 +32,6 @@ import {
   useTable,
 } from '../../../components/table';
 import { useLocales } from '../../../locales';
-import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis';
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import KpiTableRow from './KpiTableRow';
@@ -40,6 +39,7 @@ import KpiTableToolbar from './KpiTableToolbar';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { hasPermission } from '../Permissions/utils';
 import { MethodCode, ModelCode } from '../../../@types/Permission';
+import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis/actions';
 
 // ----------------------------------------------------------------------
 
