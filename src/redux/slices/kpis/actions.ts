@@ -35,7 +35,6 @@ export const deleteOnekpi = createAsyncThunk('kpi/DELETE', async (payload: { kpi
   const { kpiId } = payload;
   try {
     const response = await axios.delete(`kpis/${kpiId}`);
-    // eslint-disable-next-line prefer-destructuring
     data = response.data;
     if (response.status === 200) {
       return data;
@@ -58,7 +57,7 @@ export const deleteManykpis = createAsyncThunk(
           data: kpiIds,
         },
       });
-      // eslint-disable-next-line prefer-destructuring
+
       data = response.data;
       if (response.status === 200) {
         return data;
@@ -71,12 +70,12 @@ export const deleteManykpis = createAsyncThunk(
 );
 
 // POST ONE
-export const createkpi = createAsyncThunk('kpi/POST', async (payload: { kpi: any }) => {
+export const createkpi = createAsyncThunk('kpi/POST', async (payload: { kpi: object }) => {
   let data;
   const { kpi } = payload;
   try {
     const response = await axios.post(`kpis`, kpi);
-    // eslint-disable-next-line prefer-destructuring
+
     data = response.data;
     if (response.status === 200) {
       return data;
@@ -93,7 +92,6 @@ export const getOnekpi = createAsyncThunk('kpi/GetONE', async (payload: { kpiId:
   const { kpiId } = payload;
   try {
     const response = await axios.get(`kpis/${kpiId}`);
-    // eslint-disable-next-line prefer-destructuring
     data = response.data;
     if (response.status === 200) {
       return data;
@@ -112,7 +110,6 @@ export const updatekpi = createAsyncThunk(
     const { kpiId, body } = payload;
     try {
       const response = await axios.patch(`kpis/${kpiId}`, body);
-      // eslint-disable-next-line prefer-destructuring
       data = response.data;
       if (response.status === 200) {
         return data;
