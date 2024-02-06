@@ -8,14 +8,14 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import { dispatch, RootState, useSelector } from '../../redux/store';
-import UserNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
 import { getOnekpi } from '../../redux/slices/kpis/actions';
+import { dispatch, RootState, useSelector } from '../../redux/store';
+import UserNewEditDeatilsForm from '../../sections/@dashboard/Kpis/UserNewEditDeatilsForm';
 // sections
 
 // ----------------------------------------------------------------------
 
-export default function KpiEditPage() {
+export default function KpiDetailsPage() {
   const { themeStretch } = useSettingsContext();
   const { id } = useParams();
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function KpiEditPage() {
             { name: 'View Kpi' },
           ]}
         />
-        <UserNewEditForm kpiDetails currentKpi={kpi} />
+        <UserNewEditDeatilsForm kpiDetails currentKpi={kpi} />
       </Container>
     </>
   );

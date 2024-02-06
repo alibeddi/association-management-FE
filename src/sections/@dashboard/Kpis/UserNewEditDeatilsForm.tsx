@@ -37,7 +37,11 @@ type Props = {
   currentKpi?: IKpi | null;
 };
 
-export default function KpiNewEditForm({ isEdit = false, kpiDetails = false, currentKpi }: Props) {
+export default function UserNewEditDeatilsForm({
+  isEdit = false,
+  kpiDetails = false,
+  currentKpi,
+}: Props) {
   const navigate = useNavigate();
   const { translate } = useLocales();
 

@@ -4,9 +4,9 @@ import { Container } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
-import { useSettingsContext } from '../../components/settings';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
-import KpiNewEditForm from '../../sections/@dashboard/Kpis/KpiNewEditForm';
+import { useSettingsContext } from '../../components/settings';
+import UserNewEditDeatilsForm from '../../sections/@dashboard/Kpis/UserNewEditDeatilsForm';
 // sections
 
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@ export default function KpiNewPage() {
             { name: 'New Kpi' },
           ]}
         />
-        <KpiNewEditForm />
+        <UserNewEditDeatilsForm />
       </Container>
     </>
   );

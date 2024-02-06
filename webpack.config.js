@@ -34,14 +34,14 @@ module.exports = smp.wrap({
           priority: -10,
         },
         reactDom: {
-          test: /[\\/]node_modules[\\/](react-dom|scheduler)[\\/]/,
+          test: /[\\/]node_modules[\\/]/,
           name: 'vendor.react-dom',
           priority: 20,
           enforce: true,
           maxSize: 4000,
         },
         otherLibraries: {
-          test: /[\\/]node_modules[\\/](apexcharts|axios|react-quill)[\\/]/,
+          test: /[\\/]node_modules[\\/](axios|react-quill)[\\/]/,
           name: 'vendor.other-libraries',
           priority: 15,
           enforce: true,
