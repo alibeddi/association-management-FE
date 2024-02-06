@@ -105,7 +105,7 @@ export const getOnekpi = createAsyncThunk('kpi/GetONE', async (payload: { kpiId:
 // UPDATE ONE
 export const updatekpi = createAsyncThunk(
   'kpi/UPDATE',
-  async (payload: { kpiId: string; body: any }) => {
+  async (payload: { kpiId: string; body: object }) => {
     let data;
     const { kpiId, body } = payload;
     try {

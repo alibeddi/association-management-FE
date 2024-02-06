@@ -18,10 +18,13 @@ import UserNewEditDeatilsForm from '../../sections/@dashboard/Kpis/UserNewEditDe
 export default function KpiDetailsPage() {
   const { themeStretch } = useSettingsContext();
   const { id } = useParams();
+  
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    id && dispatch(getOnekpi({ kpiId: id }));
+    if (id) {
+      dispatch(getOnekpi({ kpiId: id }));
+    }
   }, [id]);
+
   const { kpi } = useSelector((state: RootState) => state.kpis);
   return (
     <>
