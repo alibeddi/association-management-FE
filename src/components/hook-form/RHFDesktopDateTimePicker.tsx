@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
-import { TextFieldProps, Tooltip, FormHelperText, Stack } from '@mui/material';
+import { TextFieldProps, Tooltip, FormHelperText, Stack, TextField } from '@mui/material';
 import { DesktopDateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 // redux
 
@@ -37,7 +37,7 @@ export default function RHFDesktopDateTimePicker({
   };
   const currentDate = new Date();
 
-  const getPickerValue = (value: Date) => {
+  const getPickerValue = (value: Date | null ) => {
     if (isOpened) {
       if (value !== null && value !== undefined) {
         return new Date(value);
@@ -63,26 +63,7 @@ export default function RHFDesktopDateTimePicker({
                 value={pickerValue}
                 onChange={handlePickerChange}
                 onOpen={() => setIsOpened(true)}
-                sx={{
-                  '& .MuiInputLabel-root': {
-                    color: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                  },
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                    },
-                    '&:hover fieldset': {
-                      borderColor: typeof error?.message === 'string' ? '#FF5630' : undefined,
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'black',
-                    },
-                    '& .MuiInputLabel-root.Mui-focused': {
-                      color: 'black',
-                    },
-                  },
-                }}
-                format="dd/MM/yyyy HH:mm"
+                renderInput={(props)=> <TextField {...props} />}
               />
             </Tooltip>
 

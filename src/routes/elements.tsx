@@ -21,6 +21,7 @@ export const Categories = Loadable(lazy(() => import('../pages/Categories')));
 export const Branches = Loadable(lazy(() => import('../pages/Branches')));
 export const PermissionGroup = Loadable(lazy(() => import('../pages/PermissionGroup')));
 export const OperatorList = Loadable(lazy(() => import('../pages/user')));
+export const Calendar = Loadable(lazy(() => import('../pages/Calendar')));
 export const Kpis = Loadable(lazy(() => import('../pages/Kpis/KpisListPage')));
 export const KpiNew = Loadable(lazy(() => import('../pages/Kpis/KpiNewPage')));
 export const KpiEdit = Loadable(lazy(() => import('../pages/Kpis/KpiEditPage')));

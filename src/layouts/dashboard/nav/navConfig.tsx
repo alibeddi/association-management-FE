@@ -18,6 +18,7 @@ const ICONS = {
   pricing: icon('ic_pricing'),
   settings: icon('ic_settings'),
   groupPermissions: icon('ic_lock'),
+  calendar: icon('ic_calendar'),
 };
 
 export default function navConfigItems(user: AuthUserType) {
@@ -103,6 +104,12 @@ export default function navConfigItems(user: AuthUserType) {
           path: PATH_DASHBOARD.groupPermissions,
           icon: ICONS.groupPermissions,
           tobeDisplayed: hasAccessToGroupPermissions,
+        },
+        {
+          title: 'calendar',
+          path: PATH_DASHBOARD.calender,
+          icon: ICONS.calendar,
+          tobeDisplayed: hasAccessToCalendar,
         },
       ],
     },

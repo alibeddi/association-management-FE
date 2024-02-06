@@ -22,6 +22,7 @@ import {
   Page404,
   PermissionGroup,
   Vehicles,
+  Calendar
 } from './elements';
 import { MethodCode, ModelCode } from '../@types/Permission';
 
@@ -117,6 +118,10 @@ export default function Router() {
             </PermissionGuard>
           ),
         },
+        {
+          path: "calendar",
+          element: (<Calendar/>)
+        }
       ],
     },
     {

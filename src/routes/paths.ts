@@ -40,4 +40,5 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/kpis/new'),
   },
   groupPermissions: path(ROOTS_DASHBOARD, '/permissions'),
+  calender: path(ROOTS_DASHBOARD,'/calendar')
 };

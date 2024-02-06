@@ -1,4 +1,4 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { format, getTime, formatDistanceToNow, add } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
@@ -26,4 +26,13 @@ export function fToNow(date: InputValue) {
         addSuffix: true,
       })
     : '';
+}
+export function addOneHour(date: InputValue){
+  return date ?
+  add(new Date(date),{
+    hours:1
+  })
+  : add(new Date(),{
+    hours: 1
+  })
 }
