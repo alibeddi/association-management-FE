@@ -37,57 +37,6 @@ export default function navConfigItems(user: AuthUserType) {
       subheader: '',
       items: [
         {
-          title: 'dashboard',
-          path: PATH_DASHBOARD.app,
-          icon: ICONS.dashboard,
-          tobeDisplayed: true,
-        },
-        {
-          title: 'branches',
-          path: PATH_DASHBOARD.branches,
-          icon: ICONS.branches,
-          tobeDisplayed: true,
-        },
-        {
-          title: 'fleet',
-          path: PATH_DASHBOARD.fleet.root,
-          icon: ICONS.fleet,
-          tobeDisplayed: true,
-          children: [
-            { title: 'vehicles', path: PATH_DASHBOARD.fleet.vehicles, tobeDisplayed: true },
-            { title: 'categories', path: PATH_DASHBOARD.fleet.categories, tobeDisplayed: true },
-            {
-              title: 'leasingContracacts',
-              path: PATH_DASHBOARD.fleet.leasingContracts,
-              tobeDisplayed: true,
-            },
-          ],
-        },
-        {
-          title: 'pricing',
-          path: PATH_DASHBOARD.pricing.root,
-          icon: ICONS.pricing,
-          tobeDisplayed: true,
-          children: [
-            {
-              title: 'vehicleGroups',
-              path: PATH_DASHBOARD.pricing.vehicleGroups,
-              tobeDisplayed: true,
-            },
-            { title: 'seasons', path: PATH_DASHBOARD.pricing.seasons, tobeDisplayed: true },
-          ],
-        },
-        {
-          title: 'reservation',
-          path: PATH_DASHBOARD.reservation.root,
-          icon: ICONS.reservations,
-          tobeDisplayed: true,
-          children: [
-            { title: 'list', path: PATH_DASHBOARD.reservation.list, tobeDisplayed: true },
-            { title: 'calendar', path: PATH_DASHBOARD.reservation.calendar, tobeDisplayed: true },
-          ],
-        },
-        {
           title: 'operators',
           path: PATH_DASHBOARD.operators,
           icon: ICONS.operators,
