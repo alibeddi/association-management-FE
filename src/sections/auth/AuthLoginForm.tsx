@@ -63,8 +63,8 @@ export default function AuthLoginForm() {
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3} sx={{ mb: 2 }}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
+      <Stack spacing={4} sx={{ m: 2,p:2 }}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
         <RHFTextField name="email" label="Email address" />
@@ -88,7 +88,6 @@ export default function AuthLoginForm() {
       <LoadingButton
         fullWidth
         color="inherit"
-        size="large"
         type="submit"
         variant="contained"
         loading={isSubmitSuccessful || isSubmitting}
@@ -99,7 +98,8 @@ export default function AuthLoginForm() {
             bgcolor: 'text.primary',
             color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
           },
-          mt:4
+          m:'1rem 2.5rem',
+          width:"80%"
         }}
       >
         Login
