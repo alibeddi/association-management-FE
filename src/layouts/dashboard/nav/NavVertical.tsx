@@ -1,18 +1,19 @@
-import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
-import { Box, Stack, Drawer } from '@mui/material';
+import { Box, Drawer, Stack } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // config
 import { NAV } from '../../../config-global';
 // components
 import Logo from '../../../components/logo';
-import Scrollbar from '../../../components/scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
+import Scrollbar from '../../../components/scrollbar';
 //
-import navConfig from './config-navigation';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import navConfigItems from './navConfig';
 import NavAccount from './NavAccount';
 import NavToggleButton from './NavToggleButton';
 
@@ -34,6 +35,8 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 export default function NavVertical({ openNav, onCloseNav }: Props) {
   const { pathname } = useLocation();
+  const { user } = useAuthContext();
+  const navConfig = navConfigItems(user);
 
   const isDesktop = useResponsive('up', 'lg');
 
@@ -66,7 +69,6 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
       >
         <StyledRoot>
           <Logo />
-          
         </StyledRoot>
 
         <NavAccount />

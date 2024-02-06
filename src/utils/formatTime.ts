@@ -2,7 +2,7 @@ import { format, getTime, formatDistanceToNow, add } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
-type InputValue = Date | string | number | null;
+type InputValue = Date | string | number | null | undefined;
 
 export function fDate(date: InputValue, newFormat?: string) {
   const fm = newFormat || 'dd MMM yyyy';

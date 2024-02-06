@@ -4,27 +4,27 @@ import { Box, Button, Card, CardActions, CardHeader, Container, Grid, Stack } fr
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import * as Yup from 'yup';
+import { Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import FormProvider, { RHFTextField } from '../../../components/hook-form';
-import Scrollbar from '../../../components/scrollbar/Scrollbar';
+import Scrollbar from '../../../components/scrollbar';
 import { useLocales } from '../../../locales';
 import {
   createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
   updateGroupPermission,
-} from '../../../redux/slices/groupPermissions';
-import { getPermissions } from '../../../redux/slices/permissions';
-import { RootState, dispatch, useSelector } from '../../../redux/store';
+} from '../../../redux/slices/groupPermissions/actions';
+import { getPermissions } from '../../../redux/slices/permissions/actions';
+import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { extractEntitiesAndActions } from '../../../utils/extractEntitiesAndActions';
 import { extractEntitiesAndActionsStrings } from '../../../utils/extractEntitiesAndActionsStrings';
-
 import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';
 import { hasPermission } from './utils';
@@ -105,7 +105,7 @@ function Permissions() {
     dispatch(getAllPermissionGroups());
   }, []);
 
-  const formattedPermissions = extractEntitiesAndActions(permissions.docs);
+  const formattedPermissions = extractEntitiesAndActions(user?.permissionGroup[0].permissions);
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
 
   useEffect(() => {
@@ -218,7 +218,9 @@ function Permissions() {
               variant="contained"
               color="success"
               onClick={() => {
-                const updatedPermissions = selectedPermissions.map((permission) => permission._id);
+                const updatedPermissions = selectedPermissions.map(
+                  (permission: Permission) => permission._id
+                );
                 dispatch(
                   updateGroupPermission({
                     id: permissionGroup?._id,

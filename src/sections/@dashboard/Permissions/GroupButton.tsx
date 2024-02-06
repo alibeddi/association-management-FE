@@ -9,8 +9,11 @@ import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
 import { useLocales } from '../../../locales';
-import { deleteGroupPermissionById, getPermissionGroup } from '../../../redux/slices/groupPermissions';
-import { RootState, dispatch, useSelector } from '../../../redux/store';
+import {
+  deleteGroupPermissionById,
+  getPermissionGroup,
+} from '../../../redux/slices/groupPermissions/actions';
+import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { hasPermission } from './utils';
 
@@ -43,7 +46,6 @@ const GroupButton = ({
   const userPermissions = user?.permissionGroup[0].permissions;
 
   const deleteGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
-  // TODO: || isSuperAdmin add it when we implement roles in the project
   const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
 
   const isRowMenu = deleteGroupPermission || editGroupPermission;

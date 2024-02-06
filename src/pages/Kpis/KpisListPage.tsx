@@ -1,17 +1,18 @@
 import { Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { useSettingsContext } from '../components/settings';
-import UserListPage from '../sections/@dashboard/user';
+import { useSettingsContext } from '../../components/settings';
+import KpisList from '../../sections/@dashboard/Kpis';
 
-export default function UserList() {
+export default function KpiListPage() {
   const { themeStretch } = useSettingsContext();
+
   return (
     <>
       <Helmet>
-        <title>users</title>
+        <title> Kpis</title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <UserListPage />
+        <KpisList />
       </Container>
     </>
   );

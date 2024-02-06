@@ -1,5 +1,5 @@
 // @mui
-import { Stack, Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 // config
 import { NAV } from '../../../config-global';
 // utils
@@ -8,12 +8,15 @@ import { hideScrollbarX } from '../../../utils/cssStyles';
 import Logo from '../../../components/logo';
 import { NavSectionMini } from '../../../components/nav-section';
 //
-import navConfig from './config-navigation';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import navConfigItems from './navConfig';
 import NavToggleButton from './NavToggleButton';
 
 // ----------------------------------------------------------------------
 
 export default function NavMini() {
+  const { user } = useAuthContext();
+  const navConfig = navConfigItems(user);
   return (
     <Box
       component="nav"
