@@ -13,11 +13,14 @@ export const getKpis = createAsyncThunk(
   }) => {
     let data;
     const { page, order, orderBy, filterName, limit } = payload;
-    const query = `?limit=${limit}&page=${page + 1}${
-      order && orderBy ? `&sort=${order === 'desc' ? `-${orderBy}` : `+${orderBy}`}` : ''
-    }${filterName ? `&name=${filterName}` : ''}`;
+    const params = {
+      page: page + 1,
+      limit,
+      sort: order === 'desc' ? `-${orderBy}` : `+${orderBy}`,
+      ...(filterName ? { name: filterName } : {}),
+    };
     try {
-      const response = await axios.get(`/kpis${query}`);
+      const response = await axios.get('/kpis', { params });
       data = await response.data;
       if (response.status === 200) {
         return data.data;
