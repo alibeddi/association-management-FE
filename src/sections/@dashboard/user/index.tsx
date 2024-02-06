@@ -180,11 +180,7 @@ export default function UserListPage() {
     <>
       <CustomBreadcrumbs
         heading="User List"
-        links={[
-          { name: 'Dashboard', href: PATH_DASHBOARD.root },
-          { name: 'User', href: PATH_DASHBOARD.operators },
-          { name: 'List' },
-        ]}
+        links={[{ name: 'User', href: PATH_DASHBOARD.operators }, { name: 'List' }]}
         action={
           <Button
             component={RouterLink}

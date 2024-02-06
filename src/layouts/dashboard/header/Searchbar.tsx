@@ -23,7 +23,8 @@ import { NavListProps } from '../../../components/nav-section';
 import { IconButtonAnimate } from '../../../components/animate';
 import SearchNotFound from '../../../components/search-not-found';
 //
-import NavConfig from '../nav/config-navigation';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import navConfigItems from '../nav/navConfig';
 
 // ----------------------------------------------------------------------
 
@@ -95,6 +96,8 @@ interface Option extends NavListProps {
 
 function Searchbar() {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
+  const navConfig = navConfigItems(user);
 
   const { pathname } = useLocation();
 
@@ -102,9 +105,9 @@ function Searchbar() {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const reduceItems = NavConfig.map((list) =>
-    handleLoop(list.items, (list as any).subheader)
-  ).flat();
+  const reduceItems = navConfig
+    .map((list) => handleLoop(list.items, (list as any).subheader))
+    .flat();
 
   const allItems = flattenArray(reduceItems).map((option) => {
     const group = splitPath(reduceItems, option.path);
