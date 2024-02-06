@@ -1,13 +1,18 @@
 import { PropsWithChildren } from 'react';
+import { MethodCode, ModelCode } from '../@types/Permission';
 import { hasPermission } from '../sections/@dashboard/Permissions/utils';
 import { useAuthContext } from './useAuthContext';
 
-export default function GroupPermissionGuard({ children }: PropsWithChildren) {
+type Props = {
+  model: ModelCode;
+  method: MethodCode;
+};
+export default function PermissionGuard({ children, model, method }: PropsWithChildren<Props>) {
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
-  const listGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'LIST');
+  const isAllowedToAccessPage = hasPermission(userPermissions, model, method);
 
-  if (!listGroupPermission) {
+  if (!isAllowedToAccessPage) {
     return <h1>Permission denied</h1>;
   }
 

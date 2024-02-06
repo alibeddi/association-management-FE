@@ -1,4 +1,4 @@
-import { Permission } from '../@types/Permission';
+import { Permission } from "../@types/Permission";
 
 export function extractEntitiesAndActionsStrings(data: Permission[]) {
   const resultStrings: string[] = [];
