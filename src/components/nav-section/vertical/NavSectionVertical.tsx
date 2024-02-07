@@ -11,7 +11,6 @@ import NavList from './NavList';
 
 export default function NavSectionVertical({ data, sx, ...other }: NavSectionProps) {
   const { translate } = useLocales();
-  console.log(data);
   return (
     <Stack sx={sx} {...other}>
       {data.map((group) => {
