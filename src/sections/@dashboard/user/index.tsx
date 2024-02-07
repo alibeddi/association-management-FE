@@ -183,8 +183,7 @@ export default function UserListPage() {
   useEffect(() => {
     setTableData(users?.docs);
   }, [users]);
-  console.log({ page, rowsPerPage, tableData });
-  console.log({ tableData });
+
   return (
     <>
       <CustomBreadcrumbs
@@ -204,7 +203,7 @@ export default function UserListPage() {
             dense={dense}
             numSelected={selected.length}
             rowCount={tableData.length}
-            onSelectAllRows={(checked: any) =>
+            onSelectAllRows={(checked) =>
               onSelectAllRows(
                 checked,
                 tableData.map((row) => row._id)
