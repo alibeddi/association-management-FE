@@ -2,7 +2,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Checkbox, Skeleton } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Permission } from 'src/@types/Permission';
+import { Permission } from '../../@types/Permission';
 import { RootState, useSelector } from '../../redux/store';
 
 type CheckboxComponentProps = {

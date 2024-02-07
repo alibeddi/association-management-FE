@@ -15,23 +15,10 @@ import {
   Tabs,
   Tooltip,
 } from '@mui/material';
-import { RootState } from 'src/redux/store';
-
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from 'src/redux/slices/user';
 
-// routes
-import { PATH_DASHBOARD } from 'src/routes/paths';
-// @types
-import { IUserAccountGeneral } from 'src/@types/User';
-// _mock_
-// import { _userList } from 'src/_mock/arrays';
-// components
-import ConfirmDialog from 'src/components/confirm-dialog';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-// import { useSettingsContext } from 'src/components/settings';
+import UserTableToolbar from './userTableToolbar';
+import UserTableRow from './userTableRow';
 import {
   emptyRows,
   getComparator,
@@ -41,9 +28,16 @@ import {
   TablePaginationCustom,
   TableSelectedAction,
   useTable,
-} from 'src/components/table';
-import UserTableToolbar from './userTableToolbar';
-import UserTableRow from './userTableRow';
+} from '../../../components/table';
+import { _userList } from '../../../_mock/arrays';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import { IUserAccountGeneral } from '../../../@types/User';
+import { RootState } from '../../../redux/store';
+import { getUsers } from '../../../redux/slices/users/actions';
 
 // ----------------------------------------------------------------------
 
@@ -243,7 +237,7 @@ export default function UserListPage() {
             dense={dense}
             numSelected={selected.length}
             rowCount={tableData.length}
-            onSelectAllRows={(checked) =>
+            onSelectAllRows={(checked: any) =>
               onSelectAllRows(
                 checked,
                 tableData.map((row) => row._id)
@@ -267,7 +261,7 @@ export default function UserListPage() {
                 rowCount={tableData.length}
                 numSelected={selected.length}
                 onSort={onSort}
-                onSelectAllRows={(checked) =>
+                onSelectAllRows={(checked: any) =>
                   onSelectAllRows(
                     checked,
                     tableData.map((row) => row._id)

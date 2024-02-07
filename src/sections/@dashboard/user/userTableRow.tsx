@@ -12,13 +12,13 @@ import {
   Typography,
 } from '@mui/material';
 // @types
-import { IUserAccountGeneral, User } from 'src/@types/User';
+import { IUserAccountGeneral, User } from '../../../@types/User';
 // components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import MenuPopover from 'src/components/menu-popover';
-import ConfirmDialog from 'src/components/confirm-dialog';
-import { fDate } from 'src/utils/formatTime';
+import Label from '../../../components/label';
+import Iconify from '../../../components/iconify';
+import MenuPopover from '../../../components/menu-popover';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import { fDate } from '../../../utils/formatTime';
 // ----------------------------------------------------------------------
 
 type Props = {

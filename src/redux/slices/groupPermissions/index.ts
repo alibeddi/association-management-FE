@@ -1,8 +1,14 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Meta, PaginationModel } from 'src/@types/Pagination';
-import { PermissionGroup } from 'src/@types/PermissionGroup';
-import { IStatus } from 'src/@types/status';
-import axios from '../../utils/axios';
+import { createSlice } from '@reduxjs/toolkit';
+import { Meta, PaginationModel } from '../../../@types/Pagination';
+import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { IStatus } from '../../../@types/status';
+import {
+  createNewGroupPermission,
+  deleteGroupPermissionById,
+  getAllPermissionGroups,
+  getPermissionGroup,
+  updateGroupPermission
+} from './actions';
 
 type PermissionState = {
   permissionGroups: PaginationModel<PermissionGroup>;
@@ -15,90 +21,6 @@ const initialState: PermissionState = {
   permissionGroup: {} as PermissionGroup,
   status: IStatus.IDLE,
 };
-
-export const getAllPermissionGroups = createAsyncThunk('group-permissions/GETALL', async () => {
-  let data;
-  try {
-    const response = await axios.get(`/permission-groups`);
-    data = await response.data;
-    if (response.status === 200) {
-      return data.data;
-    }
-    throw new Error(response.statusText);
-  } catch (err) {
-    return Promise.reject(err.message ? err.message : data?.message);
-  }
-});
-
-export const getPermissionGroup = createAsyncThunk(
-  'group-permissions/GET',
-  async (payload: { id: string }) => {
-    const { id } = payload;
-    let data;
-    try {
-      const response = await axios.get(`/permission-groups/${id}`);
-      data = await response.data;
-      if (response.status === 200) {
-        return data.data;
-      }
-      throw new Error(response.statusText);
-    } catch (err) {
-      return Promise.reject(err.message ? err.message : data?.message);
-    }
-  }
-);
-
-export const deleteGroupPermissionById = createAsyncThunk(
-  'group-permissions/DELETE',
-  async (payload: { id: string }) => {
-    const { id } = payload;
-    let data;
-    try {
-      const response = await axios.delete(`/permission-groups/${id}`);
-      data = await response.data;
-      if (response.status === 200) {
-        return data.data;
-      }
-      throw new Error(response.statusText);
-    } catch (err) {
-      return Promise.reject(err.message ? err.message : data?.message);
-    }
-  }
-);
-export const updateGroupPermission = createAsyncThunk(
-  'group-permissions/EDIT',
-  async (payload: { id: string; body: object }) => {
-    const { id, body } = payload;
-    let data;
-    try {
-      const response = await axios.patch(`/permission-groups/${id}`, body);
-      data = await response.data;
-      if (response.status === 200) {
-        return data;
-      }
-      throw new Error(response.statusText);
-    } catch (err) {
-      return Promise.reject(err.message ? err.message : data?.message);
-    }
-  }
-);
-export const createNewGroupPermission = createAsyncThunk(
-  'group-permissions/POST',
-  async (payload: { name: string }) => {
-    const { name } = payload;
-    let data;
-    try {
-      const response = await axios.post(`/permission-groups`, { name });
-      data = await response.data;
-      if (response.status === 200) {
-        return data;
-      }
-      throw new Error(response.statusText);
-    } catch (err) {
-      return Promise.reject(err.message ? err.message : data?.message);
-    }
-  }
-);
 
 const slice = createSlice({
   name: 'permissions_groups',
@@ -139,7 +61,7 @@ const slice = createSlice({
         state.status = IStatus.SUCCEEDED;
         state.permissionGroup = action.payload;
         state.permissionGroups.docs = state.permissionGroups.docs.filter(
-          (group) => group._id !== action.meta.arg.id
+          (group: PermissionGroup) => group._id !== action.meta.arg.id
         );
       })
       .addCase(deleteGroupPermissionById.rejected, (state) => {
@@ -166,7 +88,7 @@ const slice = createSlice({
       .addCase(updateGroupPermission.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
         state.permissionGroup = action.payload.data;
-        state.permissionGroups.docs = state.permissionGroups.docs.map((group) =>
+        state.permissionGroups.docs = state.permissionGroups.docs.map((group: PermissionGroup) =>
           group._id === action.payload.data._id ? action.payload.data : group
         );
       })

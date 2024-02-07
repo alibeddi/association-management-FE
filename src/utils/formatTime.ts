@@ -1,8 +1,8 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { format, getTime, formatDistanceToNow, add } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
-type InputValue = Date | string | number | null;
+type InputValue = Date | string | number | null | undefined;
 
 export function fDate(date: InputValue, newFormat?: string) {
   const fm = newFormat || 'dd MMM yyyy';
@@ -26,4 +26,13 @@ export function fToNow(date: InputValue) {
         addSuffix: true,
       })
     : '';
+}
+export function addOneHour(date: InputValue){
+  return date ?
+  add(new Date(date),{
+    hours:1
+  })
+  : add(new Date(),{
+    hours: 1
+  })
 }

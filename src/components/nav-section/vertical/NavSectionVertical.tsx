@@ -11,7 +11,7 @@ import NavList from './NavList';
 
 export default function NavSectionVertical({ data, sx, ...other }: NavSectionProps) {
   const { translate } = useLocales();
-
+  console.log(data);
   return (
     <Stack sx={sx} {...other}>
       {data.map((group) => {
@@ -23,14 +23,18 @@ export default function NavSectionVertical({ data, sx, ...other }: NavSectionPro
               <StyledSubheader disableSticky>{`${translate(group.subheader)}`}</StyledSubheader>
             )}
 
-            {group.items.map((list) => (
-              <NavList
-                key={list.title + list.path}
-                data={list}
-                depth={1}
-                hasChild={!!list.children}
-              />
-            ))}
+            {group.items.map((list) =>
+              list.tobeDisplayed ? (
+                <NavList
+                  key={list.title + list.path}
+                  data={list}
+                  depth={1}
+                  hasChild={!!list.children}
+                />
+              ) : (
+                <></>
+              )
+            )}
           </List>
         );
       })}
