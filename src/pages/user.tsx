@@ -8,7 +8,7 @@ export default function UserList() {
   return (
     <>
       <Helmet>
-        <title>users</title>
+        <title>Users</title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <UserListPage />

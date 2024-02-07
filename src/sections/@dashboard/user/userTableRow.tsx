@@ -11,14 +11,18 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { IUserAccountGeneral } from '../../../@types/User';
-import Iconify from '../../../components/iconify';
+// @types
+import { IUserAccountGeneral, User } from '../../../@types/User';
+// components
 import Label from '../../../components/label';
+import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
 import ConfirmDialog from '../../../components/confirm-dialog';
+import { fDate } from '../../../utils/formatTime';
+// ----------------------------------------------------------------------
 
 type Props = {
-  row: IUserAccountGeneral;
+  row: User;
   selected: boolean;
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -32,7 +36,7 @@ export default function UserTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { name, avatarUrl, company, role, isVerified, status } = row;
+  const { firstName, lastName, email, createdAt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -63,40 +67,18 @@ export default function UserTableRow({
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
-
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {firstName} {lastName}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{company}</TableCell>
+        <TableCell align="left">{email}</TableCell>
+        <TableCell align="left">Le Bardo</TableCell>
+        <TableCell align="left">{createdAt ? fDate(createdAt) : ''}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {role}
-        </TableCell>
-
-        <TableCell align="center">
-          <Iconify
-            icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-            sx={{
-              width: 20,
-              height: 20,
-              color: 'success.main',
-              ...(!isVerified && { color: 'warning.main' }),
-            }}
-          />
-        </TableCell>
-
-        <TableCell align="left">
-          <Label
-            variant="soft"
-            color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {status}
-          </Label>
+          ADMIN
         </TableCell>
 
         <TableCell align="right">
