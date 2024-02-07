@@ -23,4 +23,5 @@ export const PATH_DASHBOARD = {
   },
   groupPermissions: path(ROOTS_DASHBOARD, '/permissions'),
   calender: path(ROOTS_DASHBOARD, '/calendar'),
+  calls: path(ROOTS_DASHBOARD,'/calls')
 };

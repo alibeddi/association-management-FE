@@ -12,6 +12,7 @@ import { MethodCode, ModelCode } from '../@types/Permission';
 import PermissionGuard from '../auth/PermissionsGuard';
 import {
   Calendar,
+  Calls,
   KpiEdit,
   KpiNew,
   Kpis,
@@ -91,6 +92,10 @@ export default function Router() {
           path: 'calendar',
           element: <Calendar />,
         },
+        {
+          path:'calls',
+          element: <Calls/>
+        }
       ],
     },
     {

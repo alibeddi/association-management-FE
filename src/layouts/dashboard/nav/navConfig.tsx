@@ -31,7 +31,7 @@ export default function navConfigItems(user: AuthUserType) {
     ModelCode.PERMISSION_GROUP,
     MethodCode.LIST
   );
-
+  const hasAccessToCalls = hasPermission(userPermissions,ModelCode.CALLS,MethodCode.LIST);
   const config = [
     {
       subheader: '',
@@ -60,6 +60,12 @@ export default function navConfigItems(user: AuthUserType) {
           icon: ICONS.calendar,
           tobeDisplayed: hasAccessToCalendar,
         },
+        {
+          title: "calls",
+          path: PATH_DASHBOARD.calls,
+          icon: ICONS.dashboard,
+          tobeDisplayed: hasAccessToCalls
+        }
       ],
     },
   ];
