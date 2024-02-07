@@ -227,7 +227,7 @@ export default function UserListPage() {
                 rowCount={tableData.length}
                 numSelected={selected.length}
                 onSort={onSort}
-                onSelectAllRows={(checked: any) =>
+                onSelectAllRows={(checked) =>
                   onSelectAllRows(
                     checked,
                     tableData.map((row) => row._id)
