@@ -84,28 +84,6 @@ export default function UserTableRow({
           ADMIN
         </TableCell>
 
-        {/* <TableCell align="center">
-          <Iconify
-            icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-            sx={{
-              width: 20,
-              height: 20,
-              color: 'success.main',
-              ...(!isVerified && { color: 'warning.main' }),
-            }}
-          />
-        </TableCell> */}
-
-        {/* <TableCell align="left">
-          <Label
-            variant="soft"
-            // color={(status === 'banned' && 'error') || 'success'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {createdAt}
-          </Label>
-        </TableCell> */}
-
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />

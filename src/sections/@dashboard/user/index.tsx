@@ -194,43 +194,10 @@ export default function UserListPage() {
           { name: 'User', href: PATH_DASHBOARD.operators },
           { name: 'List' },
         ]}
-        // action={
-        //   <Button
-        //     component={RouterLink}
-        //     to={PATH_DASHBOARD.operators}
-        //     variant="contained"
-        //     startIcon={<Iconify icon="eva:plus-fill" />}
-        //   >
-        //     New User
-        //   </Button>
-        // }
+
       />
 
       <Card>
-        {/* <Tabs
-          value={filterStatus}
-          onChange={handleFilterStatus}
-          sx={{
-            px: 2,
-            bgcolor: 'background.neutral',
-          }}
-        >
-          {STATUS_OPTIONS.map((tab) => (
-            <Tab key={tab} label={tab} value={tab} />
-          ))}
-        </Tabs>
-
-        <Divider />
-
-        <UserTableToolbar
-          isFiltered={isFiltered}
-          filterName={filterName}
-          filterRole={filterRole}
-          optionsRole={ROLE_OPTIONS}
-          onFilterName={handleFilterName}
-          onFilterRole={handleFilterRole}
-          onResetFilter={handleResetFilter}
-        /> */}
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
