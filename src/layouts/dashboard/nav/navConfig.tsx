@@ -4,9 +4,8 @@ import SvgColor from '../../../components/svg-color';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { hasPermission } from '../../../sections/@dashboard/Permissions/utils';
 
-const icon = (name: string) => (
-  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
-);
+const icon = (name: string) => <SvgColor src={name} sx={{ width: 1, height: 1 }} />;
+
 
 const ICONS = {
   operators: icon('ic_operators'),

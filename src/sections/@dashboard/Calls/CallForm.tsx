@@ -26,12 +26,12 @@ const CallForm = () =>{
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-  const onSubmit = () => console.log('hey')
+  const onSubmit = (value:any) => console.log('hey : ',value)
   return <FormProvider onSubmit={handleSubmit(onSubmit)} methods={methods} >
     <Stack spacing={3} sx={{ px: 3 }}>
       {/* }
       /> */}
-    <RHFNumber name='numberCalls' label="number of call today:"/>
+    <RHFNumber name='numberCalls' label="number of call today:" min={0} max={10} />
     </Stack>
   </FormProvider>
 }
