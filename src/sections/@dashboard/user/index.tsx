@@ -143,16 +143,6 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    // const deleteRow = tableData.filter((row) => row._id !== id);
-    // setSelected([]);
-    // setTableData(deleteRow);
-
-    // if (page > 0) {
-    //   if (dataInPage.length < 2) {
-    //     setPage(page - 1);
-    //   }
-    // }
-
     dispatch(deleteOne({ userId: id })).then((res: any) => {
       if (res?.meta?.requestStatus === 'fulfilled') {
         enqueueSnackbar(`${res?.payload.message}`);
