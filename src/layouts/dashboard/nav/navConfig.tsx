@@ -25,7 +25,6 @@ export default function navConfig(user: AuthUserType) {
     ModelCode.PERMISSION_GROUP,
     MethodCode.LIST
   );
-  const hasAccessToCalls = hasPermission(userPermissions,ModelCode.CALLS,MethodCode.LIST);
   const config = [
     {
       subheader: '',

@@ -29,9 +29,7 @@ export default function NavSectionVertical({ data, sx, ...other }: NavSectionPro
                   depth={1}
                   hasChild={!!list.children}
                 />
-              ) : (
-                <></>
-              )
+              ) : null
             )}
           </List>
         );
