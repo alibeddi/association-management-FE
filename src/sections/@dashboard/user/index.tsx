@@ -183,8 +183,6 @@ export default function UserListPage() {
     setTableData(users?.docs);
   }, [users]);
 
-  console.log(tableData);
-
   return (
     <>
       <CustomBreadcrumbs
