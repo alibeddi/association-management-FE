@@ -3,18 +3,15 @@ import {
   DateSelectArg,
   EventClickArg,
   EventDropArg,
-  EventInput,
-  formatDate,
 } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 //
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Card, Button, Container, DialogTitle, Dialog } from '@mui/material';
+import { Card,  Container, DialogTitle, Dialog } from '@mui/material';
 // actions
 import {
-  getMyCalendarWorkTime,
   updateCalendarWorkTime,
   createCalendarWorkTime,
   deleteCalendarWorkTime,
@@ -24,8 +21,7 @@ import {
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 
-// utils
-import { fTimestamp } from '../utils/formatTime';
+
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // @types
@@ -39,7 +35,6 @@ import {
   CalendarForm,
   StyledCalendar,
   CalendarToolbar,
-  CalendarFilterDrawer,
 } from '../sections/@dashboard/calendar';
 import {applyFilter} from '../utils';
 import { useGetEvents } from '../hooks/useGetEvents';
@@ -81,8 +76,6 @@ export default function CalendarPage() {
   const [date, setDate] = useState(new Date());
 
   const [openFilter, setOpenFilter] = useState(false);
-
-  const [filterEventColor, setFilterEventColor] = useState<string[]>([]);
 
   const [view, setView] = useState<ICalendarViewValue>('timeGridWeek');
 
@@ -161,9 +154,9 @@ export default function CalendarPage() {
     }
   };
 
-  const handleResizeEvent = ({ event }: EventResizeDoneArg) => {
-    try {
-      dispatch(
+  const handleResizeEvent = async ({ event }: EventResizeDoneArg) => {
+
+     await  dispatch(
         updateCalendarWorkTime({
           id: event.id,
           body: {
@@ -171,10 +164,10 @@ export default function CalendarPage() {
             endDate: event.end,
           },
         })
-      );
-    } catch (error) {
-      console.error(error);
-    }
+      ).unwrap().then((res)=> enqueueSnackbar(res.message)).catch((err)=> enqueueSnackbar(err.message,{
+        variant: 'error'
+      }))
+  
   };
 
   const handleDropEvent = async (eventDropInfo:EventDropArg) => {
@@ -218,20 +211,9 @@ export default function CalendarPage() {
       console.error(error);
     }
   };
-  const handleResetFilter = () => {
-    const { setStartDate, setEndDate } = picker;
-
-    if (setStartDate && setEndDate) {
-      setStartDate(null);
-      setEndDate(null);
-    }
-
-    setFilterEventColor([]);
-  };
 
   const dataFiltered = applyFilter({
     inputData: events,
-    filterEventColor,
     filterStartDate: picker.startDate,
     filterEndDate: picker.endDate,
     isError: !!picker.isError,
@@ -251,7 +233,7 @@ export default function CalendarPage() {
               onNextDate={handleClickDateNext}
               onPrevDate={handleClickDatePrev}
               onToday={handleClickToday}
-              onOpenFilter={() => setOpenFilter(true)}
+              onOpenFilter={() => setOpenFilter(!openFilter)}
               addEvent={handleOpenModal}
             />
 

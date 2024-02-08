@@ -9,7 +9,7 @@ export default function applyFilter({
   isError,
 }: {
   inputData: EventInput[];
-  filterEventColor: string[];
+  filterEventColor?: string[];
   filterStartDate: Date | null;
   filterEndDate: Date | null;
   isError: boolean;
@@ -18,7 +18,7 @@ export default function applyFilter({
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  if (filterEventColor.length) {
+  if (filterEventColor && filterEventColor.length) {
     inputData = inputData.filter((event: EventInput) =>
       filterEventColor.includes(event.color as string)
     );
