@@ -12,6 +12,7 @@ import { IconButtonAnimate } from '../../../components/animate';
 import { CustomAvatar } from '../../../components/custom-avatar';
 import MenuPopover from '../../../components/menu-popover';
 import { useSnackbar } from '../../../components/snackbar';
+import defaultAvatar from '../../../assets/images/illustrations/images.png';
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +63,11 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+        <CustomAvatar
+          src={user?.avatar || defaultAvatar}
+          alt={user?.displayName}
+          name={user?.displayName}
+        />
       </IconButtonAnimate>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>

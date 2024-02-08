@@ -14,7 +14,6 @@ import Scrollbar from '../../../components/scrollbar';
 //
 import { useAuthContext } from '../../../auth/useAuthContext';
 import navConfigItems from './navConfig';
-import NavAccount from './NavAccount';
 import NavToggleButton from './NavToggleButton';
 
 // ----------------------------------------------------------------------
@@ -70,8 +69,6 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         <StyledRoot>
           <Logo />
         </StyledRoot>
-
-        <NavAccount />
       </Stack>
 
       <NavSectionVertical data={navConfig} />
