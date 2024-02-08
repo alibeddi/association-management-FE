@@ -1,17 +1,14 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// @mui
 import { Box, Divider, MenuItem, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-// routes
-import { PATH_AUTH } from '../../../routes/paths';
-// auth
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import defaultAvatar from '../../../assets/images/illustrations/images.png';
 import { useAuthContext } from '../../../auth/useAuthContext';
-// components
 import { IconButtonAnimate } from '../../../components/animate';
 import { CustomAvatar } from '../../../components/custom-avatar';
 import MenuPopover from '../../../components/menu-popover';
 import { useSnackbar } from '../../../components/snackbar';
+import { PATH_AUTH } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +59,11 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+        <CustomAvatar
+          src={user?.avatar || defaultAvatar}
+          alt={user?.displayName}
+          name={user?.displayName}
+        />
       </IconButtonAnimate>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>

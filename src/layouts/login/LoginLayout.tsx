@@ -24,10 +24,8 @@ export default function LoginLayout({ children, illustration }: Props) {
           src={illustration || loginImage}
           sx={{ maxWidth: 720 }}
         />
-
         <StyledSectionBg />
       </StyledSection>
-
       <StyledContent>
         <Stack sx={{ width: 1 }}> {children} </Stack>
       </StyledContent>
