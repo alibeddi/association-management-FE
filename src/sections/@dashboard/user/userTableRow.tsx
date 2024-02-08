@@ -36,7 +36,7 @@ export default function UserTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { firstName, lastName, email, createdAt } = row;
+  const { name, email, office, createdAt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -68,19 +68,14 @@ export default function UserTableRow({
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
-              {firstName} {lastName}
+              {name}
             </Typography>
           </Stack>
         </TableCell>
 
         <TableCell align="left">{email}</TableCell>
-        <TableCell align="left">Le Bardo</TableCell>
+        <TableCell align="left">{office?.name}</TableCell>
         <TableCell align="left">{createdAt ? fDate(createdAt) : ''}</TableCell>
-
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          ADMIN
-        </TableCell>
-
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -103,16 +98,6 @@ export default function UserTableRow({
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
         </MenuItem>
       </MenuPopover>
 
