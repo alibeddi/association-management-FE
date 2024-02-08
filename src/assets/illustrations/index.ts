@@ -12,3 +12,4 @@ export { default as PageNotFoundIllustration } from './PageNotFoundIllustration'
 export { default as OrderCompleteIllustration } from './OrderCompleteIllustration';
 export { default as UpgradeStorageIllustration } from './UpgradeStorageIllustration';
 export {default as BackgroundIllustration} from './BackgroundIllustration'
+export {default as EmptyContentIllustration} from "./illustration_empty_content.svg"

@@ -13,8 +13,7 @@ const ICONS = {
   operators: icon(ic_operators),
   settings: icon(ic_settings),
   groupPermissions: icon(ic_lock),
-  calendar: icon(ic_calendar),
-  calls: icon(ic_call)
+  calendar: icon(ic_calendar)
 };
 
 export default function navConfigItems(user: AuthUserType) {
@@ -54,12 +53,6 @@ export default function navConfigItems(user: AuthUserType) {
           path: PATH_DASHBOARD.calender,
           icon: ICONS.calendar,
           tobeDisplayed: true,
-        },
-        {
-          title: "calls",
-          path: PATH_DASHBOARD.calls,
-          icon: ICONS.calls,
-          tobeDisplayed: hasAccessToCalls
         }
       ],
     },
