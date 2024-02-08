@@ -13,6 +13,7 @@ export type INavItem = {
 export type NavItemProps = INavItem & ListItemButtonProps;
 
 export type NavListProps = {
+  tobeDisplayed: boolean;
   title: string;
   path: string;
   icon?: React.ReactElement;
