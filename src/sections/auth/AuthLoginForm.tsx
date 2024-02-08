@@ -51,13 +51,10 @@ export default function AuthLoginForm() {
     try {
       await login(data.email, data.password);
     } catch (error) {
-      console.error(error);
-
       reset();
-
       setError('afterSubmit', {
         ...error,
-        message: error.message || error,
+        message: error?.message || 'invalid credential',
       });
     }
   };

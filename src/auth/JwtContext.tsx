@@ -142,7 +142,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       password
     });
     const { token, user } = response.data.data;
-
+    
     setSession(token);
 
     dispatch({

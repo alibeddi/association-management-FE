@@ -1,5 +1,6 @@
 // @mui
 import { Typography, Stack, StackProps } from '@mui/material';
+import { EmptyContentIllustration } from '../../assets/illustrations';
 //
 import Image from '../image';
 
@@ -27,7 +28,7 @@ export default function EmptyContent({ title, description, img, sx, ...other }: 
       <Image
         disabledEffect
         alt="empty content"
-        src={img || '/assets/illustrations/illustration_empty_content.svg'}
+        src={img || EmptyContentIllustration}
         sx={{ height: 240, mb: 3 }}
       />
 

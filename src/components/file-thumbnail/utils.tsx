@@ -11,7 +11,7 @@ import {
   IC_img,
   IC_txt,
   IC_zip,
-} from '../../assets/icons/files/index';
+} from '../../assets/icons/files/';
 
 // ----------------------------------------------------------------------
 
