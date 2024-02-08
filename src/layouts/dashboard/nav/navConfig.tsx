@@ -16,7 +16,7 @@ const ICONS = {
   calendar: icon(ic_calendar)
 };
 
-export default function navConfigItems(user: AuthUserType) {
+export default function navConfig(user: AuthUserType) {
   const userPermissions = user?.permissionGroup[0].permissions;
   const hasAccessToKpis = hasPermission(userPermissions, ModelCode.KPI, MethodCode.LIST);
   const hasAccessToUsers = hasPermission(userPermissions, ModelCode.USER, MethodCode.LIST);
