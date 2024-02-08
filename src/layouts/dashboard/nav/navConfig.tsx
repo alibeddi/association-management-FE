@@ -3,7 +3,7 @@ import { AuthUserType } from '../../../auth/types';
 import SvgColor from '../../../components/svg-color';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { hasPermission } from '../../../sections/@dashboard/Permissions/utils';
-import { ic_operators, ic_settings, ic_lock, ic_calendar, ic_call } from '../../../assets/icons/navbar';
+import { ic_operators, ic_settings, ic_lock, ic_calendar } from '../../../assets/icons/navbar';
 
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
