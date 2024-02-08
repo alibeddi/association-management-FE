@@ -1,3 +1,4 @@
+import { Office } from './Office';
 import { Permission } from './Permission';
 import { PermissionGroup } from './PermissionGroup';
 
@@ -8,16 +9,6 @@ export interface User {
   lastName: string;
   email: string;
   office: Office;
-  createdAt: Date | null;
-}
-
-export interface Office {
-  _id: string;
-  name: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  office: object;
   createdAt: Date | null;
 }
 
