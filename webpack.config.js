@@ -74,6 +74,7 @@ module.exports = smp.wrap({
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
       template: './public/index.html',
+      favicon: './public/favicon/favicon.ico',
     }),
     new Dotenv({
       path: './.env',
