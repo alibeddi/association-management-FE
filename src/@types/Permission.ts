@@ -4,7 +4,7 @@ export enum ModelCode {
   PERMISSION_GROUP = 'PERMISSION_GROUP',
   KPI = 'KPI',
   WORKTIME = 'WORKTIME',
-  CALLS = 'CALLS'
+  CALLS = 'CALL',
 }
 
 export enum MethodCode {
