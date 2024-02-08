@@ -15,7 +15,7 @@ import {
   Tabs,
   Tooltip,
 } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 import UserTableToolbar from './userTableToolbar';
 import UserTableRow from './userTableRow';
@@ -36,8 +36,8 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import { IUserAccountGeneral } from '../../../@types/User';
-import { RootState } from '../../../redux/store';
-import { getUsers } from '../../../redux/slices/users/actions';
+import { dispatch, RootState, useSelector } from '../../../redux/store';
+import { deleteOne, getUsers } from '../../../redux/slices/users/actions';
 
 // ----------------------------------------------------------------------
 
@@ -89,11 +89,12 @@ export default function UserListPage() {
   } = useTable();
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     dispatch(getUsers({ page, limit: rowsPerPage }));
-  }, [page, rowsPerPage, dispatch]);
+  }, [page, rowsPerPage]);
 
   const [tableData, setTableData] = useState(users?.docs);
 
@@ -142,15 +143,32 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    const deleteRow = tableData.filter((row) => row._id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
+    // const deleteRow = tableData.filter((row) => row._id !== id);
+    // setSelected([]);
+    // setTableData(deleteRow);
 
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
+    // if (page > 0) {
+    //   if (dataInPage.length < 2) {
+    //     setPage(page - 1);
+    //   }
+    // }
+
+    dispatch(deleteOne({ userId: id })).then((res: any) => {
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        enqueueSnackbar(`${res?.payload.message}`);
+        const deleteRow = tableData.filter((row) => row._id !== id);
+        setSelected([]);
+        setTableData(deleteRow);
+
+        if (page > 0) {
+          if (dataInPage.length < 2) {
+            setPage(page - 1);
+          }
+        }
+      } else {
+        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
       }
-    }
+    });
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
