@@ -28,7 +28,7 @@ export default function EmptyContent({ title, description, img, sx, ...other }: 
       <Image
         disabledEffect
         alt="empty content"
-        src={img || EmptyContentIllustration}
+        src={EmptyContentIllustration}
         sx={{ height: 240, mb: 3 }}
       />
 
