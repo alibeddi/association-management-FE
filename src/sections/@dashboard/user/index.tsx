@@ -1,35 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
-import {
-  Button,
-  Card,
-  Container,
-  Divider,
-  IconButton,
-  Tab,
-  Table,
-  TableBody,
-  TableContainer,
-  Tabs,
-  Tooltip,
-} from '@mui/material';
+import { Button, Card, IconButton, Table, TableBody, TableContainer, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import UserTableToolbar from './userTableToolbar';
 import UserTableRow from './userTableRow';
 import {
-  emptyRows,
-  getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
   useTable,
 } from '../../../components/table';
-import { _userList } from '../../../_mock/arrays';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import Iconify from '../../../components/iconify';
@@ -193,11 +175,9 @@ export default function UserListPage() {
           { name: 'User', href: PATH_DASHBOARD.operators },
           { name: 'List' },
         ]}
-
       />
 
       <Card>
-
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
             dense={dense}

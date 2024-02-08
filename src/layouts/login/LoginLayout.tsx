@@ -1,20 +1,19 @@
 // @mui
-import { Typography, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 // components
-import Logo from '../../components/logo';
 import Image from '../../components/image';
 //
-import { StyledRoot, StyledSectionBg, StyledSection, StyledContent } from './styles';
+import loginImage from '../../assets/images/illustrations/At the office-rafiki.png';
+import { StyledContent, StyledRoot, StyledSection, StyledSectionBg } from './styles';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  title?: string;
   illustration?: string;
   children: React.ReactNode;
 };
 
-export default function LoginLayout({ children, illustration, title }: Props) {
+export default function LoginLayout({ children, illustration }: Props) {
   return (
     <StyledRoot>
       <StyledSection>
@@ -22,7 +21,7 @@ export default function LoginLayout({ children, illustration, title }: Props) {
           disabledEffect
           visibleByDefault
           alt="auth"
-          src={illustration || '/assets/illustrations/At the office-rafiki.png'}
+          src={illustration || loginImage}
           sx={{ maxWidth: 720 }}
         />
 
