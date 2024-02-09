@@ -1,4 +1,4 @@
-import { format, getTime, formatDistanceToNow, add } from 'date-fns';
+import { format, getTime, formatDistanceToNow, add, startOfDay } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +26,9 @@ export function fToNow(date: InputValue) {
         addSuffix: true,
       })
     : '';
+}
+export function CurrentDate(){
+  return startOfDay(new Date());
 }
 export function addOneHour(date: InputValue){
   return date ?

@@ -6,6 +6,7 @@ import usersReducer from './slices/users';
 import kpisReducer from './slices/kpis';
 import permissionReducer from './slices/permissions';
 import workTimeReducer from './slices/workTimes';
+import callsReducer from "./slices/calls"
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +17,7 @@ const combinedReducer = combineReducers({
   users: usersReducer,
   workTimes: workTimeReducer,
   kpis: kpisReducer,
+  calls: callsReducer
 });
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'LOGOUT') {

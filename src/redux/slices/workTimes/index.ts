@@ -10,7 +10,6 @@ type WorkTimeState = {
 workTimes: PaginationModel<ICalendarEvent>;
 workTime: ICalendarEvent;
 status: IStatus;
-error?: string;
 }
 
 const initialState: WorkTimeState = {
@@ -60,8 +59,6 @@ const initialState: WorkTimeState = {
         })
         .addCase(updateCalendarWorkTime.rejected, (state,action) => {
           state.status = IStatus.FAILED;
-
-          state.error = action.error.message;
         })
         .addCase(deleteCalendarWorkTime.pending, (state) => {
           state.status = IStatus.LOADING;

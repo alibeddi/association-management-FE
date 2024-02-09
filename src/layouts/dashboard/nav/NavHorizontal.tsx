@@ -18,7 +18,6 @@ function NavHorizontal() {
   const theme = useTheme();
   const { user } = useAuthContext();
   const navConfig = navConfigItems(user);
-  console.log({navConfig})
   return (
     <AppBar
       component="nav"
