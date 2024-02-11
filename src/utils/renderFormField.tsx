@@ -1,82 +1,57 @@
-import { Control, Controller } from 'react-hook-form';
+import { Control } from 'react-hook-form';
 // @mui
-import { Divider, FormHelperText, MenuItem, Tooltip } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// types
-import { IConfig, IFieldTypes } from '../../@types/config';
-import { IRentableAttribute } from '../../@types/rentableAttribute';
-// utils
-import convertJSONToRecord from '../../utils/convertJSONToRecord';
-import transformRecordToArray from '../../utils/transformRecordToArray';
+import { Divider, MenuItem } from '@mui/material';
+// components
 import {
   RHFAutocomplete,
   RHFCheckbox,
-  RHFDateTimePicker,
   RHFRadioGroup,
   RHFSelect,
   RHFSwitch,
   RHFTextField,
-  RHFUpload,
 } from '../components/hook-form';
+// types
+import { FrontType, IKpi } from '../@types/Kpi';
+// utils
+import convertJSONToRecord from '../../utils/convertJSONToRecord';
+import transformRecordToArray from '../../utils/transformRecordToArray';
 
-function RenderField(
-  config: IConfig | IRentableAttribute,
-  componentLabel: string,
-  values?: any,
-  control?: Control<any, any>
-) {
-  const componentName = config?.code;
-  const configsOptions: { label: string; value: string }[] = transformRecordToArray(
-    convertJSONToRecord(config?.data)
-  ).map((el) => ({
-    label: el.label,
-    value: el.value.toString().replace(',', '.'),
-  }));
-  const components: Record<IFieldTypes, JSX.Element> = {
-    Text: <RHFTextField name={componentName} label={componentLabel} type="text" id={config?.id} />,
-    Textarea: (
+function RenderField(kpi: IKpi, componentLabel: string, values?: any, control?: Control<any, any>) {
+  const componentName = kpi?.name;
+  const components: Record<FrontType, JSX.Element> = {
+    textarea: (
       <RHFTextField
         name={componentName}
-        id={config?.id}
-        placeholder={config?.name}
+        id={kpi?._id}
+        placeholder={kpi?.name}
         multiline
         rows={5}
         label={componentLabel}
-        helperText={config?.help}
+        helperText={kpi?.label}
       />
     ),
-    Radio: (
-      <RHFRadioGroup
-        row
-        id={config?.id}
-        name={componentName}
-        options={configsOptions}
-        label={componentLabel}
-        helperText={config?.help}
-      />
-    ),
-    Checkbox: (
+    checkbox: (
       <RHFCheckbox
         name={componentName}
-        id={config?.id}
+        id={kpi?._id}
         label={componentLabel}
         sx={{ mt: 3 }}
-        helperText={config?.help}
+        helperText={kpi?.label}
       />
     ),
-    Select: (
+    select: (
       <RHFSelect
         name={componentName}
         label={componentLabel}
-        placeholder={config?.name}
-        helperText={config?.help}
-        id={config?.id}
+        placeholder={kpi?.name}
+        helperText={kpi?.label}
+        id={kpi?._id}
       >
         <MenuItem value="" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
           None
         </MenuItem>
         <Divider />
-        {transformRecordToArray(convertJSONToRecord(config?.data))?.map(
+        {transformRecordToArray(convertJSONToRecord(kpi?.options))?.map(
           (item: { value: any; label: any }) => (
             <MenuItem key={item.value} value={item?.value.label}>
               {item?.value.label}
@@ -85,113 +60,13 @@ function RenderField(
         )}
       </RHFSelect>
     ),
-    Multiselect: (
-      <RHFAutocomplete
-        name={componentName}
-        label={componentLabel}
-        multiple
-        freeSolo
-        options={transformRecordToArray(convertJSONToRecord(config?.data)).map((item: any) =>
-          item?.value?.label?.toString()
-        )}
-        ChipProps={{ size: 'small' }}
-        helperText={config?.help}
-      />
-    ),
-    Email: (
+    input: (
       <RHFTextField
         name={componentName}
+        type="string"
         label={componentLabel}
-        id={config?.id}
-        helperText={config?.help}
-        type="email"
-      />
-    ),
-    Password: (
-      <RHFTextField
-        name={componentName}
-        type="password"
-        label={componentLabel}
-        helperText={config?.help}
-      />
-    ),
-    URL: (
-      <RHFTextField
-        name={componentName}
-        type="url"
-        label={componentLabel}
-        id={config?.id}
-        helperText={config?.help}
-      />
-    ),
-    IP: (
-      <RHFTextField
-        name={componentName}
-        type="ip"
-        label={componentLabel}
-        id={config?.id}
-        helperText={config?.help}
-      />
-    ),
-    Phone: (
-      <RHFTextField
-        name={componentName}
-        type="phone"
-        label={componentLabel}
-        id={config?.id}
-        helperText={config?.help}
-      />
-    ),
-    Date: (
-      <Controller
-        name={componentName}
-        control={control}
-        render={({ field, fieldState: { error } }) => (
-          <>
-            <Tooltip title={config?.name}>
-              <DatePicker
-                label={componentLabel}
-                value={field.value ? new Date(field.value) : null}
-                onChange={(newValue) => {
-                  field.onChange(newValue);
-                }}
-              />
-            </Tooltip>
-            {!!error && (
-              <FormHelperText error={!!error} sx={{ px: 2 }}>
-                {error?.message}
-              </FormHelperText>
-            )}
-          </>
-        )}
-      />
-    ),
-    DateTime: <RHFDateTimePicker name={componentName} label={componentLabel} />,
-    Currency: (
-      <RHFTextField
-        name={componentName}
-        type="number"
-        label={componentLabel}
-        id={config?.id}
-        helperText={config?.help}
-      />
-    ),
-    Number: (
-      <RHFTextField
-        name={componentName}
-        type="number"
-        label={componentLabel}
-        id={config?.id}
-        helperText={config?.help}
-      />
-    ),
-    Switch: (
-      <RHFSwitch
-        name={componentName}
-        labelPlacement="start"
-        id={config?.id}
-        helperText={config.help}
-        label={componentLabel}
+        id={kpi?._id}
+        helperText={kpi?.label}
       />
     ),
   };
@@ -208,44 +83,44 @@ function RenderField(
   if (
     values[AddAllowVatKey] !== undefined &&
     (values[AddAllowVatKey].toString() === 'true' || values[AddAllowVatKey].toString() === '1') &&
-    config.code.includes('vat')
+    kpi.name.includes('vat')
   ) {
-    return components[config?.frontType];
+    return components[kpi?.frontType];
   }
 
   if (
     values[AddiTionalDriverKey] !== undefined &&
     (values[AddiTionalDriverKey].toString() === 'true' ||
       values[AddiTionalDriverKey].toString() === '1') &&
-    config.code.includes('extra_driver_fee')
+    kpi.name.includes('extra_driver_fee')
   ) {
-    return components[config?.frontType];
+    return components[kpi?.frontType];
   }
   if (
     values[RequireTransferCostKey] !== undefined &&
     (values[RequireTransferCostKey].toString() === 'true' ||
       values[RequireTransferCostKey].toString() === '1') &&
-    (config.code === 'transfer_base_cost' || config.code === 'transfer_km_cost')
+    (kpi.name === 'transfer_base_cost' || kpi.name === 'transfer_km_cost')
   ) {
-    return components[config?.frontType];
+    return components[kpi?.frontType];
   }
 
   if (
     values[RequireDeposit] !== undefined &&
     (values[RequireDeposit].toString() === 'true' || values[RequireDeposit].toString() === '1') &&
-    config.code === 'deposit_amount'
+    kpi.name === 'deposit_amount'
   ) {
-    return components[config?.frontType];
+    return components[kpi?.frontType];
   }
 
   if (
-    !config.code.includes('extra_driver_fee') &&
-    !config.code.includes('transfer_base_cost') &&
-    !config.code.includes('deposit_amount') &&
-    !config.code.includes('transfer_km_cost') &&
-    config.code !== 'vat'
+    !kpi.name.includes('extra_driver_fee') &&
+    !kpi.name.includes('transfer_base_cost') &&
+    !kpi.name.includes('deposit_amount') &&
+    !kpi.name.includes('transfer_km_cost') &&
+    kpi.name !== 'vat'
   ) {
-    return components[config?.frontType];
+    return components[kpi?.frontType];
   }
 }
 export default RenderField;
