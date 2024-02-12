@@ -21,13 +21,11 @@ const CallForm = ({handleCreateUpdate,callSelected}:IProp<ICall>) => {
   })
   console.log("test : ",{callSelected,num:callSelected?.numberCalls})
   const methods = useForm<ICall>({
-    resolver: yupResolver(CallSchema),
-    defaultValues: {
-      numberCalls: callSelected?.numberCalls || 0,
-    }
+    resolver: yupResolver(CallSchema)
   })
   const onSubmit= async (data:ICall) =>{
     try {
+      console.log("handle submit : ",{data})
       handleCreateUpdate(data)
     } catch (error) {
       console.log(error)

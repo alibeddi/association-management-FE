@@ -28,15 +28,20 @@ export default function Dashboard() {
     }));
   },[dispatch,callDate])
   const callSelected = useSelector((state:RootState)=>state.calls.call)
-  const handleCreateUpdate = async (newCall: ICall) => {
+
+  const handleCreateUpdate = async (call: ICall) => {
     if(!callSelected){
-      await dispatch(createCallsToday(newCall)).unwrap().then(res=>{
+      await dispatch(createCallsToday(call)).unwrap().then(res=>{
         const {data} = res;
       }).catch(err=>console.error(err))
     }else{
-      await dispatch(updateCall({newCall:callSelected})).unwrap().then(res=>console.log('updated : ',res)).catch(err=>console.error("error",err))
+      const {_id,date} = callSelected;
+      const newCall = {...call,_id,date}
+      console.log({newCall},"ahhh")
+      await dispatch(updateCall({newCall})).unwrap().then(res=>console.log('updated : ',res)).catch(err=>console.error("error",err))
     }
   }
+  console.log('test ',callSelected)
   return (
     <>
       <Helmet>
