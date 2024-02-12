@@ -40,7 +40,7 @@ export default function RHFTextField({
             {...field}
             name={name}
             label={`${translate(label)} `}
-            // onBlur={field.onBlur}
+            onBlur={field.onBlur}
             InputProps={{
               onWheel: handleWheel,
             }}
