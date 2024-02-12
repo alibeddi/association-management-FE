@@ -40,7 +40,7 @@ export default function Dashboard() {
       }).catch(err=>{console.error(err);enqueueSnackbar(err.message,{variant:"error"})})
     }else{
       const {_id,date} = callSelected;
-      const newCall = {...call,_id,date}
+      const newCall = {calls:call.calls,_id,date}
       await dispatch(updateCall({newCall})).unwrap().then(res=> {
         const {data} = res;
         setCallDate(data.date);

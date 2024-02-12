@@ -35,7 +35,7 @@ export const updateCall = createAsyncThunk('/calls/update',async ({newCall}:{new
   try {
     const response = await axios.patch(`/calls/${newCall._id}`,{
       date:newCall.date,
-      numberCalls:newCall.numberCalls
+      calls:newCall.calls
     });
     data = response.data;
     if(response.status === 200){

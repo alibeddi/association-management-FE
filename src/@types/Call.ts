@@ -1,5 +1,8 @@
 export type ICall = {
-  numberCalls: number;
+  calls: {
+    maked:number,
+    received: number
+  };
   date?: Date | string;
   _id?: string;
 }

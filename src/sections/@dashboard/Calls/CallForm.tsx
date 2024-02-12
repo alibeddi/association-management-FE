@@ -18,10 +18,15 @@ export type IProp<ICall> = {
 
 const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
   const CallSchema = Yup.object({
-    numberCalls: Yup.number().required().typeError('calls is must be of type number'),
+    calls: Yup.object({
+      maked: Yup.number().required().typeError('Made calls must be of type number'),
+      received: Yup.number().required().typeError('Received calls must be of type number')
+    }),
   });
   const {call} = useSelector((state: RootState) => state.calls);
-  const numberCalls = call?.numberCalls || 0;
+  const callReceived = call?.calls?.received || 0;
+  const callMaked = call?.calls?.maked || 0;
+  const numberCalls = callReceived+callMaked;
   const methods = useForm<ICall>({
     resolver: yupResolver(CallSchema),
   });
@@ -40,10 +45,10 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
     formState: { isSubmitting, errors },
   } = methods;
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
       <Box sx={{
         p:1
-      }}>{`number of calls today ${numberCalls}`}</Box>
+      }}>{`total calls today ${numberCalls}`}</Box>
       <Stack
         sx={{
           direction: 'row',
@@ -51,11 +56,17 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
         }}
       >
         <RHFTextField
-          name="numberCalls"
-          label="calls emis"
-          placeholder={`number of calls today ${numberCalls}`}
+          name="calls.maked"
+          label={`${callMaked} calls emis `}
         />
-        <Box
+        <Stack >
+      <RHFTextField
+          name="calls.received"
+          label={`${callReceived} calls recu `}
+        />
+      </Stack>
+      <Stack>
+      <Box
           sx={{
             width: 'initial',
           }}
@@ -65,6 +76,10 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
           </LoadingButton>
         </Box>
       </Stack>
+        
+      </Stack>
+      
+      
     </FormProvider>
   );
 };
