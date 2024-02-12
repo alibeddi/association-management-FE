@@ -25,9 +25,9 @@ export const PATH_DASHBOARD = {
   calender: path(ROOTS_DASHBOARD, '/calendar'),
   calls: path(ROOTS_DASHBOARD, '/calls'),
   clientStatus: {
-    root: path(ROOTS_DASHBOARD, '/client-status'),
-    edit: path(ROOTS_DASHBOARD, '/client-status/edit'),
-    view: path(ROOTS_DASHBOARD, '/client-status/view'),
-    new: path(ROOTS_DASHBOARD, '/client-status/new'),
+    root: path(ROOTS_DASHBOARD, '/stat-client'),
+    edit: path(ROOTS_DASHBOARD, '/stat-client/edit'),
+    view: path(ROOTS_DASHBOARD, '/stat-client/view'),
+    new: path(ROOTS_DASHBOARD, '/stat-client/new'),
   },
 };

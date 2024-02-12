@@ -5,9 +5,9 @@ export enum FrontType {
   SELECT = 'select',
 }
 export enum BackType {
-  STRING = 'String',
-  BOOLEAN = 'Boolean',
-  ARRAY = 'Array',
+  STRING = 'string',
+  BOOLEAN = 'boolean',
+  ARRAY = 'array',
 }
 
 export interface IKpi {

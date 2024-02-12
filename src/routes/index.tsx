@@ -82,7 +82,7 @@ export default function Router() {
           ],
         },
         {
-          path: 'client-status',
+          path: 'stat-client',
           element: (
             // TODO: replace the kpi with the ClientStatus
             <PermissionGuard model={ModelCode.KPI} method={MethodCode.LIST}>

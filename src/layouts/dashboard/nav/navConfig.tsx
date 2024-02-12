@@ -59,7 +59,7 @@ export default function navConfig(user: AuthUserType) {
           tobeDisplayed: true,
         },
         {
-          title: 'client status',
+          title: 'Stat-clients',
           path: PATH_DASHBOARD.clientStatus.root,
           icon: ICONS.clientStatus,
           tobeDisplayed: true,

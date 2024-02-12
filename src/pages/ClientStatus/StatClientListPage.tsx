@@ -21,6 +21,7 @@ export default function ClientStatusListPage() {
     MethodCode.CREATE
   );
 
+
   return (
     <>
       <Helmet>
