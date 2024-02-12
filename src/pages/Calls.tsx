@@ -10,6 +10,7 @@ import { ICall } from '../@types/Call';
 import { RootState, useDispatch,useSelector } from '../redux/store';
 import { createCallsToday, getCallByDate, getMyCalls, updateCall } from '../redux/slices/calls/actions';
 import { CurrentDate, fDate, fDateTime } from '../utils';
+import { useSnackbar } from '../components/snackbar';
 
 
 
@@ -17,7 +18,7 @@ import { CurrentDate, fDate, fDateTime } from '../utils';
 
 export default function Dashboard() {
   const dispatch = useDispatch()
-  
+  const {enqueueSnackbar} = useSnackbar()
   const { themeStretch } = useSettingsContext();
   const {calls} = useSelector((state:RootState)=>state.calls)
   const currentDate = CurrentDate().toISOString();
@@ -30,18 +31,26 @@ export default function Dashboard() {
   const callSelected = useSelector((state:RootState)=>state.calls.call)
 
   const handleCreateUpdate = async (call: ICall) => {
+    console.log({call})
     if(!callSelected){
       await dispatch(createCallsToday(call)).unwrap().then(res=>{
         const {data} = res;
-      }).catch(err=>console.error(err))
+        enqueueSnackbar('created with success',{
+          variant: "success"
+        })
+      }).catch(err=>{console.error(err);enqueueSnackbar(err.message,{variant:"error"})})
     }else{
       const {_id,date} = callSelected;
       const newCall = {...call,_id,date}
-      console.log({newCall},"ahhh")
-      await dispatch(updateCall({newCall})).unwrap().then(res=>console.log('updated : ',res)).catch(err=>console.error("error",err))
+      await dispatch(updateCall({newCall})).unwrap().then(res=> {
+        const {data} = res;
+        setCallDate(data.date);
+        enqueueSnackbar('updated with success',{
+          variant: "success"
+        })
+      }).catch(err=>{console.error(err);enqueueSnackbar(err.message,{variant:"error"})})
     }
   }
-  console.log('test ',callSelected)
   return (
     <>
       <Helmet>

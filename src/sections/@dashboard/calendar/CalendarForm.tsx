@@ -21,6 +21,7 @@ import { ICalendarEvent } from '../../../@types/calendar';
 import Iconify from '../../../components/iconify';
 import FormProvider, { RHFDateTimePicker } from '../../../components/hook-form';
 
+
 // ----------------------------------------------------------------------
 
 type FormValuesProps = ICalendarEvent;
@@ -106,7 +107,7 @@ export default function CalendarForm({
       ? isBefore(new Date(values.endDate), new Date(values.startDate))
       : false;
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={3} sx={{ px: 3 }}>
           <Controller

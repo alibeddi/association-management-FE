@@ -50,10 +50,23 @@ export const updateCall = createAsyncThunk('/calls/update',async ({newCall}:{new
 export const getCallByDate = createAsyncThunk('/calls/date',async ({date}:{date:Date | string}) => {
   let data;
   try {
-    console.log({date})
     const response = await axios.post("/calls/date",{
       date
     });
+    data = response.data;
+    if(response.status === 200){
+      return data.data;
+    }
+    throw new Error(response.statusText);
+  } catch (error) {
+    return Promise.reject(error.message ? error.message : data.message)
+  }
+})
+export const getCallById = createAsyncThunk('/calls/id',async({id}:{id:string})=>{
+  let data;
+  try {
+
+    const response = await axios.get(`/calls/${id}`);
     data = response.data;
     if(response.status === 200){
       return data.data;
