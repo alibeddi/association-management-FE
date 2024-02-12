@@ -12,6 +12,8 @@ import { MethodCode, ModelCode } from '../@types/Permission';
 import PermissionGuard from '../auth/PermissionsGuard';
 import {
   Calendar,
+  ClienStatusList,
+  ClienStatusNew,
   KpiEdit,
   KpiNew,
   Kpis,
@@ -58,7 +60,7 @@ export default function Router() {
           ),
           children: [{ path: '', element: <OperatorList /> }],
         },
-
+        // clienStatusNew
         {
           path: 'kpis',
           element: (
@@ -80,6 +82,27 @@ export default function Router() {
           ],
         },
         {
+          path: 'client-status',
+          element: (
+            // TODO: replace the kpi with the ClientStatus
+            <PermissionGuard model={ModelCode.KPI} method={MethodCode.LIST}>
+              <Outlet />
+            </PermissionGuard>
+          ),
+          children: [
+            { path: '', element: <ClienStatusList /> },
+            { path: 'new', element: <ClienStatusNew /> },
+            {
+              path: 'edit/:id',
+              element: <KpiEdit />,
+            },
+            {
+              path: 'view/:id',
+              element: <KpiView />,
+            },
+          ],
+        },
+        {
           path: 'permissions',
           element: (
             <PermissionGuard model={ModelCode.PERMISSION_GROUP} method={MethodCode.LIST}>
@@ -90,7 +113,7 @@ export default function Router() {
         {
           path: 'calendar',
           element: <Calendar />,
-        }
+        },
       ],
     },
     {

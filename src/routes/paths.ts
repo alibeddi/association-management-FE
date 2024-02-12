@@ -23,5 +23,11 @@ export const PATH_DASHBOARD = {
   },
   groupPermissions: path(ROOTS_DASHBOARD, '/permissions'),
   calender: path(ROOTS_DASHBOARD, '/calendar'),
-  calls: path(ROOTS_DASHBOARD,'/calls')
+  calls: path(ROOTS_DASHBOARD, '/calls'),
+  clientStatus: {
+    root: path(ROOTS_DASHBOARD, '/client-status'),
+    edit: path(ROOTS_DASHBOARD, '/client-status/edit'),
+    view: path(ROOTS_DASHBOARD, '/client-status/view'),
+    new: path(ROOTS_DASHBOARD, '/client-status/new'),
+  },
 };

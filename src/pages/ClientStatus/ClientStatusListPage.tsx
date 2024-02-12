@@ -7,40 +7,44 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import Iconify from '../../components/iconify';
 import { useLocales } from '../../locales';
 import { PATH_DASHBOARD } from '../../routes/paths';
-import { KpisTable } from '../../sections/@dashboard/Kpis/list';
 import { hasPermission } from '../../sections/@dashboard/Permissions/utils';
 
-export default function KpiListPage() {
+export default function ClientStatusListPage() {
   const { translate } = useLocales();
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
 
-  // check current user permissions
-  const isAllowedToCreateKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.CREATE);
+  // replace the kpi with client status later
+  const isAllowedToCreateClientStatus = hasPermission(
+    userPermissions,
+    ModelCode.KPI,
+    MethodCode.CREATE
+  );
 
   return (
     <>
       <Helmet>
-        <title>{`${translate('Kpis')}`}</title>
+        <title>{`${translate('client status')}`}</title>
       </Helmet>
+
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="kpis"
-          links={[{ name: 'kpis' }]}
+          heading="client status"
+          links={[{ name: 'client-status' }]}
           action={
-            isAllowedToCreateKpi && (
+            isAllowedToCreateClientStatus && (
               <Button
                 component={RouterLink}
-                to={PATH_DASHBOARD.kpis.new}
+                to={PATH_DASHBOARD.clientStatus.new}
                 variant="contained"
                 startIcon={<Iconify icon="eva:plus-fill" />}
               >
-                New Kpi
+                New client status
               </Button>
             )
           }
         />
-        <KpisTable />
+        {/* TODO: Client status table */}
       </Container>
     </>
   );
