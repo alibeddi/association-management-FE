@@ -34,9 +34,7 @@ export default function Dashboard() {
     if(!callSelected){
       await dispatch(createCallsToday(call)).unwrap().then(res=>{
         const {data} = res;
-        enqueueSnackbar('created with success',{
-          variant: "success"
-        })
+        enqueueSnackbar('created with success')
       }).catch(err=>{console.error(err);enqueueSnackbar(err.message,{variant:"error"})})
     }else{
       const {_id,date} = callSelected;
@@ -44,9 +42,7 @@ export default function Dashboard() {
       await dispatch(updateCall({newCall})).unwrap().then(res=> {
         const {data} = res;
         setCallDate(data.date);
-        enqueueSnackbar('updated with success',{
-          variant: "success"
-        })
+        enqueueSnackbar('updated with success')
       }).catch(err=>{console.error(err);enqueueSnackbar(err.message,{variant:"error"})})
     }
   }
