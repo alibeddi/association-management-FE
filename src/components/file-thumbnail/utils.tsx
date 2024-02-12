@@ -1,5 +1,5 @@
 // components
-import React from "react"
+import React from 'react';
 import { ExtendFile } from './types';
 import {
   IC_AI,
@@ -11,7 +11,7 @@ import {
   IC_img,
   IC_txt,
   IC_zip,
-} from '../../assets/icons/files/index';
+} from '../../assets/icons/files';
 
 // ----------------------------------------------------------------------
 
@@ -90,7 +90,6 @@ export function fileFormat(fileUrl: string | undefined) {
 // ----------------------------------------------------------------------
 
 export function fileThumb(fileUrl: string) {
-  
   let thumb;
 
   switch (fileFormat(fileUrl)) {

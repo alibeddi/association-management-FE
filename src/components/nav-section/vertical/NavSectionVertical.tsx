@@ -15,7 +15,6 @@ export default function NavSectionVertical({ data, sx, ...other }: NavSectionPro
     <Stack sx={sx} {...other}>
       {data.map((group) => {
         const key = group.subheader || group.items[0].title;
-
         return (
           <List key={key} disablePadding sx={{ px: 2 }}>
             {group.subheader && (
@@ -30,9 +29,7 @@ export default function NavSectionVertical({ data, sx, ...other }: NavSectionPro
                   depth={1}
                   hasChild={!!list.children}
                 />
-              ) : (
-                <></>
-              )
+              ) : null
             )}
           </List>
         );

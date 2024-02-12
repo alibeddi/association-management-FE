@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ICalendarEvent } from '../../../@types/calendar';
 import { splitIntervalIntoHours } from '../../../utils';
 import axios from '../../../utils/axios';
@@ -39,8 +39,9 @@ export const createCalendarWorkTime = createAsyncThunk(
   'workTimes/create',
   async (payload: ICalendarEvent) => {
     let data;
-    const { startDate, endDate } = payload;
+    
     try {
+      const { startDate, endDate } = payload;
       const splitHours = splitIntervalIntoHours({ startDate, endDate });
       const response = await axios.post('/worktimes', {
         data: splitHours,
@@ -62,7 +63,6 @@ export const updateCalendarWorkTime = createAsyncThunk(
   async ({ id, body }: { id: string; body: ICalendarEvent }) => {
     let data;
     try {
-      const {startDate,endDate} = body;
       const response = await axios.patch(`/worktimes/${id}`, body);
       data = await response.data;
       if (response.status === 200) {

@@ -7,7 +7,6 @@ import { LoadingButton } from '@mui/lab';
 import LoginLayout from '../../layouts/login';
 //
 import AuthLoginForm from './AuthLoginForm';
-import AuthWithSocial from './AuthWithSocial';
 
 
 // ----------------------------------------------------------------------

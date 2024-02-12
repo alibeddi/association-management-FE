@@ -90,7 +90,7 @@ export default function Router() {
         {
           path: 'calendar',
           element: <Calendar />,
-        },
+        }
       ],
     },
     {

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
@@ -17,19 +16,14 @@ import {
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
-import UserTableToolbar from './userTableToolbar';
 import UserTableRow from './userTableRow';
 import {
-  emptyRows,
-  getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
   useTable,
 } from '../../../components/table';
-import { _userList } from '../../../_mock/arrays';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import Iconify from '../../../components/iconify';
