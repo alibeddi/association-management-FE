@@ -47,7 +47,7 @@ export const updateCall = createAsyncThunk('/calls/update',async ({newCall}:{new
     return Promise.reject(error.message ? error.message : data.message)
   }
 })
-export const getCallByDate = createAsyncThunk('/calls/update',async ({date}:{date:Date | string}) => {
+export const getCallByDate = createAsyncThunk('/calls/date',async ({date}:{date:Date | string}) => {
   let data;
   try {
     console.log({date})

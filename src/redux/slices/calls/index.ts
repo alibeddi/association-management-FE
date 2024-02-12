@@ -52,16 +52,16 @@ const slice = createSlice({
     .addCase(getCallByDate.rejected,(state)=>{
       state.status = IStatus.FAILED;
     })
-    // .addCase(updateCall.pending,(state)=>{
-    //   state.status = IStatus.LOADING;
-    // })
-    // .addCase(updateCall.fulfilled, (state, { payload }) => {
-    //   state.status = IStatus.SUCCEEDED;
-    //   state.calls.docs = state.calls.docs.map(call=>call._id!==payload.data._id?call:payload.data)
-    // })
-    // .addCase(updateCall.rejected,(state)=>{
-    //   state.status = IStatus.FAILED;
-    // })
+    .addCase(updateCall.pending,(state)=>{
+      state.status = IStatus.LOADING;
+    })
+    .addCase(updateCall.fulfilled, (state, { payload }) => {
+      state.status = IStatus.SUCCEEDED;
+      state.calls.docs = state.calls.docs.map(call=>call._id!==payload.data._id?call:payload.data)
+    })
+    .addCase(updateCall.rejected,(state)=>{
+      state.status = IStatus.FAILED;
+    })
   }
 })
 export const  {actions} = slice;
