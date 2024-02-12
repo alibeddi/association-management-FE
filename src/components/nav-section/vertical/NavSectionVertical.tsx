@@ -22,7 +22,7 @@ export default function NavSectionVertical({ data, sx, ...other }: NavSectionPro
             )}
 
             {group.items.map((list) =>
-              list.tobeDisplayed ? (
+              list.toBeDisplayed ? (
                 <NavList
                   key={list.title + list.path}
                   data={list}
