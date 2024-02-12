@@ -31,7 +31,6 @@ export default function Dashboard() {
   const callSelected = useSelector((state:RootState)=>state.calls.call)
 
   const handleCreateUpdate = async (call: ICall) => {
-    console.log({call})
     if(!callSelected){
       await dispatch(createCallsToday(call)).unwrap().then(res=>{
         const {data} = res;
