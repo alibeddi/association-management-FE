@@ -20,7 +20,7 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
   const CallSchema = Yup.object({
     numberCalls: Yup.number().required().typeError('calls is must be of type number'),
   });
-  const call = useSelector((state: RootState) => state.calls.call);
+  const {call} = useSelector((state: RootState) => state.calls);
   const numberCalls = call?.numberCalls || 0;
   const methods = useForm<ICall>({
     resolver: yupResolver(CallSchema),
@@ -29,7 +29,7 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
     try {
       handleCreateUpdate(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const {
@@ -52,7 +52,7 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
       >
         <RHFTextField
           name="numberCalls"
-          label={"calls"}
+          label="calls emis"
           placeholder={`number of calls today ${numberCalls}`}
         />
         <Box
