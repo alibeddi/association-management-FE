@@ -19,3 +19,19 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
+
+// DELETE ONE
+export const deleteOne = createAsyncThunk('users/DELETE', async (payload: { userId: string }) => {
+  let data;
+  const { userId } = payload;
+  try {
+    const response = await axios.delete(`users/${userId}`);
+    data = response.data;
+    if (response.status === 200) {
+      return data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+});
