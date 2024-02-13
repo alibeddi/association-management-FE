@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Grid } from '@mui/material';
+import { Box, Card, Grid, Stack } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -89,21 +89,30 @@ export default function StatClientForm({
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container>
-        <Grid style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }} md={6} xs={6}>
-          <RHFTextField name={'clientName'} label={'Client Name'} type="text" />
-          <RHFTextField name={'clientContact'} label={'Client Contact'} type="text" />
-          {kpis.docs.map((kpi) => RenderField(kpi))}
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={8}>
+          <Card sx={{ p: 3 }}>
+            <Box
+              rowGap={3}
+              columnGap={4}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+              }}
+            >
+              <RHFTextField name={'clientName'} label={'Client Name'} type="text" />
+              <RHFTextField name={'clientContact'} label={'Client Contact'} type="text" />
+              {kpis.docs.map((kpi) => RenderField(kpi))}
+            </Box>
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                Save Changes
+              </LoadingButton>
+            </Stack>
+          </Card>
         </Grid>
       </Grid>
-      <LoadingButton
-        sx={{ marginTop: '1rem' }}
-        type="submit"
-        variant="contained"
-        loading={isSubmitting}
-      >
-        Save Changes
-      </LoadingButton>
     </FormProvider>
   );
 }
