@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { getKpis } from '../../redux/slices/kpis/actions';
 import { dispatch } from '../../redux/store';
-import { StatClientForm } from '../../sections/@dashboard/statClient/form';
+import { StatClientResponseForm } from '../../sections/@dashboard/statClientResponse/form';
 
 export default function ClientStatusListPage() {
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function ClientStatusListPage() {
         <title> client status </title>
       </Helmet>
       <Container maxWidth={false}>
-        <StatClientForm />
+        <StatClientResponseForm />
       </Container>
     </>
   );

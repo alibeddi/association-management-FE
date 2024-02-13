@@ -1,6 +1,6 @@
 export enum FrontType {
   TEXTAREA = 'textarea',
-  RADIO = 'input',
+  RADIO = 'radio',
   CHECKBOX = 'checkbox',
   SELECT = 'select',
 }

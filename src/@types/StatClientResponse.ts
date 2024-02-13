@@ -1,0 +1,14 @@
+import { IKpi } from './Kpi';
+import { User } from './User';
+
+export interface StatClientResponse {
+  statClientId: string;
+  clientName: string;
+  admin: User;
+  kpis: Array<{
+    kpi: string | IKpi;
+    response: Array<any>;
+  }>;
+  deletedAt: Date;
+  createdAt: Date;
+}

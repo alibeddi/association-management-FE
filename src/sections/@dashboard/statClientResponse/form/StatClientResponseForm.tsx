@@ -1,9 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { LoadingButton } from '@mui/lab';
+import { Grid } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import FormProvider from '../../../../components/hook-form';
 import { RootState, useSelector } from '../../../../redux/store';
+import { generateFieldValidation } from './utils/generateFieldValidation';
+import RenderField from './utils/renderFormField';
 
 type Props = {
   isEdit?: boolean;
@@ -14,22 +17,21 @@ type Props = {
 
 export default function StatClientForm() {
   const { kpis } = useSelector((state: RootState) => state.kpis);
-  // const NewUserSchema = Yup.object().shape(() => {
-  //   return {};
-  // });
   // yup validation
+  const validationsFields: { [key: string]: any } = {};
   const NewClientStatusSchema = Yup.object().shape({ name: Yup.number() });
-
+  kpis.docs.forEach((field) => {
+    const schema = generateFieldValidation(field);
+    validationsFields[field.name] = schema;
+  });
   const methods = useForm({
-    resolver: yupResolver(NewClientStatusSchema),
+    resolver: yupResolver(Yup.object({ ...validationsFields })),
   });
   const {
     handleSubmit,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting },
     watch,
   } = methods;
-  const formValues = watch();
-
   const onSubmit = async (data: any) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -41,7 +43,19 @@ export default function StatClientForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      dfsgvdfg
+      <Grid
+        container
+        style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '1rem' }}
+      >
+        {kpis.docs.map((kpi) => (
+          <Grid item md={6} xs={6}>
+            {RenderField(kpi)}
+          </Grid>
+        ))}
+      </Grid>
+      <LoadingButton sx={{}} type="submit" variant="contained" loading={isSubmitting}>
+        Save Changes
+      </LoadingButton>
     </FormProvider>
   );
 }

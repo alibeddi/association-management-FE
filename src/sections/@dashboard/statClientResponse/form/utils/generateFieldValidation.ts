@@ -9,7 +9,7 @@ export function generateFieldValidation(kpi: IKpi) {
       schema = Yup.array();
       break;
     case 'string':
-      schema = Yup.string();
+      schema = Yup.string().max(2);
       break;
     case 'boolean':
       schema = Yup.boolean();

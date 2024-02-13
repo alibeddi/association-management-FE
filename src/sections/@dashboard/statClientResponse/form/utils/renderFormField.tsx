@@ -1,7 +1,12 @@
 // @mui
 import { Divider, MenuItem } from '@mui/material';
 // components
-import { RHFCheckbox, RHFSelect, RHFTextField } from '../../../../../components/hook-form';
+import {
+  RHFCheckbox,
+  RHFRadioGroup,
+  RHFSelect,
+  RHFTextField
+} from '../../../../../components/hook-form';
 // types
 import { FrontType, IKpi } from '../../../../../@types/Kpi';
 
@@ -16,24 +21,14 @@ function RenderField(kpi: IKpi, values?: any) {
         multiline
         rows={5}
         label={kpi.name}
-        helperText={kpi?.label}
       />
     ),
-    checkbox: (
-      <RHFCheckbox
-        name={componentName}
-        id={kpi?._id}
-        label={kpi.name}
-        sx={{ mt: 3 }}
-        helperText={kpi?.label}
-      />
-    ),
+    checkbox: <RHFCheckbox name={componentName} id={kpi?._id} label={kpi.name} sx={{ mt: 3 }} />,
     select: (
       <RHFSelect
         name={componentName}
         label={kpi.name}
         placeholder={kpi?.name}
-        helperText={kpi?.label}
         id={kpi?._id}
       >
         <MenuItem value="" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
@@ -47,13 +42,15 @@ function RenderField(kpi: IKpi, values?: any) {
         ))}
       </RHFSelect>
     ),
-    input: (
-      <RHFTextField
-        name={componentName}
-        type="string"
-        label={kpi.name}
+    radio: (
+      <RHFRadioGroup
+        row
         id={kpi?._id}
-        helperText={kpi?.label}
+        name={componentName}
+        options={
+          kpi.options ? kpi.options.map((option) => ({ label: String(option), value: option })) : []
+        }
+        label={kpi.label}
       />
     ),
   };

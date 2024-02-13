@@ -24,10 +24,10 @@ export const KpiEdit = Loadable(lazy(() => import('../pages/Kpis/KpiEditPage')))
 export const KpiView = Loadable(lazy(() => import('../pages/Kpis/KpiDetailsPage')));
 // client status
 export const ClienStatusList = Loadable(
-  lazy(() => import('../pages/ClientStatus/StatClientListPage'))
+  lazy(() => import('../pages/StatClientresponse/StatClientResListPage'))
 );
 export const ClienStatusNew = Loadable(
-  lazy(() => import('../pages/ClientStatus/StatClientNewPage'))
+  lazy(() => import('../pages/StatClientresponse/StatClientResNewPage'))
 );
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
