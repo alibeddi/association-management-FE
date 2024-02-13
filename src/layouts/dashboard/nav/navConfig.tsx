@@ -9,6 +9,7 @@ import {
   ic_lock,
   ic_calendar,
   ic_call,
+  ic_stats_client,
 } from '../../../assets/icons/navbar';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
@@ -19,6 +20,7 @@ const ICONS = {
   groupPermissions: icon(ic_lock),
   calendar: icon(ic_calendar),
   calls: icon(ic_call),
+  statsClient: icon(ic_stats_client)
 };
 
 export default function navConfig(user: AuthUserType) {
@@ -66,6 +68,12 @@ export default function navConfig(user: AuthUserType) {
           icon: ICONS.calls,
           toBeDisplayed: hasAccessToCalls,
         },
+        {
+          title:"stats-client",
+          path: PATH_DASHBOARD.statsClient.root,
+          icon: ICONS.statsClient,
+          toBeDisplayed: true,
+        }
       ],
     },
   ];
