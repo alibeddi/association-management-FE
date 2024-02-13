@@ -5,12 +5,12 @@ import {
   RHFCheckbox,
   RHFRadioGroup,
   RHFSelect,
-  RHFTextField
+  RHFTextField,
 } from '../../../../../components/hook-form';
 // types
 import { FrontType, IKpi } from '../../../../../@types/Kpi';
 
-function RenderField(kpi: IKpi, values?: any) {
+function RenderField(kpi: IKpi) {
   const componentName = kpi?.name;
   const components: Record<FrontType, JSX.Element> = {
     textarea: (
@@ -25,12 +25,7 @@ function RenderField(kpi: IKpi, values?: any) {
     ),
     checkbox: <RHFCheckbox name={componentName} id={kpi?._id} label={kpi.name} sx={{ mt: 3 }} />,
     select: (
-      <RHFSelect
-        name={componentName}
-        label={kpi.name}
-        placeholder={kpi?.name}
-        id={kpi?._id}
-      >
+      <RHFSelect name={componentName} label={kpi.name} placeholder={kpi?.name} id={kpi?._id}>
         <MenuItem value="" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
           None
         </MenuItem>

@@ -60,7 +60,7 @@ export default function navConfig(user: AuthUserType) {
         },
         {
           title: 'Stat-clients',
-          path: PATH_DASHBOARD.clientStatus.root,
+          path: PATH_DASHBOARD.clientStatusResponse.root,
           icon: ICONS.clientStatus,
           tobeDisplayed: true,
         },

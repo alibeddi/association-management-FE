@@ -1,10 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Grid } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
+import { IKpi } from '../../../../@types/Kpi';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
-import { RootState, useSelector } from '../../../../redux/store';
+import { useLocales } from '../../../../locales';
+import { createStatClientResponse } from '../../../../redux/slices/statClientResponse/actions';
+import { dispatch, RootState, useSelector } from '../../../../redux/store';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { generateFieldValidation } from './utils/generateFieldValidation';
 import RenderField from './utils/renderFormField';
 
@@ -12,12 +18,20 @@ type Props = {
   isEdit?: boolean;
   kpiDetails?: boolean;
   // TODO: add the type
-  currentStatClient?: any | null;
+  currentStatClientResponse?: any | null;
 };
 
-export default function StatClientForm() {
+export default function StatClientForm({
+  isEdit = false,
+  kpiDetails = false,
+  currentStatClientResponse,
+}: Props) {
   const { kpis } = useSelector((state: RootState) => state.kpis);
-  // yup validation
+  const { enqueueSnackbar } = useSnackbar();
+  const { translate } = useLocales();
+  const navigate = useNavigate();
+
+  // form validation
   const validationsFields: { [key: string]: any } = {};
   kpis.docs.forEach((field) => {
     const schema = generateFieldValidation(field);
@@ -28,17 +42,46 @@ export default function StatClientForm() {
     clientName: Yup.string().min(2).max(60),
     clientContact: Yup.string().min(2).max(60),
   });
+
   const methods = useForm({
     resolver: yupResolver(NewClientStatusSchema),
   });
   const {
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = methods;
+
   const onSubmit = async (data: any) => {
     try {
+      console.log(data.componentName);
       await new Promise((resolve) => setTimeout(resolve, 500));
-      console.log({ data });
+      if (!isEdit) {
+        const formattedData = (values: any, kpis: IKpi[]) => {
+          let array = [];
+          const formFields = Object.keys(values);
+          for (const field of formFields) {
+            const foundKpi = kpis.find((kpi) => kpi.name === field);
+            if (foundKpi && values[field]) {
+              array.push({ kpi: foundKpi._id, response: [values[field]] });
+            }
+          }
+          return array;
+        };
+        const body = {
+          clientName: data['clientName'],
+          kpis: formattedData(data, kpis.docs),
+        };
+        dispatch(createStatClientResponse({ statClientId: '', body })).then((res: any) => {
+          if (res?.meta?.requestStatus === 'fulfilled') {
+            enqueueSnackbar(`${translate(res?.payload.message)}`);
+            reset();
+            navigate(PATH_DASHBOARD.clientStatusResponse.root);
+          } else {
+            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+          }
+        });
+      }
     } catch (error) {
       console.error(error);
     }

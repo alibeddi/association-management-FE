@@ -21,7 +21,6 @@ export default function ClientStatusListPage() {
     MethodCode.CREATE
   );
 
-
   return (
     <>
       <Helmet>
@@ -36,7 +35,7 @@ export default function ClientStatusListPage() {
             isAllowedToCreateClientStatus && (
               <Button
                 component={RouterLink}
-                to={PATH_DASHBOARD.clientStatus.new}
+                to={PATH_DASHBOARD.clientStatusResponse.new}
                 variant="contained"
                 startIcon={<Iconify icon="eva:plus-fill" />}
               >
