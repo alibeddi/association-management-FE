@@ -8,8 +8,8 @@ import { useSettingsContext } from '../components/settings';
 import { CallForm } from '../sections/@dashboard/Calls';
 import { ICall } from '../@types/Call';
 import { RootState, useDispatch,useSelector } from '../redux/store';
-import { createCallsToday, getCallByDate, getMyCalls, updateCall } from '../redux/slices/calls/actions';
-import { CurrentDate, fDate, fDateTime } from '../utils';
+import { createCallsToday, getCallByDate, updateCall } from '../redux/slices/calls/actions';
+import { CurrentDate} from '../utils';
 import { useSnackbar } from '../components/snackbar';
 
 
@@ -20,7 +20,6 @@ export default function Dashboard() {
   const dispatch = useDispatch()
   const {enqueueSnackbar} = useSnackbar()
   const { themeStretch } = useSettingsContext();
-  const {calls} = useSelector((state:RootState)=>state.calls)
   const currentDate = CurrentDate().toISOString();
   const [callDate,setCallDate] = useState<Date | string >(currentDate)
   useEffect(()=>{
@@ -33,7 +32,6 @@ export default function Dashboard() {
   const handleCreateUpdate = async (call: ICall) => {
     if(!callSelected){
       await dispatch(createCallsToday(call)).unwrap().then(res=>{
-        const {data} = res;
         enqueueSnackbar('created with success')
       }).catch(err=>{console.error(err);enqueueSnackbar(err.message,{variant:"error"})})
     }else{
