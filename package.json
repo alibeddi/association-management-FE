@@ -7,7 +7,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "webpack",
-    "serve": "npx serve -s build -l 4999",
+    "serve": "npm run build && npx serve -s build -l 4999",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx .",
     "lint:fix": "eslint --fix --ext .ts,.tsx,.js,.jsx .",
@@ -34,6 +34,7 @@
     ]
   },
   "dependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.23.4",
     "@babel/types": "^7.23.9",
     "@emotion/cache": "^11.10.5",
     "@emotion/react": "^11.10.6",

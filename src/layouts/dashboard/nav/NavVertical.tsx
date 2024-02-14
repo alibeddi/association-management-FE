@@ -36,7 +36,6 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
   const { pathname } = useLocation();
   const { user } = useAuthContext();
   const navConfig = navConfigItems(user);
-
   const isDesktop = useResponsive('up', 'lg');
 
   useEffect(() => {

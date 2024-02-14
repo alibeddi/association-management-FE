@@ -9,6 +9,8 @@ import {
   ic_lock,
   ic_calendar,
   ic_user,
+  ic_call,
+  ic_stats_client,
 } from '../../../assets/icons/navbar';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
@@ -18,6 +20,8 @@ const ICONS = {
   settings: icon(ic_settings),
   groupPermissions: icon(ic_lock),
   calendar: icon(ic_calendar),
+  calls: icon(ic_call),
+  statsClient: icon(ic_stats_client),
   clientStatus: icon(ic_user),
 };
 
@@ -30,6 +34,8 @@ export default function navConfig(user: AuthUserType) {
     ModelCode.PERMISSION_GROUP,
     MethodCode.LIST
   );
+  const hasAccessToCalendar = hasPermission(userPermissions, ModelCode.WORKTIME, MethodCode.LIST);
+  const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
   const config = [
     {
       subheader: '',
@@ -38,31 +44,43 @@ export default function navConfig(user: AuthUserType) {
           title: 'operators',
           path: PATH_DASHBOARD.operators,
           icon: ICONS.operators,
-          tobeDisplayed: hasAccessToUsers,
+          toBeDisplayed: hasAccessToUsers,
         },
         {
           title: 'kpis',
           path: PATH_DASHBOARD.kpis.root,
           icon: ICONS.settings,
-          tobeDisplayed: hasAccessToKpis,
+          toBeDisplayed: hasAccessToKpis,
         },
         {
           title: 'group permissions',
           path: PATH_DASHBOARD.groupPermissions,
           icon: ICONS.groupPermissions,
-          tobeDisplayed: hasAccessToGroupPermissions,
+          toBeDisplayed: hasAccessToGroupPermissions,
         },
         {
           title: 'calendar',
           path: PATH_DASHBOARD.calender,
           icon: ICONS.calendar,
-          tobeDisplayed: true,
+          toBeDisplayed: hasAccessToCalendar,
+        },
+        {
+          title: 'calls',
+          path: PATH_DASHBOARD.calls,
+          icon: ICONS.calls,
+          toBeDisplayed: hasAccessToCalls,
+        },
+        {
+          title: 'stats-client',
+          path: PATH_DASHBOARD.statsClient.root,
+          icon: ICONS.statsClient,
+          toBeDisplayed: true,
         },
         {
           title: 'Stat-clients',
           path: PATH_DASHBOARD.clientStatusResponse.root,
           icon: ICONS.clientStatus,
-          tobeDisplayed: true,
+          toBeDisplayed: true,
         },
       ],
     },

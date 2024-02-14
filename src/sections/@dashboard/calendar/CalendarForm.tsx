@@ -6,21 +6,21 @@ import { EventInput } from '@fullcalendar/core';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions } from '@mui/material';
+import { Box, Stack, Button, Tooltip, IconButton, DialogActions } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // time
 import { isBefore } from 'date-fns';
-import { addOneHour, isStartOfHour } from '../../../utils';
+import { addOneHour } from '../../../utils';
 
 
 // @types
 import { ICalendarEvent } from '../../../@types/calendar';
 // components
 import Iconify from '../../../components/iconify';
-import { ColorSinglePicker } from '../../../components/color-utils';
-import FormProvider, { RHFTextField, RHFSwitch, RHFDateTimePicker } from '../../../components/hook-form';
+import FormProvider, { RHFDateTimePicker } from '../../../components/hook-form';
+
 
 // ----------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ export default function CalendarForm({
       ? isBefore(new Date(values.endDate), new Date(values.startDate))
       : false;
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={3} sx={{ px: 3 }}>
           <Controller

@@ -21,6 +21,7 @@ export default function RHFTextField({
   inputRef,
   id,
   label,
+  defaultValue,
   ...other
 }: Props) {
   const { translate } = useLocales();
@@ -32,7 +33,7 @@ export default function RHFTextField({
     <Controller
       name={name}
       control={control}
-      defaultValue=""
+      defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => (
         <Tooltip title={`${translate(helperText)}` || `${translate(label)}`}>
           <TextField
@@ -46,7 +47,6 @@ export default function RHFTextField({
             fullWidth
             onWheel={handleWheel}
             value={field.value === null ? '' : field.value}
-            inputRef={field.ref}
             multiline={multiline !== undefined && true}
             rows={rows}
             onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {

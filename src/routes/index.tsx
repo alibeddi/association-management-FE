@@ -12,6 +12,7 @@ import { MethodCode, ModelCode } from '../@types/Permission';
 import PermissionGuard from '../auth/PermissionsGuard';
 import {
   Calendar,
+  Call,
   ClienStatusList,
   ClienStatusNew,
   KpiEdit,
@@ -22,6 +23,8 @@ import {
   OperatorList,
   Page404,
   PermissionGroup,
+  StatsClient,
+  StatsClientNew,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -114,6 +117,18 @@ export default function Router() {
           path: 'calendar',
           element: <Calendar />,
         },
+        {
+          path: "calls",
+          element: <Call/>
+        },
+        {
+          path:"stats-client",
+          element: <StatsClient/>
+        },
+        {
+          path:'stats-client/new',
+          element: <StatsClientNew/>
+        }
       ],
     },
     {

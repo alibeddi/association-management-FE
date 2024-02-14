@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // form
-import { useFormContext, Controller, useForm } from 'react-hook-form';
+import { useFormContext, Controller } from 'react-hook-form';
 // @mui
 import {
   Checkbox,
