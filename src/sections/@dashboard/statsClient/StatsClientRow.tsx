@@ -93,65 +93,6 @@ export default function StatsClientRow({
   </Typography>
 </TableCell>
 
-        {/* <TableCell align="left">
-          <Box
-            sx={{
-              maxWidth: 125,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            {label}
-          </Box>
-        </TableCell>
-
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {frontType}
-        </TableCell>
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {backType}
-        </TableCell>
-
-        <TableCell align="center">
-          <Box
-            sx={{
-              color: isRequired ? '#3EAB55' : 'red',
-              bgcolor: isRequired ? '#AFE1AF' : 'pink',
-              borderRadius: '6px',
-            }}
-          >
-            {isRequired.toString()}
-          </Box>
-        </TableCell>
-        <TableCell align="left">
-          {options && options?.length > 0 ? (
-            <Tooltip
-              title={
-                <>
-                  {options?.map((option, index) => (
-                    <p key={index}>{option}</p>
-                  ))}
-                </>
-              }
-            >
-              <Box
-                sx={{
-                  maxWidth: 100,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {options?.join(', ')}
-              </Box>
-            </Tooltip>
-          ) : (
-            <Box>No options...</Box>
-          )}
-        </TableCell>
-        <TableCell align="left">{fDate(createdAt)}</TableCell> 
-        */}
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
