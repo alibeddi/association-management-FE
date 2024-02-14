@@ -1,13 +1,13 @@
 export enum FrontType {
   TEXTAREA = 'textarea',
-  RADIO = 'input',
+  RADIO = 'radio',
   CHECKBOX = 'checkbox',
   SELECT = 'select',
 }
 export enum BackType {
-  STRING = 'String',
-  BOOLEAN = 'Boolean',
-  ARRAY = 'Array',
+  STRING = 'string',
+  BOOLEAN = 'boolean',
+  ARRAY = 'array',
 }
 
 export interface IKpi {
