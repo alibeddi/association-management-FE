@@ -55,8 +55,8 @@ export default function RHFAutocomplete<
             onChange={(_, data) => {
               const myArray: any[] = data as any[];
               if (soloSelected && myArray && myArray?.length > 0) {
-                console.log({myArray})
-                // 
+                console.log({ myArray });
+                //
                 field.onChange([myArray?.pop()]);
               } else {
                 field.onChange(myArray);
