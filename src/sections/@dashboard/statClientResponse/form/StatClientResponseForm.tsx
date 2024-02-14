@@ -26,21 +26,24 @@ export default function StatClientForm({
   kpiDetails = false,
   currentStatClientResponse,
 }: Props) {
-  const { kpis } = useSelector((state: RootState) => state.kpis);
+  const { statsClient } = useSelector((state: RootState) => state.statsClient);
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
   const navigate = useNavigate();
 
   // form validation
   const validationsFields: { [key: string]: any } = {};
-  kpis.docs.forEach((field) => {
-    const schema = generateFieldValidation(field);
-    validationsFields[field.name] = schema;
-  });
+  if (statsClient.kpis) {
+    statsClient.kpis.forEach((field) => {
+      const schema = generateFieldValidation(field);
+      validationsFields[field.name] = schema;
+    });
+  }
+
   const NewClientStatusSchema = Yup.object().shape({
     ...validationsFields,
-    clientName: Yup.string().min(2).max(60),
-    clientContact: Yup.string().min(2).max(60),
+    clientName: Yup.string().min(2).max(60).required(),
+    clientContact: Yup.string().min(2).max(60).required(),
   });
 
   const methods = useForm({
@@ -58,7 +61,7 @@ export default function StatClientForm({
       if (!isEdit) {
         const body = {
           clientName: data.clientName,
-          kpis: formatFormValues(data, kpis.docs),
+          kpis: formatFormValues(data, statsClient.kpis),
         };
         dispatch(createStatClientResponse({ statClientId: '', body })).then((res: any) => {
           if (res?.meta?.requestStatus === 'fulfilled') {
@@ -91,7 +94,7 @@ export default function StatClientForm({
             >
               <RHFTextField name="clientName" label="Client Name" type="text" />
               <RHFTextField name="clientContact" label="Client Contact" type="text" />
-              {kpis.docs.map((kpi) => RenderField(kpi))}
+              {statsClient.kpis && statsClient.kpis.map((kpi) => RenderField(kpi))}
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

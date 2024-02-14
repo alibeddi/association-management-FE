@@ -1,5 +1,7 @@
+import { IKpi } from './Kpi';
+
 export type IStatsClient = {
-  _id?:string;
+  _id?: string;
   name: string;
-  kpis: string[];
-}
+  kpis: IKpi[];
+};

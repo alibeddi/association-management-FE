@@ -85,7 +85,7 @@ export default function Router() {
           ],
         },
         {
-          path: 'stat-client',
+          path: 'stat-client-response',
           element: (
             // TODO: replace the kpi with the ClientStatus
             <PermissionGuard model={ModelCode.KPI} method={MethodCode.LIST}>
@@ -96,11 +96,11 @@ export default function Router() {
             { path: '', element: <ClienStatusList /> },
             { path: 'new', element: <ClienStatusNew /> },
             {
-              path: 'edit/:id',
+              path: 'edit/:statClientId/:statClienRestId',
               element: <KpiEdit />,
             },
             {
-              path: 'view/:id',
+              path: 'view/:statClientId/:statClienRestId',
               element: <KpiView />,
             },
           ],
@@ -118,17 +118,17 @@ export default function Router() {
           element: <Calendar />,
         },
         {
-          path: "calls",
-          element: <Call/>
+          path: 'calls',
+          element: <Call />,
         },
         {
-          path:"stats-client",
-          element: <StatsClient/>
+          path: 'stats-client',
+          element: <StatsClient />,
         },
         {
-          path:'stats-client/new',
-          element: <StatsClientNew/>
-        }
+          path: 'stats-client/new',
+          element: <StatsClientNew />,
+        },
       ],
     },
     {

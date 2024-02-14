@@ -37,6 +37,7 @@ export default function RHFSwitch({ name, label, helperText, ...other }: Props) 
               control={
                 <Switch
                   {...field}
+                  readOnly
                   checked={
                     field?.value === undefined ||
                     field?.value === '' ||

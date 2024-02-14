@@ -129,8 +129,8 @@ export default function UserNewEditDeatilsForm({
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField disabled={kpiDetails} name="name" label="Name *" />
-              <RHFTextField disabled={kpiDetails} name="label" label="Label Name" />
+              <RHFTextField inputProps={{ readOnly: kpiDetails }} name="name" label="Name *" />
+              <RHFTextField inputProps={{ readOnly: kpiDetails }} name="label" label="Label Name" />
               <RHFSelect
                 disabled={kpiDetails}
                 native
@@ -160,7 +160,7 @@ export default function UserNewEditDeatilsForm({
                 ))}
               </RHFSelect>
               <RHFAutocomplete
-                disabled={kpiDetails}
+                readOnly={kpiDetails}
                 name="options"
                 label="options"
                 multiple

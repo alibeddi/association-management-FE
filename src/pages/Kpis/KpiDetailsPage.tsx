@@ -30,12 +30,8 @@ export default function KpiDetailsPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="view a Kpi Details"
+          heading="View a Kpi Details"
           links={[
-            {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
             {
               name: 'Kpi',
               href: PATH_DASHBOARD.kpis.root,

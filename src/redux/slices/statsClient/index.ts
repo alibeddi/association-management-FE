@@ -46,7 +46,7 @@ const slice = createSlice({
       })
       .addCase(getOneStatClient.fulfilled, (state, { payload }) => {
         state.status = IStatus.SUCCEEDED;
-        state.statsClients = payload.data;
+        state.statsClient = payload.data;
       })
       .addCase(getOneStatClient.rejected, (state) => {
         state.status = IStatus.FAILED;

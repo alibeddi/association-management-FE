@@ -34,10 +34,6 @@ export default function KpiEditPage() {
           heading="Edit a Kpi"
           links={[
             {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            {
               name: 'Kpi',
               href: PATH_DASHBOARD.kpis.root,
             },
