@@ -5,12 +5,12 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
-import { IKpi } from '../../../../@types/Kpi';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 import { useLocales } from '../../../../locales';
 import { createStatClientResponse } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { formatFormValues } from './utils/formatFormValues';
 import { generateFieldValidation } from './utils/generateFieldValidation';
 import RenderField from './utils/renderFormField';
 
@@ -54,23 +54,11 @@ export default function StatClientForm({
 
   const onSubmit = async (data: any) => {
     try {
-      console.log(data.componentName);
       await new Promise((resolve) => setTimeout(resolve, 500));
       if (!isEdit) {
-        const formattedData = (values: any, kpis: IKpi[]) => {
-          let array = [];
-          const formFields = Object.keys(values);
-          for (const field of formFields) {
-            const foundKpi = kpis.find((kpi) => kpi.name === field);
-            if (foundKpi && values[field]) {
-              array.push({ kpi: foundKpi._id, response: [values[field]] });
-            }
-          }
-          return array;
-        };
         const body = {
-          clientName: data['clientName'],
-          kpis: formattedData(data, kpis.docs),
+          clientName: data.clientName,
+          kpis: formatFormValues(data, kpis.docs),
         };
         dispatch(createStatClientResponse({ statClientId: '', body })).then((res: any) => {
           if (res?.meta?.requestStatus === 'fulfilled') {
@@ -101,8 +89,8 @@ export default function StatClientForm({
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name={'clientName'} label={'Client Name'} type="text" />
-              <RHFTextField name={'clientContact'} label={'Client Contact'} type="text" />
+              <RHFTextField name="clientName" label="Client Name" type="text" />
+              <RHFTextField name="clientContact" label="Client Contact" type="text" />
               {kpis.docs.map((kpi) => RenderField(kpi))}
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

@@ -22,15 +22,15 @@ export const Kpis = Loadable(lazy(() => import('../pages/Kpis/KpisListPage')));
 export const KpiNew = Loadable(lazy(() => import('../pages/Kpis/KpiNewPage')));
 export const KpiEdit = Loadable(lazy(() => import('../pages/Kpis/KpiEditPage')));
 export const KpiView = Loadable(lazy(() => import('../pages/Kpis/KpiDetailsPage')));
-export const Call = Loadable(lazy(()=>import('../pages/Calls')));
-export const StatsClient = Loadable(lazy(()=>import('../pages/statsClient')))
-export const StatsClientNew = Loadable(lazy(()=>import('../pages/statsClient/new')))
+export const Call = Loadable(lazy(() => import('../pages/Calls')));
+export const StatsClient = Loadable(lazy(() => import('../pages/statsClient')));
+export const StatsClientNew = Loadable(lazy(() => import('../pages/statsClient/new')));
 // client status
 export const ClienStatusList = Loadable(
-  lazy(() => import('../pages/StatClientresponse/StatClientResListPage'))
+  lazy(() => import('../pages/StatClientResponse/StatClientResListPage'))
 );
 export const ClienStatusNew = Loadable(
-  lazy(() => import('../pages/StatClientresponse/StatClientResNewPage'))
+  lazy(() => import('../pages/StatClientResponse/StatClientResNewPage'))
 );
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
