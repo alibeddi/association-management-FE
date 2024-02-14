@@ -61,90 +61,104 @@ const styleFlexColumn = {
       {
         display:'flex',
         flexDirection:'column',
-        gap:'1rem'
+        gap:'1rem',
+        minHeight:'30rem',
+        justifyContent:'space-between'
       }
     }>
+      <Stack>
       <RHFTextField
       name="name"
       label="name of forum"
       required
       />
-
-<Stack sx={styleFlexColumn} >
-{
-  select.length >   0 ? select.map((s,index)=>(   <>            
-    <Stack
-    key={s.num}
-    sx={{
-      flexDirection:'row',
-      display:'flex',
-      alignItems: 'center',
-      gap:'1rem',
-      width:"100%"
-    }}
-      >
-           <Controller
-            name={`stats-client-${s.num}`}
-            control={methods.control}
-            defaultValue=""
-            render={({ field }) => (
-              <RHFAutocomplete
-                {...field}
-                freeSolo
-                label={`Question n°: ${index}`}
-                getOptionLabel={(option) => (typeof option === 'string' ? option : option.name || '')}
-                options={kpis.docs}
-                required
-                onChange={(_, value) => {
-                  setSelect(prev => {
-                    const updatedSelect = [...prev];
-                    updatedSelect[index] = { num: s.num, value: value || "" };
-                    return updatedSelect;
-                  });
-                  field.onChange(value); // This line is to update react-hook-form's internal state
-                }}
-                sx={{ flexBasis: '80%' }}
+<Stack sx={{
+  display:'flex',
+  flexDirection:'row',
+  flexBasis:'100%'
+}}>
+    <Stack sx={{...styleFlexColumn,flexBasis:'50%',padding:'1rem'}} >
+    <Typography>Question</Typography>
+    {
+      select.length >   0 ? select.map((s,index)=>(   <>            
+        <Stack
+        key={s.num}
+        sx={{
+          flexDirection:'row',
+          display:'flex',
+          alignItems: 'center',
+          gap:'1rem',
+          width:"100%"
+        }}
+          >
+              <Controller
+                name={`stats-client-${s.num}`}
+                control={methods.control}
+                defaultValue=""
+                render={({ field }) => (
+                  <RHFAutocomplete
+                    {...field}
+                    freeSolo
+                    label={`Question n°: ${index}`}
+                    getOptionLabel={(option) => (typeof option === 'string' ? option : option.name || '')}
+                    options={kpis.docs}
+                    required
+                    onChange={(_, value) => {
+                      setSelect(prev => {
+                        const updatedSelect = [...prev];
+                        updatedSelect[index] = { num: s.num, value: value || "" };
+                        return updatedSelect;
+                      });
+                      field.onChange(value); // This line is to update react-hook-form's internal state
+                    }}
+                    sx={{ flexBasis: '80%' }}
+                  />
+                )}
               />
-            )}
-          />
-          <Button
-      variant='contained'
-      color="error"
-      onClick={ ()=> {removeSelect(index);unregister(`stats-client-${s.num}`)}}
-      size='large'
-      >
-        <DeleteIcon  />
-      </Button>
+              <Button
+          variant='contained'
+          color="error"
+          onClick={ ()=> {removeSelect(index);unregister(`stats-client-${s.num}`)}}
+          size='large'
+          >
+            <DeleteIcon  />
+          </Button>
+          </Stack>
+        </>)) : <Box>
+          <Typography sx={
+            {
+              padding:'1rem',
+              color:'#888080'
+            }
+          }> No Question selected </Typography>
+        </Box>
+    }
+    </Stack>
+
+
+    <Stack sx={{
+        display:'flex',
+        gap:'1rem',
+        padding:'1rem',
+        flexBasis:'50%'
+    }}>
+      <Typography>Overview</Typography>
+      <Stack sx={styleFlexColumn}>
+      {
+      select.length > 0 ? select.map((s, index) => {
+        const { num, value } = s;
+        return <Box key={index} >
+        <Typography>{value.label && value.label !=="" && `${value.label} :` }</Typography>
+        <Box>
+          <RenderField {...value} />
+        </Box>
+        </Box>
+      }) : <Typography color='#888080'>No Content </Typography>
+    }
       </Stack>
-    </>)) : <Box>
-      <Typography sx={
-        {
-          padding:'1rem',
-          color:'#888080'
-        }
-      }> No Question selected </Typography>
-    </Box>
- }
+    </Stack>
 </Stack>
-
-
- <Stack sx={{
-    display:'flex',
-    gap:'1rem',
-    padding:'1rem'
- }}>
-  <Typography>Overview</Typography>
-  <Stack sx={styleFlexColumn}>
-  {
-  select.length > 0 ? select.map((s, index) => {
-    const { num, value } = s;
-    return <Box>
-       <RenderField key={index} {...value} />
-    </Box>
-  }) : <Typography color='#888080'>No Content </Typography>
- }
-  </Stack>
- </Stack>
+      </Stack>
  
      <Box
      sx={{

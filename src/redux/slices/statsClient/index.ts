@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatsClient } from '../../../@types/statsClient';
 import { IStatus } from '../../../@types/status';
-import { createStatsClient,getAllStatsClient,getSingleStatsClient } from './action';
+import { createStatsClient,getAllStatsClient,getSingleStatsClient,deleteStatsClient } from './action';
 
 type StatsClientState = {
   statsClients : PaginationModel<IStatsClient>,
@@ -48,6 +48,16 @@ const slice = createSlice({
       state.statsClient = payload.data;
     })
     .addCase(getSingleStatsClient.rejected,(state)=>{
+      state.status = IStatus.FAILED;
+    })
+    .addCase(deleteStatsClient.pending,(state)=>{
+      state.status = IStatus.LOADING;
+    })
+    .addCase(deleteStatsClient.fulfilled,(state,{payload})=>{
+      state.status = IStatus.SUCCEEDED;
+      console.log("delete : ", {payload})
+    })
+    .addCase(deleteStatsClient.rejected,(state)=>{
       state.status = IStatus.FAILED;
     })
   }

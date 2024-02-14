@@ -53,6 +53,16 @@ export const getSingleStatsClient = createAsyncThunk('/statsClient/single',async
     return Promise.reject(error.message ?? data?.message)
   }
 })
-export const deleteStatsClient = createAsyncThunk('/statsClient/delete',async () => {
-  
+export const deleteStatsClient = createAsyncThunk('/statsClient/delete',async ({id}:{id:string}) => {
+  let data;
+  try {
+    const response = await axios.delete(`/${STAT_CLIENT_URI}/${id}`)
+    data = await response.data;
+    if(response.status===200){
+      return data;
+    }
+    throw new Error(response.statusText)
+  } catch (error) {
+    return Promise.reject(error.message ?? data?.message)
+  }
 })

@@ -40,7 +40,7 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 import { hasPermission } from '../Permissions/utils';
 import { MethodCode, ModelCode } from '../../../@types/Permission';
 import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis/actions';
-import { getAllStatsClient } from '../../../redux/slices/statsClient/action';
+import { deleteStatsClient, getAllStatsClient } from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
 
 // ----------------------------------------------------------------------
@@ -123,14 +123,8 @@ export default function StatsClientList() {
     setOpenConfirm(false);
   };
 
-  const handleDeleteRow = (id: string) => {
-    dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${res?.payload.message}`);
-      } else {
-        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
-      }
-    });
+  const handleDeleteRow = async (id: string) => {
+    await dispatch(deleteStatsClient({ id })).unwrap().then((res) => enqueueSnackbar(`${res.message}`)).catch(error=>enqueueSnackbar(`${error.message}`, { variant: 'error' }))
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
