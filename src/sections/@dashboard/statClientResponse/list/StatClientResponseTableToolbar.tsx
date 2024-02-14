@@ -7,7 +7,7 @@ import Iconify from '../../../../components/iconify';
 
 type Props = {
   placeholder: string;
-  filterName?: string;
+  filterClientName?: string;
   isFiltered?: boolean;
   onResetFilter?: VoidFunction;
   onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,7 +15,7 @@ type Props = {
 
 export default function StatClientResponseTableToolbar({
   isFiltered,
-  filterName,
+  filterClientName,
   onFilterName,
   onResetFilter,
   placeholder,
@@ -32,7 +32,7 @@ export default function StatClientResponseTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
+        value={filterClientName}
         onChange={onFilterName}
         placeholder={placeholder}
         InputProps={{

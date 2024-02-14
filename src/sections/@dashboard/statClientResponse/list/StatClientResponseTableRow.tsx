@@ -1,5 +1,3 @@
-import { useState } from 'react';
-// @mui
 import {
   Box,
   Button,
@@ -8,11 +6,9 @@ import {
   MenuItem,
   TableCell,
   TableRow,
-  Typography,
+  Typography
 } from '@mui/material';
-// utils
-import { fDate } from '../../../../utils/formatTime';
-// components
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MethodCode, ModelCode } from '../../../../@types/Permission';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
@@ -20,6 +16,7 @@ import { useAuthContext } from '../../../../auth/useAuthContext';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
+import { fDate } from '../../../../utils/formatTime';
 import { hasPermission } from '../../Permissions/utils';
 
 type Props = {
@@ -31,7 +28,7 @@ type Props = {
   onViewRow: VoidFunction;
 };
 
-export default function StatClientTableRow({
+export default function StatClientResponseTableRow({
   row,
   selected,
   onEditRow,
@@ -39,7 +36,7 @@ export default function StatClientTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { statClientId, admin, createdAt } = row;
+  const { admin, clientName, createdAt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -75,12 +72,6 @@ export default function StatClientTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell>
-          <Typography variant="subtitle2" noWrap>
-            {statClientId}
-          </Typography>
-        </TableCell>
-
         <TableCell align="left">
           <Box
             sx={{
@@ -92,6 +83,12 @@ export default function StatClientTableRow({
           >
             {admin.firstName} {admin.lastName}
           </Box>
+        </TableCell>
+
+        <TableCell>
+          <Typography variant="subtitle2" noWrap>
+            {clientName}
+          </Typography>
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>

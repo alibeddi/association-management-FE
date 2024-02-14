@@ -1,1 +1,1 @@
-export const y = {};
+export { default as StatClientResponsesTables } from './StatClientResponseTable';

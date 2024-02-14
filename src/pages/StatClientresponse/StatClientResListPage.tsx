@@ -8,6 +8,7 @@ import Iconify from '../../components/iconify';
 import { useLocales } from '../../locales';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { hasPermission } from '../../sections/@dashboard/Permissions/utils';
+import { StatClientResponsesTables } from '../../sections/@dashboard/statClientResponse/list';
 
 export default function ClientStatusListPage() {
   const { translate } = useLocales();
@@ -44,7 +45,7 @@ export default function ClientStatusListPage() {
             )
           }
         />
-        {/* TODO: Client status table */}
+        <StatClientResponsesTables />
       </Container>
     </>
   );

@@ -2,7 +2,7 @@ import { Button, Card, IconButton, Table, TableBody, TableContainer, Tooltip } f
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IKpi } from '../../../../@types/Kpi';
+import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
@@ -11,31 +11,27 @@ import {
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
-  useTable,
+  useTable
 } from '../../../../components/table';
 import { useLocales } from '../../../../locales';
-import { deleteManykpis, deleteOnekpi, getKpis } from '../../../../redux/slices/kpis/actions';
+import { getAllStatClientResponses } from '../../../../redux/slices/statClientResponse/actions';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import KpiTableRow from '../../Kpis/list/KpiTableRow';
-import KpiTableToolbar from '../../Kpis/list/KpiTableToolbar';
+import StatClientResponseTableRow from './StatClientResponseTableRow';
+import StatClientResponseTableToolbar from './StatClientResponseTableToolbar';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'label', label: 'Label', align: 'left' },
-  { id: 'frontType', label: 'Frontend Type', align: 'left' },
-  { id: 'backType', label: 'Backend Type', align: 'left' },
-  { id: 'isRequired', label: 'Required', align: 'center' },
-  { id: 'options', label: 'Options', align: 'left' },
+  { id: 'admin', label: 'Admin', align: 'left' },
+  { id: 'clientName', label: 'Client Name', align: 'left' },
+  { id: 'kpis', label: 'Kpis', align: 'left' },
   { id: 'createdAt', label: 'Created At', align: 'left' },
   { label: '', align: 'center' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function KpisTable() {
+export default function StatClientResponsesTable() {
   const {
     dense,
     page,
@@ -61,39 +57,42 @@ export default function KpisTable() {
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
 
-  const [tableData, setTableData] = useState<IKpi[]>([]);
-  const [filterName, setFilterName] = useState('');
+  const [tableData, setTableData] = useState<StatClientResponse[]>([]);
+  const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const { kpis } = useSelector((state: RootState) => state?.kpis);
+  const { kpis } = useSelector((state: RootState) => state.kpis);
+  const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
 
   useEffect(() => {
-    dispatch(getKpis({ page, limit: rowsPerPage, orderBy, order, filterName }));
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
+    dispatch(
+      getAllStatClientResponses({ page, limit: rowsPerPage, orderBy, order, filterClientName })
+    );
+  }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName]);
 
   useEffect(() => {
-    setTableData(kpis?.docs);
-  }, [kpis]);
+    setTableData(statClientResponses?.docs);
+  }, [statClientResponses]);
 
-  const isFiltered = filterName !== '';
+  const isFiltered = filterClientName !== '';
 
-  const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
+  const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
 
-  const handleViewRow = (row: IKpi) => {
-    navigate(`${PATH_DASHBOARD.kpis.view}/${row._id}`, { state: { kpi: row } });
+  const handleViewRow = (row: StatClientResponse) => {
+    console.log('view');
   };
 
-  const handleEditRow = (row: IKpi) => {
-    navigate(`${PATH_DASHBOARD.kpis.edit}/${row._id}`, { state: { kpi: row } });
+  const handleEditRow = (row: StatClientResponse) => {
+    console.log('edit');
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
-    setFilterName(event.target.value);
+    setFilterClientName(event.target.value);
   };
 
   const handleResetFilter = () => {
-    setFilterName('');
+    setFilterClientName('');
   };
 
   const handleOpenConfirm = (id?: string) => {
@@ -105,36 +104,22 @@ export default function KpisTable() {
   };
 
   const handleDeleteRow = (id: string) => {
-    dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${res?.payload.message}`);
-      } else {
-        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
-      }
-    });
+    console.log('delete');
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    dispatch(deleteManykpis({ kpiIds: selectedRows })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${translate(res?.payload.message)}`);
-        dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
-      } else {
-        enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-      }
-      setSelected([]);
-    });
+    console.log('delete many');
   };
 
   return (
     <>
       <Card>
-        <KpiTableToolbar
+        <StatClientResponseTableToolbar
           onResetFilter={handleResetFilter}
           isFiltered={isFiltered}
-          filterName={filterName}
+          filterClientName={filterClientName}
           onFilterName={handleFilterName}
-          placeholder="Search by kpi Name..."
+          placeholder="Search by Admin Name..."
         />
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
@@ -174,8 +159,8 @@ export default function KpisTable() {
               />
 
               <TableBody>
-                {tableData?.map((row: IKpi) => (
-                  <KpiTableRow
+                {tableData?.map((row: StatClientResponse) => (
+                  <StatClientResponseTableRow
                     key={row._id}
                     row={row}
                     selected={selected.includes(row._id)}

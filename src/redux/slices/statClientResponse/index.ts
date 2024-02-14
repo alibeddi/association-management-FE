@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { StatClientResponse } from '../../../@types/StatClientResponse';
 import { IStatus } from '../../../@types/status';
-import { createStatClientResponse } from './actions';
+import { createStatClientResponse, getAllStatClientResponses } from './actions';
 
 type StatClientResState = {
   statClientResponses: PaginationModel<StatClientResponse>;
@@ -21,6 +21,7 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // create
     builder
       .addCase(createStatClientResponse.pending, (state) => {
         state.status = IStatus.FAILED;
@@ -30,6 +31,18 @@ const slice = createSlice({
         state.statClientResponse = action.payload.data;
       })
       .addCase(createStatClientResponse.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // get all
+    builder
+      .addCase(getAllStatClientResponses.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(getAllStatClientResponses.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.statClientResponses = action.payload.data;
+      })
+      .addCase(getAllStatClientResponses.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
