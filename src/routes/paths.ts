@@ -28,5 +28,6 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD,'/stats-client'),
     new: path(ROOTS_DASHBOARD,'/stats-client/new'),
     edit: path(ROOTS_DASHBOARD,'/stats-client/edit'),
+    view: path(ROOTS_DASHBOARD,'/stats-client/view')
   },
 };

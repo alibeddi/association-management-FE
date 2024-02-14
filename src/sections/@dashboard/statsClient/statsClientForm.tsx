@@ -1,5 +1,6 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useRef, useState } from 'react';
 import {  Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -51,7 +52,6 @@ const StatsClientForm = () => {
       kpis:kpisArray
     })).unwrap().then(res=>enqueueSnackbar(res.message)).catch(error=>enqueueSnackbar(error.message,{variant:'error'}))
   }
-console.log({select})
 const styleFlexColumn = {
   display:'flex',
   gap:'1rem',
@@ -78,6 +78,7 @@ const styleFlexColumn = {
     sx={{
       flexDirection:'row',
       display:'flex',
+      alignItems: 'center',
       gap:'1rem',
       width:"100%"
     }}
@@ -110,8 +111,9 @@ const styleFlexColumn = {
       variant='contained'
       color="error"
       onClick={ ()=> {removeSelect(index);unregister(`stats-client-${s.num}`)}}
+      size='large'
       >
-        Remove item
+        <DeleteIcon  />
       </Button>
       </Stack>
     </>)) : <Box>

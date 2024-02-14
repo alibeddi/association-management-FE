@@ -1,10 +1,11 @@
-import { Button, Container,Typography } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useSettingsContext } from '../../components/settings';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs'
 import { PATH_DASHBOARD } from '../../routes/paths';
 import Iconify from '../../components/iconify';
+import StatsClientList from '../../sections/@dashboard/statsClient/StatsClientList';
 
 const StatsClient = () => {
   console.log('test')
@@ -33,6 +34,7 @@ const StatsClient = () => {
             )
           }
         />
+        <StatsClientList/>
       </Container>
     </>
   );

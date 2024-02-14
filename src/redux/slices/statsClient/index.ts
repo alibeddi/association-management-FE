@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatsClient } from '../../../@types/statsClient';
 import { IStatus } from '../../../@types/status';
-import { createStatsClient,getAllStatsClient } from './action';
+import { createStatsClient,getAllStatsClient,getSingleStatsClient } from './action';
 
 type StatsClientState = {
   statsClients : PaginationModel<IStatsClient>,
@@ -40,7 +40,16 @@ const slice = createSlice({
     .addCase(getAllStatsClient.rejected,(state)=>{
       state.status = IStatus.FAILED;
     })
-
+    .addCase(getSingleStatsClient.pending,(state)=>{
+      state.status = IStatus.LOADING;
+    })
+    .addCase(getSingleStatsClient.fulfilled,(state,{payload})=>{
+      state.status = IStatus.SUCCEEDED;
+      state.statsClient = payload.data;
+    })
+    .addCase(getSingleStatsClient.rejected,(state)=>{
+      state.status = IStatus.FAILED;
+    })
   }
 })
 export const  {actions} = slice;

@@ -23,7 +23,7 @@ function RenderField(kpi: IKpi, values?: any) {
         label={kpi.name}
       />
     ),
-    checkbox: <RHFCheckbox name={componentName} id={kpi?._id} label={kpi.name} sx={{ mt: 3 }} />,
+    checkbox: <RHFCheckbox name={componentName} id={kpi?._id} label={kpi.name} sx={{ mt: 1,mb:1 }} />,
     select: (
       <RHFSelect
         name={componentName}
