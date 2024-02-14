@@ -9,15 +9,24 @@ import { RootState, useDispatch, useSelector } from '../../../redux/store';
 
 
 const StatsClientForm = () => {
-  const [select,setSelect] = useState();
+  
+  const methods = useForm();
+  const {control,handleSubmit,setValue,register} = methods
   const dispatch = useDispatch()
-  const [numSelect,setNumSelect] = useState(0)
+  const [numSelect,setNumSelect] = useState<number>(0)
+  const [select,setSelect] = useState<number[] | []>([]);
+  const  { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
+    control, // control props comes from useForm (optional: if you are using FormContext)
+    name: "test", // unique name for your Field Array
+  });
   const addSelect = () => {
-    setNumSelect(pre => pre +  1);
+    setNumSelect(prevNum => prevNum + 1);
   };
-  const removeSelect = (index:number) => {
-      console.log(index)
-  }
+
+  const removeSelect = (index: number) => {
+    setValue(`stats-client-${index}`, '');
+    setNumSelect(prevNum => prevNum - 1);
+  };
 
   // TODO: make scroll to get 10 other
   useEffect(()=>{
@@ -25,33 +34,17 @@ const StatsClientForm = () => {
       page:0,limit:10
      }))
   },[dispatch])
-  const methods = useForm({
-    resolver: {
-      test
-    }
-  });
-  const { fields, append } = useFieldArray({
-    control,
-    name: 'selects',
-  });
+
   const {kpis} = useSelector((state:RootState)=>state.kpis)
-  const {control,handleSubmit} = methods
-  const onSubmit = async (data) => {
-    // Send the selected values to the backend
-    try {
-      await postSelectedValuesToBackend(data.selects);
-      console.log('Selected values sent to backend successfully!');
-    } catch (error) {
-      console.error('Error sending selected values to backend:', error);
-    }
-  };
+  
+  const submit = (data:any) => console.log({data})
 
   return (
-    <FormProvider methods={methods} 
-  
-        {/* {numSelect && [...Array(numSelect)].map((_, index) => (
+    <FormProvider methods={methods} onSubmit={handleSubmit(submit)} >
+ {/* {select.length > 0 && select.map((_, index) => (
           <>            
           <Box
+          key={index}
             >
                 <RHFAutocomplete
                   key={index}
@@ -63,6 +56,7 @@ const StatsClientForm = () => {
             </Box>
             <Button
             variant='contained'
+            color="error"
             onClick={()=>removeSelect(index)}
             >
               Remove item
@@ -71,6 +65,30 @@ const StatsClientForm = () => {
 
             
         ))} */}
+        {/* {numSelect ? [...Array(numSelect)].map((_, index) => (
+          <>            
+          <Box
+          key={index}
+            >
+                <RHFAutocomplete
+                  key={index}
+                  name={`stats-client-${index}`}
+                  freeSolo
+                  getOptionLabel={(option) => (typeof option === 'string' ? option : option.name || '')}
+                  options={kpis.docs}
+                />
+            </Box>
+            <Button
+            variant='contained'
+            color="error"
+            onClick={()=>removeSelect(index)}
+            >
+              Remove item
+            </Button>
+          </>
+
+            
+        )) : <div>nothing</div>} */}
  {/* {fields.map((field, index) => (
         <RHFAutocomplete
           key={field.id} // Ensure each component has a unique key
@@ -81,7 +99,31 @@ const StatsClientForm = () => {
           options={kpis}
         />
       ))} */}
-
+{
+  fields.map((field,index)=>(
+    <>            
+    <Box
+    key={index}
+      >
+          <RHFAutocomplete
+            key={index}
+            freeSolo
+            value={field.value}
+            {...register(`test.${index}.value`)}
+            getOptionLabel={(option) => (typeof option === 'string' ? option : option.name || '')}
+            options={kpis.docs}
+          />
+      </Box>
+      <Button
+      variant='contained'
+      color="error"
+      onClick={()=>removeSelect(index)}
+      >
+        Remove item
+      </Button>
+    </>
+  ))
+}
      <Box>
       <Button
       variant='contained'
@@ -91,7 +133,9 @@ submit
       </Button>
      <Button
           variant="contained"
-          onClick={()=> addSelect()}
+          onClick={()=> append({
+            test: ''
+          })}
           >
             add another task
           </Button>
