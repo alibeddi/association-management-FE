@@ -6,7 +6,7 @@ import {
   RHFRadioGroup,
   RHFSelect,
   RHFTextField
-} from '../../components/hook-form';
+} from '../hook-form';
 // types
 import { FrontType, IKpi } from '../../@types/Kpi';
 

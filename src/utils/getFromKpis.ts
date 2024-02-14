@@ -1,9 +1,11 @@
+import { IKpi } from "../@types/Kpi";
+
 interface MyObject {
   _id: string; 
 }
 
 
-export default function processObject(obj: Record<string, MyObject>, indexArray: { value: string; num: number }[]) {
+export default function processObject(obj: Record<string, MyObject>, indexArray: { value: IKpi; num: number }[]) {
   const results: string[] = [];
 
   indexArray.forEach(i => {
