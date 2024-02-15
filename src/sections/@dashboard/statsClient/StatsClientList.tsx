@@ -78,16 +78,8 @@ export default function StatsClientList() {
   }, [statsClients]);
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
-
-
   const [openConfirm, setOpenConfirm] = useState(false);
-
- 
-
-
-
   const isFiltered = filterName !== '';
-
   const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
 
   const handleViewRow = (row: IStatsClient) => {
@@ -138,7 +130,6 @@ export default function StatsClientList() {
   const isAllowedToEditStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.EDIT);
   const isAllowedToDeleteStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.DELETE);
   if(isAllowedToDeleteStatClient && isAllowedToEditStatClient){
-    TABLE_HEAD.push()
     TABLE_HEAD.push({label:'edit',align:'center'},{label:'delete',align:'center'})
   }
    
