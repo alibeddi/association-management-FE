@@ -17,11 +17,13 @@ import { StatClientResponseForm } from '../../sections/@dashboard/statClientResp
 export default function StatClientResponseEditPage() {
   const { statClientResponse } = useSelector((state: RootState) => state.statClientResponses);
   const { themeStretch } = useSettingsContext();
-  const { statClienRestId = '65ccbb05e6e7cb86be1a218e' } = useParams();
+  const { statClientRestId } = useParams();
 
   useEffect(() => {
-    dispatch(getOneStatClientResponse({ statClientResponseId: statClienRestId }));
-  }, [statClienRestId]);
+    if (statClientRestId) {
+      dispatch(getOneStatClientResponse({ statClientResponseId: statClientRestId }));
+    }
+  }, [statClientRestId]);
 
   return (
     <>

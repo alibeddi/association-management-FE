@@ -17,7 +17,7 @@ import { StatClientResponseForm } from '../../sections/@dashboard/statClientResp
 export default function StatClientResponseViewPage() {
   const { statClientResponse } = useSelector((state: RootState) => state.statClientResponses);
   const { themeStretch } = useSettingsContext();
-  const { statClientRestId = '65ccdbc6b8cc1a7bc86a71a8' } = useParams();
+  const { statClientRestId } = useParams();
 
   useEffect(() => {
     if (statClientRestId) {

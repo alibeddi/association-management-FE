@@ -11,10 +11,12 @@ import { StatClientResponseForm } from '../../sections/@dashboard/statClientResp
 
 export default function ClientStatusListPage() {
   const { themeStretch } = useSettingsContext();
-  const { statClientId } = useParams();
+  const { statClientId = '65cdfdcd89cf3183cf98a016' } = useParams();
 
   useEffect(() => {
-    dispatch(getOneStatClient({ statClientId: '65ccbb05e6e7cb86be1a218e' }));
+    if (statClientId) {
+      dispatch(getOneStatClient({ statClientId }));
+    }
   }, [statClientId]);
 
   return (

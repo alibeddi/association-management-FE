@@ -53,6 +53,7 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
           kpi.options ? kpi.options.map((option) => ({ label: String(option), value: option })) : []
         }
         label={kpi.label}
+        disabled={statClientDetails}
       />
     ),
   };

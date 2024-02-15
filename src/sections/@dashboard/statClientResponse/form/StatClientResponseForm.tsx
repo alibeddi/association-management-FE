@@ -51,8 +51,8 @@ export default function StatClientForm({
       const transformedObject: { [key: string]: any } = {};
       const formValues = currentStatClientResponse?.kpis || [];
       formValues.forEach((item: { kpi: { name: any }; response: any }) => {
-        const kpiName = item.kpi.name;
-        const response = item.response;
+        const kpiName = item?.kpi?.name;
+        const response = item?.response;
         transformedObject[kpiName] = response;
       });
       return {

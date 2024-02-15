@@ -16,6 +16,7 @@ import { useAuthContext } from '../../../../auth/useAuthContext';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fDate } from '../../../../utils/formatTime';
 import { hasPermission } from '../../Permissions/utils';
 
@@ -36,7 +37,7 @@ export default function StatClientResponseTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { admin, clientName, createdAt } = row;
+  const { admin, clientName, createdAt, _id } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -91,7 +92,9 @@ export default function StatClientResponseTableRow({
         </TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          <Link to="">click here to see the answers</Link>
+          <Link to={`${PATH_DASHBOARD.statClientResponse.edit}/${_id}`}>
+            click here to see the answers
+          </Link>
         </TableCell>
 
         <TableCell align="left">{fDate(createdAt)}</TableCell>

@@ -81,11 +81,11 @@ export default function StatClientResponsesTable() {
   const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
 
   const handleViewRow = (row: StatClientResponse) => {
-    navigate(`${PATH_DASHBOARD.statClientResponse.view}/${row._id || '65cdcacfcdb26dd641ba50c2'}`);
+    navigate(`${PATH_DASHBOARD.statClientResponse.view}/${row._id}`);
   };
 
   const handleEditRow = (row: StatClientResponse) => {
-    navigate(`${PATH_DASHBOARD.statClientResponse.edit}/${row._id || '65cdcacfcdb26dd641ba50c2'}`);
+    navigate(`${PATH_DASHBOARD.statClientResponse.edit}/${row._id}`);
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
