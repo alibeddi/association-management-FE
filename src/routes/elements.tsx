@@ -35,5 +35,8 @@ export const StatClientResponseNew = Loadable(
 export const StatClientResponseView = Loadable(
   lazy(() => import('../pages/StatClientResponse/StatClientResponseView'))
 );
+export const StatClientResponseEdit = Loadable(
+  lazy(() => import('../pages/StatClientResponse/StatClientResponseEdit'))
+);
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

@@ -45,7 +45,6 @@ export default function StatClientResponsesTable() {
     setPage,
     //
     selected,
-    setSelected,
     onSelectRow,
     onSelectAllRows,
     //
@@ -82,13 +81,11 @@ export default function StatClientResponsesTable() {
   const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
 
   const handleViewRow = (row: StatClientResponse) => {
-    navigate(`${PATH_DASHBOARD.statClientResponse.view}/${row._id || '65cdcacfcdb26dd641ba50c2'}`, {
-      state: { kpi: row },
-    });
+    navigate(`${PATH_DASHBOARD.statClientResponse.view}/${row._id || '65cdcacfcdb26dd641ba50c2'}`);
   };
 
   const handleEditRow = (row: StatClientResponse) => {
-    console.log('edit');
+    navigate(`${PATH_DASHBOARD.statClientResponse.edit}/${row._id || '65cdcacfcdb26dd641ba50c2'}`);
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,9 +115,7 @@ export default function StatClientResponsesTable() {
     });
   };
 
-  const handleDeleteRows = (selectedRows: string[]) => {
-    console.log('delete many');
-  };
+  const handleDeleteRows = (selectedRows: string[]) => {};
 
   return (
     <>

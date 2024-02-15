@@ -8,7 +8,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import { getOneStatClient } from '../../redux/slices/statsClient/action';
+import { getOneStatClientResponse } from '../../redux/slices/statClientResponse/actions';
 import { dispatch, RootState, useSelector } from '../../redux/store';
 import { StatClientResponseForm } from '../../sections/@dashboard/statClientResponse/form';
 
@@ -17,11 +17,11 @@ import { StatClientResponseForm } from '../../sections/@dashboard/statClientResp
 export default function StatClientResponseEditPage() {
   const { statClientResponse } = useSelector((state: RootState) => state.statClientResponses);
   const { themeStretch } = useSettingsContext();
-  const { statClientId, statClienRestId } = useParams();
+  const { statClienRestId = '65ccbb05e6e7cb86be1a218e' } = useParams();
 
   useEffect(() => {
-    dispatch(getOneStatClient({ statClientId: '65ccbb05e6e7cb86be1a218e' }));
-  }, [statClientId]);
+    dispatch(getOneStatClientResponse({ statClientResponseId: statClienRestId }));
+  }, [statClienRestId]);
 
   return (
     <>

@@ -21,6 +21,7 @@ import {
   OperatorList,
   Page404,
   PermissionGroup,
+  StatClientResponseEdit,
   StatClientResponseList,
   StatClientResponseNew,
   StatClientResponseView,
@@ -92,7 +93,7 @@ export default function Router() {
             { path: 'new/:statClientId', element: <StatClientResponseNew /> },
             {
               path: 'edit/:statClientRestId',
-              element: <KpiEdit />,
+              element: <StatClientResponseEdit />,
             },
             {
               path: 'view/:statClientRestId',
