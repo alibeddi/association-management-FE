@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IGetAll } from "../../../@types/api";
-import { IStatsClient } from "../../../@types/statsClient";
+import { IStatsClient, IStatsClients } from "../../../@types/statsClient";
 import axios from "../../../utils/axios";
 
 const STAT_CLIENT_URI = "stat-clients"
@@ -51,6 +51,17 @@ export const getSingleStatsClient = createAsyncThunk('/statsClient/single',async
     throw new Error(response.statusText)
   } catch (error) {
     return Promise.reject(error.message ?? data?.message)
+  }
+})
+export const updateStatsClient = createAsyncThunk('/statsClient/update',async ({id,body}:{id:string,body:Partial<IStatsClients>})=>{
+  let data;
+  try {
+    const response = await axios.patch(`/${STAT_CLIENT_URI}/${id}`,body);
+    data = await response.data;
+    if(response.status === 200) return data;
+    throw new Error(response.statusText);
+  } catch (error) {
+    return Promise.reject(error.message ? error.message : data.message)
   }
 })
 export const deleteStatsClient = createAsyncThunk('/statsClient/delete',async ({id}:{id:string}) => {

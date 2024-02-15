@@ -8,9 +8,8 @@ import Iconify from '../../components/iconify';
 import StatsClientList from '../../sections/@dashboard/statsClient/StatsClientList';
 
 const StatsClient = () => {
-  console.log('test')
   const { themeStretch } = useSettingsContext()
-  const isAllowedToCreateKpi = true;
+  const isAllowedToCreateStatsClient = true;
   return (
     <>
       <Helmet>
@@ -22,7 +21,7 @@ const StatsClient = () => {
           heading="stats-client"
           links={[{ name: 'stats-client' }]}
           action={
-            isAllowedToCreateKpi && (
+            isAllowedToCreateStatsClient && (
               <Button
                 component={RouterLink}
                 to={PATH_DASHBOARD.statsClient.new}

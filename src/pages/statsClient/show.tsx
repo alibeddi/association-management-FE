@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Container } from '@mui/material';
+import { Button, Container } from '@mui/material';
+
+
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -42,7 +45,14 @@ const StatsClientShow = () => {
           { name: 'View Stats Client' },
         ]}
       />
- {statsClient &&  <StatsClientView statsClient={statsClient} />}
+      <StatsClientView statsClient={statsClient} />
+      <Button
+       component={RouterLink}
+       to={`${PATH_DASHBOARD.statsClient.edit}/${statsClient?._id}`}
+       variant="contained"
+      >
+        Edit 
+      </Button>
     </Container>
   </>
   )
