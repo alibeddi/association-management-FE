@@ -70,7 +70,7 @@ export const deleteStatsClient = createAsyncThunk('/statsClient/delete',async ({
     const response = await axios.delete(`/${STAT_CLIENT_URI}/${id}`)
     data = await response.data;
     if(response.status===200){
-      return data;
+      return {id,data};
     }
     throw new Error(response.statusText)
   } catch (error) {

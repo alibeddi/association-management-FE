@@ -116,7 +116,7 @@ export default function StatsClientList() {
   };
 
   const handleDeleteRow = async (id: string) => {
-    await dispatch(deleteStatsClient({ id })).unwrap().then((res) => enqueueSnackbar(`${res.message}`)).catch(error=>enqueueSnackbar(`${error.message}`, { variant: 'error' }))
+    await dispatch(deleteStatsClient({ id })).unwrap().then((res) => enqueueSnackbar(`${res.data.message}`)).catch(error=>enqueueSnackbar(`${error.data.message}`, { variant: 'error' }))
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {

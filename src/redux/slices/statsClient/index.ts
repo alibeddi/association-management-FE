@@ -64,6 +64,8 @@ const slice = createSlice({
       })
       .addCase(deleteStatsClient.fulfilled, (state, { payload }) => {
         state.status = IStatus.SUCCEEDED;
+        state.statsClients.docs = state.statsClients.docs.filter(stat=>stat._id!==payload.id)
+
       })
       .addCase(deleteStatsClient.rejected, (state) => {
         state.status = IStatus.FAILED;
