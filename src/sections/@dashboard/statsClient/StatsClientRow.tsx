@@ -86,7 +86,7 @@ export default function StatsClientRow({
     flexDirection:'column',
     gap:'.5rem'
   }}>
-    {kpis?.map((kpi: any) => (
+    {kpis?.map((kpi: IKpi) => (
       <Box key={kpi._id}>{kpi.label}</Box>
     ))}
     
