@@ -45,7 +45,7 @@ const slice = createSlice({
       .addCase(deleteOnekpi.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
-    // DELETE OMANY
+    // DELETE MANY
     builder
       .addCase(deleteManykpis.pending, (state) => {
         state.status = IStatus.LOADING;
