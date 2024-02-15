@@ -6,7 +6,7 @@ import {
   MenuItem,
   TableCell,
   TableRow,
-  Typography
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -64,7 +64,6 @@ export default function StatClientResponseTableRow({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
-
   return (
     <>
       <TableRow hover selected={selected}>
@@ -81,7 +80,7 @@ export default function StatClientResponseTableRow({
               textOverflow: 'ellipsis',
             }}
           >
-            {admin.firstName} {admin.lastName}
+            {admin.name}
           </Box>
         </TableCell>
 

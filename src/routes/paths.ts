@@ -29,7 +29,7 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/stats-client/new'),
     edit: path(ROOTS_DASHBOARD, '/stats-client/edit'),
   },
-  clientStatusResponse: {
+  statClientResponse: {
     root: path(ROOTS_DASHBOARD, '/stat-client-response'),
     edit: path(ROOTS_DASHBOARD, '/stat-client-response/edit'),
     view: path(ROOTS_DASHBOARD, '/stat-client-response/view'),

@@ -78,7 +78,7 @@ export default function navConfig(user: AuthUserType) {
         },
         {
           title: 'Stat-client Answers',
-          path: PATH_DASHBOARD.clientStatusResponse.root,
+          path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
           toBeDisplayed: true,
         },

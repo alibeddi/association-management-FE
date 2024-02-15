@@ -13,8 +13,6 @@ import PermissionGuard from '../auth/PermissionsGuard';
 import {
   Calendar,
   Call,
-  ClienStatusList,
-  ClienStatusNew,
   KpiEdit,
   KpiNew,
   Kpis,
@@ -23,6 +21,9 @@ import {
   OperatorList,
   Page404,
   PermissionGroup,
+  StatClientResponseList,
+  StatClientResponseNew,
+  StatClientResponseView,
   StatsClient,
   StatsClientNew,
 } from './elements';
@@ -63,7 +64,6 @@ export default function Router() {
           ),
           children: [{ path: '', element: <OperatorList /> }],
         },
-        // clienStatusNew
         {
           path: 'kpis',
           element: (
@@ -86,22 +86,17 @@ export default function Router() {
         },
         {
           path: 'stat-client-response',
-          element: (
-            // TODO: replace the kpi with the ClientStatus
-            <PermissionGuard model={ModelCode.KPI} method={MethodCode.LIST}>
-              <Outlet />
-            </PermissionGuard>
-          ),
+          element: <Outlet />,
           children: [
-            { path: '', element: <ClienStatusList /> },
-            { path: 'new', element: <ClienStatusNew /> },
+            { path: '', element: <StatClientResponseList /> },
+            { path: 'new/:statClientId', element: <StatClientResponseNew /> },
             {
-              path: 'edit/:statClientId/:statClienRestId',
+              path: 'edit/:statClientRestId',
               element: <KpiEdit />,
             },
             {
-              path: 'view/:statClientId/:statClienRestId',
-              element: <KpiView />,
+              path: 'view/:statClientRestId',
+              element: <StatClientResponseView />,
             },
           ],
         },

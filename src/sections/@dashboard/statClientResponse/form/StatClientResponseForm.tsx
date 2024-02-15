@@ -2,9 +2,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
+import { IKpi } from '../../../../@types/Kpi';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 import { useLocales } from '../../../../locales';
 import { createStatClientResponse } from '../../../../redux/slices/statClientResponse/actions';
@@ -16,25 +18,55 @@ import RenderField from './utils/renderFormField';
 
 type Props = {
   isEdit?: boolean;
-  kpiDetails?: boolean;
+  statClientDetails?: boolean;
   // TODO: add the type
   currentStatClientResponse?: any | null;
 };
 
 export default function StatClientForm({
   isEdit = false,
-  kpiDetails = false,
+  statClientDetails = false,
   currentStatClientResponse,
 }: Props) {
   const { statsClient } = useSelector((state: RootState) => state.statsClient);
+
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
   const navigate = useNavigate();
+  const [kpis, setKpis] = useState<IKpi[]>([]);
+
+  useEffect(() => {
+    if ((isEdit || statClientDetails) && currentStatClientResponse) {
+      const array = currentStatClientResponse.kpis?.map((item: { kpi: any }) => item.kpi);
+      setKpis(array);
+    } else {
+      setKpis(statsClient.kpis);
+    }
+  }, [currentStatClientResponse, statsClient, isEdit, statClientDetails]);
+
+  const defaultValues = useMemo(() => {
+    if ((isEdit || statClientDetails) && currentStatClientResponse) {
+      const transformedObject: { [key: string]: any } = {};
+      const formValues = currentStatClientResponse?.kpis || [];
+      formValues.forEach((item: { kpi: { name: any }; response: any }) => {
+        const kpiName = item.kpi.name;
+        const response = item.response;
+        transformedObject[kpiName] = response;
+      });
+      return {
+        ...transformedObject,
+        clientName: currentStatClientResponse.clientName,
+        clientContact: '',
+      };
+    }
+
+    return {};
+  }, [isEdit, statClientDetails, currentStatClientResponse]);
 
   // form validation
   const validationsFields: { [key: string]: any } = {};
-  if (statsClient.kpis) {
-    statsClient.kpis.forEach((field) => {
+  if (kpis) {
+    kpis.forEach((field) => {
       const schema = generateFieldValidation(field);
       validationsFields[field.name] = schema;
     });
@@ -47,14 +79,15 @@ export default function StatClientForm({
   });
 
   const methods = useForm({
+    defaultValues,
     resolver: yupResolver(NewClientStatusSchema),
   });
+
   const {
     handleSubmit,
     reset,
     formState: { isSubmitting },
   } = methods;
-
   const onSubmit = async (data: any) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -67,7 +100,7 @@ export default function StatClientForm({
           if (res?.meta?.requestStatus === 'fulfilled') {
             enqueueSnackbar(`${translate(res?.payload.message)}`);
             reset();
-            navigate(PATH_DASHBOARD.clientStatusResponse.root);
+            navigate(PATH_DASHBOARD.statClientResponse.root);
           } else {
             enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
           }
@@ -94,11 +127,11 @@ export default function StatClientForm({
             >
               <RHFTextField name="clientName" label="Client Name" type="text" />
               <RHFTextField name="clientContact" label="Client Contact" type="text" />
-              {statsClient.kpis && statsClient.kpis.map((kpi) => RenderField(kpi))}
+              {kpis && kpis.map((kpi) => RenderField(kpi))}
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+                {isEdit ? 'edit' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>

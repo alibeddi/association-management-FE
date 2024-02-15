@@ -2,13 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
 
 type StatClientResBody = {
-  // clientContact: string;
   clientName: any;
   kpis: {
     kpi: string;
     response: any;
   }[];
 };
+
 export const createStatClientResponse = createAsyncThunk(
   'STAT_CLIENT_RESPONSE/POST',
   async (payload: { statClientId: string; body: StatClientResBody }) => {
@@ -28,7 +28,6 @@ export const createStatClientResponse = createAsyncThunk(
 );
 
 // get all
-
 export const getAllStatClientResponses = createAsyncThunk(
   'STAT_CLIENT_RESPONSE/GET-ALL',
   async (payload: {
@@ -48,6 +47,25 @@ export const getAllStatClientResponses = createAsyncThunk(
     let data;
     try {
       const response = await axios.get('/stat-client-responses', { params });
+      data = response.data;
+      if (response.status === 200) {
+        return data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
+
+// get one
+export const getOneStatClientResponse = createAsyncThunk(
+  'STAT_CLIENT_RESPONSE/GET-ONE',
+  async (payload: { statClientResponseId: string }) => {
+    const { statClientResponseId } = payload;
+    let data;
+    try {
+      const response = await axios.get(`/stat-client-responses/${statClientResponseId}`);
       data = response.data;
       if (response.status === 200) {
         return data;

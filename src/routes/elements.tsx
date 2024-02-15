@@ -25,12 +25,15 @@ export const KpiView = Loadable(lazy(() => import('../pages/Kpis/KpiDetailsPage'
 export const Call = Loadable(lazy(() => import('../pages/Calls')));
 export const StatsClient = Loadable(lazy(() => import('../pages/statsClient')));
 export const StatsClientNew = Loadable(lazy(() => import('../pages/statsClient/new')));
-// client status
-export const ClienStatusList = Loadable(
+// client status response
+export const StatClientResponseList = Loadable(
   lazy(() => import('../pages/StatClientResponse/StatClientResListPage'))
 );
-export const ClienStatusNew = Loadable(
+export const StatClientResponseNew = Loadable(
   lazy(() => import('../pages/StatClientResponse/StatClientResNewPage'))
+);
+export const StatClientResponseView = Loadable(
+  lazy(() => import('../pages/StatClientResponse/StatClientResponseView'))
 );
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

@@ -7,7 +7,7 @@ export interface StatClientResponse {
   clientName: string;
   admin: User;
   kpis: Array<{
-    kpi: string | IKpi;
+    kpi: IKpi;
     response: Array<any>;
   }>;
   deletedAt: Date;

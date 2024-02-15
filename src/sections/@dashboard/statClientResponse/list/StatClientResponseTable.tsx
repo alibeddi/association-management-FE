@@ -11,11 +11,12 @@ import {
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
-  useTable
+  useTable,
 } from '../../../../components/table';
 import { useLocales } from '../../../../locales';
 import { getAllStatClientResponses } from '../../../../redux/slices/statClientResponse/actions';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
 import StatClientResponseTableToolbar from './StatClientResponseTableToolbar';
 
@@ -61,7 +62,6 @@ export default function StatClientResponsesTable() {
   const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const { kpis } = useSelector((state: RootState) => state.kpis);
   const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
 
   useEffect(() => {
@@ -79,7 +79,9 @@ export default function StatClientResponsesTable() {
   const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
 
   const handleViewRow = (row: StatClientResponse) => {
-    console.log('view');
+    navigate(`${PATH_DASHBOARD.statClientResponse.view}/${row._id || '65cdcacfcdb26dd641ba50c2'}`, {
+      state: { kpi: row },
+    });
   };
 
   const handleEditRow = (row: StatClientResponse) => {
@@ -184,7 +186,7 @@ export default function StatClientResponsesTable() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={kpis.meta.totalDocs || 0}
+          count={statClientResponses.meta.totalDocs || 0}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={onChangePage}

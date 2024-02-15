@@ -1,17 +1,23 @@
-import { Container } from '@mui/material';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
+// @mui
+import { Container } from '@mui/material';
+// routes
+import { PATH_DASHBOARD } from '../../routes/paths';
+// components
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import { getOneStatClient } from '../../redux/slices/statsClient/action';
-import { dispatch } from '../../redux/store';
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { dispatch, RootState, useSelector } from '../../redux/store';
 import { StatClientResponseForm } from '../../sections/@dashboard/statClientResponse/form';
 
-export default function ClientStatusListPage() {
+// ----------------------------------------------------------------------
+
+export default function StatClientResponseEditPage() {
+  const { statClientResponse } = useSelector((state: RootState) => state.statClientResponses);
   const { themeStretch } = useSettingsContext();
-  const { statClientId } = useParams();
+  const { statClientId, statClienRestId } = useParams();
 
   useEffect(() => {
     dispatch(getOneStatClient({ statClientId: '65ccbb05e6e7cb86be1a218e' }));
@@ -20,20 +26,21 @@ export default function ClientStatusListPage() {
   return (
     <>
       <Helmet>
-        <title> stat-client : Create a new answer </title>
+        <title> Stat-client Response: Edit </title>
       </Helmet>
+
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Create a new stat-client answer"
+          heading="Edit a stat-client response"
           links={[
             {
-              name: 'stat-client answers',
+              name: 'stat-client response',
               href: PATH_DASHBOARD.statClientResponse.root,
             },
-            { name: 'New stat-client answers' },
+            { name: 'Edit stat-client response' },
           ]}
         />
-        <StatClientResponseForm />
+        <StatClientResponseForm isEdit currentStatClientResponse={statClientResponse} />
       </Container>
     </>
   );
