@@ -9,7 +9,10 @@ import * as Yup from 'yup';
 import { IKpi } from '../../../../@types/Kpi';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 import { useLocales } from '../../../../locales';
-import { createStatClientResponse } from '../../../../redux/slices/statClientResponse/actions';
+import {
+  createStatClientResponse,
+  editStatClientResponse,
+} from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { formatFormValues } from './utils/formatFormValues';
@@ -90,12 +93,27 @@ export default function StatClientForm({
   const onSubmit = async (data: any) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
+      const body = {
+        clientName: data.clientName,
+        kpis: formatFormValues(data, statsClient.kpis),
+      };
       if (!isEdit) {
-        const body = {
-          clientName: data.clientName,
-          kpis: formatFormValues(data, statsClient.kpis),
-        };
         dispatch(createStatClientResponse({ statClientId: '', body })).then((res: any) => {
+          if (res?.meta?.requestStatus === 'fulfilled') {
+            enqueueSnackbar(`${translate(res?.payload.message)}`);
+            reset();
+            navigate(PATH_DASHBOARD.statClientResponse.root);
+          } else {
+            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
+          }
+        });
+      } else {
+        dispatch(
+          editStatClientResponse({
+            statClientResponseId: currentStatClientResponse?._id,
+            body: data,
+          })
+        ).then((res: any) => {
           if (res?.meta?.requestStatus === 'fulfilled') {
             enqueueSnackbar(`${translate(res?.payload.message)}`);
             reset();
