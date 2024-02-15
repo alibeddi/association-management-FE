@@ -84,7 +84,7 @@ export const editStatClientResponse = createAsyncThunk(
     const { statClientResponseId, body } = payload;
     let data;
     try {
-      const response = await axios.patch(`/stat-client-responses/${statClientResponseId}`);
+      const response = await axios.patch(`/stat-client-responses/${statClientResponseId}`, body);
       data = response.data;
       if (response.status === 200) {
         return data;

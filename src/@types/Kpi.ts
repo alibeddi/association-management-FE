@@ -3,6 +3,7 @@ export enum FrontType {
   RADIO = 'radio',
   CHECKBOX = 'checkbox',
   SELECT = 'select',
+  INPUT = 'input',
 }
 export enum BackType {
   STRING = 'string',

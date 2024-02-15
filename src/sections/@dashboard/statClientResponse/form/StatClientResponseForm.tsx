@@ -80,8 +80,9 @@ export default function StatClientForm({
       await new Promise((resolve) => setTimeout(resolve, 500));
       const body = {
         clientName: data.clientName,
-        kpis: formatFormValues(data, statsClient.kpis),
+        kpis: formatFormValues(data, kpis),
       };
+
       if (!isEdit) {
         dispatch(createStatClientResponse({ statClientId: '', body }))
           .unwrap()
@@ -94,7 +95,7 @@ export default function StatClientForm({
         dispatch(
           editStatClientResponse({
             statClientResponseId: currentStatClientResponse?._id,
-            body: data,
+            body,
           })
         )
           .unwrap()

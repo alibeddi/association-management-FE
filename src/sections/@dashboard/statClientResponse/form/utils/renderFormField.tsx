@@ -64,6 +64,7 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
         disabled={statClientDetails}
       />
     ),
+    input: <RHFTextField name={componentName} label={kpi.label} type="text" id={kpi?._id} />,
   };
 
   return components[kpi?.frontType];
