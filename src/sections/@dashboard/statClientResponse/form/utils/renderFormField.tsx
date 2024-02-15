@@ -24,7 +24,15 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
         label={kpi.name}
       />
     ),
-    checkbox: <RHFCheckbox name={componentName} id={kpi?._id} label={kpi.name} sx={{ mt: 3 }} />,
+    checkbox: (
+      <RHFCheckbox
+        disabled={statClientDetails}
+        name={componentName}
+        id={kpi?._id}
+        label={kpi.name}
+        sx={{ mt: 3 }}
+      />
+    ),
     select: (
       <RHFSelect
         disabled={statClientDetails}

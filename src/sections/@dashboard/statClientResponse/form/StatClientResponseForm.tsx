@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
 import { IKpi } from '../../../../@types/Kpi';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
-import { useLocales } from '../../../../locales';
 import {
   createStatClientResponse,
   editStatClientResponse,
@@ -18,6 +17,7 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { formatFormValues } from './utils/formatFormValues';
 import { generateFieldValidation } from './utils/generateFieldValidation';
 import RenderField from './utils/renderFormField';
+import { transformStatClientResponse } from './utils/transformStatClientResponse';
 
 type Props = {
   isEdit?: boolean;
@@ -33,7 +33,6 @@ export default function StatClientForm({
   const { statsClient } = useSelector((state: RootState) => state.statsClient);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { translate } = useLocales();
   const navigate = useNavigate();
   const [kpis, setKpis] = useState<IKpi[]>([]);
 
@@ -46,24 +45,10 @@ export default function StatClientForm({
     }
   }, [currentStatClientResponse, statsClient, isEdit, statClientDetails]);
 
-  const defaultValues = useMemo(() => {
-    if ((isEdit || statClientDetails) && currentStatClientResponse) {
-      const transformedObject: { [key: string]: any } = {};
-      const formValues = currentStatClientResponse?.kpis || [];
-      formValues.forEach((item: { kpi: { name: any }; response: any }) => {
-        const kpiName = item?.kpi?.name;
-        const response = item?.response;
-        transformedObject[kpiName] = response;
-      });
-      return {
-        ...transformedObject,
-        clientName: currentStatClientResponse.clientName,
-        clientContact: '',
-      };
-    }
-
-    return {};
-  }, [isEdit, statClientDetails, currentStatClientResponse]);
+  const defaultValues = useMemo(
+    () => transformStatClientResponse(currentStatClientResponse, isEdit, statClientDetails),
+    [isEdit, statClientDetails, currentStatClientResponse]
+  );
 
   // form validation
   const validationsFields: { [key: string]: any } = {};
@@ -98,35 +83,40 @@ export default function StatClientForm({
         kpis: formatFormValues(data, statsClient.kpis),
       };
       if (!isEdit) {
-        dispatch(createStatClientResponse({ statClientId: '', body })).then((res: any) => {
-          if (res?.meta?.requestStatus === 'fulfilled') {
-            enqueueSnackbar(`${translate(res?.payload.message)}`);
-            reset();
+        dispatch(createStatClientResponse({ statClientId: '', body }))
+          .unwrap()
+          .then((res) => {
+            enqueueSnackbar(res.message);
             navigate(PATH_DASHBOARD.statClientResponse.root);
-          } else {
-            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-          }
-        });
+          })
+          .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
       } else {
         dispatch(
           editStatClientResponse({
             statClientResponseId: currentStatClientResponse?._id,
             body: data,
           })
-        ).then((res: any) => {
-          if (res?.meta?.requestStatus === 'fulfilled') {
-            enqueueSnackbar(`${translate(res?.payload.message)}`);
-            reset();
+        )
+          .unwrap()
+          .then((res) => {
+            enqueueSnackbar(res.message);
             navigate(PATH_DASHBOARD.statClientResponse.root);
-          } else {
-            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-          }
-        });
+          })
+          .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (isEdit && currentStatClientResponse) {
+      reset(defaultValues);
+    }
+    if (!isEdit) {
+      reset(defaultValues);
+    }
+  }, [isEdit, currentStatClientResponse, defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -144,12 +134,14 @@ export default function StatClientForm({
             >
               <RHFTextField
                 inputProps={{ readOnly: statClientDetails }}
+                InputLabelProps={{ shrink: true }}
                 name="clientName"
                 label="Client Name"
                 type="text"
               />
               <RHFTextField
                 inputProps={{ readOnly: statClientDetails }}
+                InputLabelProps={{ shrink: true }}
                 name="clientContact"
                 label="Client Contact"
                 type="text"

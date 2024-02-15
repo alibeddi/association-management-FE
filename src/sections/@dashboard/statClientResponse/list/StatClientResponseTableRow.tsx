@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Checkbox,
   IconButton,
@@ -9,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MethodCode, ModelCode } from '../../../../@types/Permission';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import { useAuthContext } from '../../../../auth/useAuthContext';
@@ -40,6 +39,7 @@ export default function StatClientResponseTableRow({
   const { admin, clientName, createdAt, _id } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
+  const navigate = useNavigate();
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
@@ -65,38 +65,26 @@ export default function StatClientResponseTableRow({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
+
   return (
     <>
       <TableRow hover selected={selected}>
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
-
-        <TableCell align="left">
-          <Box
-            sx={{
-              maxWidth: 125,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            {admin.name}
-          </Box>
-        </TableCell>
-
+        <TableCell align="left">{admin.name}</TableCell>
         <TableCell>
           <Typography variant="subtitle2" noWrap>
             {clientName}
           </Typography>
         </TableCell>
-
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          <Link to={`${PATH_DASHBOARD.statClientResponse.edit}/${_id}`}>
-            click here to see the answers
-          </Link>
+        <TableCell
+          onClick={() => navigate(`${PATH_DASHBOARD.statClientResponse.view}/${_id}`)}
+          align="left"
+          sx={{ textTransform: 'capitalize', cursor: 'pointer' }}
+        >
+          click here to see the answers
         </TableCell>
-
         <TableCell align="left">{fDate(createdAt)}</TableCell>
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
@@ -104,7 +92,6 @@ export default function StatClientResponseTableRow({
           </IconButton>
         </TableCell>
       </TableRow>
-
       <MenuPopover
         open={openPopover}
         onClose={handleClosePopover}
@@ -123,7 +110,6 @@ export default function StatClientResponseTableRow({
             Delete
           </MenuItem>
         )}
-
         {isAllowedToEditKpi && (
           <MenuItem
             onClick={() => {
@@ -147,7 +133,6 @@ export default function StatClientResponseTableRow({
           </MenuItem>
         )}
       </MenuPopover>
-
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
