@@ -112,15 +112,11 @@ export default function StatsClientList() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    dispatch(deleteManykpis({ kpiIds: selectedRows })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${translate(res?.payload.message)}`);
+    dispatch(deleteManykpis({ kpiIds: selectedRows })).unwrap().then(res =>{
+             enqueueSnackbar(`${translate(res?.payload.message)}`);
         dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
-      } else {
-        enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-      }
-      setSelected([]);
-    });
+    }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+    setSelected([]);
   };
 
   const { user } = useAuthContext();

@@ -137,22 +137,18 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    dispatch(deleteOne({ userId: id })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${res?.payload.message}`);
-        const deleteRow = tableData.filter((row) => row._id !== id);
-        setSelected([]);
-        setTableData(deleteRow);
+    dispatch(deleteOne({ userId: id })).unwrap().then(res=>{
+      enqueueSnackbar(res.message);
+      const deleteRow = tableData.filter((row) => row._id !== id);
+      setSelected([]);
+      setTableData(deleteRow);
 
-        if (page > 0) {
-          if (dataInPage.length < 2) {
-            setPage(page - 1);
-          }
+      if (page > 0) {
+        if (dataInPage.length < 2) {
+          setPage(page - 1);
         }
-      } else {
-        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
       }
-    });
+    }).catch(err=>  enqueueSnackbar(`${err.message}`, { variant: 'error' }))
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {

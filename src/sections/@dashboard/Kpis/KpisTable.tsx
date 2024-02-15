@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -126,31 +126,21 @@ export default function KpiListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${res?.payload.message}`);
-      } else {
-        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
-      }
-    });
+    dispatch(deleteOnekpi({ kpiId: id })).unwrap().then(res => enqueueSnackbar(res.message)).catch(err =>enqueueSnackbar(err.message, { variant: 'error' }) )
   };
-
   const handleDeleteRows = (selectedRows: string[]) => {
-    dispatch(deleteManykpis({ kpiIds: selectedRows })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${translate(res?.payload.message)}`);
-        dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
-      } else {
-        enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-      }
-      setSelected([]);
-    });
+
+    dispatch(deleteManykpis({ kpiIds: selectedRows })).unwrap().then(res =>{ 
+      enqueueSnackbar(res.message)
+      dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
+    }).catch(err =>enqueueSnackbar(err.message, { variant: 'error' }) )
+    setSelected([])
+    
   };
 
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
 
-  // check current user permissions
   const isAllowedToCreateKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.CREATE);
 
   return (
