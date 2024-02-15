@@ -15,9 +15,6 @@ import {
 } from '@mui/material';
 // routes
 
-// types
-import { IKpi } from '../../../@types/Kpi';
-// components
 
 // sections
 import ConfirmDialog from '../../../components/confirm-dialog';
@@ -35,7 +32,7 @@ import { useLocales } from '../../../locales';
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import StatsClientRow from './StatsClientRow';
-import KpiTableToolbar from './StatsClientToolbar';
+import StatsClientTableToolbar from './StatsClientToolbar';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { hasPermission } from '../Permissions/utils';
 import { MethodCode, ModelCode } from '../../../@types/Permission';
@@ -150,12 +147,12 @@ export default function StatsClientList() {
     <>
       <Container maxWidth={false}>
         <Card>
-          <KpiTableToolbar
+          <StatsClientTableToolbar
             onResetFilter={handleResetFilter}
             isFiltered={isFiltered}
             filterName={filterName}
             onFilterName={handleFilterName}
-            placeholder="Search by kpi Name..."
+            placeholder="Search by Stats Client Name..."
           />
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction

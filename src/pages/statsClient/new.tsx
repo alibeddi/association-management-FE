@@ -21,7 +21,7 @@ export default function KpiNewPage() {
   return (
     <>
       <Helmet>
-        <title> Kpi: Create a new Kpi </title>
+        <title> Kpi: Create a new Stats Client </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
