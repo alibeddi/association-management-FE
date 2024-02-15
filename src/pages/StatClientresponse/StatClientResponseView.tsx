@@ -42,7 +42,7 @@ export default function StatClientResponseViewPage() {
             { name: 'View stat-client response' },
           ]}
         />
-        <StatClientResponseForm isEdit currentStatClientResponse={statClientResponse} />
+        <StatClientResponseForm statClientDetails currentStatClientResponse={statClientResponse} />
       </Container>
     </>
   );

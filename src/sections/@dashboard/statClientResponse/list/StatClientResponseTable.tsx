@@ -14,7 +14,10 @@ import {
   useTable,
 } from '../../../../components/table';
 import { useLocales } from '../../../../locales';
-import { getAllStatClientResponses } from '../../../../redux/slices/statClientResponse/actions';
+import {
+  deleteStatClientResponse,
+  getAllStatClientResponses,
+} from '../../../../redux/slices/statClientResponse/actions';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
@@ -106,7 +109,13 @@ export default function StatClientResponsesTable() {
   };
 
   const handleDeleteRow = (id: string) => {
-    console.log('delete');
+    dispatch(deleteStatClientResponse({ statClientResponseId: id })).then((res: any) => {
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        enqueueSnackbar(`${res?.payload.message}`);
+      } else {
+        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
+      }
+    });
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {

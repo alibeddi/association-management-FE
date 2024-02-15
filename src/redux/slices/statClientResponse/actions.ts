@@ -76,3 +76,41 @@ export const getOneStatClientResponse = createAsyncThunk(
     }
   }
 );
+
+// edit
+export const editStatClientResponse = createAsyncThunk(
+  'STAT_CLIENT_RESPONSE/EDIT',
+  async (payload: { statClientResponseId: string; body: object }) => {
+    const { statClientResponseId, body } = payload;
+    let data;
+    try {
+      const response = await axios.patch(`/stat-client-responses/${statClientResponseId}`);
+      data = response.data;
+      if (response.status === 200) {
+        return data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
+
+// delete
+export const deleteStatClientResponse = createAsyncThunk(
+  'STAT_CLIENT_RESPONSE/DELETE',
+  async (payload: { statClientResponseId: string }) => {
+    const { statClientResponseId } = payload;
+    let data;
+    try {
+      const response = await axios.delete(`/stat-client-responses/${statClientResponseId}`);
+      data = response.data;
+      if (response.status === 200) {
+        return data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);

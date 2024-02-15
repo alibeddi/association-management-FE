@@ -10,11 +10,12 @@ import {
 // types
 import { FrontType, IKpi } from '../../../../../@types/Kpi';
 
-function RenderField(kpi: IKpi) {
+function RenderField(kpi: IKpi, statClientDetails?: boolean) {
   const componentName = kpi?.name;
   const components: Record<FrontType, JSX.Element> = {
     textarea: (
       <RHFTextField
+        inputProps={{ readOnly: statClientDetails }}
         name={componentName}
         id={kpi?._id}
         placeholder={kpi?.name}
@@ -25,7 +26,13 @@ function RenderField(kpi: IKpi) {
     ),
     checkbox: <RHFCheckbox name={componentName} id={kpi?._id} label={kpi.name} sx={{ mt: 3 }} />,
     select: (
-      <RHFSelect name={componentName} label={kpi.name} placeholder={kpi?.name} id={kpi?._id}>
+      <RHFSelect
+        disabled={statClientDetails}
+        name={componentName}
+        label={kpi.name}
+        placeholder={kpi?.name}
+        id={kpi?._id}
+      >
         <MenuItem value="" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
           None
         </MenuItem>

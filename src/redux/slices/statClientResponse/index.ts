@@ -4,6 +4,8 @@ import { StatClientResponse } from '../../../@types/StatClientResponse';
 import { IStatus } from '../../../@types/status';
 import {
   createStatClientResponse,
+  deleteStatClientResponse,
+  editStatClientResponse,
   getAllStatClientResponses,
   getOneStatClientResponse,
 } from './actions';
@@ -59,6 +61,29 @@ const slice = createSlice({
         state.statClientResponse = action.payload.data;
       })
       .addCase(getOneStatClientResponse.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // edit Stat-client-response
+    builder
+      .addCase(editStatClientResponse.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(editStatClientResponse.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.statClientResponse = action.payload.data;
+      })
+      .addCase(editStatClientResponse.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // delete Stat-client-response
+    builder
+      .addCase(deleteStatClientResponse.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(deleteStatClientResponse.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+      })
+      .addCase(deleteStatClientResponse.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

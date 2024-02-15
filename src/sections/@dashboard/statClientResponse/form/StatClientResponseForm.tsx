@@ -19,7 +19,6 @@ import RenderField from './utils/renderFormField';
 type Props = {
   isEdit?: boolean;
   statClientDetails?: boolean;
-  // TODO: add the type
   currentStatClientResponse?: any | null;
 };
 
@@ -125,15 +124,27 @@ export default function StatClientForm({
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="clientName" label="Client Name" type="text" />
-              <RHFTextField name="clientContact" label="Client Contact" type="text" />
-              {kpis && kpis.map((kpi) => RenderField(kpi))}
+              <RHFTextField
+                inputProps={{ readOnly: statClientDetails }}
+                name="clientName"
+                label="Client Name"
+                type="text"
+              />
+              <RHFTextField
+                inputProps={{ readOnly: statClientDetails }}
+                name="clientContact"
+                label="Client Contact"
+                type="text"
+              />
+              {kpis && kpis.map((kpi) => RenderField(kpi, statClientDetails))}
             </Box>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {isEdit ? 'edit' : 'Save Changes'}
-              </LoadingButton>
-            </Stack>
+            {!statClientDetails && (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {isEdit ? 'edit' : 'Save Changes'}
+                </LoadingButton>
+              </Stack>
+            )}
           </Card>
         </Grid>
       </Grid>
