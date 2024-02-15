@@ -57,7 +57,6 @@ export default function RHFAutocomplete<
             onChange={(_, data) => {
               const myArray: any[] = data as any[];
               if (soloSelected && myArray && myArray?.length > 0) {
-                console.log({myArray})
                 // 
                 field.onChange([myArray?.pop()]);
               } else {
@@ -73,7 +72,6 @@ export default function RHFAutocomplete<
                 name={name}
                 error={!!error}
                 value={field.value}
-                inputRef={field.ref}
                 helperText={error && `${translate(error?.message)} `}
                 required={required}
                 {...params}

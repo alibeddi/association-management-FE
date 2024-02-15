@@ -12,9 +12,7 @@ type IProps = {
 }
 
 const StatsClientView = ({statsClient}:IProps) => {
-  console.log('new ',{statsClient});
   const methods = useForm()
-  // Destructure properties with default values to prevent errors
   const {kpis = [], name = ''} = statsClient;
 
   return (
@@ -30,9 +28,9 @@ const StatsClientView = ({statsClient}:IProps) => {
     <Stack>
     {
         kpis.length > 0 && kpis.map((kpi:IKpi, index:number) => (
-          <Stack sx={{m:1,display:'flex', gap:'1rem'}}>
+          <Stack sx={{m:1,display:'flex', gap:'1rem'}} key={index}>
           <Typography>{kpi.label} : </Typography>
-          <Box key={index}>
+          <Box >
             <RenderField {...kpi}  />
           </Box>
           </Stack>

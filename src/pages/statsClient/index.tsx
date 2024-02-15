@@ -6,10 +6,15 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs'
 import { PATH_DASHBOARD } from '../../routes/paths';
 import Iconify from '../../components/iconify';
 import StatsClientList from '../../sections/@dashboard/statsClient/StatsClientList';
+import { hasPermission } from '../../sections/@dashboard/Permissions/utils';
+import { useAuthContext } from '../../auth/useAuthContext';
+import { MethodCode, ModelCode } from '../../@types/Permission';
 
 const StatsClient = () => {
   const { themeStretch } = useSettingsContext()
-  const isAllowedToCreateStatsClient = true;
+  const {user} = useAuthContext();
+  const userPermissions = user?.permissionGroup[0].permissions;
+  const isAllowedToCreateStatsClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.CREATE);
   return (
     <>
       <Helmet>

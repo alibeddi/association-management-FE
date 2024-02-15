@@ -43,15 +43,6 @@ import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpi
 import { deleteStatsClient, getAllStatsClient } from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
 
-// ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'name', label: 'Forum name', align: 'left' },
-  { id: 'kpis', label:'Question' , align:'left'},
-  { label: '', align: 'center' },
-];
-
-// ----------------------------------------------------------------------
 
 export default function StatsClientList() {
   const {
@@ -72,7 +63,11 @@ export default function StatsClientList() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
-
+  const TABLE_HEAD = [
+    { id: 'name', label: 'Forum name', align: 'left' },
+    { id: 'kpis', label:'Question' , align:'left'},
+    {label:'view',align:'center'}
+  ];
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState<IStatsClient[]>([]);
@@ -143,7 +138,13 @@ export default function StatsClientList() {
   const userPermissions = user?.permissionGroup[0].permissions;
 
   // check current user permissions
-  const isAllowedToCreateKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.CREATE);
+  const isAllowedToEditStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.EDIT);
+  const isAllowedToDeleteStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.DELETE);
+  if(isAllowedToDeleteStatClient && isAllowedToEditStatClient){
+    TABLE_HEAD.push()
+    TABLE_HEAD.push({label:'edit',align:'center'},{label:'delete',align:'center'})
+  }
+   
 
   return (
     <>

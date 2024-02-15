@@ -64,7 +64,6 @@ const slice = createSlice({
       })
       .addCase(deleteStatsClient.fulfilled, (state, { payload }) => {
         state.status = IStatus.SUCCEEDED;
-        console.log('delete : ', { payload });
       })
       .addCase(deleteStatsClient.rejected, (state) => {
         state.status = IStatus.FAILED;

@@ -48,9 +48,9 @@ export default function StatsClientRow({
   const userPermissions = user?.permissionGroup[0].permissions;
   
   // check current user permissions
-  const isAllowedToDeleteKpi = true;
-  const isAllowedToEditKpi = true
-  const isAllowedToViewKpi = true;
+  const isAllowedToDeleteStatClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.DELETE);
+  const isAllowedToEditStatClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.EDIT);
+  const isAllowedToViewStatClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.VIEW);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -92,56 +92,36 @@ export default function StatsClientRow({
     
   </Typography>
 </TableCell>
-
-        <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell> 
-      </TableRow>
-
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        {isAllowedToDeleteKpi && (
-          <MenuItem
-            onClick={() => {
-              handleOpenConfirm();
-              handleClosePopover();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="eva:trash-2-outline" />
-            Delete
-          </MenuItem>
-        )}
-
-        {isAllowedToEditKpi && (
-          <MenuItem
-            onClick={() => {
-              onEditRow();
-              handleClosePopover();
-            }}
-          >
-            <Iconify icon="eva:edit-fill" />
-            Edit
-          </MenuItem>
-        )}
-        {isAllowedToViewKpi && (
-          <MenuItem
+{isAllowedToViewStatClient && (
+          <TableCell
+          align='center'
             onClick={() => {
               onViewRow();
               handleClosePopover();
             }}
           >
             <Iconify icon="carbon:view-filled" />
-            View
-          </MenuItem>
+            </TableCell>
         )}
-      </MenuPopover>
+        {isAllowedToEditStatClient && (
+          <TableCell
+          align='center'
+            onClick={() => onEditRow()}
+          >
+            <Iconify icon="eva:edit-fill" />
+            </TableCell>
+        )}
+          {isAllowedToDeleteStatClient && (
+          <TableCell
+          align='center'
+            onClick={() => onDeleteRow()}
+          >
+            <Iconify icon="eva:trash-2-outline" />
+            </TableCell>
+        )}    
+      </TableRow>
+
+
 
       <ConfirmDialog
         open={openConfirm}

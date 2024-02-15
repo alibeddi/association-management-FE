@@ -2,26 +2,22 @@ import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack';
-import React, { useEffect, useRef, useState } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Controller,  useForm } from 'react-hook-form';
 import { IKpi } from '../../../@types/Kpi';
 import FormProvider, {
   RHFAutocomplete,
-  RHFSelect,
   RHFTextField,
 } from '../../../components/hook-form';
 import RenderField from '../../../components/RenderField';
 import { getKpis } from '../../../redux/slices/kpis/actions';
 import {
   createStatsClient,
-  getAllStatsClient,
-  getSingleStatsClient,
   updateStatsClient,
 } from '../../../redux/slices/statsClient/action';
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { getFromKpis } from '../../../utils';
 import { IStatsClient } from '../../../@types/statsClient';
-import { stats } from '../../../../webpack.config';
 import { generateSelectKpis } from '../../../utils/generateSelectKpis';
 
 type IProps = {
@@ -56,18 +52,16 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     setSelect((pre) => [...pre, { value: {} as IKpi, num: numSelect }]);
   };
   const removeSelect = (index: number) =>
-    setSelect((prevState) => {
-      const newArray = [...prevState];
+    setSelect((pre) => {
+      const newArray = [...pre];
       newArray.splice(index, 1);
       return newArray;
     });
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const submit = async (data: any) => {
    
-    const kpisArray: any = getFromKpis(data, select);
+    const kpisArray: string[] = getFromKpis(data, select);
     if(statsClient){
-      console.log(data)
-        console.log('update',kpisArray)
         await dispatch(updateStatsClient({
           id:statsClient._id,
           body:{
@@ -116,7 +110,6 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                 label="name of forum"
                 onChange={(e) => {
                   field.onChange(e.target.value);
-                  console.log(e.target.value);
                 }}
                 required
               />
@@ -133,7 +126,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
               <Typography>Question</Typography>
               {select.length > 0 ? (
                 select.map((s, index) => (
-                  <>
+
                     <Stack
                       key={s.num}
                       sx={{
@@ -182,7 +175,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                         <DeleteIcon />
                       </Button>
                     </Stack>
-                  </>
+             
                 ))
               ) : (
                 <Box>

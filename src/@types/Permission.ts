@@ -5,6 +5,7 @@ export enum ModelCode {
   KPI = 'KPI',
   WORKTIME = 'WORKTIME',
   CALLS = 'CALL',
+  STAT_CLIENT = 'STAT_CLIENT'
 }
 
 export enum MethodCode {

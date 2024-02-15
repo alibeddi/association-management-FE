@@ -27,7 +27,7 @@ export const getAllStatsClient = createAsyncThunk('/statsClient/',async(payload:
     return Promise.reject(error.message ? error.message : data?.message)
   }
 })
-export const createStatsClient = createAsyncThunk('/statsClient/new',async (newStatsClient:Partial<IStatsClient>) =>{
+export const createStatsClient = createAsyncThunk('/statsClient/new',async (newStatsClient:Partial<IStatsClients>) =>{
   let data;
   try {
     const response = await axios.post(`/${STAT_CLIENT_URI}`,newStatsClient)
