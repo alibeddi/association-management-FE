@@ -11,7 +11,7 @@ import { StatClientResponseForm } from '../../sections/@dashboard/statClientResp
 
 export default function ClientStatusListPage() {
   const { themeStretch } = useSettingsContext();
-  const { statClientId = '65cdfdcd89cf3183cf98a016' } = useParams();
+  const { statClientId } = useParams();
 
   useEffect(() => {
     if (statClientId) {

@@ -32,18 +32,6 @@ export default function ClientStatusListPage() {
         <CustomBreadcrumbs
           heading="client status"
           links={[{ name: 'client-status' }]}
-          action={
-            isAllowedToCreateClientStatus && (
-              <Button
-                component={RouterLink}
-                to={`${PATH_DASHBOARD.statClientResponse.new}/65cdfdcd89cf3183cf98a016`}
-                variant="contained"
-                startIcon={<Iconify icon="eva:plus-fill" />}
-              >
-                New client status
-              </Button>
-            )
-          }
         />
         <StatClientResponsesTables />
       </Container>
