@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -15,9 +15,6 @@ import {
 } from '@mui/material';
 // routes
 
-// types
-import { IKpi } from '../../../@types/Kpi';
-// components
 
 // sections
 import ConfirmDialog from '../../../components/confirm-dialog';
@@ -34,29 +31,17 @@ import {
 import { useLocales } from '../../../locales';
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import KpiTableRow from './KpiTableRow';
-import KpiTableToolbar from './KpiTableToolbar';
+import StatsClientRow from './StatsClientRow';
+import StatsClientTableToolbar from './StatsClientToolbar';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import { hasPermission } from '../Permissions/utils';
 import { MethodCode, ModelCode } from '../../../@types/Permission';
 import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis/actions';
+import { deleteManyStatsClient, deleteStatsClient, getAllStatsClient } from '../../../redux/slices/statsClient/action';
+import { IStatsClient } from '../../../@types/statsClient';
 
-// ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'label', label: 'Label', align: 'left' },
-  { id: 'frontType', label: 'Frontend Type', align: 'left' },
-  { id: 'backType', label: 'Backend Type', align: 'left' },
-  { id: 'isRequired', label: 'Required', align: 'center' },
-  { id: 'options', label: 'Options', align: 'left' },
-  { id: 'createdAt', label: 'Created At', align: 'left' },
-  { label: '', align: 'center' },
-];
-
-// ----------------------------------------------------------------------
-
-export default function KpiListPage() {
+export default function StatsClientList() {
   const {
     dense,
     page,
@@ -75,37 +60,34 @@ export default function KpiListPage() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
-
+  const TABLE_HEAD = [
+    { id: 'name', label: 'Forum name', align: 'left' },
+    { id: 'kpis', label:'Question' , align:'left'},
+    {label:'view',align:'center'}
+  ];
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [tableData, setTableData] = useState<IStatsClient[]>([]);
+  const [filterName, setFilterName] = useState('');
+  useEffect(() => {
+    dispatch(getAllStatsClient({page, limit:rowsPerPage, orderBy, order, filterName}));
+  }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
+  const { statsClients } = useSelector((state: RootState) => state?.statsClient);
+  useEffect(() => {
+    setTableData(statsClients?.docs);
+  }, [statsClients]);
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
-
-  const [tableData, setTableData] = useState<IKpi[]>([]);
-  const [filterName, setFilterName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
-
-  const { kpis } = useSelector((state: RootState) => state?.kpis);
-
-  useEffect(() => {
-    dispatch(getKpis({ page, limit: rowsPerPage, orderBy, order, filterName }));
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
-
-  useEffect(() => {
-    setTableData(kpis?.docs);
-  }, [kpis]);
-
   const isFiltered = filterName !== '';
-
   const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
 
-  const handleViewRow = (row: IKpi) => {
-    navigate(`${PATH_DASHBOARD.kpis.view}/${row._id}`, { state: { kpi: row } });
+  const handleViewRow = (row: IStatsClient) => {
+    navigate(`${PATH_DASHBOARD.statsClient.view}/${row._id}`, { state: { statsClient: row } });
   };
 
-  const handleEditRow = (row: IKpi) => {
-    navigate(`${PATH_DASHBOARD.kpis.edit}/${row._id}`, { state: { kpi: row } });
+  const handleEditRow = (row: IStatsClient) => {
+    navigate(`${PATH_DASHBOARD.statsClient.edit}/${row._id}`, { state: { statsClient: row } });
   };
 
   const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,54 +107,39 @@ export default function KpiListPage() {
     setOpenConfirm(false);
   };
 
-  const handleDeleteRow = (id: string) => {
-    dispatch(deleteOnekpi({ kpiId: id })).unwrap().then(res => enqueueSnackbar(res.message)).catch(err =>enqueueSnackbar(err.message, { variant: 'error' }) )
+  const handleDeleteRow = async (id: string) => {
+    await dispatch(deleteStatsClient({ id })).unwrap().then((res) => enqueueSnackbar(`${res.data.message}`)).catch(error=>enqueueSnackbar(`${error.data.message}`, { variant: 'error' }))
   };
-  const handleDeleteRows = (selectedRows: string[]) => {
 
-    dispatch(deleteManykpis({ kpiIds: selectedRows })).unwrap().then(res =>{ 
-      enqueueSnackbar(res.message)
-      dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
-    }).catch(err =>enqueueSnackbar(err.message, { variant: 'error' }) )
-    setSelected([])
-    
+  const handleDeleteRows = (selectedRows: string[]) => {
+    dispatch(deleteManyStatsClient({ statClientIds: selectedRows })).unwrap().then(res =>{
+             enqueueSnackbar(`${translate(res?.data.message)}`);
+        dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
+    }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+    setSelected([]);
   };
 
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
 
-  const isAllowedToCreateKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.CREATE);
+  // check current user permissions
+  const isAllowedToEditStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.EDIT);
+  const isAllowedToDeleteStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.DELETE);
+  if(isAllowedToDeleteStatClient && isAllowedToEditStatClient){
+    TABLE_HEAD.push({label:'edit',align:'center'},{label:'delete',align:'center'})
+  }
+   
 
   return (
     <>
-      <Helmet>
-        <title>{`${translate('Kpis')}`}</title>
-      </Helmet>
-
       <Container maxWidth={false}>
-        <CustomBreadcrumbs
-          heading="kpis"
-          links={[{ name: 'kpis' }]}
-          action={
-            isAllowedToCreateKpi && (
-              <Button
-                component={RouterLink}
-                to={PATH_DASHBOARD.kpis.new}
-                variant="contained"
-                startIcon={<Iconify icon="eva:plus-fill" />}
-              >
-                New Kpi
-              </Button>
-            )
-          }
-        />
         <Card>
-          <KpiTableToolbar
+          <StatsClientTableToolbar
             onResetFilter={handleResetFilter}
             isFiltered={isFiltered}
             filterName={filterName}
             onFilterName={handleFilterName}
-            placeholder="Search by kpi Name..."
+            placeholder="Search by Stats Client Name..."
           />
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
@@ -182,7 +149,7 @@ export default function KpiListPage() {
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
-                  tableData.map((row) => row._id)
+                  tableData?.map((row) => row._id)
                 )
               }
               action={
@@ -206,14 +173,14 @@ export default function KpiListPage() {
                   onSelectAllRows={(checked: boolean) =>
                     onSelectAllRows(
                       checked,
-                      tableData.map((row) => row._id)
+                      tableData?.map((row) => row._id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {tableData?.map((row: IKpi) => (
-                    <KpiTableRow
+                  {tableData?.map((row: IStatsClient) => (
+                    <StatsClientRow
                       key={row._id}
                       row={row}
                       selected={selected.includes(row._id)}
@@ -237,7 +204,7 @@ export default function KpiListPage() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={kpis.meta.totalDocs || 0}
+            count={statsClients.meta.totalDocs || 0}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
@@ -254,7 +221,7 @@ export default function KpiListPage() {
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
+            Are you sure want to delete <strong> {selected?.length} </strong> items?
           </>
         }
         action={

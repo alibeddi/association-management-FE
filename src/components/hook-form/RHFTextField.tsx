@@ -44,6 +44,7 @@ export default function RHFTextField({
             InputProps={{
               onWheel: handleWheel,
             }}
+            defaultValue={defaultValue}
             fullWidth
             onWheel={handleWheel}
             value={field.value === null ? '' : field.value}

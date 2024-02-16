@@ -22,5 +22,9 @@ export const KpiNew = Loadable(lazy(() => import('../pages/Kpis/KpiNewPage')));
 export const KpiEdit = Loadable(lazy(() => import('../pages/Kpis/KpiEditPage')));
 export const KpiView = Loadable(lazy(() => import('../pages/Kpis/KpiDetailsPage')));
 export const Call = Loadable(lazy(()=>import('../pages/Calls')));
+export const StatsClient = Loadable(lazy(()=>import('../pages/statsClient')))
+export const StatsClientNew = Loadable(lazy(()=>import('../pages/statsClient/statsClientNew')))
+export const StatsClientEdit = Loadable(lazy(()=>import('../pages/statsClient/statsClientEdit')))
+export const StatsClientShow = Loadable(lazy(()=>import('../pages/statsClient/statsClientShow')))
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

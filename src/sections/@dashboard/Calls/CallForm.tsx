@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+
 
 import * as Yup from 'yup';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch } from 'react-redux';
 import { LoadingButton } from '@mui/lab';
 import { Box, Stack } from '@mui/system';
 import FormProvider, { RHFTextField } from '../../../components/hook-form';
 import { ICall } from '../../../@types/Call';
-import { createCallsToday, getCallByDate, getCallById } from '../../../redux/slices/calls/actions';
 import { RootState, useSelector } from '../../../redux/store';
 
 export type IProp<ICall> = {
@@ -28,7 +26,7 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
   const callMaked = call?.calls?.maked || 0;
   const numberCalls = callReceived+callMaked;
   const methods = useForm<ICall>({
-    resolver: yupResolver(CallSchema),
+    resolver: yupResolver(CallSchema)
   });
   const onSubmit = async (data: ICall) => {
     try {
@@ -38,11 +36,8 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
     }
   };
   const {
-    reset,
-    control,
     handleSubmit,
-    setValue,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
@@ -62,7 +57,8 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
         <Stack >
       <RHFTextField
           name="calls.received"
-          label={`${callReceived} calls recu `}
+          label={`${callReceived} calls  recieved `}
+          
         />
       </Stack>
       <Stack>

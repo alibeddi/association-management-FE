@@ -21,6 +21,10 @@ import {
   OperatorList,
   Page404,
   PermissionGroup,
+  StatsClient,
+  StatsClientEdit,
+  StatsClientNew,
+  StatsClientShow,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -95,6 +99,17 @@ export default function Router() {
         {
           path: "calls",
           element: <Call/>
+        },
+        {
+          path:"stats-client",
+          element: <Outlet/>,
+          children: [
+            {path:'',element:<StatsClient/>},
+            {path:'new' , element: <StatsClientNew/>},
+            {path:'view/:id',element:<StatsClientShow/>},
+            {path:'edit/:id',element:<StatsClientEdit/>}
+
+          ]
         }
       ],
     },

@@ -77,26 +77,16 @@ function Permissions() {
 
   const onSubmit = async ({ group }: { group: string }) => {
     if (isEdit) {
-      dispatch(updateGroupPermission({ id: permissionGroup?._id, body: { name: group } })).then(
-        (res: any) => {
-          if (res?.meta?.requestStatus === 'fulfilled') {
-            reset({ group: '' });
-            setIsEdit(false);
-            enqueueSnackbar(`${translate(res?.payload.message)}`);
-          } else {
-            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-          }
-        }
-      );
+      dispatch(updateGroupPermission({ id: permissionGroup?._id, body: { name: group } })).unwrap().then(res => {
+        reset({ group: '' });
+        setIsEdit(false);
+        enqueueSnackbar(`${translate(res.message)}`);
+      }).catch(err=>enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
     } else {
-      dispatch(createNewGroupPermission({ name: group })).then((res: any) => {
-        if (res?.meta?.requestStatus === 'fulfilled') {
-          enqueueSnackbar(`${translate(res?.payload.message)}`);
+      dispatch(createNewGroupPermission({ name: group })).unwrap().then(res => {
+     enqueueSnackbar(`${translate(res?.payload.message)}`);
           reset();
-        } else {
-          enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-        }
-      });
+      }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
     }
   };
 
@@ -226,15 +216,12 @@ function Permissions() {
                     id: permissionGroup?._id,
                     body: { permissions: updatedPermissions },
                   })
-                ).then((res: any) => {
-                  if (res?.meta?.requestStatus === 'fulfilled') {
-                    reset({ group: '' });
+                ).unwrap()
+                .then(res => {
+                   reset({ group: '' });
                     setIsEdit(false);
-                    enqueueSnackbar(`${translate(res?.payload.message)}`);
-                  } else {
-                    enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-                  }
-                });
+                    enqueueSnackbar(`${translate(res.message)}`);
+                }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
               }}
               loading={isSubmitting}
             >

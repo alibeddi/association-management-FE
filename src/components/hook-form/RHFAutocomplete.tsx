@@ -19,19 +19,21 @@ interface Props<
   helperText?: React.ReactNode;
   codeInOrderOfName?: boolean;
   soloSelected?: boolean;
+  required?:boolean
 }
 
 export default function RHFAutocomplete<
   T,
   Multiple extends boolean | undefined,
   DisableClearable extends boolean | undefined,
-  FreeSolo extends boolean | undefined
+  FreeSolo extends boolean | undefined,
 >({
   name,
   label,
   helperText,
   options,
   soloSelected = false,
+  required = false,
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
   const { control } = useFormContext();
@@ -55,6 +57,7 @@ export default function RHFAutocomplete<
             onChange={(_, data) => {
               const myArray: any[] = data as any[];
               if (soloSelected && myArray && myArray?.length > 0) {
+                // 
                 field.onChange([myArray?.pop()]);
               } else {
                 field.onChange(myArray);
@@ -69,8 +72,8 @@ export default function RHFAutocomplete<
                 name={name}
                 error={!!error}
                 value={field.value}
-                inputRef={field.ref}
                 helperText={error && `${translate(error?.message)} `}
+                required={required}
                 {...params}
               />
             )}
