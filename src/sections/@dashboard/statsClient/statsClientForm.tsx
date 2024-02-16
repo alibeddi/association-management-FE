@@ -4,7 +4,7 @@ import { LoadingButton } from '@mui/lab';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack';
 import  { useEffect } from 'react';
-import { Controller, useFieldArray,  useForm } from 'react-hook-form';
+import {  useFieldArray,  useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup'
 import {  BackType, FrontType, IKpi } from '../../../@types/Kpi';
@@ -21,6 +21,7 @@ import {
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { getFromKpis } from '../../../utils';
 import { IStatsClient, IStatsClientFormProps } from '../../../@types/statsClient';
+import { setDefaultValuesStatsClient } from '../../../utils/setDefaultValuesStatsClient';
 
 
 type IProps = {
@@ -48,12 +49,10 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
       })
     )
   })
+  const defaultValues = setDefaultValuesStatsClient(statsClientProp);
   const methods = useForm<{name:string;kpis:IKpi[] | [];}>({
     resolver: yupResolver(newKpisSchema),
-    defaultValues: {
-      name: '',
-      kpis: []
-    }
+    defaultValues
   });
   const { 
     watch,
@@ -100,6 +99,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     display: 'flex',
     gap: '1rem',
   };
+
   return (
     (
       <FormProvider
@@ -114,21 +114,14 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
         }}
       >
         <Stack>
-          <Controller
-            name="name"
-            control={methods.control}
-            defaultValue={statsClient?.name || ''}
-            render={({ field }) => (
+
               <RHFTextField
-                {...field}
                 label="name of forum"
-                onChange={(e) => {
-                  field.onChange(e.target.value);
-                }}
+                name="name"
+                defaultValue={statsClient?.name ? statsClient.name:  ''}
                 required
               />
-            )}
-          />
+
           <Stack
             sx={{
               display: 'flex',
@@ -138,8 +131,8 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
           >
             <Stack sx={{ ...styleFlexColumn, flexBasis: '50%', padding: '1rem' }}>
               <Typography>Question</Typography>
-              {fields.length > 0 ? (
-                fields.map((s, index) => (
+              {fields?.length > 0 ? (
+                fields?.map((s, index) => (
                     <Stack
                       key={index}
                       sx={{
@@ -198,8 +191,8 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
             >
               <Typography>Overview</Typography>
               <Stack sx={styleFlexColumn}>
-                {values.kpis.length > 0 ? (
-                  values.kpis.map((value, index) => 
+                {values.kpis?.length > 0 ? (
+                  values.kpis?.map((value, index) => 
                    (
                       <Box key={index}>
                         <Typography>
