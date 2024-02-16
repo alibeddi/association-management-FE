@@ -73,7 +73,10 @@ export default function StatClientForm({
     handleSubmit,
     reset,
     formState: { isSubmitting },
+    watch,
   } = methods;
+  const values = watch();
+  console.log({ values });
   const onSubmit = async (data: any) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));

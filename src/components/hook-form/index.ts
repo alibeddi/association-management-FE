@@ -12,3 +12,4 @@ export { default as RHFDateTimePicker } from './RHFDateTimePicker';
 export { default as RHFPhoneNumber } from './RHFPhoneNumber';
 export { default as RHFDate } from './RHFDate';
 export { default as RHFDesktopDateTimePicker } from './RHFDesktopDateTimePicker';
+export { default as RHFCheckboxGroup } from './RHFCheckboxGroup';
