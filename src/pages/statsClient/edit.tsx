@@ -1,27 +1,28 @@
+import { Container } from '@mui/system';
+import React, { useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
-// @mui
-import { Container,Button } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-// routes
-import { PATH_DASHBOARD } from '../../routes/paths';
-// components
-import Iconify from '../../components/iconify';
-
+import { useParams } from 'react-router';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
+import { getSingleStatsClient } from '../../redux/slices/statsClient/action';
+import { useDispatch, useSelector } from '../../redux/store';
+import { PATH_DASHBOARD } from '../../routes/paths';
 import StatsClientForm from '../../sections/@dashboard/statsClient/statsClientForm';
+import { actions } from '../../redux/slices/statsClient';
 
-// sections
-
-// ----------------------------------------------------------------------
-
-export default function KpiNewPage() {
+const StatsClientEdit = () => {
   const { themeStretch } = useSettingsContext();
-
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    
+    if (id) dispatch(getSingleStatsClient({ id }));
+  }, [dispatch, id]);
+  const { statsClient } = useSelector((state) => state.statsClient);
   return (
     <>
       <Helmet>
-        <title> Kpi: Create a new Stats Client </title>
+        <title> Kpi: Create a new Kpi </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -38,10 +39,11 @@ export default function KpiNewPage() {
             },
             { name: 'New stats client' },
           ]}
-          
         />
-        <StatsClientForm/>
+        <StatsClientForm key={statsClient._id} statsClientProp={statsClient} />
       </Container>
     </>
   );
-}
+};
+
+export default StatsClientEdit;

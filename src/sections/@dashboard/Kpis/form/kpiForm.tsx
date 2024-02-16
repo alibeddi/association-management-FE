@@ -90,25 +90,17 @@ export default function UserNewEditDeatilsForm({
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       if (isEdit && currentKpi) {
-        dispatch(updatekpi({ kpiId: currentKpi?._id, body: data })).then((res: any) => {
-          if (res?.meta?.requestStatus === 'fulfilled') {
-            enqueueSnackbar(`${translate(res?.payload.message)}`);
-            reset();
-            navigate(PATH_DASHBOARD.kpis.root);
-          } else {
-            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-          }
-        });
+        dispatch(updatekpi({ kpiId: currentKpi?._id, body: data })).unwrap().then(res=>{
+          enqueueSnackbar(`${translate(res.message)}`);
+          reset();
+          navigate(PATH_DASHBOARD.kpis.root);
+        }).catch(err=> enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
       } else {
-        dispatch(createkpi({ kpi: data })).then((res: any) => {
-          if (res?.meta?.requestStatus === 'fulfilled') {
-            enqueueSnackbar(`${translate(res?.payload.message)}`);
+        dispatch(createkpi({ kpi: data })).unwrap().then(res => {
+          enqueueSnackbar(`${translate(res.message)}`);
             reset();
             navigate(PATH_DASHBOARD.kpis.root);
-          } else {
-            enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-          }
-        });
+        }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
       }
     } catch (error) {
       console.error(error);

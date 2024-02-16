@@ -26,7 +26,9 @@ import {
   StatClientResponseNew,
   StatClientResponseView,
   StatsClient,
+  StatsClientEdit,
   StatsClientNew,
+  StatsClientShow,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -118,13 +120,16 @@ export default function Router() {
           element: <Call />,
         },
         {
-          path: 'stats-client',
-          element: <StatsClient />,
-        },
-        {
-          path: 'stats-client/new',
-          element: <StatsClientNew />,
-        },
+          path:"stats-client",
+          element: <Outlet/>,
+          children: [
+            {path:'',element:<StatsClient/>},
+            {path:'new' , element: <StatsClientNew/>},
+            {path:'view/:id',element:<StatsClientShow/>},
+            {path:'edit/:id',element:<StatsClientEdit/>}
+
+          ]
+        }
       ],
     },
     {

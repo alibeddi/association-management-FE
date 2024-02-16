@@ -38,5 +38,7 @@ export const StatClientResponseView = Loadable(
 export const StatClientResponseEdit = Loadable(
   lazy(() => import('../pages/StatClientResponse/StatClientResponseEdit'))
 );
+export const StatsClientEdit = Loadable(lazy(()=>import('../pages/statsClient/edit')))
+export const StatsClientShow = Loadable(lazy(()=>import('../pages/statsClient/show')))
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

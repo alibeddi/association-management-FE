@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import { getOneStatClient } from '../../redux/slices/statsClient/action';
+import { getSingleStatsClient } from '../../redux/slices/statsClient/action';
 import { dispatch } from '../../redux/store';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { StatClientResponseForm } from '../../sections/@dashboard/statClientResponse/form';
@@ -15,7 +15,7 @@ export default function ClientStatusListPage() {
 
   useEffect(() => {
     if (statClientId) {
-      dispatch(getOneStatClient({ statClientId }));
+      dispatch(getSingleStatsClient({ id: statClientId }));
     }
   }, [statClientId]);
 

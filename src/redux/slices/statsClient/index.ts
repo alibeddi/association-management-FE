@@ -2,7 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatsClient } from '../../../@types/statsClient';
 import { IStatus } from '../../../@types/status';
-import { createStatsClient, getAllStatsClient, getOneStatClient } from './action';
+import {
+  createStatsClient,
+  getAllStatsClient,
+  getSingleStatsClient,
+  deleteStatsClient,
+} from './action';
 
 type StatsClientState = {
   statsClients: PaginationModel<IStatsClient>;
@@ -17,7 +22,11 @@ const initialState: StatsClientState = {
 const slice = createSlice({
   name: 'statsClient',
   initialState,
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.statsClient = {} as IStatsClient;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createStatsClient.pending, (state) => {
@@ -40,18 +49,28 @@ const slice = createSlice({
       .addCase(getAllStatsClient.rejected, (state) => {
         state.status = IStatus.FAILED;
       })
-      // get ONE stat-client
-      .addCase(getOneStatClient.pending, (state) => {
+      .addCase(getSingleStatsClient.pending, (state) => {
         state.status = IStatus.LOADING;
       })
-      .addCase(getOneStatClient.fulfilled, (state, { payload }) => {
+      .addCase(getSingleStatsClient.fulfilled, (state, { payload }) => {
         state.status = IStatus.SUCCEEDED;
-        state.statsClient = payload.data;
+        state.statsClient = { ...payload.data };
       })
-      .addCase(getOneStatClient.rejected, (state) => {
+      .addCase(getSingleStatsClient.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(deleteStatsClient.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(deleteStatsClient.fulfilled, (state, { payload }) => {
+        state.status = IStatus.SUCCEEDED;
+        state.statsClients.docs = state.statsClients.docs.filter(stat=>stat._id!==payload.id)
+
+      })
+      .addCase(deleteStatsClient.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
 });
-export const { actions } = slice;
+export const { actions  } = slice;
 export default slice.reducer;
