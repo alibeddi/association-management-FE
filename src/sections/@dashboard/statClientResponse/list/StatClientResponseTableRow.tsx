@@ -36,7 +36,7 @@ export default function StatClientResponseTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { admin, clientName, createdAt, _id } = row;
+  const { admin, clientName, clientContact, statClient, createdAt, _id } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
   const navigate = useNavigate();
@@ -76,6 +76,16 @@ export default function StatClientResponseTableRow({
         <TableCell>
           <Typography variant="subtitle2" noWrap>
             {clientName}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" noWrap>
+            {clientContact}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" noWrap>
+            {statClient}
           </Typography>
         </TableCell>
         <TableCell

@@ -28,6 +28,8 @@ import StatClientResponseTableToolbar from './StatClientResponseTableToolbar';
 const TABLE_HEAD = [
   { id: 'admin', label: 'Admin', align: 'left' },
   { id: 'clientName', label: 'Client Name', align: 'left' },
+  { id: 'clientContact', label: 'Client Contact', align: 'left' },
+  { id: 'statClient', label: 'stat-Client', align: 'left' },
   { id: 'kpis', label: 'Kpis', align: 'left' },
   { id: 'createdAt', label: 'Created At', align: 'left' },
   { label: '', align: 'center' },
