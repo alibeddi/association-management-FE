@@ -15,6 +15,7 @@ import {
 } from '../../../../components/table';
 import { useLocales } from '../../../../locales';
 import {
+  deleteManyStatClientResponse,
   deleteStatClientResponse,
   getAllStatClientResponses,
 } from '../../../../redux/slices/statClientResponse/actions';
@@ -47,6 +48,7 @@ export default function StatClientResponsesTable() {
     setPage,
     //
     selected,
+    setSelected,
     onSelectRow,
     onSelectAllRows,
     //
@@ -117,7 +119,24 @@ export default function StatClientResponsesTable() {
     });
   };
 
-  const handleDeleteRows = (selectedRows: string[]) => {};
+  const handleDeleteRows = (selectedRows: string[]) => {
+    dispatch(deleteManyStatClientResponse({ statClientResponses: selectedRows }))
+      .unwrap()
+      .then((res: any) => {
+        enqueueSnackbar(`${translate(res.message)}`);
+        dispatch(
+          getAllStatClientResponses({
+            page: 0,
+            limit: rowsPerPage,
+            orderBy,
+            order,
+            filterClientName,
+          })
+        );
+        setSelected([]);
+      })
+      .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
+  };
 
   return (
     <>

@@ -4,6 +4,7 @@ import { StatClientResponse } from '../../../@types/StatClientResponse';
 import { IStatus } from '../../../@types/status';
 import {
   createStatClientResponse,
+  deleteManyStatClientResponse,
   deleteStatClientResponse,
   editStatClientResponse,
   getAllStatClientResponses,
@@ -63,7 +64,7 @@ const slice = createSlice({
       .addCase(getOneStatClientResponse.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
-    // edit Stat-client-response
+    // edit
     builder
       .addCase(editStatClientResponse.pending, (state) => {
         state.status = IStatus.FAILED;
@@ -75,7 +76,7 @@ const slice = createSlice({
       .addCase(editStatClientResponse.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
-    // delete Stat-client-response
+    // delete one
     builder
       .addCase(deleteStatClientResponse.pending, (state) => {
         state.status = IStatus.FAILED;
@@ -87,6 +88,17 @@ const slice = createSlice({
         );
       })
       .addCase(deleteStatClientResponse.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // delete many
+    builder
+      .addCase(deleteManyStatClientResponse.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(deleteManyStatClientResponse.fulfilled, (state) => {
+        state.status = IStatus.SUCCEEDED;
+      })
+      .addCase(deleteManyStatClientResponse.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

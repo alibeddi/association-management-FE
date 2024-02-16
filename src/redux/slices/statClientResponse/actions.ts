@@ -98,7 +98,7 @@ export const editStatClientResponse = createAsyncThunk(
   }
 );
 
-// delete
+// delete one
 export const deleteStatClientResponse = createAsyncThunk(
   'STAT_CLIENT_RESPONSE/DELETE',
   async (payload: { statClientResponseId: string }) => {
@@ -106,6 +106,29 @@ export const deleteStatClientResponse = createAsyncThunk(
     let data;
     try {
       const response = await axios.delete(`/stat-client-responses/${statClientResponseId}`);
+      data = response.data;
+      if (response.status === 200) {
+        return data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
+
+// delete many
+export const deleteManyStatClientResponse = createAsyncThunk(
+  'STAT_CLIENT_RESPONSE/DELETE-MANY',
+  async (payload: { statClientResponses: string[] }) => {
+    const { statClientResponses } = payload;
+    let data;
+    try {
+      const response = await axios.delete(`/stat-client-responses/delete`, {
+        data: {
+          statClientResponseIds: statClientResponses,
+        },
+      });
       data = response.data;
       if (response.status === 200) {
         return data;
