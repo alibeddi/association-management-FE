@@ -1,3 +1,4 @@
+import * as Yup from 'yup'
 import { Button, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
@@ -6,7 +7,8 @@ import { useSnackbar } from 'notistack';
 import  { useEffect } from 'react';
 import {  useFieldArray,  useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup'
+import { AsyncPaginate } from "react-select-async-paginate";
+
 import {  BackType, FrontType, IKpi } from '../../../@types/Kpi';
 import FormProvider, {
   RHFAutocomplete,
@@ -22,6 +24,8 @@ import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { getFromKpis } from '../../../utils';
 import { IStatsClient, IStatsClientFormProps } from '../../../@types/statsClient';
 import { setDefaultValuesStatsClient } from '../../../utils/setDefaultValuesStatsClient';
+
+
 
 
 type IProps = {
@@ -143,7 +147,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                         width: '100%',
                       }}
                     >
-                          <RHFAutocomplete
+                        {/*  <RHFAutocomplete
                             freeSolo
                             label={`Question n°: ${index}`}
                             name={`kpis[${index}]`}
@@ -153,7 +157,10 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                             required
                             sx={{ flexBasis: '80%' }}
                           />
+*/} 
+<AsyncPaginate 
 
+/>
                       <Button
                         variant="contained"
                         color="error"
