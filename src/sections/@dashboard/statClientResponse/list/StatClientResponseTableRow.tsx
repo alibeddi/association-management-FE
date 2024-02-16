@@ -72,7 +72,11 @@ export default function StatClientResponseTableRow({
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
-        <TableCell align="left">{admin.name}</TableCell>
+        <TableCell align="left">
+          <Typography variant="subtitle2" noWrap>
+            {admin.name}
+          </Typography>
+        </TableCell>
         <TableCell>
           <Typography variant="subtitle2" noWrap>
             {clientName}
@@ -93,9 +97,15 @@ export default function StatClientResponseTableRow({
           align="left"
           sx={{ textTransform: 'capitalize', cursor: 'pointer' }}
         >
-          click here to see the answers
+          <Typography variant="subtitle2" noWrap>
+            click here to see the answers
+          </Typography>
         </TableCell>
-        <TableCell align="left">{fDate(createdAt)}</TableCell>
+        <TableCell align="left">
+          <Typography variant="subtitle2" noWrap>
+            {fDate(createdAt)}
+          </Typography>
+        </TableCell>
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
