@@ -30,12 +30,10 @@ export default function RHFMultiCheckbox({
   ...other
 }: RHFMultiCheckboxProps) {
   const { control } = useFormContext();
-  const getSelected = (selectedItems: string[], item: string) => {
-    console.log({ selectedItems });
-    return selectedItems?.includes(item)
+  const getSelected = (selectedItems: string[], item: string) =>
+    selectedItems?.includes(item)
       ? selectedItems.filter((value) => value !== item)
       : [...selectedItems, item];
-  };
 
   return (
     <Controller
@@ -68,27 +66,19 @@ export default function RHFMultiCheckbox({
               ...sx,
             }}
           >
-            {options.map((option) => {
-              console.log({
-                include: field?.value?.includes(option.value),
-                value: field.value,
-                name: field.name,
-              });
-              return (
-                <FormControlLabel
-                  key={option.value}
-                  control={
-                    <Checkbox
-                      value={option.value}
-                      checked={field?.value?.includes(option.value)}
-                      onChange={() => field.onChange(getSelected(field.value, option.value))}
-                    />
-                  }
-                  label={option.label}
-                  {...other}
-                />
-              );
-            })}
+            {options.map((option) => (
+              <FormControlLabel
+                key={option.value}
+                control={
+                  <Checkbox
+                    checked={field?.value?.includes(option.value)}
+                    onChange={() => field.onChange(getSelected(field.value || [], option.value))}
+                  />
+                }
+                label={option.label}
+                {...other}
+              />
+            ))}
           </FormGroup>
 
           {(!!error || helperText) && (

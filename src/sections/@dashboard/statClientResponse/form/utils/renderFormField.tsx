@@ -32,11 +32,7 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
         name={componentName}
         label={kpi.label}
         spacing={2}
-        options={[
-          { value: 'option 1', label: 'Checkbox 1' },
-          { value: 'option 2', label: 'Checkbox 2' },
-          { value: 'option 3', label: 'Checkbox 3' },
-        ]}
+        options={options}
       />
     ),
     select: (
