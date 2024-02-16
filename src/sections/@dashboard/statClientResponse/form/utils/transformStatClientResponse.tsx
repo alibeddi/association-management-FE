@@ -1,8 +1,7 @@
 import { BackType } from '../../../../../@types/Kpi';
 import { StatClientResponse } from '../../../../../@types/StatClientResponse';
 
-export // Define a new function outside of your component
-function transformStatClientResponse(
+export function transformStatClientResponse(
   currentStatClientResponse: StatClientResponse,
   isEdit: boolean,
   statClientDetails: boolean
