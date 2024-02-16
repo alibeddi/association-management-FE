@@ -3,7 +3,6 @@ import { IKpi } from '../../../../../@types/Kpi';
 
 export function generateFieldValidation(kpi: IKpi) {
   let schema: Yup.BaseSchema<any, any>;
-
   switch (kpi.backType) {
     case 'array':
       schema = Yup.array();

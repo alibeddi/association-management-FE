@@ -31,6 +31,6 @@ function transformStatClientResponse(
   return {
     ...transformedObject,
     clientName: currentStatClientResponse.clientName,
-    clientContact: '',
+    clientContact: currentStatClientResponse.clientContact,
   };
 }

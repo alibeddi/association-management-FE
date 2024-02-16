@@ -3,8 +3,9 @@ import { User } from './User';
 
 export interface StatClientResponse {
   _id: string;
-  statClientId: string;
+  statClient: string;
   clientName: string;
+  clientContact: string;
   admin: User;
   kpis: Array<{
     kpi: IKpi;

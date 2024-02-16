@@ -31,7 +31,6 @@ export default function StatClientForm({
   currentStatClientResponse,
 }: Props) {
   const { statsClient } = useSelector((state: RootState) => state.statsClient);
-
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [kpis, setKpis] = useState<IKpi[]>([]);
@@ -80,11 +79,17 @@ export default function StatClientForm({
       await new Promise((resolve) => setTimeout(resolve, 500));
       const body = {
         clientName: data.clientName,
+        clientContact: data.clientContact,
         kpis: formatFormValues(data, kpis),
       };
 
       if (!isEdit) {
-        dispatch(createStatClientResponse({ statClientId: '', body }))
+        dispatch(
+          createStatClientResponse({
+            statClientId: '',
+            body: { ...body, statClient: statsClient._id },
+          })
+        )
           .unwrap()
           .then((res) => {
             enqueueSnackbar(res.message);

@@ -2,7 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
 
 type StatClientResBody = {
-  clientName: any;
+  clientName: string;
+  statClient: string;
+  clientContact: string;
   kpis: {
     kpi: string;
     response: any;
