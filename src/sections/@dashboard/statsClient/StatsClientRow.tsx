@@ -92,7 +92,7 @@ export default function StatsClientRow({
     
   </Typography>
 </TableCell>
-{isAllowedToViewStatClient && (
+
           <TableCell
           align='center'
             onClick={() => {
@@ -102,7 +102,7 @@ export default function StatsClientRow({
           >
             <Iconify icon="carbon:view-filled" />
             </TableCell>
-        )}
+
         {isAllowedToEditStatClient && (
           <TableCell
           align='center'

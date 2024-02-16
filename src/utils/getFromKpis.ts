@@ -5,11 +5,11 @@ interface MyObject {
 }
 
 
-export default function processObject(obj: Record<string, MyObject>, indexArray: { value: IKpi; num: number }[]) {
+export default function processObject(array: IKpi[]) {
   const results: string[] = [];
 
-  indexArray.forEach(i => {
-    const name = obj[`stats-client-${i.num}`]?._id as string;
+  array.forEach((ele) => {
+    const name = ele._id;
     results.push(name);
   });
 

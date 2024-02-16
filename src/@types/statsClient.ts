@@ -10,3 +10,7 @@ export type IStatsClients = {
   name: string;
   kpis: string[];
 }
+export type IStatsClientFormProps = {
+  name: string;
+  kpis: IKpi[] | [];
+}
