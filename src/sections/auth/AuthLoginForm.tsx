@@ -9,7 +9,8 @@ import { Alert, IconButton, InputAdornment, Stack } from '@mui/material';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // components
-import FormProvider, { RHFTextField } from '../../components/hook-form';
+import FormProvider from '../../components/hook-form/FormProvider';
+import RHFTextField from '../../components/hook-form/RHFTextField';
 import Iconify from '../../components/iconify';
 
 // ----------------------------------------------------------------------
@@ -41,7 +42,6 @@ export default function AuthLoginForm() {
   });
 
   const {
-    reset,
     setError,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
@@ -59,8 +59,8 @@ export default function AuthLoginForm() {
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
-      <Stack spacing={4} sx={{ m: 2,p:2 }}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={4} sx={{ m: 2, p: 2 }}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
         <RHFTextField name="email" label="Email address" />
@@ -94,8 +94,8 @@ export default function AuthLoginForm() {
             bgcolor: 'text.primary',
             color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
           },
-          m:'1rem 2.5rem',
-          width:"80%"
+          m: '1rem 2.5rem',
+          width: '80%',
         }}
       >
         Login
