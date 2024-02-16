@@ -2,8 +2,7 @@
 import { Divider, MenuItem } from '@mui/material';
 // components
 import {
-  RHFCheckbox,
-  RHFCheckboxGroup,
+  RHFMultiCheckbox,
   RHFRadioGroup,
   RHFSelect,
   RHFTextField,
@@ -12,20 +11,9 @@ import {
 import { FrontType, IKpi } from '../../../../../@types/Kpi';
 
 function RenderField(kpi: IKpi, statClientDetails?: boolean) {
-  type OptionsType = {
-    [key: string]: boolean;
-  };
   const componentName = kpi?.name;
-  // const options = (kpi.options || []).reduce((accumulator, currentValue) => {
-  //   accumulator[currentValue] = false;
-  //   return accumulator;
-  // }, {} as OptionsType);
+  const options = (kpi.options || []).map((option) => ({ label: option, value: option }));
 
-  const options = {
-    'Option 1': false,
-    'Option 2': false,
-    'Option 3': false,
-  };
   const components: Record<FrontType, JSX.Element> = {
     textarea: (
       <RHFTextField
@@ -39,14 +27,17 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
       />
     ),
     checkbox: (
-      // <RHFCheckbox
-      //   disabled={statClientDetails}
-      //   name={componentName}
-      //   id={kpi?._id}
-      //   label={kpi.name}
-      //   sx={{ mt: 3 }}
-      // />
-      <RHFCheckboxGroup name={componentName} label={kpi.label} options={options} />
+      <RHFMultiCheckbox
+        row
+        name={componentName}
+        label={kpi.label}
+        spacing={2}
+        options={[
+          { value: 'option 1', label: 'Checkbox 1' },
+          { value: 'option 2', label: 'Checkbox 2' },
+          { value: 'option 3', label: 'Checkbox 3' },
+        ]}
+      />
     ),
     select: (
       <RHFSelect

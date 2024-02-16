@@ -76,9 +76,12 @@ export default function StatClientForm({
     watch,
   } = methods;
   const values = watch();
+
   console.log({ values });
+
   const onSubmit = async (data: any) => {
     try {
+      console.log({ data });
       await new Promise((resolve) => setTimeout(resolve, 500));
       const body = {
         clientName: data.clientName,
