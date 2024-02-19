@@ -110,13 +110,10 @@ export default function StatClientResponsesTable() {
   };
 
   const handleDeleteRow = (id: string) => {
-    dispatch(deleteStatClientResponse({ statClientResponseId: id })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${res?.payload.message}`);
-      } else {
-        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
-      }
-    });
+    dispatch(deleteStatClientResponse({ statClientResponseId: id }))
+      .unwrap()
+      .then((res) => enqueueSnackbar(`${translate(res.message)}`))
+      .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
