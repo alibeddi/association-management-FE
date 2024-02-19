@@ -84,7 +84,7 @@ function Permissions() {
       }).catch(err=>enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
     } else {
       dispatch(createNewGroupPermission({ name: group })).unwrap().then(res => {
-     enqueueSnackbar(`${translate(res?.payload.message)}`);
+      enqueueSnackbar(`${translate(res?.message)}`);
           reset();
       }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
     }

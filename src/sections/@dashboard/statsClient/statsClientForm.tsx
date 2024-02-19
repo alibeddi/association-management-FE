@@ -147,7 +147,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                         width: '100%',
                       }}
                     >
-                        {/*  <RHFAutocomplete
+                         <RHFAutocomplete
                             freeSolo
                             label={`Question n°: ${index}`}
                             name={`kpis[${index}]`}
@@ -157,10 +157,8 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                             required
                             sx={{ flexBasis: '80%' }}
                           />
-*/} 
-<AsyncPaginate 
 
-/>
+
                       <Button
                         variant="contained"
                         color="error"
