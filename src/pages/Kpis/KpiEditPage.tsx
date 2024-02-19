@@ -8,9 +8,9 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import UserNewEditDeatilsForm from '../../sections/@dashboard/Kpis/UserNewEditDeatilsForm';
 import { RootState, dispatch, useSelector } from '../../redux/store';
 import { getOnekpi } from '../../redux/slices/kpis/actions';
+import { UserForm } from '../../sections/@dashboard/Kpis/form';
 // sections
 
 // ----------------------------------------------------------------------
@@ -34,17 +34,13 @@ export default function KpiEditPage() {
           heading="Edit a Kpi"
           links={[
             {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            {
               name: 'Kpi',
               href: PATH_DASHBOARD.kpis.root,
             },
             { name: 'Edit Kpi' },
           ]}
         />
-        <UserNewEditDeatilsForm isEdit currentKpi={kpi} />
+        <UserForm isEdit currentKpi={kpi} />
       </Container>
     </>
   );

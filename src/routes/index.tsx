@@ -21,6 +21,10 @@ import {
   OperatorList,
   Page404,
   PermissionGroup,
+  StatClientResponseEdit,
+  StatClientResponseList,
+  StatClientResponseNew,
+  StatClientResponseView,
   StatsClient,
   StatsClientEdit,
   StatsClientNew,
@@ -63,7 +67,6 @@ export default function Router() {
           ),
           children: [{ path: '', element: <OperatorList /> }],
         },
-
         {
           path: 'kpis',
           element: (
@@ -85,6 +88,22 @@ export default function Router() {
           ],
         },
         {
+          path: 'stat-client-response',
+          element: <Outlet />,
+          children: [
+            { path: '', element: <StatClientResponseList /> },
+            { path: 'new/:statClientId', element: <StatClientResponseNew /> },
+            {
+              path: 'edit/:statClientRestId',
+              element: <StatClientResponseEdit />,
+            },
+            {
+              path: 'view/:statClientRestId',
+              element: <StatClientResponseView />,
+            },
+          ],
+        },
+        {
           path: 'permissions',
           element: (
             <PermissionGuard model={ModelCode.PERMISSION_GROUP} method={MethodCode.LIST}>
@@ -97,8 +116,8 @@ export default function Router() {
           element: <Calendar />,
         },
         {
-          path: "calls",
-          element: <Call/>
+          path: 'calls',
+          element: <Call />,
         },
         {
           path:"stats-client",

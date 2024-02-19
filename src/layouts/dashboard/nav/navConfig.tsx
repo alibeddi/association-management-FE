@@ -8,6 +8,7 @@ import {
   ic_settings,
   ic_lock,
   ic_calendar,
+  ic_stat_client_response,
   ic_call,
   ic_stats_client,
 } from '../../../assets/icons/navbar';
@@ -20,7 +21,8 @@ const ICONS = {
   groupPermissions: icon(ic_lock),
   calendar: icon(ic_calendar),
   calls: icon(ic_call),
-  statsClient: icon(ic_stats_client)
+  statsClient: icon(ic_stats_client),
+  statClientResponse: icon(ic_stat_client_response),
 };
 
 export default function navConfig(user: AuthUserType) {
@@ -69,11 +71,17 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: hasAccessToCalls,
         },
         {
-          title:"stats-client",
+          title: 'stats-client',
           path: PATH_DASHBOARD.statsClient.root,
           icon: ICONS.statsClient,
           toBeDisplayed: true,
-        }
+        },
+        {
+          title: 'Stat-client Answers',
+          path: PATH_DASHBOARD.statClientResponse.root,
+          icon: ICONS.statClientResponse,
+          toBeDisplayed: true,
+        },
       ],
     },
   ];

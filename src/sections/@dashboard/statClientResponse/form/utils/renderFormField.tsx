@@ -2,29 +2,43 @@
 import { Divider, MenuItem } from '@mui/material';
 // components
 import {
-  RHFCheckbox,
+  RHFMultiCheckbox,
   RHFRadioGroup,
   RHFSelect,
-  RHFTextField
-} from '../hook-form';
+  RHFTextField,
+} from '../../../../../components/hook-form';
 // types
-import { FrontType, IKpi } from '../../@types/Kpi';
+import { FrontType, IKpi } from '../../../../../@types/Kpi';
 
-function RenderField(kpi: IKpi, values?: any) {
+function RenderField(kpi: IKpi, statClientDetails?: boolean) {
   const componentName = kpi?.name;
+  const options = (kpi.options || []).map((option) => ({ label: option, value: option }));
+
   const components: Record<FrontType, JSX.Element> = {
     textarea: (
       <RHFTextField
+        inputProps={{ readOnly: statClientDetails }}
         name={componentName}
         id={kpi?._id}
         placeholder={kpi?.name}
         multiline
         rows={5}
-        label={kpi.name} />
+        label={kpi.name}
+      />
     ),
-    checkbox: <RHFCheckbox name={componentName} id={kpi?._id} label={kpi.name} sx={{ mt: 1, mb: 1 }} />,
+    checkbox: (
+      <RHFMultiCheckbox
+        disabled={statClientDetails}
+        row
+        name={componentName}
+        label={kpi.label}
+        spacing={2}
+        options={options}
+      />
+    ),
     select: (
       <RHFSelect
+        disabled={statClientDetails}
         name={componentName}
         label={kpi.name}
         placeholder={kpi?.name}
@@ -46,8 +60,12 @@ function RenderField(kpi: IKpi, values?: any) {
         row
         id={kpi?._id}
         name={componentName}
-        options={kpi.options ? kpi.options.map((option) => ({ label: String(option), value: option })) : []}
-        label={kpi.label} />
+        options={
+          kpi.options ? kpi.options.map((option) => ({ label: String(option), value: option })) : []
+        }
+        label={kpi.label}
+        disabled={statClientDetails}
+      />
     ),
     input: <RHFTextField name={componentName} label={kpi.label} type="text" id={kpi?._id} />,
   };

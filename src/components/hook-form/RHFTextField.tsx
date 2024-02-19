@@ -52,7 +52,6 @@ export default function RHFTextField({
             rows={rows}
             onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
               field.onChange(e);
-            
             }}
             error={!!error}
             helperText={error && `${translate(error?.message)}`}

@@ -3,6 +3,7 @@ export enum FrontType {
   RADIO = 'radio',
   CHECKBOX = 'checkbox',
   SELECT = 'select',
+  INPUT = 'input',
 }
 export enum BackType {
   STRING = 'string',
@@ -16,7 +17,7 @@ export interface IKpi {
   label: string;
   frontType: FrontType;
   backType: BackType;
-  options?: (string | number)[];
+  options?: string[];
   isRequired: boolean;
   createdAt?: Date;
   deletedAt?: Date;

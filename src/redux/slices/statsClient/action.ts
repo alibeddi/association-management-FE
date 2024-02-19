@@ -3,7 +3,7 @@ import { IGetAll } from "../../../@types/api";
 import { IStatsClient, IStatsClients } from "../../../@types/statsClient";
 import axios from "../../../utils/axios";
 
-const STAT_CLIENT_URI = "stat-clients"
+const STAT_CLIENT_URI = 'stat-clients';
 
 interface GetAllProps extends IGetAll {
   filterName?: string;

@@ -1,6 +1,4 @@
 import { Office } from './Office';
-import { Permission } from './Permission';
-import { PermissionGroup } from './PermissionGroup';
 
 export interface User {
   _id: string;

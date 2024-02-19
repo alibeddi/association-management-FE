@@ -22,6 +22,7 @@ type Props = RadioGroupProps & {
   label?: string;
   spacing?: number;
   helperText?: React.ReactNode;
+  disabled?: boolean;
 };
 
 export default function RHFRadioGroup({
@@ -31,7 +32,7 @@ export default function RHFRadioGroup({
   options,
   spacing,
   helperText,
-
+  disabled,
   ...other
 }: Props) {
   const { control } = useFormContext();
@@ -60,6 +61,7 @@ export default function RHFRadioGroup({
             >
               {options.map((option) => (
                 <FormControlLabel
+                  disabled={disabled}
                   key={
                     option.value !== undefined &&
                     !Number.isNaN(option.value) &&
