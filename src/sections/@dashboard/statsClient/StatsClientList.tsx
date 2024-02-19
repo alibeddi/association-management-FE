@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 // routes
 
-
 // sections
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -40,7 +39,6 @@ import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpi
 import { deleteManyStatsClient, deleteStatsClient, getAllStatsClient } from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
 
-
 export default function StatsClientList() {
   const {
     dense,
@@ -62,15 +60,16 @@ export default function StatsClientList() {
   } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
   const TABLE_HEAD = [
     { id: 'name', label: 'Forum name', align: 'left' },
-    { id: 'kpis', label:'Question' , align:'left'},
-    {label:'view',align:'center'}
+    { id: 'question', label: 'Question', align: 'left' },
+    { id: 'create', label: 'create', align: 'center' },
+    { label: 'view', align: 'center' },
   ];
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState<IStatsClient[]>([]);
   const [filterName, setFilterName] = useState('');
   useEffect(() => {
-    dispatch(getAllStatsClient({page, limit:rowsPerPage, orderBy, order, filterName}));
+    dispatch(getAllStatsClient({ page, limit: rowsPerPage, orderBy, order, filterName }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
   const { statsClients } = useSelector((state: RootState) => state?.statsClient);
   useEffect(() => {
@@ -85,7 +84,10 @@ export default function StatsClientList() {
   const handleViewRow = (row: IStatsClient) => {
     navigate(`${PATH_DASHBOARD.statsClient.view}/${row._id}`, { state: { statsClient: row } });
   };
-
+  const handleCreateRowResponse = (row: IStatsClient) => {
+    navigate(`${PATH_DASHBOARD.statClientResponse.new}/${row._id}`, { state: { statsClient: row } });
+  };
+  
   const handleEditRow = (row: IStatsClient) => {
     navigate(`${PATH_DASHBOARD.statsClient.edit}/${row._id}`, { state: { statsClient: row } });
   };
@@ -108,14 +110,18 @@ export default function StatsClientList() {
   };
 
   const handleDeleteRow = async (id: string) => {
-    await dispatch(deleteStatsClient({ id })).unwrap().then((res) => enqueueSnackbar(`${res.data.message}`)).catch(error=>enqueueSnackbar(`${error.data.message}`, { variant: 'error' }))
+    await dispatch(deleteStatsClient({ id }))
+      .unwrap()
+      .then((res) => enqueueSnackbar(`${res.data.message}`))
+      .catch((error) => enqueueSnackbar(`${error.data.message}`, { variant: 'error' }));
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
     dispatch(deleteManyStatsClient({ statClientIds: selectedRows })).unwrap().then(res =>{
              enqueueSnackbar(`${translate(res?.data.message)}`);
         dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
-    }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+      })
+      .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
     setSelected([]);
   };
 
@@ -123,12 +129,19 @@ export default function StatsClientList() {
   const userPermissions = user?.permissionGroup[0].permissions;
 
   // check current user permissions
-  const isAllowedToEditStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.EDIT);
-  const isAllowedToDeleteStatClient = hasPermission(userPermissions, ModelCode.STAT_CLIENT, MethodCode.DELETE);
-  if(isAllowedToDeleteStatClient && isAllowedToEditStatClient){
-    TABLE_HEAD.push({label:'edit',align:'center'},{label:'delete',align:'center'})
+  const isAllowedToEditStatClient = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.EDIT
+  );
+  const isAllowedToDeleteStatClient = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.DELETE
+  );
+  if (isAllowedToDeleteStatClient && isAllowedToEditStatClient) {
+    TABLE_HEAD.push({ label: 'edit', align: 'center' }, { label: 'delete', align: 'center' });
   }
-   
 
   return (
     <>
@@ -193,6 +206,9 @@ export default function StatsClientList() {
                       }}
                       onViewRow={() => {
                         handleViewRow(row);
+                      }}
+                      onCreateRowResponse={() => {
+                        handleCreateRowResponse(row);
                       }}
                     />
                   ))}

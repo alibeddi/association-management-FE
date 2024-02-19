@@ -6,13 +6,13 @@ export const getKpis = createAsyncThunk(
   'Kpi/GETALL',
   async (payload: {
     page: number;
-    limit: number;
+    limit?: number;
     orderBy?: string;
     order?: string;
     filterName?: string;
   }) => {
     let data;
-    const { page, order, orderBy, filterName, limit } = payload;
+    const { page, order = 'desc', orderBy = 'createdAt', filterName, limit = 10 } = payload;
     const params = {
       page: page + 1,
       limit,

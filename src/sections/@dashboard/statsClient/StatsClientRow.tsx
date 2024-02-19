@@ -3,25 +3,18 @@ import { useState } from 'react';
 import {
   Box,
   Button,
-  Checkbox,
-  IconButton,
-  MenuItem,
-  TableCell,
-  TableRow,
-  Tooltip,
-  Typography,
+  Checkbox, TableCell,
+  TableRow, Typography
 } from '@mui/material';
 // utils
-import { fDate } from '../../../utils/formatTime';
 // components
 import { IKpi } from '../../../@types/Kpi';
+import { MethodCode, ModelCode } from '../../../@types/Permission';
+import { IStatsClient } from '../../../@types/statsClient';
+import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
-import MenuPopover from '../../../components/menu-popover';
 import { hasPermission } from '../Permissions/utils';
-import { MethodCode, ModelCode } from '../../../@types/Permission';
-import { useAuthContext } from '../../../auth/useAuthContext';
-import { IStatsClient } from '../../../@types/statsClient';
 
 type Props = {
   row: IStatsClient;
@@ -30,6 +23,7 @@ type Props = {
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewRow: VoidFunction;
+  onCreateRowResponse: VoidFunction;
 };
 
 export default function StatsClientRow({
@@ -39,18 +33,31 @@ export default function StatsClientRow({
   onSelectRow,
   onDeleteRow,
   onViewRow,
+  onCreateRowResponse,
 }: Props) {
-  const { name,kpis } = row;
+  const { name, kpis } = row;
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
-  
+
   // check current user permissions
-  const isAllowedToDeleteStatClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.DELETE);
-  const isAllowedToEditStatClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.EDIT);
-  const isAllowedToViewStatClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.VIEW);
+  const isAllowedToDeleteStatClient = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.DELETE
+  );
+  const isAllowedToEditStatClient = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.EDIT
+  );
+  const isAllowedToViewStatClient = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.VIEW
+  );
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -81,47 +88,49 @@ export default function StatsClientRow({
           </Typography>
         </TableCell>
         <TableCell>
-  <Typography variant="subtitle2" sx={{
-    display:'flex',
-    flexDirection:'column',
-    gap:'.5rem'
-  }}>
-    {kpis?.map((kpi: IKpi) => (
-      <Box key={kpi._id}>{kpi.label}</Box>
-    ))}
-    
-  </Typography>
-</TableCell>
-
+          <Typography
+            variant="subtitle2"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '.5rem',
+            }}
+          >
+            {kpis?.map((kpi: IKpi) => (
+              <Box key={kpi._id}>{kpi.label}</Box>
+            ))}
+          </Typography>
+        </TableCell>
+        <TableCell
+          align="center"
+          onClick={() => {
+            onCreateRowResponse();
+          }}
+        >
+          <Iconify icon="ion:create" />
+        </TableCell>
+        {isAllowedToViewStatClient && (
           <TableCell
-          align='center'
+            align="center"
             onClick={() => {
               onViewRow();
               handleClosePopover();
             }}
           >
             <Iconify icon="carbon:view-filled" />
-            </TableCell>
-
-        {isAllowedToEditStatClient && (
-          <TableCell
-          align='center'
-            onClick={() => onEditRow()}
-          >
-            <Iconify icon="eva:edit-fill" />
-            </TableCell>
+          </TableCell>
         )}
-          {isAllowedToDeleteStatClient && (
-          <TableCell
-          align='center'
-            onClick={() => onDeleteRow()}
-          >
+        {isAllowedToEditStatClient && (
+          <TableCell align="center" onClick={() => onEditRow()}>
+            <Iconify icon="eva:edit-fill" />
+          </TableCell>
+        )}
+        {isAllowedToDeleteStatClient && (
+          <TableCell align="center" onClick={() => onDeleteRow()}>
             <Iconify icon="eva:trash-2-outline" />
-            </TableCell>
-        )}    
+          </TableCell>
+        )}
       </TableRow>
-
-
 
       <ConfirmDialog
         open={openConfirm}

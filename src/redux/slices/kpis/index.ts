@@ -24,7 +24,7 @@ const slice = createSlice({
     // GET ALL
     builder
       .addCase(getKpis.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(getKpis.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -36,7 +36,7 @@ const slice = createSlice({
     // DELETE ONE
     builder
       .addCase(deleteOnekpi.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(deleteOnekpi.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -45,10 +45,10 @@ const slice = createSlice({
       .addCase(deleteOnekpi.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
-    // DELETE OMANY
+    // DELETE MANY
     builder
       .addCase(deleteManykpis.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(deleteManykpis.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -60,7 +60,7 @@ const slice = createSlice({
     // CREATE ONE
     builder
       .addCase(createkpi.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(createkpi.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -72,7 +72,7 @@ const slice = createSlice({
     // GET ONE
     builder
       .addCase(getOnekpi.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(getOnekpi.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -84,7 +84,7 @@ const slice = createSlice({
     // UPDATE ONE
     builder
       .addCase(updatekpi.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(updatekpi.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;

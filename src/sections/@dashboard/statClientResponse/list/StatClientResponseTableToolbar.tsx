@@ -1,21 +1,21 @@
 // @mui
 import { Stack, InputAdornment, TextField, Button } from '@mui/material';
 // components
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   placeholder: string;
-  filterName?: string;
+  filterClientName?: string;
   isFiltered?: boolean;
   onResetFilter?: VoidFunction;
   onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function KpiTableToolbar({
+export default function StatClientResponseTableToolbar({
   isFiltered,
-  filterName,
+  filterClientName,
   onFilterName,
   onResetFilter,
   placeholder,
@@ -32,7 +32,7 @@ export default function KpiTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
+        value={filterClientName}
         onChange={onFilterName}
         placeholder={placeholder}
         InputProps={{

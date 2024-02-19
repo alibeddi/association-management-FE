@@ -12,15 +12,15 @@ import {
   Typography,
 } from '@mui/material';
 // utils
-import { fDate } from '../../../utils/formatTime';
+import { fDate } from '../../../../utils/formatTime';
 // components
-import { IKpi } from '../../../@types/Kpi';
-import ConfirmDialog from '../../../components/confirm-dialog';
-import Iconify from '../../../components/iconify';
-import MenuPopover from '../../../components/menu-popover';
-import { hasPermission } from '../Permissions/utils';
-import { MethodCode, ModelCode } from '../../../@types/Permission';
-import { useAuthContext } from '../../../auth/useAuthContext';
+import { IKpi } from '../../../../@types/Kpi';
+import ConfirmDialog from '../../../../components/confirm-dialog';
+import Iconify from '../../../../components/iconify';
+import MenuPopover from '../../../../components/menu-popover';
+import { hasPermission } from '../../Permissions/utils';
+import { MethodCode, ModelCode } from '../../../../@types/Permission';
+import { useAuthContext } from '../../../../auth/useAuthContext';
 
 type Props = {
   row: IKpi;
