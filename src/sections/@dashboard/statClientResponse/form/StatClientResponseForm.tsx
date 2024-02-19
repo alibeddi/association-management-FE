@@ -7,10 +7,11 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
 import { IKpi } from '../../../../@types/Kpi';
+import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 import {
   createStatClientResponse,
-  editStatClientResponse,
+  editStatClientResponse
 } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
@@ -22,7 +23,7 @@ import { transformStatClientResponse } from './utils/transformStatClientResponse
 type Props = {
   isEdit?: boolean;
   statClientDetails?: boolean;
-  currentStatClientResponse?: any | null;
+  currentStatClientResponse?: StatClientResponse;
 };
 
 export default function StatClientForm({
