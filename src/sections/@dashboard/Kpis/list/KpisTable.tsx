@@ -105,25 +105,21 @@ export default function KpisTable() {
   };
 
   const handleDeleteRow = (id: string) => {
-    dispatch(deleteOnekpi({ kpiId: id })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${res?.payload.message}`);
-      } else {
-        enqueueSnackbar(`${res?.error?.message}`, { variant: 'error' });
-      }
-    });
+    dispatch(deleteOnekpi({ kpiId: id }))
+      .unwrap()
+      .then((res) => enqueueSnackbar(`${res?.message}`))
+      .catch((err) => enqueueSnackbar(`${err?.message}`, { variant: 'error' }));
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    dispatch(deleteManykpis({ kpiIds: selectedRows })).then((res: any) => {
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        enqueueSnackbar(`${translate(res?.payload.message)}`);
+    dispatch(deleteManykpis({ kpiIds: selectedRows }))
+      .unwrap()
+      .then((res) => {
+        enqueueSnackbar(`${translate(res?.message)}`);
         dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
-      } else {
-        enqueueSnackbar(`${translate(res?.error?.message)}`, { variant: 'error' });
-      }
-      setSelected([]);
-    });
+        setSelected([]);
+      })
+      .catch((err) => enqueueSnackbar(`${translate(err?.message)}`, { variant: 'error' }));
   };
 
   return (
