@@ -220,9 +220,7 @@ export default function CalendarPage() {
     filterEndDate: picker.endDate,
     isError: !!picker.isError,
   });
-  const timeFormat='HH:mm' as any
-  
-  return (
+return (
     <>
       <Helmet>
         <title> Calendar | Branch Office</title>
@@ -266,7 +264,7 @@ export default function CalendarPage() {
               eventBackgroundColor="#1890FF"
               plugins={[timeGridPlugin, interactionPlugin]}
             
-              slotLabelFormat= { // like '14:30:00'
+              slotLabelFormat= { 
                 {hour: 'numeric',
                 minute: '2-digit',
                 omitZeroMinute: true,
@@ -276,9 +274,6 @@ export default function CalendarPage() {
               slotMinTime="07:00:00"
               slotMaxTime="22:00:00"
               nowIndicator
-              // slotDuration={{ hours: 1 }}
-
-              // locale={frLocale}
 
             />
           </StyledCalendar>
