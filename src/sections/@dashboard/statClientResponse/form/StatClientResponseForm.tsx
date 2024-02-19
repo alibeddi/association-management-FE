@@ -11,7 +11,7 @@ import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 import {
   createStatClientResponse,
-  editStatClientResponse
+  editStatClientResponse,
 } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
@@ -45,10 +45,10 @@ export default function StatClientForm({
     }
   }, [currentStatClientResponse, statsClient, isEdit, statClientDetails]);
 
-  const defaultValues = useMemo(
-    () => transformStatClientResponse(currentStatClientResponse, isEdit, statClientDetails),
-    [isEdit, statClientDetails, currentStatClientResponse]
-  );
+  const defaultValues = useMemo(() => {
+    const response = currentStatClientResponse || ({} as StatClientResponse);
+    return transformStatClientResponse(response, isEdit, statClientDetails);
+  }, [isEdit, statClientDetails, currentStatClientResponse]);
 
   // form validation
   const validationsFields: { [key: string]: any } = {};
@@ -85,11 +85,11 @@ export default function StatClientForm({
         kpis: formatFormValues(data, kpis),
       };
 
-      if (!isEdit) {
+      if (isEdit && currentStatClientResponse) {
         dispatch(
-          createStatClientResponse({
-            statClientId: '',
-            body: { ...body, statClient: statsClient._id },
+          editStatClientResponse({
+            statClientResponseId: currentStatClientResponse?._id,
+            body,
           })
         )
           .unwrap()
@@ -100,9 +100,9 @@ export default function StatClientForm({
           .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
       } else {
         dispatch(
-          editStatClientResponse({
-            statClientResponseId: currentStatClientResponse?._id,
-            body,
+          createStatClientResponse({
+            statClientId: '',
+            body: { ...body, statClient: statsClient._id },
           })
         )
           .unwrap()
