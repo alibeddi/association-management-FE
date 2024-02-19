@@ -6,6 +6,8 @@ import {
 } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import frLocale from '@fullcalendar/core/locales/fr';
+
 //
 import { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -218,7 +220,8 @@ export default function CalendarPage() {
     filterEndDate: picker.endDate,
     isError: !!picker.isError,
   });
-
+  const timeFormat='HH:mm' as any
+  
   return (
     <>
       <Helmet>
@@ -238,6 +241,7 @@ export default function CalendarPage() {
             />
 
             <FullCalendar
+              
               weekends
               editable
               droppable
@@ -261,6 +265,21 @@ export default function CalendarPage() {
               eventColor="#1890FF"
               eventBackgroundColor="#1890FF"
               plugins={[timeGridPlugin, interactionPlugin]}
+            
+              slotLabelFormat= { // like '14:30:00'
+                {hour: 'numeric',
+                minute: '2-digit',
+                omitZeroMinute: true,
+                meridiem: 'short'
+              }
+              }
+              slotMinTime="07:00:00"
+              slotMaxTime="22:00:00"
+              nowIndicator
+              // slotDuration={{ hours: 1 }}
+
+              // locale={frLocale}
+
             />
           </StyledCalendar>
         </Card>
