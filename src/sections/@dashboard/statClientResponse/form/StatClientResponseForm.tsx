@@ -25,6 +25,14 @@ type Props = {
   statClientDetails?: boolean;
   currentStatClientResponse?: StatClientResponse;
 };
+type StaticValuesType = {
+  clientName: string;
+  clientContact: string;
+};
+
+type DynamicFormValuesType = Record<string, any>;
+
+type CombinedFormValuesType = StaticValuesType & DynamicFormValuesType;
 
 export default function StatClientForm({
   isEdit = false,
@@ -65,7 +73,7 @@ export default function StatClientForm({
     clientContact: Yup.string().min(2).max(60).required(),
   });
 
-  const methods = useForm({
+  const methods = useForm<CombinedFormValuesType>({
     defaultValues,
     resolver: yupResolver(NewClientStatusSchema),
   });
@@ -76,7 +84,7 @@ export default function StatClientForm({
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: CombinedFormValuesType) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const body = {
