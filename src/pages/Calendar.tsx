@@ -263,24 +263,9 @@ return (
               eventColor="#1890FF"
               eventBackgroundColor="#1890FF"
               plugins={[timeGridPlugin, interactionPlugin]}
-            
-              slotLabelFormat= { 
-                {hour: 'numeric',
-                minute: '2-digit',
-                omitZeroMinute: true,
-                meridiem: 'short'
-              }
-              }
               slotMinTime="07:00:00"
               slotMaxTime="22:00:00"
-              nowIndicator
-              titleFormat= {
-               { 
-                meridiem: false
-              }
-              }
-              
-
+              locale={frLocale} 
             />
           </StyledCalendar>
         </Card>
