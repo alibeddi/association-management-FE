@@ -1,14 +1,7 @@
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  formControlLabelClasses,
-  FormControlLabelProps,
-  FormGroup,
-  FormHelperText,
-  FormLabel,
-} from '@mui/material';
-import { Controller, useFormContext } from 'react-hook-form';
+import { FormControlLabelProps } from "@mui/material";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { useLocales } from "../../locales";
 
 interface RHFMultiCheckboxProps extends Omit<FormControlLabelProps, 'control' | 'label'> {
   name: string;
@@ -17,28 +10,37 @@ interface RHFMultiCheckboxProps extends Omit<FormControlLabelProps, 'control' | 
   label?: string;
   spacing?: number;
   helperText?: React.ReactNode;
+  values?: any;
 }
 
-export default function RHFMultiCheckbox({
+export function RHFMultiCheckbox({
   row,
   name,
   label,
   options,
   spacing,
   helperText,
-  sx,
+  values,
   ...other
 }: RHFMultiCheckboxProps) {
   const { control } = useFormContext();
-  const getSelected = (selectedItems: string[], item: string) =>
-    selectedItems?.includes(item)
-      ? selectedItems.filter((value) => value !== item)
-      : [...selectedItems, item];
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const { translate } = useLocales();
+
+  const handleCheckboxChange = (option: string) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(selectedOptions.filter((value) => value !== option));
+    } else {
+      setSelectedOptions([...selectedOptions, option]);
+    }
+   
+  };
 
   return (
     <Controller
       name={name}
       control={control}
+      defaultValue={[]}
       render={({ field, fieldState: { error } }) => (
         <FormControl component="fieldset">
           {label && (
@@ -51,8 +53,9 @@ export default function RHFMultiCheckbox({
             sx={{
               ...(row && {
                 flexDirection: 'row',
+                flexWrap: 'nowrap',
               }),
-              [`& .${formControlLabelClasses.root}`]: {
+              '& .MuiFormControlLabel-root': {
                 '&:not(:last-of-type)': {
                   mb: spacing || 0,
                 },
@@ -63,7 +66,6 @@ export default function RHFMultiCheckbox({
                   },
                 }),
               },
-              ...sx,
             }}
           >
             {options.map((option) => (
@@ -71,11 +73,11 @@ export default function RHFMultiCheckbox({
                 key={option.value}
                 control={
                   <Checkbox
-                    checked={field?.value?.includes(option.value)}
-                    onChange={() => field.onChange(getSelected(field.value || [], option.value))}
+                    checked={selectedOptions && selectedOptions?.includes(option.value)}
+                    onChange={() => handleCheckboxChange(option.value)}
                   />
                 }
-                label={option.label}
+                label={`${translate(option.label)} `}
                 {...other}
               />
             ))}

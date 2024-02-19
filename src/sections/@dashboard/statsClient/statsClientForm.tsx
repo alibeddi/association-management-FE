@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import  { useEffect } from 'react';
 import {  useFieldArray,  useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AsyncPaginate } from "react-select-async-paginate";
+
 
 import {  BackType, FrontType, IKpi } from '../../../@types/Kpi';
 import FormProvider, {
