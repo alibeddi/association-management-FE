@@ -1,10 +1,13 @@
-import { Button, IconButton, TextField, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
+import { LoadingButton } from '@mui/lab';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack';
-import React, { useEffect, useState } from 'react';
-import { Controller,  useForm } from 'react-hook-form';
-import { IKpi } from '../../../@types/Kpi';
+import  { useEffect } from 'react';
+import {  useFieldArray,  useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup'
+import {  BackType, FrontType, IKpi } from '../../../@types/Kpi';
 import FormProvider, {
   RHFAutocomplete,
   RHFTextField,
@@ -17,15 +20,15 @@ import {
 } from '../../../redux/slices/statsClient/action';
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { getFromKpis } from '../../../utils';
-import { IStatsClient } from '../../../@types/statsClient';
-import { generateSelectKpis } from '../../../utils/generateSelectKpis';
+import { IStatsClient, IStatsClientFormProps } from '../../../@types/statsClient';
+import { setDefaultValuesStatsClient } from '../../../utils/setDefaultValuesStatsClient';
+
 
 type IProps = {
   statsClientProp?: IStatsClient | null;
 };
 
 const StatsClientForm = ({ statsClientProp = null }: IProps) => {
-  const statsClientId = statsClientProp?._id;
   const dispatch = useDispatch();
   const statsClient = statsClientProp;
   // TODO: make scroll to get 10 other
@@ -38,29 +41,39 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     );
   }, [dispatch]);
   const { enqueueSnackbar } = useSnackbar();
-  const [select, setSelect] = useState<{ num: number; value: IKpi }[] | []>(() => {
-    if (statsClientProp && statsClientProp.kpis) {
-      return generateSelectKpis(statsClientProp.kpis);
-    }
-    return [];
+  const newKpisSchema = Yup.object().shape({
+    name: Yup.string().required(),
+    kpis: Yup.array().of(
+      Yup.object().shape({
+        _id :Yup.string()
+      })
+    )
+  })
+  const defaultValues = setDefaultValuesStatsClient(statsClientProp);
+  const methods = useForm<{name:string;kpis:IKpi[] | [];}>({
+    resolver: yupResolver(newKpisSchema),
+    defaultValues
   });
-  const [numSelect, setNumSelect] = useState(select?.length || 0);
-  const methods = useForm();
-  const { handleSubmit, unregister } = methods;
-  const addSelect = () => {
-    setNumSelect((pre) => pre + 1);
-    setSelect((pre) => [...pre, { value: {} as IKpi, num: numSelect }]);
-  };
-  const removeSelect = (index: number) =>
-    setSelect((pre) => {
-      const newArray = [...pre];
-      newArray.splice(index, 1);
-      return newArray;
+  const { 
+    watch,
+    control,
+    handleSubmit,
+    formState: { isSubmitting, errors }, } = methods;
+    const { fields, append, remove } = useFieldArray({
+      control,
+      name: 'kpis'
     });
+
+    const handleAdd = () => append({  _id: '',
+      name: '',
+      label: '',
+      frontType:FrontType.TEXTAREA, backType: BackType.STRING, isRequired:true
+    })
+    const handleRemove = (index:number) => remove(index)
+    const values = watch() 
   const { kpis } = useSelector((state: RootState) => state.kpis);
-  const submit = async (data: any) => {
-   
-    const kpisArray: string[] = getFromKpis(data, select);
+  const submit  = async (data:IStatsClientFormProps) => {
+    const kpisArray: string[] = getFromKpis(data.kpis);
     if(statsClient){
         await dispatch(updateStatsClient({
           id:statsClient._id,
@@ -86,6 +99,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     display: 'flex',
     gap: '1rem',
   };
+
   return (
     (
       <FormProvider
@@ -100,21 +114,14 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
         }}
       >
         <Stack>
-          <Controller
-            name="name"
-            control={methods.control}
-            defaultValue={statsClient?.name || ''}
-            render={({ field }) => (
+
               <RHFTextField
-                {...field}
                 label="name of forum"
-                onChange={(e) => {
-                  field.onChange(e.target.value);
-                }}
+                name="name"
+                defaultValue={statsClient?.name ? statsClient.name:  ''}
                 required
               />
-            )}
-          />
+
           <Stack
             sx={{
               display: 'flex',
@@ -124,11 +131,10 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
           >
             <Stack sx={{ ...styleFlexColumn, flexBasis: '50%', padding: '1rem' }}>
               <Typography>Question</Typography>
-              {select.length > 0 ? (
-                select.map((s, index) => (
-
+              {fields?.length > 0 ? (
+                fields?.map((s, index) => (
                     <Stack
-                      key={s.num}
+                      key={index}
                       sx={{
                         flexDirection: 'row',
                         display: 'flex',
@@ -137,38 +143,22 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                         width: '100%',
                       }}
                     >
-                      <Controller
-                        name={`stats-client-${s.num}`}
-                        control={methods.control}
-                        defaultValue={s.value || ''}
-                        render={({ field }) => (
                           <RHFAutocomplete
-                            {...field}
                             freeSolo
                             label={`Question n°: ${index}`}
-                            getOptionLabel={(option) =>
-                              typeof option === 'string' ? option : option.name || ''
-                            }
+                            name={`kpis[${index}]`}
+                            defaultValue={s || ''}
+                            getOptionLabel={(option) => typeof option !== 'string' ? option.label :  option}
                             options={kpis.docs}
                             required
-                            onChange={(_, value) => {
-                              setSelect((prev) => {
-                                const updatedSelect = [...prev];
-                                updatedSelect[index] = { num: s.num, value: value || '' };
-                                return updatedSelect;
-                              });
-                              field.onChange(value); // This line is to update react-hook-form's internal state
-                            }}
                             sx={{ flexBasis: '80%' }}
                           />
-                        )}
-                      />
+
                       <Button
                         variant="contained"
                         color="error"
                         onClick={() => {
-                          removeSelect(index);
-                          unregister(`stats-client-${s.num}`);
+                          handleRemove(index);
                         }}
                         size="large"
                       >
@@ -185,8 +175,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                       color: '#888080',
                     }}
                   >
-                    {' '}
-                    No Question selected{' '}
+                    No Question selected
                   </Typography>
                 </Box>
               )}
@@ -202,10 +191,9 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
             >
               <Typography>Overview</Typography>
               <Stack sx={styleFlexColumn}>
-                {select.length > 0 ? (
-                  select.map((s, index) => {
-                    const { num, value } = s;
-                    return (
+                {values.kpis?.length > 0 ? (
+                  values.kpis?.map((value, index) => 
+                   (
                       <Box key={index}>
                         <Typography>
                           {value.label && value.label !== '' && `${value.label} :`}
@@ -214,8 +202,8 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                           <RenderField {...value} />
                         </Box>
                       </Box>
-                    );
-                  })
+                    )
+                  )
                 ) : (
                   <Typography color="#888080">No Content </Typography>
                 )}
@@ -230,12 +218,12 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
             gap: '1rem',
           }}
         >
-          <Button variant="contained" type="submit">
+          <LoadingButton variant="contained" type="submit" loading={isSubmitting} >
             submit
-          </Button>
-          <Button variant="outlined" onClick={() => addSelect()}>
+          </LoadingButton>
+          <LoadingButton variant="outlined" onClick={() => handleAdd()} >
             add another question
-          </Button>
+          </LoadingButton>
         </Box>
       </FormProvider>
     )

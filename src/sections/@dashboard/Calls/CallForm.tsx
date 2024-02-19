@@ -57,7 +57,7 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
         <Stack >
       <RHFTextField
           name="calls.received"
-          label={`${callReceived} calls call recieved `}
+          label={`${callReceived} calls  recieved `}
           
         />
       </Stack>

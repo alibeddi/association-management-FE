@@ -28,6 +28,7 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
     ),
     checkbox: (
       <RHFMultiCheckbox
+        disabled={statClientDetails}
         row
         name={componentName}
         label={kpi.label}

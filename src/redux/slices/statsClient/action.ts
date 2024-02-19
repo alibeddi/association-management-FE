@@ -77,3 +77,18 @@ export const deleteStatsClient = createAsyncThunk('/statsClient/delete',async ({
     return Promise.reject(error.message ?? data?.message)
   }
 })
+export const deleteManyStatsClient = createAsyncThunk('/statsClient/delete/many',async (body:{statClientIds:string[]})=>{
+  let data;
+  try {
+    const response = await axios.delete(`/${STAT_CLIENT_URI}/delete`, {
+      data: body 
+    });
+    data = await response.data;
+    if(response.status===200){
+      return {data,statClientIds:body.statClientIds};
+    }
+    throw new Error(response.statusText)
+  } catch (error) {
+    return Promise.reject(error.message ?? data?.message)
+  }
+})

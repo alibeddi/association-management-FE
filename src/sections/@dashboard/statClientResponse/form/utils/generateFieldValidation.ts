@@ -1,16 +1,16 @@
 import * as Yup from 'yup';
-import { IKpi } from '../../../../../@types/Kpi';
+import { BackType, FrontType, IKpi } from '../../../../../@types/Kpi';
 
 export function generateFieldValidation(kpi: IKpi) {
   let schema: Yup.BaseSchema<any, any>;
   switch (kpi.backType) {
-    case 'array':
+    case BackType.ARRAY:
       schema = Yup.array();
       break;
-    case 'string':
+    case BackType.STRING:
       schema = Yup.string();
       break;
-    case 'boolean':
+    case BackType.BOOLEAN:
       schema = Yup.boolean();
       break;
     default:

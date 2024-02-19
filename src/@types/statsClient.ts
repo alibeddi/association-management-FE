@@ -9,4 +9,8 @@ export type IStatsClients = {
   _id:string;
   name: string;
   kpis: string[];
-};
+}
+export type IStatsClientFormProps = {
+  name: string;
+  kpis: IKpi[] | [];
+}

@@ -36,7 +36,7 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 import { hasPermission } from '../Permissions/utils';
 import { MethodCode, ModelCode } from '../../../@types/Permission';
 import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis/actions';
-import { deleteStatsClient, getAllStatsClient } from '../../../redux/slices/statsClient/action';
+import { deleteManyStatsClient, deleteStatsClient, getAllStatsClient } from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
 
 export default function StatsClientList() {
@@ -117,10 +117,8 @@ export default function StatsClientList() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    dispatch(deleteManykpis({ kpiIds: selectedRows }))
-      .unwrap()
-      .then((res) => {
-        enqueueSnackbar(`${translate(res?.payload.message)}`);
+    dispatch(deleteManyStatsClient({ statClientIds: selectedRows })).unwrap().then(res =>{
+             enqueueSnackbar(`${translate(res?.data.message)}`);
         dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
       })
       .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));

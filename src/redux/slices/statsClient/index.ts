@@ -7,6 +7,7 @@ import {
   getAllStatsClient,
   getSingleStatsClient,
   deleteStatsClient,
+  deleteManyStatsClient,
 } from './action';
 
 type StatsClientState = {
@@ -65,9 +66,18 @@ const slice = createSlice({
       .addCase(deleteStatsClient.fulfilled, (state, { payload }) => {
         state.status = IStatus.SUCCEEDED;
         state.statsClients.docs = state.statsClients.docs.filter(stat=>stat._id!==payload.id)
-
       })
       .addCase(deleteStatsClient.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(deleteManyStatsClient.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(deleteManyStatsClient.fulfilled, (state, { payload }) => {
+        state.status = IStatus.SUCCEEDED;
+        state.statsClients.docs = state.statsClients.docs.filter(stat => !payload.statClientIds.includes(stat._id));
+      })
+      .addCase(deleteManyStatsClient.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
