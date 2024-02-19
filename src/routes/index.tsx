@@ -38,7 +38,7 @@ export default function Router() {
     {
       path: '/',
       children: [
-        { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+        { element: <Navigate to="/login" replace />, index: true },
         {
           path: 'login',
           element: (
@@ -120,16 +120,15 @@ export default function Router() {
           element: <Call />,
         },
         {
-          path:"stats-client",
-          element: <Outlet/>,
+          path: 'stats-client',
+          element: <Outlet />,
           children: [
-            {path:'',element:<StatsClient/>},
-            {path:'new' , element: <StatsClientNew/>},
-            {path:'view/:id',element:<StatsClientShow/>},
-            {path:'edit/:id',element:<StatsClientEdit/>}
-
-          ]
-        }
+            { path: '', element: <StatsClient /> },
+            { path: 'new', element: <StatsClientNew /> },
+            { path: 'view/:id', element: <StatsClientShow /> },
+            { path: 'edit/:id', element: <StatsClientEdit /> },
+          ],
+        },
       ],
     },
     {

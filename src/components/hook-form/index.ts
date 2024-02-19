@@ -5,7 +5,6 @@ export { default as RHFCodes } from './RHFCodes';
 export { default as RHFDate } from './RHFDate';
 export { default as RHFDateTimePicker } from './RHFDateTimePicker';
 export { default as RHFDesktopDateTimePicker } from './RHFDesktopDateTimePicker';
-export { default as RHFMultiCheckbox } from './RHFMultiCheckbox';
 export { default as RHFPhoneNumber } from './RHFPhoneNumber';
 export { default as RHFRadioGroup } from './RHFRadioGroup';
 export * from './RHFSelect';
