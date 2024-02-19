@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { IKpi } from '../../../../@types/Kpi';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
+import RenderField from '../../../../components/RenderField';
 import {
   createStatClientResponse,
   editStatClientResponse,
@@ -17,7 +18,7 @@ import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { formatFormValues } from './utils/formatFormValues';
 import { generateFieldValidation } from './utils/generateFieldValidation';
-import RenderField from './utils/renderFormField';
+
 import { transformStatClientResponse } from './utils/transformStatClientResponse';
 
 type Props = {
