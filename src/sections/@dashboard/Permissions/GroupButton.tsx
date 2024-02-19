@@ -1,4 +1,5 @@
 import { Button, IconButton, MenuItem, Stack } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
@@ -38,6 +39,7 @@ const GroupButton = ({
 }: Props) => {
   const { translate } = useLocales();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const { reset } = useFormContext();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
@@ -162,7 +164,10 @@ const GroupButton = ({
             color="error"
             onClick={() => {
               handleCloseConfirm();
-              dispatch(deleteGroupPermissionById({ id: group?._id }));
+              dispatch(deleteGroupPermissionById({ id: group?._id }))
+                .unwrap()
+                .then((res) => enqueueSnackbar(res?.message))
+                .catch((err) => enqueueSnackbar(err?.message, { variant: 'error' }));
             }}
           >
             {`${translate('Delete')}`}
