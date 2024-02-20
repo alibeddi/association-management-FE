@@ -4,11 +4,8 @@ export enum FrontType {
   CHECKBOX = 'checkbox',
   SELECT = 'select',
   INPUT = 'input',
-}
-export enum BackType {
-  STRING = 'string',
-  BOOLEAN = 'boolean',
-  ARRAY = 'array',
+  SWITCH = 'switch',
+  NONE = '',
 }
 
 export interface IKpi {
@@ -16,7 +13,6 @@ export interface IKpi {
   name: string;
   label: string;
   frontType: FrontType;
-  backType: BackType;
   options?: string[];
   isRequired: boolean;
   createdAt?: Date;

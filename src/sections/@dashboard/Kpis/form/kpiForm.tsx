@@ -1,26 +1,25 @@
-import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack } from '@mui/material';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { BackType, FrontType, IKpi } from '../../../../@types/Kpi';
-import { backendTypes, frontendTypes } from '../../../../assets/data';
+import { useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import { FrontType, IKpi } from '../../../../@types/Kpi';
+import { frontendTypes } from '../../../../assets/data';
 import FormProvider, { RHFSelect, RHFSwitch, RHFTextField } from '../../../../components/hook-form';
 import RHFAutocomplete from '../../../../components/hook-form/RHFAutocomplete';
 import { useSnackbar } from '../../../../components/snackbar';
 import { useLocales } from '../../../../locales';
-import { dispatch } from '../../../../redux/store';
 import { createkpi, updatekpi } from '../../../../redux/slices/kpis/actions';
+import { dispatch } from '../../../../redux/store';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 interface FormValuesProps {
   name: string;
   label: string;
-  frontType: string;
-  backType: string;
+  frontType: FrontType;
   isRequired: boolean;
   options: (string | number)[];
 }
@@ -46,9 +45,6 @@ export default function UserNewEditDeatilsForm({
     frontType: Yup.string()
       .required('Front type is required')
       .oneOf(Object.values(FrontType), 'Invalid front type value'),
-    backType: Yup.string()
-      .required('Back type is required')
-      .oneOf(Object.values(BackType), 'Invalid back type value'),
     isRequired: Yup.boolean().required('isRequired is required'),
     options: Yup.array().of(Yup.mixed()),
   });
@@ -57,8 +53,7 @@ export default function UserNewEditDeatilsForm({
     () => ({
       name: currentKpi?.name || '',
       label: currentKpi?.label || '',
-      frontType: currentKpi?.frontType || '',
-      backType: currentKpi?.backType || '',
+      frontType: currentKpi?.frontType || FrontType.NONE,
       isRequired: currentKpi?.isRequired || false,
       options: Array.isArray(currentKpi?.options) ? currentKpi?.options : [],
     }),
@@ -74,8 +69,9 @@ export default function UserNewEditDeatilsForm({
     reset,
     handleSubmit,
     formState: { isSubmitting, isDirty },
+    watch,
   } = methods;
-
+  const values = watch();
   useEffect(() => {
     if (isEdit && currentKpi) {
       reset(defaultValues);
@@ -90,17 +86,23 @@ export default function UserNewEditDeatilsForm({
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       if (isEdit && currentKpi) {
-        dispatch(updatekpi({ kpiId: currentKpi?._id, body: data })).unwrap().then(res=>{
-          enqueueSnackbar(`${translate(res.message)}`);
-          reset();
-          navigate(PATH_DASHBOARD.kpis.root);
-        }).catch(err=> enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
-      } else {
-        dispatch(createkpi({ kpi: data })).unwrap().then(res => {
-          enqueueSnackbar(`${translate(res.message)}`);
+        dispatch(updatekpi({ kpiId: currentKpi?._id, body: data }))
+          .unwrap()
+          .then((res) => {
+            enqueueSnackbar(`${translate(res.message)}`);
             reset();
             navigate(PATH_DASHBOARD.kpis.root);
-        }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+          })
+          .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
+      } else {
+        dispatch(createkpi({ kpi: data }))
+          .unwrap()
+          .then((res) => {
+            enqueueSnackbar(`${translate(res.message)}`);
+            reset();
+            navigate(PATH_DASHBOARD.kpis.root);
+          })
+          .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
       }
     } catch (error) {
       console.error(error);
@@ -137,29 +139,19 @@ export default function UserNewEditDeatilsForm({
                   </option>
                 ))}
               </RHFSelect>
-              <RHFSelect
-                native
-                name="backType"
-                label="Backend Type"
-                placeholder="select your backend type"
-                disabled={kpiDetails}
-              >
-                <option value="" />
-                {backendTypes.map((backType) => (
-                  <option key={backType.code} value={backType.label}>
-                    {backType.label}
-                  </option>
-                ))}
-              </RHFSelect>
-              <RHFAutocomplete
-                readOnly={kpiDetails}
-                name="options"
-                label="options"
-                multiple
-                freeSolo
-                options={[]}
-                ChipProps={{ size: 'small' }}
-              />
+              {[FrontType.CHECKBOX, FrontType.RADIO, FrontType.SELECT].includes(
+                values.frontType
+              ) && (
+                <RHFAutocomplete
+                  readOnly={kpiDetails}
+                  name="options"
+                  label="options"
+                  multiple
+                  freeSolo
+                  options={[]}
+                  ChipProps={{ size: 'small' }}
+                />
+              )}
               <RHFSwitch disabled={kpiDetails} name="isRequired" label="Is this kpi required" />
             </Box>
 

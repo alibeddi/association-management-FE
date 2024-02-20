@@ -39,14 +39,14 @@ export default function KpiTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, label, frontType, backType, isRequired, options, createdAt } = row;
+  const { name, label, frontType, isRequired, options, createdAt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
-  
+
   // check current user permissions
   const isAllowedToDeleteKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.DELETE);
   const isAllowedToEditKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.EDIT);
@@ -96,9 +96,6 @@ export default function KpiTableRow({
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
           {frontType}
-        </TableCell>
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {backType}
         </TableCell>
 
         <TableCell align="center">

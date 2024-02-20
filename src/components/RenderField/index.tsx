@@ -1,12 +1,7 @@
 // @mui
 import { Divider, MenuItem } from '@mui/material';
 // components
-import {
-  RHFMultiCheckbox,
-  RHFRadioGroup,
-  RHFSelect,
-  RHFTextField,
-} from '../hook-form';
+import { RHFMultiCheckbox, RHFRadioGroup, RHFSelect, RHFSwitch, RHFTextField } from '../hook-form';
 // types
 import { FrontType, IKpi } from '../../@types/Kpi';
 
@@ -68,6 +63,8 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
       />
     ),
     input: <RHFTextField name={componentName} label={kpi.label} type="text" id={kpi?._id} />,
+    switch: <RHFSwitch name={componentName} id={kpi?._id} label={kpi.label} />,
+    '': <></>,
   };
 
   return components[kpi?.frontType];
