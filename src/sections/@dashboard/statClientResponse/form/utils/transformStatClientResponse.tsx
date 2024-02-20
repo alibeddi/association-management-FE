@@ -1,4 +1,4 @@
-import { BackType } from '../../../../../@types/Kpi';
+import { FrontType } from '../../../../../@types/Kpi';
 import { StatClientResponse } from '../../../../../@types/StatClientResponse';
 
 export function transformStatClientResponse(
@@ -18,7 +18,7 @@ export function transformStatClientResponse(
     const kpiName = kpi?.name;
     let value;
 
-    if (kpi?.backType === BackType.ARRAY) {
+    if (kpi?.frontType === FrontType.CHECKBOX) {
       value = response;
     } else {
       value = response[0];
