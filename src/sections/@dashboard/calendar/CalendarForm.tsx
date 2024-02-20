@@ -110,18 +110,10 @@ export default function CalendarForm({
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={3} sx={{ px: 3 }}>
-          <Controller
-            name="startDate"
-            control={control}
-            render={({ field }) => <RHFDateTimePicker name='startDate' label="start date" />
-            }
-          />
-          <Controller
-            name="endDate"
-            control={control}
-            render={({ field }) => <RHFDateTimePicker name='endDate' label="end date" />
-          }
-          />
+       <RHFDateTimePicker name='startDate' label="start date" />
+
+<RHFDateTimePicker name='endDate' label="end date" />
+
         </Stack>
       </LocalizationProvider>
       <DialogActions>

@@ -66,6 +66,7 @@ export default function RHFDateTimePicker({
           <Stack sx={{ display: 'flex', flexDirection: 'column', gap: 0.2 }}>
             <Tooltip title={`${translate(label)}`}>
               <MobileDateTimePicker
+              ampm={false}
                 label={`${translate(label)}`}
                 value={pickerValue}
                 onChange={handlePickerChange}
