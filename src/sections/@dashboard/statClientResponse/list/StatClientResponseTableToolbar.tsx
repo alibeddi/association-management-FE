@@ -1,5 +1,6 @@
 // @mui
 import { Stack, InputAdornment, TextField, Button } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
 // components
 import Iconify from '../../../../components/iconify';
 
@@ -11,6 +12,7 @@ type Props = {
   isFiltered?: boolean;
   onResetFilter?: VoidFunction;
   onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setOpenFilter: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function StatClientResponseTableToolbar({
@@ -19,6 +21,7 @@ export default function StatClientResponseTableToolbar({
   onFilterName,
   onResetFilter,
   placeholder,
+  setOpenFilter
 }: Props) {
   return (
     <Stack
@@ -43,7 +46,7 @@ export default function StatClientResponseTableToolbar({
           ),
         }}
       />
-
+      <Button onClick={() => setOpenFilter(true)}>tesqsdfqsdft</Button>
       {isFiltered && (
         <Button
           color="error"
