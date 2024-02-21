@@ -11,6 +11,7 @@ import {
   ic_stat_client_response,
   ic_call,
   ic_stats_client,
+  ic_analytics
 } from '../../../assets/icons/navbar';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
@@ -23,6 +24,7 @@ const ICONS = {
   calls: icon(ic_call),
   statsClient: icon(ic_stats_client),
   statClientResponse: icon(ic_stat_client_response),
+  analytics: icon(ic_analytics),
 };
 
 export default function navConfig(user: AuthUserType) {
@@ -80,6 +82,12 @@ export default function navConfig(user: AuthUserType) {
           title: 'Stat-client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
+          toBeDisplayed: true,
+        },
+        {
+          title: 'Analytics',
+          path: PATH_DASHBOARD.analytics,
+          icon: ICONS.analytics,
           toBeDisplayed: true,
         },
       ],

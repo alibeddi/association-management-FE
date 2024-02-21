@@ -36,4 +36,5 @@ export const PATH_DASHBOARD = {
     view: path(ROOTS_DASHBOARD, '/stat-client-response/view'),
     new: path(ROOTS_DASHBOARD, '/stat-client-response/new'),
   },
+  analytics: path(ROOTS_DASHBOARD, '/analytics'),
 };
