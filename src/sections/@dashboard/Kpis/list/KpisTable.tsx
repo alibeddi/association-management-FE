@@ -26,7 +26,6 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'label', label: 'Label', align: 'left' },
   { id: 'frontType', label: 'Frontend Type', align: 'left' },
-  { id: 'backType', label: 'Backend Type', align: 'left' },
   { id: 'isRequired', label: 'Required', align: 'center' },
   { id: 'options', label: 'Options', align: 'left' },
   { id: 'createdAt', label: 'Created At', align: 'left' },
