@@ -145,11 +145,10 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                 >
                   <RHFAutocomplete
                     freeSolo
-                    label={`Question n°: ${index}`}
+                    label={`Question n°: ${index+1}`}
                     name={`kpis[${index}]`}
                     defaultValue={s || ''}
-                    getOptionLabel={(option) =>
-                      typeof option !== 'string' ? option.label : option
+                    getOptionLabel={(option) => option && typeof option !== 'string' ? option?.label : option
                     }
                     options={kpis.docs}
                     required
@@ -196,7 +195,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                 values.kpis?.map((value, index) => (
                   <Box key={index}>
                     <Typography>
-                      {value.label && value.label !== '' && `${value.label} :`}
+                      {value?.label ? `${value.label} :` : null}
                     </Typography>
                     <Box>
                       <RenderField {...value} />
