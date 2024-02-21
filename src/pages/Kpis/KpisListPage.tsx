@@ -5,6 +5,7 @@ import { MethodCode, ModelCode } from '../../@types/Permission';
 import { useAuthContext } from '../../auth/useAuthContext';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import Iconify from '../../components/iconify';
+import { useSettingsContext } from '../../components/settings';
 import { useLocales } from '../../locales';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { KpisTable } from '../../sections/@dashboard/Kpis/list';
@@ -12,6 +13,7 @@ import { hasPermission } from '../../sections/@dashboard/Permissions/utils';
 
 export default function KpiListPage() {
   const { translate } = useLocales();
+  const { themeStretch } = useSettingsContext();
   const { user } = useAuthContext();
   const userPermissions = user?.permissionGroup[0].permissions;
 
@@ -23,7 +25,7 @@ export default function KpiListPage() {
       <Helmet>
         <title>{`${translate('Kpis')}`}</title>
       </Helmet>
-      <Container maxWidth={false}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
           heading="kpis"
           links={[{ name: 'kpis' }]}

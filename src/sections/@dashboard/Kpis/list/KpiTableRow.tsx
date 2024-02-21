@@ -104,6 +104,8 @@ export default function KpiTableRow({
               color: isRequired ? '#3EAB55' : 'red',
               bgcolor: isRequired ? '#AFE1AF' : 'pink',
               borderRadius: '6px',
+              display: 'inline-block', // Make the box inline-block to fit content width
+              padding: '1px 1rem', // Adjust padding as needed
             }}
           >
             {isRequired.toString()}
