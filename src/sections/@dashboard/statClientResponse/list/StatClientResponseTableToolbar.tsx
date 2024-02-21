@@ -46,7 +46,7 @@ export default function StatClientResponseTableToolbar({
           ),
         }}
       />
-      <div onClick={() => setOpenFilter(true)}>tesqsdfqsdft</div>
+      <Button onClick={() => setOpenFilter(true)}>tesqsdfqsdft</Button>
       {isFiltered && (
         <Button
           color="error"
