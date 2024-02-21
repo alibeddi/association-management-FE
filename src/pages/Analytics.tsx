@@ -52,6 +52,7 @@ export default function GeneralAnalyticsPage() {
             <AnalyticsWidgetSummary
               title="Offices"
               total={analytics?.nbOffices}
+              color="warning"
               icon="vaadin:office"
             />
           </Grid>
@@ -60,7 +61,7 @@ export default function GeneralAnalyticsPage() {
             <AnalyticsWidgetSummary
               title="Users"
               total={analytics?.nbEmployees}
-              color="info"
+              color="error"
               icon="mdi:users"
             />
           </Grid>
@@ -69,7 +70,7 @@ export default function GeneralAnalyticsPage() {
             <AnalyticsWidgetSummary
               title="KPI's"
               total={analytics?.nbKpis}
-              color="error"
+              color="primary"
               icon="fluent-mdl2:analytics-report"
             />
           </Grid>
@@ -78,7 +79,7 @@ export default function GeneralAnalyticsPage() {
             <AnalyticsWidgetSummary
               title="Stat Clients"
               total={analytics?.nbStatClients}
-              color="error"
+              color="info"
               icon="material-symbols:list-alt"
             />
           </Grid>
@@ -87,7 +88,7 @@ export default function GeneralAnalyticsPage() {
             <AnalyticsWidgetSummary
               title="Stat Client Responses"
               total={analytics?.nbStatClientResponses}
-              color="error"
+              color="secondary"
               icon="fluent:text-bullet-list-square-edit-20-regular"
             />
           </Grid>
