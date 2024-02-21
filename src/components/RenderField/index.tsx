@@ -63,7 +63,14 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
       />
     ),
     input: <RHFTextField name={componentName} label={kpi.label} type="text" id={kpi?._id} />,
-    switch: <RHFSwitch name={componentName} id={kpi?._id} label={kpi.label} />,
+    switch: (
+      <RHFSwitch
+        name={componentName}
+        id={kpi?._id}
+        label={kpi.label}
+        disabled={statClientDetails}
+      />
+    ),
     '': <></>,
   };
 

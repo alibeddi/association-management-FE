@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   FormControlLabelProps,
   Tooltip,
+  formControlLabelClasses,
 } from '@mui/material';
 
 // translation
@@ -60,7 +61,6 @@ interface RHFMultiCheckboxProps extends Omit<FormControlLabelProps, 'control' | 
   label?: string;
   spacing?: number;
   helperText?: React.ReactNode;
-  values?: any;
 }
 
 export function RHFMultiCheckbox({
@@ -70,27 +70,19 @@ export function RHFMultiCheckbox({
   options,
   spacing,
   helperText,
-  values,
+  sx,
   ...other
 }: RHFMultiCheckboxProps) {
   const { control } = useFormContext();
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const { translate } = useLocales();
-
-  const handleCheckboxChange = (option: string) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((value) => value !== option));
-    } else {
-      setSelectedOptions([...selectedOptions, option]);
-    }
-   
-  };
+  const getSelected = (selectedItems: string[], item: string) =>
+    selectedItems?.includes(item)
+      ? selectedItems.filter((value) => value !== item)
+      : [...selectedItems, item];
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={[]}
       render={({ field, fieldState: { error } }) => (
         <FormControl component="fieldset">
           {label && (
@@ -103,9 +95,8 @@ export function RHFMultiCheckbox({
             sx={{
               ...(row && {
                 flexDirection: 'row',
-                flexWrap: 'nowrap',
               }),
-              '& .MuiFormControlLabel-root': {
+              [`& .${formControlLabelClasses.root}`]: {
                 '&:not(:last-of-type)': {
                   mb: spacing || 0,
                 },
@@ -116,6 +107,7 @@ export function RHFMultiCheckbox({
                   },
                 }),
               },
+              ...sx,
             }}
           >
             {options.map((option) => (
@@ -123,11 +115,11 @@ export function RHFMultiCheckbox({
                 key={option.value}
                 control={
                   <Checkbox
-                    checked={selectedOptions && selectedOptions?.includes(option.value)}
-                    onChange={() => handleCheckboxChange(option.value)}
+                    checked={field?.value?.includes(option.value)}
+                    onChange={() => field.onChange(getSelected(field.value || [], option.value))}
                   />
                 }
-                label={`${translate(option.label)} `}
+                label={option.label}
                 {...other}
               />
             ))}
