@@ -17,9 +17,10 @@ interface Props extends Omit<FormControlLabelProps, 'control'> {
   name: string;
   label: string;
   helperText?: React.ReactNode;
+  disabled?: boolean;
 }
 
-export default function RHFSwitch({ name, label, helperText, ...other }: Props) {
+export default function RHFSwitch({ name, label, helperText, disabled = false, ...other }: Props) {
   const { control } = useFormContext();
   const { translate } = useLocales();
 
@@ -32,6 +33,7 @@ export default function RHFSwitch({ name, label, helperText, ...other }: Props) 
         <>
           <Tooltip title={`${translate(helperText)}` || `${translate(label)}`}>
             <FormControlLabel
+              disabled={disabled}
               label={`${translate(label)} `}
               onBlur={field.onBlur}
               control={
