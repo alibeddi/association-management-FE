@@ -23,7 +23,6 @@ export default function StatClientResponseTableToolbar({
   placeholder,
 }: Props) {
   const [openFilter,setOpenFilter] = useState(false)
-  const [filterValue,setFilterValue] = useState({});
   const handleClostFilter = () => setOpenFilter(false)
   return (
     <Stack

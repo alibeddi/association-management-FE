@@ -10,7 +10,7 @@ interface Params {
   page: number;
   limit: number;
   orderBy?: string;
-  filterName?: string; // Define filterName as optional
+  filterName?: string;
 }
 
 const AsyncSelectKpis = ({

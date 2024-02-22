@@ -26,7 +26,10 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             <Box sx={{display:"flex",flexDirection:'row',"& *":{flexBasis:'100%'},gap:"1rem",flex:1}}>
             <Select name={ele.id} defaultValue={ele.type} onChange={(e)=> handleChangeOptionfilter(e.target.name,e.target.value) } >
               <MenuItem value="kpis">Kpis</MenuItem>
-              <MenuItem value="adminName">admin name</MenuItem>
+              <MenuItem value="adminName">admin </MenuItem>
+              <MenuItem value="clientContact">client contact</MenuItem>
+              <MenuItem value="clientName">client name</MenuItem>
+              <MenuItem value="statClient">stat client </MenuItem>
             </Select>
             <RenderSelectFilter filter={ele} setFilters={setFilters} />
             </Box>
