@@ -32,7 +32,6 @@ export default function RHFAutocomplete<
   label,
   helperText,
   options,
-  defaultValue,
   soloSelected = false,
   required = false,
   ...other
@@ -50,7 +49,7 @@ export default function RHFAutocomplete<
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue}
+      defaultValue={[]}
       render={({ field, fieldState: { error } }) => (
         <Tooltip title={`${translate(helperText)}` || `${translate(label)}`}>
           <Autocomplete
