@@ -2,9 +2,13 @@ import { LoadingButton } from '@mui/lab';
 import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import { nanoid } from '@reduxjs/toolkit';
+import { useSnackbar } from 'notistack';
 import  { useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 import EmptyContent from '../../../../components/empty-content';
+import { statsClientResponseFilter } from '../../../../redux/slices/statClientResponse/actions';
+import { dispatch } from '../../../../redux/store';
+import { validNotEmptyFilters } from '../../../../utils';
 import StatResponseFilterSelect from './StatResponseFilterSelect';
 
 type IProps = {
@@ -14,9 +18,24 @@ type IProps = {
 const StatClientResponseFormFilter = ({
   onClose
 }:IProps) =>  {
+  const {enqueueSnackbar} = useSnackbar()
   const [filters,setFilters] = useState<IFilterStatClientResponse[] | []>([]);
   const [isSubmitting,setIsSubmitting] = useState<boolean>(false)
-  const handleSubmit = () => console.log(filters)
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    const isValid = validNotEmptyFilters(filters);
+    if(!isValid){ setIsSubmitting(false)
+      enqueueSnackbar("Please ensure all fields are filled in.",{
+        variant:"error"
+      })
+    }
+    await dispatch(statsClientResponseFilter({
+      page:1,
+      limit:10,
+      filterValue:filters
+    }))
+    console.log({filters,isValid})
+  }
   const handleAdd = () => setFilters([...filters, { id:nanoid() , type: '', value: '' }]);
   const handleRemove = (id: string) => setFilters(filters.filter((ele) => ele.id !== id));
   return (
