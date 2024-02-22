@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
+import "./_index.scss"
 import { AsyncPaginate } from 'react-select-async-paginate';
-import { IKpi } from '../../@types/Kpi';
-import { getKpis } from '../../redux/slices/kpis/actions';
-import {  useDispatch, useSelector } from '../../redux/store';
-
+import { IKpi } from '../../../@types/Kpi';
+import { getKpis } from '../../../redux/slices/kpis/actions';
+import {  useDispatch, useSelector } from '../../../redux/store';
 
 interface Params {
   page: number;
@@ -11,8 +11,7 @@ interface Params {
   orderBy?: string;
   filterName?: string; // Define filterName as optional
 }
-
-const AsyncSelectKpis = ({
+const Admin = (({
   handleChange,
   name
 }:any) => {
@@ -29,8 +28,6 @@ const AsyncSelectKpis = ({
 
   const loadOptions = async (searchQuery: any, loadedOptions: any, { page:pageIndex }: any) => {
     setPage(prev => prev + 1);
-
-    console.log("loadOptions : ",searchQuery,"test",loadedOptions,page)
     if(searchQuery){
       setFilterName(searchQuery)
       setPage(0)
@@ -43,10 +40,8 @@ const AsyncSelectKpis = ({
       }
     };
   };
-
   return (
     <AsyncPaginate
-
     value={value}
     getOptionLabel={(option)=>option.name}
     getOptionValue={(option)=>option._id}
@@ -58,8 +53,7 @@ const AsyncSelectKpis = ({
     placeholder="Select an kpis"
     onChange={(e)=>{handleChange(name,e);setValue(e)}}
     />
-
   )
-}
+})
 
-export default AsyncSelectKpis
+export default Admin

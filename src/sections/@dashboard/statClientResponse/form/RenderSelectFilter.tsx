@@ -1,7 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { TextField, MenuItem } from '@mui/material';
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
-import AsyncSelectKpis from '../../../../components/AsyncSelectKpis';
+import AsyncSelectKpis from '../../../../components/AsyncSelect/AsyncSelectKpis';
+import { AdminAsyncSelect } from '../../../../components/AsyncSelect';
 
 type IProp = {
   filter: IFilterStatClientResponse;
@@ -14,12 +15,9 @@ const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
   switch (filter.type) {
     case 'adminName':
       return (
-        <TextField
-          name={filter.id}
-          placeholder={filter.value}
-          label="admin  "
-          value={filter.value}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
+        <AdminAsyncSelect
+        name={filter.id} 
+        handleChange={handleChange}
         />
       );
     case 'kpis':
