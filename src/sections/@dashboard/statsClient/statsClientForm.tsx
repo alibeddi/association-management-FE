@@ -64,7 +64,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
       _id: '',
       name: '',
       label: '',
-      frontType: FrontType.TEXTAREA,
+      frontType: FrontType.INPUT,
       isRequired: true,
     });
   const handleRemove = (index: number) => remove(index);

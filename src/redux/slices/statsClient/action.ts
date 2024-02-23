@@ -7,11 +7,16 @@ const STAT_CLIENT_URI = 'stat-clients';
 
 interface GetAllProps extends IGetAll {
   filterName?: string;
+  page: number;
+  limit: number;
+  orderBy?: string;
+  order?: string;
+  
 }
 
 export const getAllStatsClient = createAsyncThunk('/statsClient/',async(payload:GetAllProps)=>{
   let data;
-  const { page, order, orderBy,filterName,  limit } = payload;
+  const { page, order, orderBy,filterName,  limit  } = payload;
   const params = {
     page:page+1,
     limit,

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { StatClientResponse } from '../../../@types/StatClientResponse';
 import { IStatus } from '../../../@types/status';
+import { generateFilterStatClientResponse } from '../../../utils';
 import {
   createStatClientResponse,
   deleteManyStatClientResponse,
@@ -9,6 +10,7 @@ import {
   editStatClientResponse,
   getAllStatClientResponses,
   getOneStatClientResponse,
+  statsClientResponseFilter,
 } from './actions';
 
 type StatClientResState = {
@@ -101,6 +103,17 @@ const slice = createSlice({
       .addCase(deleteManyStatClientResponse.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
+    builder
+    .addCase(statsClientResponseFilter.pending,(state)=>{
+      state.status = IStatus.LOADING;
+    })
+    .addCase(statsClientResponseFilter.fulfilled, (state, {payload}) => {
+      state.status = IStatus.SUCCEEDED;
+      state.statClientResponses = payload;
+    })
+    .addCase(statsClientResponseFilter.rejected, (state) => {
+      state.status = IStatus.FAILED;
+    });
   },
 });
 
