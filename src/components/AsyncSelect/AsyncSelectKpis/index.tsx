@@ -26,9 +26,9 @@ const AsyncSelectKpis = ({
     dispatch(getKpis(params))
   },[dispatch,page,filterName])
   const {kpis} = useSelector(store=>store.kpis)
-  const [value,setValue] = useState<IKpi[] | IKpi | null>(kpis.docs)
+  const [value,setValue] = useState<IKpi[] | IKpi | string | null>(kpis.docs)
 
-  const loadOptions = async (searchQuery: any, loadedOptions: any, { page:pageIndex }: any) => {
+  const loadOptions = async (searchQuery: any) => {
     setPage(prev => prev + 1);
     if(searchQuery){
       setFilterName(searchQuery)
@@ -38,7 +38,7 @@ const AsyncSelectKpis = ({
       options: kpis.docs,
       hasMore: kpis.meta.hasMore,
       additional: {
-        page: pageIndex + 1
+        page: kpis.meta.hasMore ? page + 1 : page
       }
     };
   };
@@ -46,15 +46,15 @@ const AsyncSelectKpis = ({
   return (
     <AsyncPaginate
     value={value}
-    getOptionLabel={(option)=>option.name}
-    getOptionValue={(option)=>option._id}
+    getOptionLabel={(test)=>(test as unknown as IKpi)._id}
+    getOptionValue={(test)=>(test as unknown as IKpi)._id}
     additional={{
       page:1
     }}
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an kpis"
-    onChange={(e)=>{handleChange(name,e);setValue(e)}}
+    onChange={(e)=>{handleChange(name,e);setValue(e);console.log({e})}}
     />
 
   )

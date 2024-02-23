@@ -34,7 +34,17 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             <RenderSelectFilter filter={ele} setFilters={setFilters} />
             </Box>
             
-            <Button  color="error" startIcon={<Iconify icon="material-symbols:delete" />} onClick={()=>onDelete(ele.id)}/>
+            <Button  color="error" startIcon={<Iconify icon="material-symbols:delete" 
+           />} sx={{
+              padding:0,
+              display:"flex",
+              justifyContent:"center",
+              alignItems:"center",
+              "& .css-gcc2o7-MuiButton-startIcon":{
+                margin:"0 !important"
+              }  
+            
+            }} onClick={()=>onDelete(ele.id)}/>
           </Stack>
           
         ))

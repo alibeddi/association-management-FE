@@ -6,6 +6,7 @@ import { useSnackbar } from 'notistack';
 import  { useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 import EmptyContent from '../../../../components/empty-content';
+import Iconify from '../../../../components/iconify';
 import { statsClientResponseFilter } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch } from '../../../../redux/store';
 import { validNotEmptyFilters } from '../../../../utils';
@@ -28,13 +29,15 @@ const StatClientResponseFormFilter = ({
       enqueueSnackbar("Please ensure all fields are filled in.",{
         variant:"error"
       })
+      return;
     }
     await dispatch(statsClientResponseFilter({
       page:1,
       limit:10,
       filterValue:filters
-    }))
-    console.log({filters,isValid})
+    })).unwrap().then(res=>{enqueueSnackbar("success");onClose();}).catch(err=>enqueueSnackbar(err.messsage))
+    
+    setIsSubmitting(false)
   }
   const handleAdd = () => setFilters([...filters, { id:nanoid() , type: '', value: '' }]);
   const handleRemove = (id: string) => setFilters(filters.filter((ele) => ele.id !== id));
@@ -42,7 +45,7 @@ const StatClientResponseFormFilter = ({
     <Stack>
 
 
-      <Button onClick={()=>handleAdd()} > Add new Filter</Button>
+      <Button onClick={()=>handleAdd()} startIcon={<Iconify icon='icons8:plus' />}> Add new Filter</Button>
 
    
     <Stack  style={{

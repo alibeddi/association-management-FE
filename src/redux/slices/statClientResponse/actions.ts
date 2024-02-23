@@ -149,17 +149,16 @@ export const statsClientResponseFilter = createAsyncThunk('STAT_CLIENT_RESPONSE/
   filterClientName?: string;
   filterValue: IFilterStatClientResponse[]
 })=>{
-  const { page, order = 'desc', orderBy = 'createdAt', filterClientName, limit,filterValue  } = payload;
+  const { page, filterClientName, limit,filterValue  } = payload;
   const params = {
     page: page + 1,
     limit,
-    sort: order === 'desc' ? `-${orderBy}` : `+${orderBy}`,
     ...(filterClientName ? { clientName: filterClientName } : {}),
   };
 let data;
 try {
-  const url = generateFilterStatClientResponse(filterValue)
-  const response = await axios.get(`/stat-client-responses/filter`,{params})
+  const query = generateFilterStatClientResponse(filterValue,limit,page)
+  const response = await axios.get(`/stat-client-responses/filter?${query}`)
   data = response.data;
   if(response.status ===200){
     return data.data;

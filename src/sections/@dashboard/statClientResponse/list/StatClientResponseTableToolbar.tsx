@@ -59,7 +59,7 @@ export default function StatClientResponseTableToolbar({
         </Button>
       )}
       <Button onClick={()=>setOpenFilter(!openFilter)}>{openFilter ? "Filter" : "Reset Filter"}</Button>
-      <StatClientResponseFilter open={openFilter} onClose={handleClostFilter} />
+      <StatClientResponseFilter open={openFilter} onClose={handleClostFilter}  />
     </Stack>
   );
 }
