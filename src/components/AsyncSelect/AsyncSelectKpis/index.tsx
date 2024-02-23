@@ -20,7 +20,7 @@ const AsyncSelectKpis = ({
 }:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
   const [page,setPage] = useState<number>(0)
-  const [filterName,setFilterName] = useState(undefined)
+  const [filterName,setFilterName] = useState<string | null>(null)
   useEffect(()=>{
     const params:Params = {page,limit:10,orderBy:"name"};
     if(filterName && typeof filterName === "string") params.filterName = filterName
@@ -29,7 +29,7 @@ const AsyncSelectKpis = ({
   const {kpis} = useSelector(store=>store.kpis)
   const [value,setValue] = useState<IKpi[] | IKpi | string | null>(kpis.docs)
 
-  const loadOptions = async (searchQuery: any) => {
+  const loadOptions = async (searchQuery: string) => {
     setPage(prev => prev + 1);
     if(searchQuery){
       setFilterName(searchQuery)

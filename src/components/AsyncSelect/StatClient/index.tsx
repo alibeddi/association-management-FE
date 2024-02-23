@@ -19,7 +19,7 @@ const StatClient = (({
 }:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
   const [page,setPage] = useState<number>(0)
-  const [filterName,setFilterName] = useState(undefined)
+  const [filterName,setFilterName] = useState<string | null>(null)
   useEffect(()=>{
     const params:Params = {page,limit:10};
     if(filterName && typeof filterName === "string") params.filterName = filterName
@@ -27,17 +27,19 @@ const StatClient = (({
   },[dispatch,page,filterName])
   const {statsClients} = useSelector(store=>store.statsClient)
   const [value,setValue] = useState<IStatsClient[] | IStatsClient | null>(statsClients.docs)
-  const loadOptions = async (searchQuery: any, loadedOptions: any, { page:pageIndex }: any) => {
+  const loadOptions = async (searchQuery: string | null) => {
     setPage(prev => prev + 1);
     if(searchQuery){
       setFilterName(searchQuery)
       setPage(0)
+    }else {
+      setPage(page + 1)
     }
     return {
       options: statsClients.docs,
       hasMore: statsClients.meta.hasMore,
       additional: {
-        page: pageIndex + 1
+        page
       }
     };
   };

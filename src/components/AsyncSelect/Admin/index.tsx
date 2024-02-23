@@ -18,7 +18,7 @@ const Admin = (({
 }:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
   const [page,setPage] = useState<number>(0)
-  const [filterName,setFilterName] = useState(undefined)
+  const [filterName,setFilterName] = useState<string | null>(null)
   useEffect(()=>{
     const params:Params = {page,limit:10};
     if(filterName && typeof filterName === "string") params.name = filterName
@@ -26,17 +26,19 @@ const Admin = (({
   },[dispatch,page,filterName])
   const {users} = useSelector(store=>store.users)
   const [value,setValue] = useState<User[] | User | null>(users.docs)
-  const loadOptions = async (searchQuery: any, loadedOptions: any, { page:pageIndex }: any) => {
+  const loadOptions = async (searchQuery: string) => {
     setPage(prev => prev + 1);
     if(searchQuery){
       setFilterName(searchQuery)
       setPage(0)
+    } else{
+      setPage(page +1 )
     }
     return {
       options: users.docs,
       hasMore: users.meta.hasMore,
       additional: {
-        page: pageIndex + 1
+        page
       }
     };
   };
