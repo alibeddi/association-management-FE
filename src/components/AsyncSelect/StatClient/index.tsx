@@ -5,6 +5,7 @@ import {  useDispatch, useSelector } from '../../../redux/store';
 import { User } from '../../../@types/User';
 import { getAllStatsClient } from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
+import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 
 interface Params {
   page: number;
@@ -15,7 +16,7 @@ interface Params {
 const StatClient = (({
   handleChange,
   name
-}:any) => {
+}:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
   const [page,setPage] = useState<number>(0)
   const [filterName,setFilterName] = useState(undefined)
@@ -50,8 +51,8 @@ const StatClient = (({
     }}
     loadOptions={loadOptions}
     isSearchable
-    placeholder="Select an statsClients"
-    onChange={(e)=>{handleChange(name,e);setValue(e)}}
+    placeholder="Select an stats Clients"
+    onChange={(e)=>{if(e) handleChange(name,typeof e === "string" ? e: e._id);setValue(e)}}
     />
   )
 })

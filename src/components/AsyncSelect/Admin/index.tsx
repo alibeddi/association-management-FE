@@ -4,6 +4,7 @@ import { AsyncPaginate } from 'react-select-async-paginate';
 import {  useDispatch, useSelector } from '../../../redux/store';
 import { getUsers } from '../../../redux/slices/users/actions';
 import { User } from '../../../@types/User';
+import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 
 interface Params {
   page: number;
@@ -14,7 +15,7 @@ interface Params {
 const Admin = (({
   handleChange,
   name
-}:any) => {
+}:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
   const [page,setPage] = useState<number>(0)
   const [filterName,setFilterName] = useState(undefined)
@@ -50,7 +51,9 @@ const Admin = (({
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an users"
-    onChange={(e)=>{handleChange(name,e);setValue(e)}}
+    onChange={(e)=>{
+      if(e) handleChange(name,e._id);setValue(e)
+    }}
     />
   )
 })

@@ -4,6 +4,7 @@ import { AsyncPaginate } from 'react-select-async-paginate';
 import { IKpi } from '../../../@types/Kpi';
 import { getKpis } from '../../../redux/slices/kpis/actions';
 import {  useDispatch, useSelector } from '../../../redux/store';
+import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 
 
 interface Params {
@@ -16,7 +17,7 @@ interface Params {
 const AsyncSelectKpis = ({
   handleChange,
   name
-}:any) => {
+}:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
   const [page,setPage] = useState<number>(0)
   const [filterName,setFilterName] = useState(undefined)
@@ -46,7 +47,7 @@ const AsyncSelectKpis = ({
   return (
     <AsyncPaginate
     value={value}
-    getOptionLabel={(test)=>(test as unknown as IKpi)._id}
+    getOptionLabel={(test)=>(test as unknown as IKpi).label}
     getOptionValue={(test)=>(test as unknown as IKpi)._id}
     additional={{
       page:1
@@ -54,7 +55,7 @@ const AsyncSelectKpis = ({
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an kpis"
-    onChange={(e)=>{handleChange(name,e);setValue(e);console.log({e})}}
+    onChange={(e)=>{if(e) handleChange(name,typeof e === "string" ? e : e._id);setValue(e);}}
     />
 
   )
