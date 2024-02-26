@@ -37,7 +37,7 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
       </Box>
     );
   }
-  const handleChangeFilters = (choices:string) => setFilters(prev=> prev.map(ele=>ele.value=== kpi._id ? {...ele,choices:selectedChoices} : ele))
+  const handleChangeFilters = (choices:string) => setFilters(prev=> prev.map(elt=>elt.value=== kpi._id ? {...elt,choices:selectedChoices} : elt))
   const handleCheckboxChange = (choice: string, isChecked: boolean) => {
     const updatedChoices = {
       ...selectedChoices,
@@ -45,7 +45,7 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
     };
     setSelectedChoices(updatedChoices);
   };
-  console.log({selectedChoices})
+
 
   return (
     <Stack sx={{
@@ -56,7 +56,7 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
       {kpi?.choices?.map((choice: string) => (
         <FormControlLabel
           key={choice}
-          control={<Checkbox checked={selectedChoices[choice]} onChange={(e) => {handleCheckboxChange(choice, e.target.checked);console.log(e.target.checked)}} />}
+          control={<Checkbox checked={selectedChoices[choice]} onChange={(e) => {handleCheckboxChange(choice, e.target.checked);}} />}
           label={choice}
         />
       ))}
