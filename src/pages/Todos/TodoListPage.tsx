@@ -2,7 +2,7 @@ import { Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useLocales } from '../../locales';
-import { TodoList } from '../../sections/@dashboard/todos';
+import { TodoList } from '../../sections/@dashboard/todos/list';
 
 export default function MyTodoListPage() {
   const { translate } = useLocales();
