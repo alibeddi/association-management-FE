@@ -40,7 +40,7 @@ const StatClientResponseFormFilter = ({
     setIsSubmitting(false)
   }
   const handleAdd = () => setFilters([...filters, { id:nanoid() , type: '', value: '' }]);
-  const handleRemove = (id: string) => setFilters(filters.filter((ele) => ele.id !== id));
+  const handleRemove = (id: string) => setFilters(filters.filter((elt) => elt.id !== id));
   return (
     <Stack>
 
