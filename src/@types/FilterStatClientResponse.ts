@@ -1,3 +1,3 @@
 export type IFilterStatClientResponse = {
-  id:string,type:string,value:string
+  id:string,type:string,value:string 
 }

@@ -2,6 +2,7 @@ import { Button, MenuItem, Select } from '@mui/material'
 import { Box, Stack } from '@mui/system'
 import  { Dispatch, SetStateAction } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse'
+import ChoicesSelect from '../../../../components/ChoicesSelect'
 import Iconify from '../../../../components/iconify'
 import RenderSelectFilter from './RenderSelectFilter'
 
@@ -19,11 +20,18 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
     <Stack sx={{
       gap:"1rem",
       display:"flex"
-    }} >
+    }} 
+
+    >
       {
          filters.map((ele)=>(
-          <Stack key={ele.id} sx={{display:"flex",flexDirection:'row',gap:"1rem"}}>
-            <Box sx={{display:"flex",flexDirection:'row',"& *":{flexBasis:'100%'},gap:"1rem",flex:1}}>
+          <Stack key={ele.id} sx={{display:"flex",flexDirection:'column',gap:"1rem"}}>
+            <Stack sx={{
+              display:'flex',
+              flexDirection:'row',
+              gap:'1rem'
+            }} >
+            <Stack sx={{display:"flex",flexDirection:'row',"& *":{flexBasis:'100%'},gap:"1rem",flex:1}}>
             <Select name={ele.id} defaultValue={ele.type} onChange={(e)=> handleChangeOptionfilter(e.target.name,e.target.value) } >
               <MenuItem value="kpis">Kpis</MenuItem>
               <MenuItem value="adminName">admin </MenuItem>
@@ -32,9 +40,8 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
               <MenuItem value="statClient">stat client </MenuItem>
             </Select>
             <RenderSelectFilter filter={ele} setFilters={setFilters} />
-            </Box>
-            
-            <Button  color="error" startIcon={<Iconify icon="material-symbols:delete" 
+            </Stack>
+<Button  color="error" startIcon={<Iconify icon="material-symbols:delete" 
            />} sx={{
               padding:0,
               display:"flex",
@@ -45,6 +52,9 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
               }  
             
             }} onClick={()=>onDelete(ele.id)}/>
+            </Stack>
+              
+            {ele.type==="kpis" && ele.value !=="" ? <ChoicesSelect value={ele} setFilters={setFilters}/> : null}
           </Stack>
           
         ))

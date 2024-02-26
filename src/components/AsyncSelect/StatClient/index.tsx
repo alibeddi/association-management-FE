@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import "./_index.scss"
 import { AsyncPaginate } from 'react-select-async-paginate';
 import {  useDispatch, useSelector } from '../../../redux/store';
-import { User } from '../../../@types/User';
 import { getAllStatsClient } from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
+import { StyledAsyncPaginate } from '../styles';
 
 interface Params {
   page: number;
@@ -55,6 +54,7 @@ const StatClient = (({
     isSearchable
     placeholder="Select an stats Clients"
     onChange={(e)=>{if(e) handleChange(name,typeof e === "string" ? e: e._id);setValue(e)}}
+    styles={StyledAsyncPaginate}
     />
   )
 })
