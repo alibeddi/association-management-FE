@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import "./_index.scss"
 import { AsyncPaginate } from 'react-select-async-paginate';
 import {  useDispatch, useSelector } from '../../../redux/store';
 import { getUsers } from '../../../redux/slices/users/actions';

@@ -15,10 +15,10 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
   }, [dispatch, value]);
 
   const { kpi } = useSelector((store: RootState) => store.kpis);
-  const [selectedChoices, setSelectedChoices] = useState<any>({});
+  const [selectedChoices, setSelectedChoices] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
-    const initialSelectedChoices: any = {};
+    const initialSelectedChoices = {} as { [key: string]: boolean };
     if (kpi?.choices) {
       kpi.choices.forEach((choice: string) => {
         initialSelectedChoices[choice] = false;
@@ -37,14 +37,13 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
       </Box>
     );
   }
-  const handleChangeFilters = (choices:any) => setFilters(prev=> prev.map(ele=>ele.value=== kpi._id ? {...ele,choices:selectedChoices} : ele))
+  const handleChangeFilters = (choices:string) => setFilters(prev=> prev.map(ele=>ele.value=== kpi._id ? {...ele,choices:selectedChoices} : ele))
   const handleCheckboxChange = (choice: string, isChecked: boolean) => {
     const updatedChoices = {
       ...selectedChoices,
       [choice]: !selectedChoices[choice]
     };
     setSelectedChoices(updatedChoices);
-    handleChangeFilters(updatedChoices);
   };
   console.log({selectedChoices})
 
