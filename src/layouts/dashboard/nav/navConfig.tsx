@@ -11,6 +11,7 @@ import {
   ic_stat_client_response,
   ic_call,
   ic_stats_client,
+  ic_todolist,
 } from '../../../assets/icons/navbar';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
@@ -23,6 +24,7 @@ const ICONS = {
   calls: icon(ic_call),
   statsClient: icon(ic_stats_client),
   statClientResponse: icon(ic_stat_client_response),
+  todoList: icon(ic_todolist),
 };
 
 export default function navConfig(user: AuthUserType) {
@@ -63,6 +65,12 @@ export default function navConfig(user: AuthUserType) {
           path: PATH_DASHBOARD.calender,
           icon: ICONS.calendar,
           toBeDisplayed: hasAccessToCalendar,
+        },
+        {
+          title: 'Todo List',
+          path: PATH_DASHBOARD.todoList.root,
+          icon: ICONS.todoList,
+          toBeDisplayed: true,
         },
         {
           title: 'calls',
