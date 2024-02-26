@@ -1,9 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useMemo, useState } from 'react';
+import { Button } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import FormProvider from '../../../../components/hook-form';
+import { Mention, MentionsInput } from 'react-mentions';
 import * as Yup from 'yup';
-import { MentionsInput, Mention } from 'react-mentions';
+import FormProvider from '../../../../components/hook-form';
+
 type FormValues = {
   todo: string;
 };
@@ -32,48 +34,33 @@ export default function AddNewTodo() {
   } = methods;
 
   const onSubmit = async (data: FormValues) => {
-    try {
-    } catch (error) {
-      console.error(error);
-    }
+    console.log(data);
   };
+  const [value, setValue] = useState('');
+
+  const users = [
+    {
+      id: 'isaac',
+      display: 'Isaac Newton',
+    },
+    {
+      id: 'sam',
+      display: 'Sam Victor',
+    },
+    {
+      id: 'emma',
+      display: 'emmanuel@nobody.com',
+    },
+  ];
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Controller
-        name="todo"
         control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <MentionsInput
-            value={field.value}
-            onChange={(e) => field.onChange(e.target.value)}
-            placeholder="Type a message..."
-            style={{ width: '100%', height: 100 }}
-            allowSuggestionsAboveCursor
-            inputRef={(input) => {
-              field.ref(input);
-            }}
-            markup="@[__display__](__type__:__id__)"
-            displayTransform={(id, display) => `@${display}`}
-            suggestions={[]}
-            onAdd={(id, display) => {
-              setMentions([...mentions, { id, display }]);
-            }}
-            onBlur={() => {
-              field.onBlur(mentions);
-            }}
-          >
-            <Mention
-              trigger="@"
-              data={[]}
-              renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                <div className="user">{highlightedDisplay}</div>
-              )}
-              onAdd={(id, display) => {
-                setMentions([...mentions, { id, display }]);
-              }}
-            />
+        name="todo"
+        render={({ field: { onChange, onBlur, value, ref } }) => (
+          <MentionsInput value={value} onChange={onChange}>
+            <Mention data={users} trigger="@" />
           </MentionsInput>
         )}
       />
