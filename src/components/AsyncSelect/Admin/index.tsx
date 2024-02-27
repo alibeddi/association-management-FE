@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import "./_index.scss"
 import { AsyncPaginate } from 'react-select-async-paginate';
 import {  useDispatch, useSelector } from '../../../redux/store';
 import { getUsers } from '../../../redux/slices/users/actions';
 import { User } from '../../../@types/User';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
+import { StyledAsyncPaginate } from '../styles';
 
 interface Params {
   page: number;
@@ -56,6 +56,7 @@ const Admin = (({
     onChange={(e)=>{
       if(e) handleChange(name,e._id);setValue(e)
     }}
+    styles={StyledAsyncPaginate}
     />
   )
 })

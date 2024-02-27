@@ -7,7 +7,7 @@ import { FrontType, IKpi } from '../../@types/Kpi';
 
 function RenderField(kpi: IKpi, statClientDetails?: boolean) {
   const componentName = kpi?.name;
-  const options = (kpi.options || []).map((option) => ({ label: option, value: option }));
+  const options = (kpi.choices || []).map((choice) => ({ label: choice, value: choice }));
 
   const components: Record<FrontType, JSX.Element> = {
     textarea: (
@@ -43,7 +43,7 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
           None
         </MenuItem>
         <Divider />
-        {kpi?.options?.map((item: string | number) => (
+        {kpi?.choices?.map((item: string | number) => (
           <MenuItem key={item} value={item}>
             {item}
           </MenuItem>
@@ -56,7 +56,7 @@ function RenderField(kpi: IKpi, statClientDetails?: boolean) {
         id={kpi?._id}
         name={componentName}
         options={
-          kpi.options ? kpi.options.map((option) => ({ label: String(option), value: option })) : []
+          kpi.choices ? kpi.choices.map((option) => ({ label: String(option), value: option })) : []
         }
         label={kpi.label}
         disabled={statClientDetails}

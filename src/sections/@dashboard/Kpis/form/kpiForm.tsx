@@ -21,7 +21,7 @@ interface FormValuesProps {
   label: string;
   frontType: FrontType;
   isRequired: boolean;
-  options: (string | number)[];
+  choices: (string | number)[];
 }
 type Props = {
   isEdit?: boolean;
@@ -46,7 +46,7 @@ export default function UserNewEditDeatilsForm({
       .required('Front type is required')
       .oneOf(Object.values(FrontType), 'Invalid front type value'),
     isRequired: Yup.boolean().required('isRequired is required'),
-    options: Yup.array().of(Yup.mixed()),
+    choices: Yup.array().of(Yup.mixed()),
   });
 
   const defaultValues = useMemo(
@@ -55,7 +55,7 @@ export default function UserNewEditDeatilsForm({
       label: currentKpi?.label || '',
       frontType: currentKpi?.frontType || FrontType.NONE,
       isRequired: currentKpi?.isRequired || false,
-      options: Array.isArray(currentKpi?.options) ? currentKpi?.options : [],
+      choices: Array.isArray(currentKpi?.choices) ? currentKpi?.choices : [],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentKpi]
@@ -144,8 +144,8 @@ export default function UserNewEditDeatilsForm({
               ) && (
                 <RHFAutocomplete
                   readOnly={kpiDetails}
-                  name="options"
-                  label="options"
+                  name="choices"
+                  label="choices"
                   multiple
                   freeSolo
                   options={[]}
