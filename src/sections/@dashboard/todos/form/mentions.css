@@ -1,0 +1,10 @@
+.mention-input input {
+  border: 1px solid #e3e5e7;
+  border-radius: 4px;
+  padding: 12px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.mention-input input:focus {
+  outline: none;
+  border: none;
+}

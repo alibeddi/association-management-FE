@@ -1,30 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useMemo, useState } from 'react';
+import { LoadingButton } from '@mui/lab';
+import { Avatar, Box, ListItemAvatar, ListItemText, MenuItem, Stack } from '@mui/material';
+import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Mention, MentionsInput, DisplayTransformFunc } from 'react-mentions';
+import { DisplayTransformFunc, Mention, MentionsInput } from 'react-mentions';
 import * as Yup from 'yup';
 import { User } from '../../../../@types/User';
 import FormProvider from '../../../../components/hook-form';
+import Iconify from '../../../../components/iconify';
 import { getUsers } from '../../../../redux/slices/users/actions';
-import { dispatch, RootState, useSelector } from '../../../../redux/store';
+import { dispatch } from '../../../../redux/store';
+import './mentions.css';
 
 type FormValues = {
   todo: string;
 };
-type MentionData = {
-  id: string;
-  display: string;
-};
-
 export default function AddNewTodo() {
-  const { users } = useSelector((state: RootState) => state.users);
-  const [mentions, setMentions] = useState<{ id: string; display: string }[]>([]);
-
-  useEffect(() => {
-    const filtereddata = users.docs.map((user) => ({ id: user._id, display: user.username }));
-    setMentions(filtereddata);
-  }, [users]);
-
   const NewTodoSchema = Yup.object().shape({
     todo: Yup.string().required('task description is required'),
   });
@@ -52,32 +43,71 @@ export default function AddNewTodo() {
     console.log(data);
   };
 
-  const fetchUsers = (search: any, callback: any) => {
-    if (!search) return;
-    console.log(search);
+  const fetchUsers = (search: string, callback: any) => {
     dispatch(getUsers({ page: 0, limit: 100, search }))
       .unwrap()
       .then((data) => {
-        callback(data.docs.map((user: User) => ({ id: user._id, display: user.username })));
+        callback(
+          data.docs.map((user: User) => ({
+            id: user._id,
+            display: user.username,
+            profilePicture: user?.avatar,
+          }))
+        );
       })
       .catch(() => callback([]));
   };
 
-  const mentionDisplayTransform: DisplayTransformFunc = (id: string, display: string) => {
-    return `@${display}`;
-  };
+  const mentionDisplayTransform: DisplayTransformFunc = (id: string, display: string) =>
+    `@${display}`;
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        control={control}
-        name="todo"
-        render={({ field: { onChange, value } }) => (
-          <MentionsInput placeholder="type your new task..." value={value} onChange={onChange}>
-            <Mention displayTransform={mentionDisplayTransform} data={fetchUsers} trigger="@" />
-          </MentionsInput>
-        )}
-      />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '0.75rem',
+          alignItems: 'center',
+          maxWidth: '800px',
+        }}
+      >
+        <Stack className="mention-input" sx={{ flexGrow: 1 }}>
+          <Controller
+            control={control}
+            name="todo"
+            render={({ field: { onChange, value } }) => (
+              <MentionsInput
+                singleLine
+                placeholder="Add your new todo..."
+                value={value}
+                onChange={onChange}
+                allowSuggestionsAboveCursor // To enable keyboard navigation for selecting tagged users
+              >
+                <Mention
+                  displayTransform={mentionDisplayTransform}
+                  data={fetchUsers}
+                  trigger="@"
+                  markup="@[__display__](__id__)" // To highlight tagged users
+                  renderSuggestion={(suggestion, search, highlightedDisplay) => (
+                    <MenuItem>
+                      <ListItemAvatar>
+                        <Avatar src={suggestion.display} alt={suggestion.display} />
+                      </ListItemAvatar>
+                      <ListItemText primary={highlightedDisplay} />
+                    </MenuItem>
+                  )}
+                />
+              </MentionsInput>
+            )}
+          />
+        </Stack>
+        <Stack alignItems="flex-end" sx={{ marginTop: 2 }}>
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            <Iconify icon="ic:sharp-add" /> add
+          </LoadingButton>
+        </Stack>
+      </Box>
     </FormProvider>
   );
 }
