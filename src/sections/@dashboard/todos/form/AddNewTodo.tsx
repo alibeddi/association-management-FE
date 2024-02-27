@@ -65,6 +65,16 @@ export default function AddNewTodo() {
       display: 'emmanuel@nobody.com',
     },
   ];
+  const fetchUsers = (search: any, callback: any) => {
+    if (!search) return;
+    console.log(search);
+    dispatch(getUsers({ page: 0, limit: 100 }))
+      .unwrap()
+      .then((data) => {
+        callback(data.docs.map((user: User) => ({ id: user._id, display: user.username })));
+      })
+      .catch(() => callback([]));
+  };
 
   const mentionDisplayTransform: DisplayTransformFunc = (id: string, display: string) => {
     return `@${display}`;
@@ -77,7 +87,7 @@ export default function AddNewTodo() {
         name="todo"
         render={({ field: { onChange, value } }) => (
           <MentionsInput placeholder="type your new task..." value={value} onChange={onChange}>
-            <Mention displayTransform={mentionDisplayTransform} data={data} trigger="@" />
+            <Mention displayTransform={mentionDisplayTransform} data={fetchUsers} trigger="@" />
           </MentionsInput>
         )}
       />
