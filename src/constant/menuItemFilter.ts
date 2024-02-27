@@ -16,7 +16,7 @@ export const MENU_ITEM_FILTER:{label:string,value:string}[] = [
     value:'clientName'
   },
   {
-    label:"statClient",
-    value:'stat client'
+    label:"stat client",
+    value:'statClient'
   }
 ]
