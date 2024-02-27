@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Stack } from '@mui/system';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import { Controller } from 'react-hook-form';
 import { RootState } from '../../redux/store';
 import { getOnekpi } from '../../redux/slices/kpis/actions';
 import { IFilterStatClientResponse } from '../../@types/FilterStatClientResponse';
@@ -12,7 +11,7 @@ import { IResponseFilter } from '../../@types/AsyncSelectFilter';
 
 
 
-const ChoicesSelect = ({ value,setFilters,filters }: { value: IFilterStatClientResponse,filters:IFilterStatClientResponse[],  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
+const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
 }) => {
   const dispatch = useDispatch();
 
@@ -77,15 +76,17 @@ const ChoicesSelect = ({ value,setFilters,filters }: { value: IFilterStatClientR
     handleChangeFilters(updatedChoices)
   };
 
-
   return (
     <Stack sx={{
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap'
     }}>
-      {kpi?.choices?.map((choice: string) => (
- <FormControlLabel
+      {
+      
+      
+      ( kpi?.frontType===FrontType.SWITCH ? ['true','false'] :kpi?.choices  )?.map((choice: string) => (
+  <FormControlLabel
           key={choice}
           control={<Checkbox checked={selectedChoices[choice]} onChange={(e) => {handleCheckboxChange(choice);}} />}
           label={choice}

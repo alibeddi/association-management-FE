@@ -49,7 +49,6 @@ const AsyncSelectKpis = ({
    
   return (
     <AsyncPaginate
-    value={value}
     getOptionLabel={(option)=>(option.name)}
     getOptionValue={(option:IKpi)=>(option._id)}
     additional={{

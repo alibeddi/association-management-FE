@@ -4,6 +4,7 @@ import  { Dispatch, SetStateAction, useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse'
 import ChoicesSelect from '../../../../components/ChoicesSelect'
 import Iconify from '../../../../components/iconify'
+import { MENU_ITEM_FILTER } from '../../../../constant/menuItemFilter'
 import RenderSelectFilter from './RenderSelectFilter'
 
 type IProps = {
@@ -34,11 +35,9 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             }} >
             <Stack sx={{display:"flex",flexDirection:'row',"& *":{flexBasis:'100%'},gap:"1rem",flex:1}}>
             <Select name={elt.id} defaultValue={elt.type} onChange={(e)=> handleChangeOptionfilter(e.target.name,e.target.value) } >
-              <MenuItem value="kpis">Kpis</MenuItem>
-              <MenuItem value="admin">admin </MenuItem>
-              <MenuItem value="clientContact">client contact</MenuItem>
-              <MenuItem value="clientName">client name</MenuItem>
-              <MenuItem value="statClient">stat client </MenuItem>
+              {
+                MENU_ITEM_FILTER.map(({label,value})=><MenuItem value={value}>{label}</MenuItem>)
+              }
             </Select>
             <RenderSelectFilter filter={elt} setFilters={setFilters} />
             </Stack>
@@ -55,7 +54,7 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             }} onClick={()=>onDelete(elt.id)}/>
             </Stack>
               
-            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect value={elt} filters={filters} setFilters={setFilters}/> : null}
+            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect value={elt}  setFilters={setFilters}/> : null}
           </Stack>: null
           
           

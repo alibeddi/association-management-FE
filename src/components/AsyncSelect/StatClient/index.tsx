@@ -44,7 +44,6 @@ const StatClient = (({
   };
   return (
     <AsyncPaginate
-    value={value}
     getOptionLabel={(option)=>option.name }
     getOptionValue={(option)=>option._id}
     additional={{
