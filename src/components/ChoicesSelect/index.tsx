@@ -75,7 +75,6 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
     setSelectedChoices(updatedChoices);
     handleChangeFilters(updatedChoices)
   };
-console.log({kpi})
 
   return (
     <Stack sx={{
