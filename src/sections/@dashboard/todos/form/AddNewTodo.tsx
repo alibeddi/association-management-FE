@@ -1,20 +1,33 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Mention, MentionsInput } from 'react-mentions';
+import { Mention, MentionsInput, DisplayTransformFunc } from 'react-mentions';
 import * as Yup from 'yup';
+import { User } from '../../../../@types/User';
 import FormProvider from '../../../../components/hook-form';
+import { getUsers } from '../../../../redux/slices/users/actions';
+import { dispatch, RootState, useSelector } from '../../../../redux/store';
 
 type FormValues = {
   todo: string;
 };
+type MentionData = {
+  id: string;
+  display: string;
+};
 
 export default function AddNewTodo() {
+  const { users } = useSelector((state: RootState) => state.users);
+  const [mentions, setMentions] = useState<{ id: string; display: string }[]>([]);
+
+  useEffect(() => {
+    const filtereddata = users.docs.map((user) => ({ id: user._id, display: user.username }));
+    setMentions(filtereddata);
+  }, [users]);
+
   const NewTodoSchema = Yup.object().shape({
     todo: Yup.string().required('task description is required'),
   });
-  const [mentions, setMentions] = useState([]);
   const defaultValues = useMemo(
     () => ({
       todo: '',
@@ -31,14 +44,14 @@ export default function AddNewTodo() {
     reset,
     formState: { isSubmitting },
     control,
+    watch,
   } = methods;
-
+  const values = watch();
+  console.log({ values });
   const onSubmit = async (data: FormValues) => {
     console.log(data);
   };
-  const [value, setValue] = useState('');
-
-  const users = [
+  const data = [
     {
       id: 'isaac',
       display: 'Isaac Newton',
@@ -53,14 +66,18 @@ export default function AddNewTodo() {
     },
   ];
 
+  const mentionDisplayTransform: DisplayTransformFunc = (id: string, display: string) => {
+    return `@${display}`;
+  };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Controller
         control={control}
         name="todo"
-        render={({ field: { onChange, onBlur, value, ref } }) => (
-          <MentionsInput value={value} onChange={onChange}>
-            <Mention data={users} trigger="@" />
+        render={({ field: { onChange, value } }) => (
+          <MentionsInput placeholder="type your new task..." value={value} onChange={onChange}>
+            <Mention displayTransform={mentionDisplayTransform} data={data} trigger="@" />
           </MentionsInput>
         )}
       />

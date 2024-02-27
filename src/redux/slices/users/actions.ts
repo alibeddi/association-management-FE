@@ -3,7 +3,7 @@ import axios from '../../../utils/axios';
 
 export const getUsers = createAsyncThunk(
   'users/GETALL',
-  async (body: { page: number; limit: number }) => {
+  async (body: { page: number; limit?: number }) => {
     let data;
     try {
       const response = await axios.get(`/users`, {
