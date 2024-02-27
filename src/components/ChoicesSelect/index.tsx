@@ -2,11 +2,17 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Stack } from '@mui/system';
 import { Checkbox, FormControlLabel } from '@mui/material';
+import { Controller } from 'react-hook-form';
 import { RootState } from '../../redux/store';
 import { getOnekpi } from '../../redux/slices/kpis/actions';
 import { IFilterStatClientResponse } from '../../@types/FilterStatClientResponse';
+import { FrontType } from '../../@types/Kpi';
+import { IResponseFilter } from '../../@types/AsyncSelectFilter';
 
-const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
+
+
+
+const ChoicesSelect = ({ value,setFilters,filters }: { value: IFilterStatClientResponse,filters:IFilterStatClientResponse[],  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
 }) => {
   const dispatch = useDispatch();
 
@@ -15,10 +21,10 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
   }, [dispatch, value]);
 
   const { kpi } = useSelector((store: RootState) => store.kpis);
-  const [selectedChoices, setSelectedChoices] = useState<{ [key: string]: boolean }>({});
+  const [selectedChoices, setSelectedChoices] = useState<IResponseFilter>({});
 
   useEffect(() => {
-    const initialSelectedChoices = {} as { [key: string]: boolean };
+    const initialSelectedChoices = {} as IResponseFilter;
     if (kpi?.choices) {
       kpi.choices.forEach((choice: string) => {
         initialSelectedChoices[choice] = false;
@@ -26,8 +32,7 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
       setSelectedChoices(initialSelectedChoices);
     }
   }, [kpi]);
-
-  if (!kpi || kpi?.choices?.length === 0) {
+  if (kpi && ![FrontType.SELECT,FrontType.CHECKBOX,FrontType.RADIO,FrontType.SWITCH].includes(kpi?.frontType)) {
     return (
       <Box sx={{
         fontSize: '.8rem',
@@ -37,13 +42,39 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
       </Box>
     );
   }
-  const handleChangeFilters = (choices:string) => setFilters(prev=> prev.map(elt=>elt.value=== kpi._id ? {...elt,choices:selectedChoices} : elt))
-  const handleCheckboxChange = (choice: string, isChecked: boolean) => {
+  const handleChangeFilters = (choices:IResponseFilter) => {
+    setFilters(prev => {
+      const index = prev.findIndex(filter => filter.id === (kpi ? kpi._id : null));
+  
+      if (index !== -1) {
+        const updatedFilters = [...prev];
+        updatedFilters[index] = {
+          ...updatedFilters[index],
+          type: 'response',
+          value:"response",
+          choices
+        };
+        return updatedFilters;
+      } 
+        return [
+          ...prev,
+          {
+            id: kpi ? kpi._id : new Date().toString(),
+            type: 'response',
+            value:"response",
+            choices
+          }
+        ];
+      
+    });
+  };
+    const handleCheckboxChange = (choice: string) => {
     const updatedChoices = {
       ...selectedChoices,
       [choice]: !selectedChoices[choice]
     };
     setSelectedChoices(updatedChoices);
+    handleChangeFilters(updatedChoices)
   };
 
 
@@ -54,11 +85,13 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
       flexWrap: 'wrap'
     }}>
       {kpi?.choices?.map((choice: string) => (
-        <FormControlLabel
+ <FormControlLabel
           key={choice}
-          control={<Checkbox checked={selectedChoices[choice]} onChange={(e) => {handleCheckboxChange(choice, e.target.checked);}} />}
+          control={<Checkbox checked={selectedChoices[choice]} onChange={(e) => {handleCheckboxChange(choice);}} />}
           label={choice}
+
         />
+       
       ))}
     </Stack>
   );

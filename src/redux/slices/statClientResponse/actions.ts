@@ -150,11 +150,6 @@ export const statsClientResponseFilter = createAsyncThunk('STAT_CLIENT_RESPONSE/
   filterValue: IFilterStatClientResponse[]
 })=>{
   const { page, filterClientName, limit,filterValue  } = payload;
-  const params = {
-    page: page + 1,
-    limit,
-    ...(filterClientName ? { clientName: filterClientName } : {}),
-  };
 let data;
 try {
   const query = generateFilterStatClientResponse(filterValue,limit,page)

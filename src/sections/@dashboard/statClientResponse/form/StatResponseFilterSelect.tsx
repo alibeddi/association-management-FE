@@ -1,6 +1,6 @@
 import { Button, MenuItem, Select } from '@mui/material'
 import { Box, Stack } from '@mui/system'
-import  { Dispatch, SetStateAction } from 'react'
+import  { Dispatch, SetStateAction, useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse'
 import ChoicesSelect from '../../../../components/ChoicesSelect'
 import Iconify from '../../../../components/iconify'
@@ -25,7 +25,8 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
     >
       {
          filters.map((elt)=>(
-          <Stack key={elt.id} sx={{display:"flex",flexDirection:'column',gap:"1rem"}}>
+          
+          !['response','page','limit'].includes(elt.type) ? <Stack key={elt.id} sx={{display:"flex",flexDirection:'column',gap:"1rem"}}>
             <Stack sx={{
               display:'flex',
               flexDirection:'row',
@@ -41,7 +42,7 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             </Select>
             <RenderSelectFilter filter={elt} setFilters={setFilters} />
             </Stack>
-<Button  color="error" startIcon={<Iconify icon="material-symbols:delete" 
+          <Button  color="error" startIcon={<Iconify icon="material-symbols:delete" 
            />} sx={{
               padding:0,
               display:"flex",
@@ -54,8 +55,9 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             }} onClick={()=>onDelete(elt.id)}/>
             </Stack>
               
-            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect value={elt} setFilters={setFilters}/> : null}
-          </Stack>
+            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect value={elt} filters={filters} setFilters={setFilters}/> : null}
+          </Stack>: null
+          
           
         ))
       }

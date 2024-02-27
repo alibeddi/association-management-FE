@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { StatClientResponse } from '../../../@types/StatClientResponse';
 import { IStatus } from '../../../@types/status';
-import { generateFilterStatClientResponse } from '../../../utils';
 import {
   createStatClientResponse,
   deleteManyStatClientResponse,

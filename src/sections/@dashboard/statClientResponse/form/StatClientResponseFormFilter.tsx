@@ -38,7 +38,6 @@ const StatClientResponseFormFilter = ({
     })).unwrap().then(res=>{enqueueSnackbar("success");onClose();}).catch(err=>enqueueSnackbar(err.message,{
       variant:"error"
     }))
-    
     setIsSubmitting(false)
   }
   const handleAdd = () => setFilters([...filters, { id:nanoid() , type: '', value: '' }]);
