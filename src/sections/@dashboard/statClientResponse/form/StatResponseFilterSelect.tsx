@@ -55,7 +55,7 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             }} onClick={()=>onDelete(elt.id)}/>
             </Stack>
               
-            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect value={elt} filters={filters} setFilters={setFilters}/> : null}
+            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect value={elt}  setFilters={setFilters}/> : null}
           </Stack>: null
           
           
