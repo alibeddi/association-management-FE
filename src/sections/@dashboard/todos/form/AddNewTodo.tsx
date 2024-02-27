@@ -51,24 +51,11 @@ export default function AddNewTodo() {
   const onSubmit = async (data: FormValues) => {
     console.log(data);
   };
-  const data = [
-    {
-      id: 'isaac',
-      display: 'Isaac Newton',
-    },
-    {
-      id: 'sam',
-      display: 'Sam Victor',
-    },
-    {
-      id: 'emma',
-      display: 'emmanuel@nobody.com',
-    },
-  ];
+
   const fetchUsers = (search: any, callback: any) => {
     if (!search) return;
     console.log(search);
-    dispatch(getUsers({ page: 0, limit: 100 }))
+    dispatch(getUsers({ page: 0, limit: 100, search }))
       .unwrap()
       .then((data) => {
         callback(data.docs.map((user: User) => ({ id: user._id, display: user.username })));
