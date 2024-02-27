@@ -35,7 +35,9 @@ const StatClientResponseFormFilter = ({
       page:1,
       limit:10,
       filterValue:filters
-    })).unwrap().then(res=>{enqueueSnackbar("success");onClose();}).catch(err=>enqueueSnackbar(err.messsage))
+    })).unwrap().then(res=>{enqueueSnackbar("success");onClose();}).catch(err=>enqueueSnackbar(err.message,{
+      variant:"error"
+    }))
     
     setIsSubmitting(false)
   }
@@ -59,7 +61,7 @@ const StatClientResponseFormFilter = ({
       flex:1
     }}>
       {
-        filters?.length > 0 ? <StatResponseFilterSelect filters={filters} setFilters={setFilters} onDelete={handleRemove}/>: <EmptyContent title="no filter"/>
+        filters?.length > 0 ? <StatResponseFilterSelect filters={filters} setFilters={setFilters} onDelete={handleRemove}/> : <EmptyContent title="no filter"/>
       }
 
       <Stack sx={{

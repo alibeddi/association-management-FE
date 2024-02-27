@@ -12,7 +12,7 @@ type IProp = {
 const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
   const handleChange = (id: string, value: string) => setFilters(prev => prev.map(elt => elt.id !== id ? elt : { ...elt, value }));
   switch (filter.type) {
-    case 'adminName':
+    case 'admin':
       return (
         <AdminAsyncSelect
         name={filter.id} 
