@@ -76,15 +76,18 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
     handleChangeFilters(updatedChoices)
   };
 console.log({kpi})
-if(kpi?.frontType===FrontType.SWITCH) console.log('SWITCH')
+
   return (
     <Stack sx={{
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap'
     }}>
-      {kpi?.choices?.map((choice: string) => (
- <FormControlLabel
+      {
+      
+      
+      ( kpi?.frontType===FrontType.SWITCH ? ['true','false'] :kpi?.choices  )?.map((choice: string) => (
+  <FormControlLabel
           key={choice}
           control={<Checkbox checked={selectedChoices[choice]} onChange={(e) => {handleCheckboxChange(choice);}} />}
           label={choice}
