@@ -19,23 +19,18 @@ const StatClient = (({
   const dispatch = useDispatch()
   const [page,setPage] = useState<number>(0)
   const [filterName,setFilterName] = useState<string | null>(null)
-  useEffect(()=>{
-    const params:Params = {page,limit:10};
-    if(filterName && typeof filterName === "string") params.filterName = filterName
-    dispatch(getAllStatsClient(params))
-  },[dispatch,page,filterName])
-  const {statsClients} = useSelector(store=>store.statsClient)
-  const loadOptions = async (searchQuery: string ) => {
-    const hasMore = statsClients.meta.hasMore;
-    setPage(prev => hasMore ? prev + 1 : prev);
+  const loadOptions = async (searchQuery: string ) => { 
     if(searchQuery){
       setFilterName(searchQuery)
       setPage(0)
-      
     }
-    const newOption = [...statsClients.docs]
+    const params:Params = {page,limit:10};
+    if(filterName && typeof filterName === "string") params.filterName = filterName
+    const result =  await dispatch(getAllStatsClient(params)).unwrap().then(res=>res.data)
+    const hasMore = result.meta.hasMore;
+    setPage(prev => hasMore ? prev + 1 : prev);
     return {
-      options: newOption,
+      options: result.docs,
       hasMore,
       additional: {
         page
@@ -44,7 +39,7 @@ const StatClient = (({
   };
   return (
     <AsyncPaginate
-    getOptionLabel={(option)=>option.name }
+    getOptionLabel={(option:IStatsClient)=>option.name }
     getOptionValue={(option)=>option._id}
     additional={{
       page:1
