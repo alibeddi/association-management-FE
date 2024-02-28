@@ -2,7 +2,7 @@ import { Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useLocales } from '../../locales';
-import { AddNewTodo } from '../../sections/@dashboard/todos/form';
+import { Todos } from '../../sections/@dashboard/todos/list';
 
 export default function MyTodoListPage() {
   const { translate } = useLocales();
@@ -15,7 +15,7 @@ export default function MyTodoListPage() {
 
       <Container maxWidth={false}>
         <CustomBreadcrumbs heading="Todo List" links={[{ name: 'My tasks' }]} />
-        <AddNewTodo />
+        <Todos />
       </Container>
     </>
   );
