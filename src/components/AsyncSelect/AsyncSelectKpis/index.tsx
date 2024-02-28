@@ -6,6 +6,7 @@ import { getKpis } from '../../../redux/slices/kpis/actions';
 import {  useDispatch, useSelector } from '../../../redux/store';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 import { StyledAsyncPaginate } from '../styles';
+import { setParams } from '../../../utils/setParams';
 
 
 interface Params {
@@ -28,9 +29,8 @@ const AsyncSelectKpis = ({
       setFilterName(searchQuery)
       setPage(0)
     }
-    const params:Params = {page,limit:10,orderBy:"name"};
-    if(filterName && typeof filterName === "string") params.filterName = filterName
-    const results = await dispatch(getKpis(params)).unwrap().then(res=>{console.log(res);return res;})
+    const params = setParams({page,limit:10,filterName:searchQuery})
+    const results = await dispatch(getKpis(params)).unwrap().then(res=>res)
     const hasMore = results.meta.hasMore;
     setPage(prev => hasMore ? prev + 1 : prev);
     return {

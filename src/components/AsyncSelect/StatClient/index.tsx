@@ -5,13 +5,9 @@ import { getAllStatsClient } from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 import { StyledAsyncPaginate } from '../styles';
+import { setParams } from '../../../utils/setParams';
 
-interface Params {
-  page: number;
-  limit: number;
-  orderBy?: string;
-  filterName?: string; 
-}
+
 const StatClient = (({
   handleChange,
   name
@@ -24,8 +20,7 @@ const StatClient = (({
       setFilterName(searchQuery)
       setPage(0)
     }
-    const params:Params = {page,limit:10};
-    if(filterName && typeof filterName === "string") params.filterName = filterName
+    const params = setParams({page,limit:10,filterName:searchQuery})
     const result =  await dispatch(getAllStatsClient(params)).unwrap().then(res=>res.data)
     const hasMore = result.meta.hasMore;
     setPage(prev => hasMore ? prev + 1 : prev);

@@ -5,6 +5,7 @@ import { getUsers } from '../../../redux/slices/users/actions';
 import { User } from '../../../@types/User';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 import { StyledAsyncPaginate } from '../styles';
+import { setParams } from '../../../utils/setParams';
 
 interface Params {
   page: number;
@@ -25,8 +26,7 @@ const Admin = (({
       setFilterName(searchQuery)
       setPage(0)
     } 
-    const params:Params = {page,limit:10};
-    if(filterName && typeof filterName === "string") params.name = filterName
+    const params = setParams({page,limit:10,filterName:searchQuery})
     const {docs,meta}= await dispatch(getUsers(params)).unwrap().then(res=>res)
     const hasMore = meta.hasMore;
     setPage(prev => hasMore ?  prev + 1 : page);
