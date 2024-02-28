@@ -44,6 +44,7 @@ const Admin = (({
   };
   return (
     <AsyncPaginate
+    value={value}
     getOptionLabel={(option)=>option.name || option?.email}
     getOptionValue={(option)=>option._id}
     additional={{
