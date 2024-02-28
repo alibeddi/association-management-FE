@@ -3,7 +3,7 @@ import merge from 'lodash/merge';
 
 import { EventInput } from '@fullcalendar/core';
 // form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Stack, Button, Tooltip, IconButton, DialogActions } from '@mui/material';
@@ -11,7 +11,6 @@ import { LoadingButton } from '@mui/lab';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // time
-import { isBefore } from 'date-fns';
 import { addOneHour } from '../../../utils';
 
 
@@ -79,13 +78,10 @@ export default function CalendarForm({
 
   const {
     reset,
-    watch,
-    control,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
@@ -101,11 +97,6 @@ export default function CalendarForm({
       console.error(error);
     }
   };
-
-  const isDateError =
-    values.startDate && values.endDate
-      ? isBefore(new Date(values.endDate), new Date(values.startDate))
-      : false;
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
