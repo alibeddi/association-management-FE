@@ -15,14 +15,16 @@ const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
     case 'admin':
       return (
         <AdminAsyncSelect
+        key={filter.id}
         name={filter.id} 
         handleChange={handleChange}
         />
       );
     case 'kpis':
-      return <AsyncSelectKpis name={filter.id}  handleChange={handleChange}/>;
+      return <AsyncSelectKpis key={filter.id} name={filter.id}  handleChange={handleChange}/>;
     case 'clientContact':
       return <TextField
+      key={filter.id}
       name={filter.id}
       value={filter.value}
       placeholder="enter client contact"
@@ -30,13 +32,14 @@ const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
       />
     case 'clientName':
       return  <TextField
+      key={filter.id}
       name={filter.id}
       value={filter.value}
       placeholder="enter client name"
       onChange={(e)=>handleChange(filter.id,e.target.value)}
       />
     case 'statClient':
-      return <StatClientAsyncSelect name={filter.id}  handleChange={handleChange} />
+      return <StatClientAsyncSelect  key={filter.id} name={filter.id}  handleChange={handleChange} />
     default:
       return (
         <TextField disabled value="">

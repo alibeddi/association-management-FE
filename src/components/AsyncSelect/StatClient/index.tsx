@@ -25,26 +25,25 @@ const StatClient = (({
     dispatch(getAllStatsClient(params))
   },[dispatch,page,filterName])
   const {statsClients} = useSelector(store=>store.statsClient)
-  const [value,setValue] = useState<IStatsClient[] | IStatsClient | null>(statsClients.docs)
-  const loadOptions = async (searchQuery: string | null) => {
-    setPage(prev => prev + 1);
+  const loadOptions = async (searchQuery: string ) => {
+    const hasMore = statsClients.meta.hasMore;
+    setPage(prev => hasMore ? prev + 1 : prev);
     if(searchQuery){
       setFilterName(searchQuery)
       setPage(0)
-    }else {
-      setPage(page + 1)
+      
     }
+    const newOption = [...statsClients.docs]
     return {
-      options: statsClients.docs,
-      hasMore: statsClients.meta.hasMore,
+      options: newOption,
+      hasMore,
       additional: {
         page
       }
     };
   };
   return (
-    <AsyncPaginate   
-    value={value}
+    <AsyncPaginate
     getOptionLabel={(option)=>option.name }
     getOptionValue={(option)=>option._id}
     additional={{
@@ -53,7 +52,7 @@ const StatClient = (({
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an stats Clients"
-    onChange={(e)=>{if(e) handleChange(name,typeof e === "string" ? e: e._id);setValue(e)}}
+    onChange={(e)=>{if(e) {handleChange(name,e._id);}}}
     styles={StyledAsyncPaginate}
     />
   )

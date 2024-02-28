@@ -25,18 +25,19 @@ const Admin = (({
     dispatch(getUsers(params))
   },[dispatch,page,filterName])
   const {users} = useSelector(store=>store.users)
-  const [value,setValue] = useState<User[] | User | null>(users.docs)
+  const [value,setValue] = useState<User[] >(users.docs)
   const loadOptions = async (searchQuery: string) => {
-    setPage(prev => prev + 1);
+    const hasMore = users.meta.hasMore;
+    setPage(prev => hasMore ?  prev + 1 : page);
     if(searchQuery){
       setFilterName(searchQuery)
       setPage(0)
-    } else{
-      setPage(page +1 )
-    }
+    } 
+    const newOptions = [...users.docs];
+
     return {
-      options: users.docs,
-      hasMore: users.meta.hasMore,
+      options: newOptions,
+      hasMore,
       additional: {
         page
       }
@@ -44,7 +45,6 @@ const Admin = (({
   };
   return (
     <AsyncPaginate
-    value={value}
     getOptionLabel={(option)=>option.name || option?.email}
     getOptionValue={(option)=>option._id}
     additional={{
@@ -54,7 +54,7 @@ const Admin = (({
     isSearchable
     placeholder="Select an users"
     onChange={(e)=>{
-      if(e) handleChange(name,e._id);setValue(e)
+      if(e){ handleChange(name,e._id);}
     }}
     styles={StyledAsyncPaginate}
     />
