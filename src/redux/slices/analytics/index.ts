@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Analytics } from '../../../@types/analytics';
+import { Analytics, NbStatClientResponses } from '../../../@types/analytics';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
-import { getAnalytics } from './actions';
+import { getAnalytics, getNbStatClientResponsesByOffice } from './actions';
 
 type AnalyticsState = {
   analytics: Analytics;
+  nbStatClientResponsesByOffice: NbStatClientResponses[];
   status: IStatus;
 };
 
@@ -17,11 +18,17 @@ const initialState: AnalyticsState = {
     nbOffices: 0,
     nbKpis: 0,
   },
+  nbStatClientResponsesByOffice: [
+    {
+      nbStatClientResponses: 0,
+      office: { _id: '', name: '', address: '', createdAt: null },
+    },
+  ],
   status: IStatus.IDLE,
 };
 
 const slice = createSlice({
-  name: 'permissions',
+  name: 'analytics',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -34,6 +41,17 @@ const slice = createSlice({
         state.analytics = action.payload;
       })
       .addCase(getAnalytics.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    builder
+      .addCase(getNbStatClientResponsesByOffice.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(getNbStatClientResponsesByOffice.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.nbStatClientResponsesByOffice = action.payload;
+      })
+      .addCase(getNbStatClientResponsesByOffice.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
