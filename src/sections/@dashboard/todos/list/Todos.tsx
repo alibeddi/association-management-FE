@@ -21,7 +21,6 @@ export default function Todos() {
 
   return (
     <>
-      {filterTodos === 'created By me' && <AddNewTodo />}
       <Card sx={{ marginTop: 4 }}>
         <Tabs
           value={filterTodos}
@@ -37,6 +36,9 @@ export default function Todos() {
         </Tabs>
 
         <Divider />
+
+        {filterTodos === 'Created By me' && <AddNewTodo />}
+
         <TodosToolbar
           isFiltered
           filterName="search by text..."

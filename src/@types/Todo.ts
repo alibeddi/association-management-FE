@@ -1,9 +1,6 @@
 export const enum TodoStatus {
   TODO = 'todo',
-  INPROGRESS = 'in progress',
-  BLOCKED = 'blocked',
   COMPLETED = 'completed',
-  CANCELED = 'canceled',
 }
 
 export interface Todo {

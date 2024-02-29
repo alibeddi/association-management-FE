@@ -70,6 +70,7 @@ export default function AddNewTodo() {
           gap: '0.75rem',
           alignItems: 'center',
           maxWidth: '800px',
+          margin: '15px',
         }}
       >
         <Stack className="mention-input" sx={{ flexGrow: 1 }}>
