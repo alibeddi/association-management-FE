@@ -7,7 +7,7 @@ export const getTodosCreatedbyMe = createAsyncThunk(
   async (payload: { page: number; limit?: number }) => {
     const { page, limit } = payload;
     const params = {
-      page: page + 1,
+      page,
       limit,
     };
     let data;

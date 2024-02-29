@@ -15,6 +15,9 @@ import {
 // components
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
+import { Todo, TodoStatus } from '../../../../@types/Todo';
+import { dispatch } from '../../../../redux/store';
+import { deleteOneTodo, updateTodo } from '../../../../redux/slices/todos/actions';
 
 // ----------------------------------------------------------------------
 
@@ -26,18 +29,25 @@ type ItemProps = {
 interface Props extends CardProps {
   title?: string;
   subheader?: string;
-  list: ItemProps[];
+  list: Todo[];
 }
 
 export default function AnalyticsTasks({ title, subheader, list, ...other }: Props) {
   const [selected, setSelected] = useState(['2']);
 
-  const handleClickComplete = (taskId: string) => {
-    const tasksCompleted = selected.includes(taskId)
-      ? selected.filter((value) => value !== taskId)
-      : [...selected, taskId];
-
-    setSelected(tasksCompleted);
+  const handleClickComplete = (task: Todo) => {
+    // const tasksCompleted = selected.includes(taskId)
+    //   ? selected.filter((value) => value !== taskId)
+    //   : [...selected, taskId];
+    dispatch(
+      updateTodo({
+        todoId: task._id,
+        body: {
+          status: task.status === TodoStatus.COMPLETED ? TodoStatus.TODO : TodoStatus.COMPLETED,
+        },
+      })
+    );
+    // setSelected(tasksCompleted);
   };
 
   return (
@@ -46,10 +56,10 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }: Pro
 
       {list.map((task) => (
         <TaskItem
-          key={task.id}
+          key={task._id}
           task={task}
-          checked={selected.includes(task.id)}
-          onChange={() => handleClickComplete(task.id)}
+          checked={task.status === TodoStatus.COMPLETED}
+          onChange={() => handleClickComplete(task)}
         />
       ))}
     </Card>
@@ -59,7 +69,7 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }: Pro
 // ----------------------------------------------------------------------
 
 interface TaskItemProps extends CheckboxProps {
-  task: ItemProps;
+  task: Todo;
 }
 
 function TaskItem({ task, checked, onChange }: TaskItemProps) {
@@ -75,22 +85,17 @@ function TaskItem({ task, checked, onChange }: TaskItemProps) {
 
   const handleMarkComplete = () => {
     handleClosePopover();
-    console.log('MARK COMPLETE', task.id);
-  };
-
-  const handleShare = () => {
-    handleClosePopover();
-    console.log('SHARE', task.id);
+    dispatch(updateTodo({ todoId: task._id, body: { status: TodoStatus.COMPLETED } }));
   };
 
   const handleEdit = () => {
     handleClosePopover();
-    console.log('EDIT', task.id);
+    console.log('EDIT', task._id);
   };
 
   const handleDelete = () => {
     handleClosePopover();
-    console.log('DELETE', task.id);
+    dispatch(deleteOneTodo({ todoId: task._id }));
   };
 
   return (
@@ -108,7 +113,7 @@ function TaskItem({ task, checked, onChange }: TaskItemProps) {
       >
         <FormControlLabel
           control={<Checkbox checked={checked} onChange={onChange} />}
-          label={task.label}
+          label={task.description}
           sx={{ flexGrow: 1, m: 0 }}
         />
 
