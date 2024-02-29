@@ -131,12 +131,6 @@ function TaskItem({ task, checked, onChange }: TaskItemProps) {
           <Iconify icon="eva:edit-fill" />
           Edit
         </MenuItem>
-
-        <MenuItem onClick={handleShare}>
-          <Iconify icon="eva:share-fill" />
-          Share
-        </MenuItem>
-
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>

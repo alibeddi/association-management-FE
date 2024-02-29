@@ -1,5 +1,6 @@
 import { Card, Divider, Grid, Tab, Tabs } from '@mui/material';
 import React, { useState } from 'react';
+import { AddNewTodo } from '../form';
 import AnalyticsTasks from './TodoList';
 import TodosToolbar from './TodosToolbar';
 
@@ -7,17 +8,23 @@ const TODO_STATUS_OPTIONS = ['todo', 'in progress', 'blocked', 'completed', 'can
 
 export default function Todos() {
   const STATUS_OPTIONS = ['Created By me', 'Assigned To me'];
-  const [filterStatus, setFilterStatus] = useState('Created By me');
+  const [filterTodos, setFilterTodos] = useState('Created By me');
   const handleFilterStatus = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     // setPage(0);
-    setFilterStatus(newValue);
+    setFilterTodos(newValue);
+    if (newValue === 'created By me') {
+      console.log('fetch the todos created by me ');
+    } else {
+      console.log('fetch the todos assigned to me ');
+    }
   };
 
   return (
     <>
-      <Card>
+      {filterTodos === 'created By me' && <AddNewTodo />}
+      <Card sx={{ marginTop: 4 }}>
         <Tabs
-          value={filterStatus}
+          value={filterTodos}
           onChange={handleFilterStatus}
           sx={{
             px: 2,
