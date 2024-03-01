@@ -9,15 +9,24 @@ export const getKpis = createAsyncThunk(
     limit?: number;
     orderBy?: string;
     order?: string;
-    filterName?: string;
+    search?: string;
+    filterValue?: string;
   }) => {
     let data;
-    const { page, order = 'desc', orderBy = 'createdAt', filterName, limit = 10 } = payload;
+    const {
+      page,
+      order = 'desc',
+      orderBy = 'createdAt',
+      search,
+      limit = 10,
+      filterValue,
+    } = payload;
     const params = {
       page: page + 1,
       limit,
       sort: order === 'desc' ? `-${orderBy}` : `+${orderBy}`,
-      ...(filterName ? { name: filterName } : {}),
+      ...(search ? { search } : {}),
+      ...(filterValue !== 'all' ? { frontType: filterValue } : {}),
     };
     try {
       const response = await axios.get('/kpis', { params });

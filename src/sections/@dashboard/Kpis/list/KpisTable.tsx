@@ -32,6 +32,8 @@ const TABLE_HEAD = [
   { label: '', align: 'center' },
 ];
 
+const FRONT_TYPE_OPTIONS = ['all', 'textarea', 'radio', 'checkbox', 'select', 'input', 'switch'];
+
 // ----------------------------------------------------------------------
 
 export default function KpisTable() {
@@ -61,22 +63,27 @@ export default function KpisTable() {
   const { translate } = useLocales();
 
   const [tableData, setTableData] = useState<IKpi[]>([]);
-  const [filterName, setFilterName] = useState('');
+  const [search, setSearch] = useState('');
+  const [filterFrontType, setFilterRole] = useState('all');
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const { kpis } = useSelector((state: RootState) => state?.kpis);
 
   useEffect(() => {
-    dispatch(getKpis({ page, limit: rowsPerPage, orderBy, order, filterName }));
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
+    dispatch(
+      getKpis({ page, limit: rowsPerPage, orderBy, order, search, filterValue: filterFrontType })
+    );
+  }, [dispatch, page, rowsPerPage, orderBy, order, search, filterFrontType]);
 
   useEffect(() => {
     setTableData(kpis?.docs);
   }, [kpis]);
 
-  const isFiltered = filterName !== '';
+  const isFiltered = search !== '' || filterFrontType !== 'all';
 
-  const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
+  const isNotFound = (!tableData.length && !!search) || !tableData.length;
+
+  const dataInPage = tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleViewRow = (row: IKpi) => {
     navigate(`${PATH_DASHBOARD.kpis.view}/${row._id}`, { state: { kpi: row } });
@@ -86,13 +93,19 @@ export default function KpisTable() {
     navigate(`${PATH_DASHBOARD.kpis.edit}/${row._id}`, { state: { kpi: row } });
   };
 
-  const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
-    setFilterName(event.target.value);
+    setSearch(event.target.value);
+  };
+
+  const handleFilterFrontType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
+    setFilterRole(event.target.value);
   };
 
   const handleResetFilter = () => {
-    setFilterName('');
+    setSearch('');
+    setFilterRole('all');
   };
 
   const handleOpenConfirm = (id?: string) => {
@@ -108,6 +121,12 @@ export default function KpisTable() {
       .unwrap()
       .then((res) => enqueueSnackbar(`${res?.message}`))
       .catch((err) => enqueueSnackbar(`${err?.message}`, { variant: 'error' }));
+
+    if (page > 0) {
+      if (dataInPage.length < 2) {
+        setPage(page - 1);
+      }
+    }
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
@@ -115,10 +134,30 @@ export default function KpisTable() {
       .unwrap()
       .then((res) => {
         enqueueSnackbar(`${translate(res?.message)}`);
-        dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
+        dispatch(
+          getKpis({
+            page: 0,
+            limit: rowsPerPage,
+            orderBy,
+            order,
+            search,
+            filterValue: filterFrontType,
+          })
+        );
         setSelected([]);
       })
       .catch((err) => enqueueSnackbar(`${translate(err?.message)}`, { variant: 'error' }));
+
+    if (page > 0) {
+      if (selectedRows.length === dataInPage.length) {
+        setPage(page - 1);
+      } else if (selectedRows.length === tableData.length) {
+        setPage(0);
+      } else if (selectedRows.length > dataInPage.length) {
+        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+        setPage(newPage);
+      }
+    }
   };
 
   return (
@@ -127,9 +166,12 @@ export default function KpisTable() {
         <KpiTableToolbar
           onResetFilter={handleResetFilter}
           isFiltered={isFiltered}
-          filterName={filterName}
-          onFilterName={handleFilterName}
+          search={search}
+          onSearch={handleSearch}
           placeholder="Search by kpi Name..."
+          filterFrontType={filterFrontType}
+          optionsFrontType={FRONT_TYPE_OPTIONS}
+          onFilterFrontType={handleFilterFrontType}
         />
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
