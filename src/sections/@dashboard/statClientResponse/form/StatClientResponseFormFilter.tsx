@@ -24,7 +24,6 @@ const StatClientResponseFormFilter = ({
   setFilters
 }:IProps) =>  {
   const {enqueueSnackbar} = useSnackbar()
-  // const [filters,setFilters] = useState<IFilterStatClientResponse[] | []>([]);
   const [isSubmitting,setIsSubmitting] = useState<boolean>(false)
   const handleSubmit = async () => {
     setIsSubmitting(true)
