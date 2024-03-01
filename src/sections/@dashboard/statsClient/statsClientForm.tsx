@@ -52,7 +52,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     watch,
     control,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
@@ -148,8 +148,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                     label={`Question n°: ${index+1}`}
                     name={`kpis[${index}]`}
                     defaultValue={s || ''}
-                    getOptionLabel={(option) => option && typeof option !== 'string' ? option?.label : option
-                    }
+                    getOptionLabel={(option) => option && typeof option !== 'string' ? option?.label : option}
                     options={kpis.docs}
                     required
                     sx={{ flexBasis: '80%' }}
