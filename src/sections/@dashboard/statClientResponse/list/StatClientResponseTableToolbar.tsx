@@ -1,5 +1,5 @@
 // @mui
-import { Stack, InputAdornment, TextField, Button, Dialog, DialogTitle } from '@mui/material';
+import { Stack, Button} from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
@@ -40,13 +40,14 @@ export default function StatClientResponseTableToolbar({
     <Stack
       spacing={2}
       alignItems="center"
+      justifyContent='flex-end'
       direction={{
         xs: 'column',
         sm: 'row',
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
+      {/* <TextField
         fullWidth
         value={filterClientName}
         onChange={onFilterName}
@@ -58,9 +59,9 @@ export default function StatClientResponseTableToolbar({
             </InputAdornment>
           ),
         }}
-      />
+      /> */}
       
-      {isFiltered && (
+      {/* {isFiltered && (
         <Button
           color="error"
           sx={{ flexShrink: 0 }}
@@ -69,7 +70,7 @@ export default function StatClientResponseTableToolbar({
         >
           Clear
         </Button>
-      )}
+      )} */}
       {filters.length > 0 && (
         <Button
           color="error"
@@ -80,7 +81,7 @@ export default function StatClientResponseTableToolbar({
           Clear Filter
         </Button>
       )}
-      {filters.length === 0 &&  <Button onClick={()=>setOpenFilter(!openFilter)}>Filter</Button>}
+      {filters.length === 0 &&  <Button startIcon={<Iconify icon="mdi:filter" />} onClick={()=>setOpenFilter(!openFilter)}>Filter</Button>}
       <StatClientResponseFilter open={openFilter} onClose={handleClostFilter}  filters={filters} setFilters={setFilters} />
     </Stack>
   );
