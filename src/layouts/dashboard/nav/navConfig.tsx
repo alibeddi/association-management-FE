@@ -77,7 +77,7 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: true,
         },
         {
-          title: 'Stat client Answers',
+          title: 'Stats client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
           toBeDisplayed: true,
