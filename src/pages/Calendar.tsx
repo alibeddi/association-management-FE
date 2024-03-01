@@ -290,6 +290,7 @@ return (
           onCancel={handleCloseModal}
           onCreateUpdateEvent={handleCreateUpdateEvent}
           onDeleteEvent={handleDeleteEvent}
+          hasPermissionDelete={hasPermissionDelete}
         />
       </Dialog>}
     </>

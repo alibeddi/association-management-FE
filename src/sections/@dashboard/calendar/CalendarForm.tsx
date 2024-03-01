@@ -33,6 +33,7 @@ type Props = {
   } | null;
   onCancel: VoidFunction;
   onDeleteEvent: VoidFunction;
+  hasPermissionDelete:Boolean
   onCreateUpdateEvent: (newEvent: ICalendarEvent) => void;
 };
 
@@ -64,6 +65,7 @@ export default function CalendarForm({
   onCreateUpdateEvent,
   onDeleteEvent,
   onCancel,
+  hasPermissionDelete
 }: Props) {
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
@@ -108,7 +110,7 @@ export default function CalendarForm({
         </Stack>
       </LocalizationProvider>
       <DialogActions>
-        {hasEventData && (
+        {hasEventData && hasPermissionDelete && (
           <Tooltip title="Delete Event">
             <IconButton onClick={onDeleteEvent}>
               <Iconify icon="eva:trash-2-outline" />
