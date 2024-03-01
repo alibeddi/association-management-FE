@@ -4,7 +4,7 @@ import {
   Box,
   Button,
   Checkbox, TableCell,
-  TableRow, Typography
+  TableRow, Tooltip, Typography
 } from '@mui/material';
 // utils
 // components
@@ -96,9 +96,32 @@ export default function StatsClientRow({
               gap: '.5rem',
             }}
           >
-            {kpis?.map((kpi: IKpi) => (
-              <Box key={kpi._id}>{kpi.label}</Box>
-            ))}
+            <Tooltip 
+            
+            title={
+              <>
+              {
+                kpis?.map((kpi:IKpi,index)=>
+                  <p key={index}>{kpi.label}</p>
+                )
+              }
+              </>
+            }>
+              <Box
+               sx={{
+                maxWidth: 100,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+              >
+              {
+                kpis.map((kpi:IKpi)=> `${kpi.label} ,` ).join('').slice(0,-1)
+              }
+              </Box>
+
+            </Tooltip>
+            
           </Typography>
         </TableCell>
         <TableCell
