@@ -40,6 +40,9 @@ import {
 } from '../sections/@dashboard/calendar';
 import {applyFilter} from '../utils';
 import { useGetEvents } from '../hooks/useGetEvents';
+import { useAuthContext } from '../auth/useAuthContext';
+import { hasPermission } from '../sections/@dashboard/Permissions/utils';
+import { MethodCode, ModelCode } from '../@types/Permission';
 
 
 
@@ -47,7 +50,11 @@ import { useGetEvents } from '../hooks/useGetEvents';
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
-
+  const {user} = useAuthContext()
+  const userPermissions = user?.permissionGroup[0].permissions;
+  const hasPermissionCreate =   hasPermission(userPermissions,ModelCode.MY_WORKTIME,MethodCode.CREATE) 
+  const hasPermissionUpdate = hasPermission(userPermissions,ModelCode.MY_WORKTIME,MethodCode.EDIT) 
+  const hasPermissionDelete =  hasPermission(userPermissions,ModelCode.MY_WORKTIME,MethodCode.DELETE) 
   const { themeStretch } = useSettingsContext();
 
   const dispatch = useDispatch();
@@ -157,7 +164,7 @@ export default function CalendarPage() {
   };
 
   const handleResizeEvent = async ({ event }: EventResizeDoneArg) => {
-
+    if(!hasPermissionUpdate) return;
      await  dispatch(
         updateCalendarWorkTime({
           id: event.id,
@@ -173,7 +180,10 @@ export default function CalendarPage() {
   };
 
   const handleDropEvent = async (eventDropInfo:EventDropArg) => {
-
+      if(!hasPermissionUpdate) {
+        eventDropInfo.revert();
+        return;
+      }
       await dispatch(
         updateCalendarWorkTime({
           id: eventDropInfo.event.id,
@@ -193,9 +203,9 @@ export default function CalendarPage() {
   };
 
   const handleCreateUpdateEvent = async (newEvent: ICalendarEvent) => {
-    if (selectedEventId) {
+    if (selectedEventId && hasPermissionUpdate) {
       await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent })).unwrap().then(()=>enqueueSnackbar('Update success!')).catch(err=>enqueueSnackbar(err.message,{variant:"error"}));   
-    } else {
+    } else if(hasPermissionCreate) {
         await dispatch(createCalendarWorkTime(newEvent)).unwrap().then(res=>enqueueSnackbar('Create success!')).catch(err=>{
           enqueueSnackbar(err.message,{variant:"error"})
         })
@@ -204,7 +214,7 @@ export default function CalendarPage() {
 
   const handleDeleteEvent = () => {
     try {
-      if (selectedEventId) {
+      if (selectedEventId && hasPermissionDelete) {
         handleCloseModal();
         dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
         enqueueSnackbar('Delete success!');
@@ -236,6 +246,7 @@ return (
               onToday={handleClickToday}
               onOpenFilter={() => setOpenFilter(!openFilter)}
               addEvent={handleOpenModal}
+              hasPermissionCreate={hasPermissionCreate}
             />
 
             <FullCalendar
@@ -271,7 +282,7 @@ return (
         </Card>
       </Container>
 
-      <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
+      {(hasPermissionCreate || hasPermissionDelete )&& <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
         <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
         <CalendarForm
           event={selectedEvent}
@@ -280,7 +291,7 @@ return (
           onCreateUpdateEvent={handleCreateUpdateEvent}
           onDeleteEvent={handleDeleteEvent}
         />
-      </Dialog>
+      </Dialog>}
     </>
   );
 }

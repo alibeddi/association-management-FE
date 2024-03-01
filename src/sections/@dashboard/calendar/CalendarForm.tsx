@@ -103,7 +103,7 @@ export default function CalendarForm({
         <Stack spacing={3} sx={{ px: 3 }}>
        <RHFDateTimePicker name='startDate' label="start date" />
 
-<RHFDateTimePicker name='endDate' label="end date" />
+    <RHFDateTimePicker name='endDate' label="end date" />
 
         </Stack>
       </LocalizationProvider>
