@@ -15,7 +15,6 @@ import { StatClientResponsesTables } from '../../sections/@dashboard/statClientR
 
 export default function ClientStatusListPage() {
   const { statsClients } = useSelector((state: RootState) => state.statsClient);
-
   const { translate } = useLocales();
   const navigate = useNavigate();
 
@@ -28,7 +27,7 @@ export default function ClientStatusListPage() {
   >([]);
 
   useEffect(() => {
-    dispatch(getAllStatsClient({ page: 1, limit: 100 }));
+    dispatch(getAllStatsClient({ page: 0, limit: 100 }));
   }, []);
 
   useEffect(() => {
