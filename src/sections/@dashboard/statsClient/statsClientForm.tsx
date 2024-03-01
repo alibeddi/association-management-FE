@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router';
 
 import { FrontType, IKpi } from '../../../@types/Kpi';
 import FormProvider, { RHFAutocomplete, RHFTextField } from '../../../components/hook-form';
@@ -18,12 +19,15 @@ import { getFromKpis } from '../../../utils';
 import { IStatsClient, IStatsClientFormProps } from '../../../@types/statsClient';
 import { setDefaultValuesStatsClient } from '../../../utils/setDefaultValuesStatsClient';
 
+import { PATH_DASHBOARD } from '../../../routes/paths';
+
 type IProps = {
   statsClientProp?: IStatsClient | null;
 };
 
 const StatsClientForm = ({ statsClientProp = null }: IProps) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const statsClient = statsClientProp;
   // TODO: make scroll to get 10 other
   useEffect(() => {
@@ -83,7 +87,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
         })
       )
         .unwrap()
-        .then((res) => enqueueSnackbar(res.message))
+        .then((res) => {enqueueSnackbar(res.message);navigate(PATH_DASHBOARD.statsClient.root)})
         .catch((error) => enqueueSnackbar(error.message, { variant: 'error' }));
     } else {
       await dispatch(
@@ -93,7 +97,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
         })
       )
         .unwrap()
-        .then((res) => enqueueSnackbar(res.message))
+        .then((res) => {enqueueSnackbar(res.message);navigate(PATH_DASHBOARD.statsClient.root)})
         .catch((error) => enqueueSnackbar(error.message, { variant: 'error' }));
     }
   };
