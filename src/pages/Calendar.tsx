@@ -282,7 +282,7 @@ return (
         </Card>
       </Container>
 
-      {(hasPermissionCreate || hasPermissionDelete )&& <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
+      {(hasPermissionCreate || hasPermissionDelete || hasPermissionUpdate )&& <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
         <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
         <CalendarForm
           event={selectedEvent}
