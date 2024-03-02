@@ -93,7 +93,6 @@ export default function StatClientForm({
         clientContact: data.clientContact,
         kpis: formatFormValues(data, kpis),
       };
-
       if (isEdit && currentStatClientResponse) {
         dispatch(
           editStatClientResponse({

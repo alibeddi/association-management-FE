@@ -1,8 +1,10 @@
 // @mui
 import { Stack, InputAdornment, TextField, Button } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
+
 // components
 import Iconify from '../../../../components/iconify';
+import StatClientResponseFilter from '../../../../components/StatClientResponseFilter';
 
 // ----------------------------------------------------------------------
 
@@ -21,8 +23,9 @@ export default function StatClientResponseTableToolbar({
   onFilterName,
   onResetFilter,
   placeholder,
-  setOpenFilter
 }: Props) {
+  const [openFilter, setOpenFilter] = useState(false);
+  const handleClostFilter = () => setOpenFilter(false);
   return (
     <Stack
       spacing={2}
@@ -46,7 +49,7 @@ export default function StatClientResponseTableToolbar({
           ),
         }}
       />
-      <Button onClick={() => setOpenFilter(true)}>tesqsdfqsdft</Button>
+
       {isFiltered && (
         <Button
           color="error"
@@ -57,6 +60,8 @@ export default function StatClientResponseTableToolbar({
           Clear
         </Button>
       )}
+      <Button onClick={() => setOpenFilter(!openFilter)}>Filter</Button>
+      <StatClientResponseFilter open={openFilter} onClose={handleClostFilter} />
     </Stack>
   );
 }

@@ -39,8 +39,8 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
       document.body.style.overflow = '';
       document.body.style.padding = '';
       // Apply for Window
-      appBarEl.forEach((elem) => {
-        elem.style.padding = '';
+      appBarEl.forEach((elt) => {
+        elt.style.padding = '';
       });
     };
 

@@ -123,7 +123,7 @@ export default function StatClientResponsesTable() {
   const handleDeleteRows = (selectedRows: string[]) => {
     dispatch(deleteManyStatClientResponse({ statClientResponses: selectedRows }))
       .unwrap()
-      .then((res: any) => {
+      .then((res) => {
         enqueueSnackbar(`${translate(res.message)}`);
         dispatch(
           getAllStatClientResponses({

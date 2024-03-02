@@ -1,4 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { IFilterStatClientResponse } from '../../../@types/FilterStatClientResponse';
+import { generateFilterStatClientResponse } from '../../../utils';
 import axios from '../../../utils/axios';
 
 type StatClientResBody = {
@@ -39,7 +41,7 @@ export const getAllStatClientResponses = createAsyncThunk(
     order?: string;
     filterClientName?: string;
   }) => {
-    const { page, order = 'desc', orderBy = 'createdAt', filterClientName, limit = 10 } = payload;
+    const { page, order = 'desc', orderBy = 'createdAt', filterClientName, limit  } = payload;
     const params = {
       page: page + 1,
       limit,
@@ -139,3 +141,25 @@ export const deleteManyStatClientResponse = createAsyncThunk(
     }
   }
 );
+export const statsClientResponseFilter = createAsyncThunk('STAT_CLIENT_RESPONSE/FILTER',async (payload:{
+  page: number;
+  limit?: number;
+  orderBy?: string;
+  order?: string;
+  filterClientName?: string;
+  filterValue: IFilterStatClientResponse[]
+})=>{
+  const { page, filterClientName, limit,filterValue  } = payload;
+let data;
+try {
+  const query = generateFilterStatClientResponse(filterValue,limit,page)
+  const response = await axios.get(`/stat-client-responses/filter?${query}`)
+  data = response.data;
+  if(response.status ===200){
+    return data.data;
+  }
+  throw new Error(response.statusText)
+} catch (error) {
+  return Promise.reject(error?.message ? error.message : data.message)
+}
+})

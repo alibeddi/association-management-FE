@@ -9,6 +9,7 @@ import {
   editStatClientResponse,
   getAllStatClientResponses,
   getOneStatClientResponse,
+  statsClientResponseFilter,
 } from './actions';
 
 type StatClientResState = {
@@ -101,6 +102,17 @@ const slice = createSlice({
       .addCase(deleteManyStatClientResponse.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
+    builder
+    .addCase(statsClientResponseFilter.pending,(state)=>{
+      state.status = IStatus.LOADING;
+    })
+    .addCase(statsClientResponseFilter.fulfilled, (state, {payload}) => {
+      state.status = IStatus.SUCCEEDED;
+      state.statClientResponses = payload;
+    })
+    .addCase(statsClientResponseFilter.rejected, (state) => {
+      state.status = IStatus.FAILED;
+    });
   },
 });
 

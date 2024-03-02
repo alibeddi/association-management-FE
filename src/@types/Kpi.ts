@@ -13,7 +13,7 @@ export interface IKpi {
   name: string;
   label: string;
   frontType: FrontType;
-  options?: string[];
+  choices?: string[];
   isRequired: boolean;
   createdAt?: Date;
   deletedAt?: Date;

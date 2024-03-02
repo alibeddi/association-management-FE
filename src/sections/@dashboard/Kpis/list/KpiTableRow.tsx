@@ -39,7 +39,7 @@ export default function KpiTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, label, frontType, isRequired, options, createdAt } = row;
+  const { name, label, frontType, isRequired, choices, createdAt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -104,17 +104,19 @@ export default function KpiTableRow({
               color: isRequired ? '#3EAB55' : 'red',
               bgcolor: isRequired ? '#AFE1AF' : 'pink',
               borderRadius: '6px',
+              display: 'inline-block', // Make the box inline-block to fit content width
+              padding: '1px 1rem', // Adjust padding as needed
             }}
           >
             {isRequired.toString()}
           </Box>
         </TableCell>
         <TableCell align="left">
-          {options && options?.length > 0 ? (
+          {choices && choices?.length > 0 ? (
             <Tooltip
               title={
                 <>
-                  {options?.map((option, index) => (
+                  {choices?.map((option:string, index:number) => (
                     <p key={index}>{option}</p>
                   ))}
                 </>
@@ -128,7 +130,7 @@ export default function KpiTableRow({
                   textOverflow: 'ellipsis',
                 }}
               >
-                {options?.join(', ')}
+                {choices?.join(', ')}
               </Box>
             </Tooltip>
           ) : (
