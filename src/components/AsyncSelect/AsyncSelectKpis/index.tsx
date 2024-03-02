@@ -3,7 +3,7 @@ import { AsyncPaginate } from 'react-select-async-paginate';
 import { styled } from '@mui/material/styles';
 import { IKpi } from '../../../@types/Kpi';
 import { getKpis } from '../../../redux/slices/kpis/actions';
-import {  useDispatch, useSelector } from '../../../redux/store';
+import {  useDispatch } from '../../../redux/store';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 import { StyledAsyncPaginate } from '../styles';
 import { setParams } from '../../../utils/setParams';

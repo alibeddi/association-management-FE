@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import { nanoid } from '@reduxjs/toolkit';
 import { useSnackbar } from 'notistack';
-import  { useState } from 'react'
+import  { Dispatch, SetStateAction, useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 import EmptyContent from '../../../../components/empty-content';
 import Iconify from '../../../../components/iconify';
@@ -14,13 +14,16 @@ import StatResponseFilterSelect from './StatResponseFilterSelect';
 
 type IProps = {
   onClose : () => void;
+  filters:  IFilterStatClientResponse[];
+  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
 }
 
 const StatClientResponseFormFilter = ({
-  onClose
+  onClose,
+  filters,
+  setFilters
 }:IProps) =>  {
   const {enqueueSnackbar} = useSnackbar()
-  const [filters,setFilters] = useState<IFilterStatClientResponse[] | []>([]);
   const [isSubmitting,setIsSubmitting] = useState<boolean>(false)
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -42,11 +45,11 @@ const StatClientResponseFormFilter = ({
   }
   const handleAdd = () => setFilters([...filters, { id:nanoid() , type: '', value: '' }]);
   const handleRemove = (id: string) => setFilters(filters.filter((elt) => elt.id !== id));
+  
   return (
     <Stack>
 
-
-      <Button onClick={()=>handleAdd()} startIcon={<Iconify icon='icons8:plus' />}> Add new Filter</Button>
+ <Button onClick={()=>handleAdd()} startIcon={<Iconify icon='icons8:plus' />}> Add new Filter</Button>
 
    
     <Stack  style={{
