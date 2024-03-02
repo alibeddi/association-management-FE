@@ -1,5 +1,5 @@
 // @mui
-import { Stack, InputAdornment, TextField, Button } from '@mui/material';
+import { Stack, InputAdornment, TextField, Button, MenuItem } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
 
@@ -7,18 +7,24 @@ import Iconify from '../../../../components/iconify';
 
 type Props = {
   placeholder: string;
-  filterName?: string;
+  search?: string;
+  filterFrontType: string;
+  optionsFrontType: string[];
   isFiltered?: boolean;
   onResetFilter?: VoidFunction;
-  onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearch?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFilterFrontType: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function KpiTableToolbar({
   isFiltered,
-  filterName,
-  onFilterName,
+  filterFrontType,
+  search,
+  onSearch,
   onResetFilter,
+  onFilterFrontType,
   placeholder,
+  optionsFrontType,
 }: Props) {
   return (
     <Stack
@@ -32,8 +38,43 @@ export default function KpiTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
-        onChange={onFilterName}
+        select
+        label="Front Type"
+        value={filterFrontType}
+        onChange={onFilterFrontType}
+        SelectProps={{
+          MenuProps: {
+            PaperProps: {
+              sx: {
+                maxHeight: 260,
+              },
+            },
+          },
+        }}
+        sx={{
+          maxWidth: { sm: 240 },
+          textTransform: 'capitalize',
+        }}
+      >
+        {optionsFrontType.map((option) => (
+          <MenuItem
+            key={option}
+            value={option}
+            sx={{
+              mx: 1,
+              borderRadius: 0.75,
+              typography: 'body2',
+              textTransform: 'capitalize',
+            }}
+          >
+            {option}
+          </MenuItem>
+        ))}
+      </TextField>
+      <TextField
+        fullWidth
+        value={search}
+        onChange={onSearch}
         placeholder={placeholder}
         InputProps={{
           startAdornment: (

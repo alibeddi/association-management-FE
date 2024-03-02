@@ -149,10 +149,12 @@ export const statsClientResponseFilter = createAsyncThunk('STAT_CLIENT_RESPONSE/
   filterClientName?: string;
   filterValue: IFilterStatClientResponse[]
 })=>{
-  const { page, filterClientName, limit,filterValue  } = payload;
+  const { page, limit,filterValue  } = payload;
 let data;
 try {
+
   const query = generateFilterStatClientResponse(filterValue,limit,page)
+
   const response = await axios.get(`/stat-client-responses/filter?${query}`)
   data = response.data;
   if(response.status ===200){

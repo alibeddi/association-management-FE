@@ -36,7 +36,11 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 import { hasPermission } from '../Permissions/utils';
 import { MethodCode, ModelCode } from '../../../@types/Permission';
 import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis/actions';
-import { deleteManyStatsClient, deleteStatsClient, getAllStatsClient } from '../../../redux/slices/statsClient/action';
+import {
+  deleteManyStatsClient,
+  deleteStatsClient,
+  getAllStatsClient,
+} from '../../../redux/slices/statsClient/action';
 import { IStatsClient } from '../../../@types/statsClient';
 
 export default function StatsClientList() {
@@ -85,9 +89,11 @@ export default function StatsClientList() {
     navigate(`${PATH_DASHBOARD.statsClient.view}/${row._id}`, { state: { statsClient: row } });
   };
   const handleCreateRowResponse = (row: IStatsClient) => {
-    navigate(`${PATH_DASHBOARD.statClientResponse.new}/${row._id}`, { state: { statsClient: row } });
+    navigate(`${PATH_DASHBOARD.statClientResponse.new}/${row._id}`, {
+      state: { statsClient: row },
+    });
   };
-  
+
   const handleEditRow = (row: IStatsClient) => {
     navigate(`${PATH_DASHBOARD.statsClient.edit}/${row._id}`, { state: { statsClient: row } });
   };
@@ -117,9 +123,11 @@ export default function StatsClientList() {
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
-    dispatch(deleteManyStatsClient({ statClientIds: selectedRows })).unwrap().then(res =>{
-             enqueueSnackbar(`${translate(res?.data.message)}`);
-        dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, filterName }));
+    dispatch(deleteManyStatsClient({ statClientIds: selectedRows }))
+      .unwrap()
+      .then((res) => {
+        enqueueSnackbar(`${translate(res?.data.message)}`);
+        dispatch(getKpis({ page: 0, limit: rowsPerPage, orderBy, order, search: filterName }));
       })
       .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
     setSelected([]);

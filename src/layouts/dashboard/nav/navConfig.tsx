@@ -36,7 +36,7 @@ export default function navConfig(user: AuthUserType) {
     ModelCode.PERMISSION_GROUP,
     MethodCode.LIST
   );
-  const hasAccessToCalendar = hasPermission(userPermissions, ModelCode.WORKTIME, MethodCode.LIST);
+  const hasAccessToCalendar = hasPermission(userPermissions, ModelCode.MY_WORKTIME, MethodCode.LIST);
   const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
   const config = [
     {
@@ -73,13 +73,13 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: hasAccessToCalls,
         },
         {
-          title: 'stats-client',
+          title: 'stats client',
           path: PATH_DASHBOARD.statsClient.root,
           icon: ICONS.statsClient,
           toBeDisplayed: true,
         },
         {
-          title: 'Stat-client Answers',
+          title: 'Stats client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
           toBeDisplayed: true,
