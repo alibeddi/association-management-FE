@@ -1,12 +1,17 @@
 import { Card, CardHeader, Divider, Grid, Tab, Tabs } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../../../@types/Todo';
 import EmptyContent from '../../../../components/empty-content';
-import { TableNoData, TablePaginationCustom, useTable } from '../../../../components/table';
-import { getTodosAssignedToMe, getTodosCreatedbyMe } from '../../../../redux/slices/todos/actions';
+import { TablePaginationCustom, useTable } from '../../../../components/table';
+import {
+  deleteOneTodo,
+  getTodosAssignedToMe,
+  getTodosCreatedbyMe,
+} from '../../../../redux/slices/todos/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { AddNewTodo } from '../form';
-import TodoList, { TaskItem } from './TodoList';
+import { TaskItem } from './TodoIteml';
 import TodosToolbar from './TodosToolbar';
 
 const TODO_STATUS_OPTIONS = ['all', 'todo', 'completed'];
@@ -32,6 +37,8 @@ export default function Todos() {
     onChangeRowsPerPage,
   } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const [filterTodos, setFilterTodos] = useState('Created By me');
   const { assignedTodos, myTodos } = useSelector((state: RootState) => state.todos);
 
@@ -43,7 +50,7 @@ export default function Todos() {
   const isFiltered = filterDescription !== '' || filterStatus !== 'all';
   const isNotFound =
     (!todos.length && !!filterDescription) || (!todos.length && !!filterStatus) || !todos.length;
-  // const dataInPage = todos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const dataInPage = todos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   useEffect(() => {
     if (filterTodos === 'Assigned To me') {
@@ -66,6 +73,19 @@ export default function Todos() {
       dispatch(getTodosAssignedToMe({ page: 0 }));
     }
     handleResetFilter();
+  };
+
+  const handleDeleteTodo = (id: string) => {
+    dispatch(deleteOneTodo({ todoId: id }))
+      .unwrap()
+      .then((res) => enqueueSnackbar(`${res?.message}`))
+      .catch((err) => enqueueSnackbar(`${err?.message}`, { variant: 'error' }));
+
+    if (page > 0) {
+      if (dataInPage.length < 2) {
+        setPage(page - 1);
+      }
+    }
   };
   const handleResetFilter = () => {
     setFilterDescription('');
@@ -112,14 +132,11 @@ export default function Todos() {
           onResetFilter={handleResetFilter}
         />
         <Grid item xs={12} md={6} lg={8}>
-          {/* <TodoList title="Tasks" list={todos} /> */}
-          <>
-            <CardHeader title="Tasks" />
+          <CardHeader title="Tasks" />
+          {todos.map((task) => (
+            <TaskItem key={task._id} task={task} onDeleteRow={handleDeleteTodo} />
+          ))}
 
-            {todos.map((task) => (
-              <TaskItem key={task._id} task={task} onDeleteRow={() => {}} />
-            ))}
-          </>
           {isNotFound && (
             <EmptyContent
               title="No Data"

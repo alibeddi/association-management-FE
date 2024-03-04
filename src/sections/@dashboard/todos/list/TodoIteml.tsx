@@ -21,29 +21,9 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 
-interface Props {
-  title?: string;
-  subheader?: string;
-  list: Todo[];
-}
-
-export default function TodoList({ title, subheader, list }: Props) {
-  return (
-    <>
-      <CardHeader title={title} subheader={subheader} />
-
-      {list.map((task) => (
-        <TaskItem key={task._id} task={task} onDeleteRow={() => {}} />
-      ))}
-    </>
-  );
-}
-
-// ----------------------------------------------------------------------
-
 interface TaskItemProps extends CheckboxProps {
   task: Todo;
-  onDeleteRow: VoidFunction;
+  onDeleteRow: (id: string) => void;
 }
 
 export function TaskItem({ task, onDeleteRow }: TaskItemProps) {
@@ -77,7 +57,7 @@ export function TaskItem({ task, onDeleteRow }: TaskItemProps) {
 
   const handleDelete = () => {
     handleClosePopover();
-    dispatch(deleteOneTodo({ todoId: task._id }));
+    handleOpenConfirm();
   };
 
   const onChange = () => {
@@ -147,7 +127,7 @@ export function TaskItem({ task, onDeleteRow }: TaskItemProps) {
             variant="contained"
             color="error"
             onClick={() => {
-              onDeleteRow();
+              onDeleteRow(task._id);
               handleCloseConfirm();
             }}
           >
