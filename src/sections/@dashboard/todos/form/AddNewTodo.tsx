@@ -50,7 +50,6 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
   } = methods;
 
   const values = watch();
-  console.log({ values });
 
   useEffect(() => {
     if (isEdit && currentTodo) {

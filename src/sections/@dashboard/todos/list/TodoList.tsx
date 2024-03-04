@@ -32,9 +32,7 @@ interface Props extends CardProps {
   list: Todo[];
 }
 
-export default function AnalyticsTasks({ title, subheader, list, ...other }: Props) {
-  const [selected, setSelected] = useState(['2']);
-
+export default function TodoList({ title, subheader, list, ...other }: Props) {
   const handleClickComplete = (task: Todo) => {
     // const tasksCompleted = selected.includes(taskId)
     //   ? selected.filter((value) => value !== taskId)
@@ -51,7 +49,7 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }: Pro
   };
 
   return (
-    <Card {...other}>
+    <>
       <CardHeader title={title} subheader={subheader} />
 
       {list.map((task) => (
@@ -62,7 +60,7 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }: Pro
           onChange={() => handleClickComplete(task)}
         />
       ))}
-    </Card>
+    </>
   );
 }
 
@@ -73,8 +71,8 @@ interface TaskItemProps extends CheckboxProps {
 }
 
 function TaskItem({ task, checked, onChange }: TaskItemProps) {
+  
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
-
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
     setOpenPopover(event.currentTarget);
   };
