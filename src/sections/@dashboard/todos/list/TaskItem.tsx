@@ -1,16 +1,13 @@
-import { useState } from 'react';
 import {
-  Card,
-  Stack,
-  Divider,
   Checkbox,
-  MenuItem,
-  CardProps,
-  CardHeader,
-  IconButton,
   CheckboxProps,
+  Divider,
   FormControlLabel,
+  IconButton,
+  MenuItem,
+  Stack,
 } from '@mui/material';
+import { useState } from 'react';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 
@@ -21,46 +18,11 @@ type ItemProps = {
   label: string;
 };
 
-interface Props extends CardProps {
-  title?: string;
-  subheader?: string;
-  list: ItemProps[];
-}
-
-export default function AnalyticsTasks({ title, subheader, list, ...other }: Props) {
-  const [selected, setSelected] = useState(['2']);
-
-  const handleClickComplete = (taskId: string) => {
-    const tasksCompleted = selected.includes(taskId)
-      ? selected.filter((value) => value !== taskId)
-      : [...selected, taskId];
-
-    setSelected(tasksCompleted);
-  };
-
-  return (
-    <Card {...other}>
-      <CardHeader title={title} subheader={subheader} />
-
-      {list.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          checked={selected.includes(task.id)}
-          onChange={() => handleClickComplete(task.id)}
-        />
-      ))}
-    </Card>
-  );
-}
-
-// ----------------------------------------------------------------------
-
 interface TaskItemProps extends CheckboxProps {
   task: ItemProps;
 }
 
-function TaskItem({ task, checked, onChange }: TaskItemProps) {
+export function TaskItem({ task, checked, onChange }: TaskItemProps) {
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
 
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {

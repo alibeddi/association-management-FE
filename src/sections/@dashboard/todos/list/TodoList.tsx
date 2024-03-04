@@ -1,6 +1,7 @@
 import { useState } from 'react';
 // @mui
 import {
+  Button,
   CardHeader,
   Checkbox,
   CheckboxProps,
@@ -16,6 +17,7 @@ import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import { deleteOneTodo, updateTodo } from '../../../../redux/slices/todos/actions';
 import { dispatch } from '../../../../redux/store';
+import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +33,7 @@ export default function TodoList({ title, subheader, list }: Props) {
       <CardHeader title={title} subheader={subheader} />
 
       {list.map((task) => (
-        <TaskItem key={task._id} task={task} />
+        <TaskItem key={task._id} task={task} onDeleteRow={() => {}} />
       ))}
     </>
   );
@@ -41,16 +43,26 @@ export default function TodoList({ title, subheader, list }: Props) {
 
 interface TaskItemProps extends CheckboxProps {
   task: Todo;
+  onDeleteRow: VoidFunction;
 }
 
-function TaskItem({ task }: TaskItemProps) {
+export function TaskItem({ task, onDeleteRow }: TaskItemProps) {
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
     setOpenPopover(event.currentTarget);
   };
 
   const handleClosePopover = () => {
     setOpenPopover(null);
+  };
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
   };
 
   const handleMarkComplete = () => {
@@ -124,6 +136,25 @@ function TaskItem({ task }: TaskItemProps) {
           Delete
         </MenuItem>
       </MenuPopover>
+
+      <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              onDeleteRow();
+              handleCloseConfirm();
+            }}
+          >
+            Delete
+          </Button>
+        }
+      />
     </>
   );
 }

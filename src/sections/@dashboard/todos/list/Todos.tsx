@@ -1,4 +1,4 @@
-import { Card, Divider, Grid, Tab, Tabs } from '@mui/material';
+import { Card, CardHeader, Divider, Grid, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../../../@types/Todo';
 import EmptyContent from '../../../../components/empty-content';
@@ -6,7 +6,7 @@ import { TableNoData, TablePaginationCustom, useTable } from '../../../../compon
 import { getTodosAssignedToMe, getTodosCreatedbyMe } from '../../../../redux/slices/todos/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { AddNewTodo } from '../form';
-import TodoList from './TodoList';
+import TodoList, { TaskItem } from './TodoList';
 import TodosToolbar from './TodosToolbar';
 
 const TODO_STATUS_OPTIONS = ['all', 'todo', 'completed'];
@@ -112,7 +112,14 @@ export default function Todos() {
           onResetFilter={handleResetFilter}
         />
         <Grid item xs={12} md={6} lg={8}>
-          <TodoList title="Tasks" list={todos} />
+          {/* <TodoList title="Tasks" list={todos} /> */}
+          <>
+            <CardHeader title="Tasks" />
+
+            {todos.map((task) => (
+              <TaskItem key={task._id} task={task} onDeleteRow={() => {}} />
+            ))}
+          </>
           {isNotFound && (
             <EmptyContent
               title="No Data"
