@@ -23,7 +23,7 @@ export default function StatClientResponseTableToolbar({
   filterClientName,
   onFilterName,
   onResetFilter,
-  placeholder,
+  placeholder
 }: Props) {
   const [openFilter,setOpenFilter] = useState(false)
   const dispatch = useDispatch()

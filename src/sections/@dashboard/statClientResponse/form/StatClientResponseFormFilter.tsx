@@ -7,6 +7,7 @@ import  { Dispatch, SetStateAction, useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 import EmptyContent from '../../../../components/empty-content';
 import Iconify from '../../../../components/iconify';
+import { useTable } from '../../../../components/table';
 import { statsClientResponseFilter } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch } from '../../../../redux/store';
 import { validNotEmptyFilters } from '../../../../utils';
@@ -23,6 +24,7 @@ const StatClientResponseFormFilter = ({
   filters,
   setFilters
 }:IProps) =>  {
+  const {page,rowsPerPage} = useTable({defaultOrderBy: 'createdAt', defaultOrder: 'desc'})
   const {enqueueSnackbar} = useSnackbar()
   const [isSubmitting,setIsSubmitting] = useState<boolean>(false)
   const handleSubmit = async () => {
@@ -35,8 +37,8 @@ const StatClientResponseFormFilter = ({
       return;
     }
     await dispatch(statsClientResponseFilter({
-      page:1,
-      limit:10,
+      page: page+1,
+      limit:rowsPerPage,
       filterValue:filters
     })).unwrap().then(res=>{enqueueSnackbar("success");onClose();}).catch(err=>enqueueSnackbar(err.message,{
       variant:"error"

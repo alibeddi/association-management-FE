@@ -123,7 +123,7 @@ export default function StatClientResponsesTable() {
         enqueueSnackbar(`${translate(res.message)}`);
         dispatch(
           getAllStatClientResponses({
-            page: 0,
+            page,
             limit: rowsPerPage,
             orderBy,
             order,
@@ -144,6 +144,7 @@ export default function StatClientResponsesTable() {
           filterClientName={filterClientName}
           onFilterName={handleFilterName}
           placeholder="Search by Client Name..."
+          
         />
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
