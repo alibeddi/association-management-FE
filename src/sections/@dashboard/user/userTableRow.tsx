@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 // @mui
 import {
   Stack,
@@ -19,6 +20,8 @@ import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import { fDate } from '../../../utils/formatTime';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -36,8 +39,10 @@ export default function UserTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { name, email, office, createdAt } = row;
-
+  const { name, email, office, createdAt,_id:userId } = row;
+  const navigate = useNavigate()
+  const handleEditUser = () => navigate(`${PATH_DASHBOARD.operators.edit}/${userId}`)
+  const handleViewUser = () => navigate(`${PATH_DASHBOARD.operators.view}/${userId}`)
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
@@ -91,6 +96,24 @@ export default function UserTableRow({
       >
         <MenuItem
           onClick={() => {
+            handleViewUser()
+          }}
+          sx={{ color: 'principal.main' }}
+        >
+          <Iconify icon="carbon:view-filled" />
+          View
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleEditUser()
+          }}
+          sx={{ color: 'principal.main' }}
+        >
+          <Iconify icon="eva:edit-fill" />
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
             handleOpenConfirm();
             handleClosePopover();
           }}
@@ -99,6 +122,7 @@ export default function UserTableRow({
           <Iconify icon="eva:trash-2-outline" />
           Delete
         </MenuItem>
+        
       </MenuPopover>
 
       <ConfirmDialog
