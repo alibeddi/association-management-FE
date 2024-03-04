@@ -17,7 +17,6 @@ type Props = {
   isFiltered?: boolean;
   onResetFilter?: VoidFunction;
   onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setOpenFilter: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function StatClientResponseTableToolbar({
@@ -25,7 +24,7 @@ export default function StatClientResponseTableToolbar({
   filterClientName,
   onFilterName,
   onResetFilter,
-  placeholder,
+  placeholder
 }: Props) {
   const [openFilter,setOpenFilter] = useState(false)
   const dispatch = useDispatch()
