@@ -1,19 +1,25 @@
 // @mui
 import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
+const INPUT_WIDTH = 160;
 type Props = {
   filterDescription: string;
   filterStatus: string;
   isFiltered: boolean;
   placeholder?: string;
   optionsStatus: string[];
+  filterEndDate: Date | null;
+  filterStartDate: Date | null;
   onResetFilter: VoidFunction;
   onFilterDescription: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onFilterStatus: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFilterStartDate: (value: Date | null) => void;
+  onFilterEndDate: (value: Date | null) => void;
 };
 
 export default function TodosToolbar({
@@ -22,8 +28,12 @@ export default function TodosToolbar({
   filterDescription,
   filterStatus,
   optionsStatus,
+  filterEndDate,
+  filterStartDate,
   onFilterDescription,
   onFilterStatus,
+  onFilterStartDate,
+  onFilterEndDate,
   onResetFilter,
 }: Props) {
   return (
@@ -71,6 +81,36 @@ export default function TodosToolbar({
           </MenuItem>
         ))}
       </TextField>
+
+      <DatePicker
+        label="Start date"
+        value={filterStartDate}
+        onChange={onFilterStartDate}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            fullWidth
+            sx={{
+              maxWidth: { md: INPUT_WIDTH },
+            }}
+          />
+        )}
+      />
+
+      <DatePicker
+        label="End date"
+        value={filterEndDate}
+        onChange={onFilterEndDate}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            fullWidth
+            sx={{
+              maxWidth: { md: INPUT_WIDTH },
+            }}
+          />
+        )}
+      />
 
       <TextField
         fullWidth

@@ -17,7 +17,7 @@ import TodosToolbar from './TodosToolbar';
 const TODO_STATUS_OPTIONS = ['all', 'todo', 'completed'];
 const TODO_FILTERS = ['Created By me', 'Assigned To me'];
 
-export default function Todos() {
+export default function TodoList() {
   const {
     dense,
     page,
@@ -46,10 +46,18 @@ export default function Todos() {
 
   const [filterDescription, setFilterDescription] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
+  const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
 
-  const isFiltered = filterDescription !== '' || filterStatus !== 'all';
+  const isFiltered =
+    filterDescription !== '' || filterStatus !== 'all' || (!!filterStartDate && !!filterEndDate);
   const isNotFound =
-    (!todos.length && !!filterDescription) || (!todos.length && !!filterStatus) || !todos.length;
+    (!todos.length && !!filterDescription) ||
+    (!todos.length && !!filterStatus) ||
+    (!todos.length && !!filterEndDate) ||
+    (!todos.length && !!filterStartDate) ||
+    !todos.length;
+
   const dataInPage = todos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   useEffect(() => {
@@ -90,6 +98,8 @@ export default function Todos() {
   const handleResetFilter = () => {
     setFilterDescription('');
     setFilterStatus('all');
+    setFilterEndDate(null);
+    setFilterStartDate(null);
   };
   const handleFilterStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
@@ -126,10 +136,18 @@ export default function Todos() {
           isFiltered={isFiltered}
           filterDescription={filterDescription}
           filterStatus={filterStatus}
+          filterEndDate={filterEndDate}
+          filterStartDate={filterStartDate}
           optionsStatus={TODO_STATUS_OPTIONS}
           onFilterDescription={handleFilterDescription}
           onFilterStatus={handleFilterStatus}
           onResetFilter={handleResetFilter}
+          onFilterStartDate={(newValue) => {
+            setFilterStartDate(newValue);
+          }}
+          onFilterEndDate={(newValue) => {
+            setFilterEndDate(newValue);
+          }}
         />
         <Grid item xs={12} md={6} lg={8}>
           <CardHeader title="Tasks" />

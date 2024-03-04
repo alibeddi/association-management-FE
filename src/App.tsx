@@ -11,6 +11,9 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
+// @mui
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 // routes
 import { Provider } from 'react-redux';
 import Router from './routes';
@@ -34,22 +37,24 @@ export default function App() {
     <Provider store={store}>
       <AuthProvider>
         <HelmetProvider>
-          <SettingsProvider>
-            <BrowserRouter>
-              <ScrollToTop />
-              <MotionLazyContainer>
-                <ThemeProvider>
-                  <ThemeSettings>
-                    <ThemeLocalization>
-                      <SnackbarProvider>
-                        <Router />
-                      </SnackbarProvider>
-                    </ThemeLocalization>
-                  </ThemeSettings>
-                </ThemeProvider>
-              </MotionLazyContainer>
-            </BrowserRouter>
-          </SettingsProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <SettingsProvider>
+              <BrowserRouter>
+                <ScrollToTop />
+                <MotionLazyContainer>
+                  <ThemeProvider>
+                    <ThemeSettings>
+                      <ThemeLocalization>
+                        <SnackbarProvider>
+                          <Router />
+                        </SnackbarProvider>
+                      </ThemeLocalization>
+                    </ThemeSettings>
+                  </ThemeProvider>
+                </MotionLazyContainer>
+              </BrowserRouter>
+            </SettingsProvider>
+          </LocalizationProvider>
         </HelmetProvider>
       </AuthProvider>
     </Provider>
