@@ -75,22 +75,18 @@ function TaskItem({ task, checked, onChange }: TaskItemProps) {
 
   const handleMarkComplete = () => {
     handleClosePopover();
-    console.log('MARK COMPLETE', task.id);
   };
 
   const handleShare = () => {
     handleClosePopover();
-    console.log('SHARE', task.id);
   };
 
   const handleEdit = () => {
     handleClosePopover();
-    console.log('EDIT', task.id);
   };
 
   const handleDelete = () => {
     handleClosePopover();
-    console.log('DELETE', task.id);
   };
 
   return (
