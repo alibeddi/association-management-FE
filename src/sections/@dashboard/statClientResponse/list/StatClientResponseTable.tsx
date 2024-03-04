@@ -144,7 +144,7 @@ export default function StatClientResponsesTable() {
           filterClientName={filterClientName}
           onFilterName={handleFilterName}
           placeholder="Search by Client Name..."
-          page={page}
+          
         />
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction

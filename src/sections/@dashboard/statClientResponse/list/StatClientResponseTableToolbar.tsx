@@ -16,7 +16,6 @@ type Props = {
   isFiltered?: boolean;
   onResetFilter?: VoidFunction;
   onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  page: number
 };
 
 export default function StatClientResponseTableToolbar({
@@ -24,8 +23,7 @@ export default function StatClientResponseTableToolbar({
   filterClientName,
   onFilterName,
   onResetFilter,
-  placeholder,
-  page
+  placeholder
 }: Props) {
   const [openFilter,setOpenFilter] = useState(false)
   const dispatch = useDispatch()
@@ -34,7 +32,7 @@ export default function StatClientResponseTableToolbar({
   const resetFilterStatClientResponse = async () => {
     setFilters([])
     await dispatch(getAllStatClientResponses({
-      page,
+      page:0,
       limit:5
     }))
   }
