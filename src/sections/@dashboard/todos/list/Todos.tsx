@@ -1,6 +1,6 @@
 import { Card, Divider, Grid, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { getTodosCreatedbyMe } from '../../../../redux/slices/todos/actions';
+import { getTodosAssignedToMe, getTodosCreatedbyMe } from '../../../../redux/slices/todos/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { AddNewTodo } from '../form';
 import AnalyticsTasks from './TodoList';
@@ -19,11 +19,12 @@ export default function Todos() {
 
   const handleFilterStatus = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     // setPage(0);
+    console.log(newValue);
     setFilterTodos(newValue);
     if (newValue === 'created By me') {
-      console.log('fetch the todos created by me ');
+      dispatch(getTodosCreatedbyMe({ page: 1 }));
     } else {
-      console.log('fetch the todos assigned to me ');
+      dispatch(getTodosAssignedToMe({ page: 0 }));
     }
   };
 
@@ -57,7 +58,10 @@ export default function Todos() {
           onResetFilter={() => {}}
         />
         <Grid item xs={12} md={6} lg={8}>
-          <AnalyticsTasks title="Tasks" list={myTodos.docs} />
+          <AnalyticsTasks
+            title="Tasks"
+            list={filterTodos === 'Created By me' ? myTodos.docs : assignedTodos.docs}
+          />
         </Grid>
       </Card>
     </>
