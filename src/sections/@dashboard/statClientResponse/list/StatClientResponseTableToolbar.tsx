@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 // components
 import Iconify from '../../../../components/iconify';
-import StatClientResponseFilter from '../../../../components/StatClientResponseFilter';
+import StatClientResponseFilter from "../../../../components/StatClientResponseFilter";
 import { getAllStatClientResponses } from '../../../../redux/slices/statClientResponse/actions';
 
 // ----------------------------------------------------------------------
