@@ -6,22 +6,24 @@ import Iconify from '../../../../components/iconify';
 // ----------------------------------------------------------------------
 
 type Props = {
-  filterName: string;
-  filterRole: string;
+  filterDescription: string;
+  filterStatus: string;
   isFiltered: boolean;
-  optionsRole: string[];
+  placeholder?: string;
+  optionsStatus: string[];
   onResetFilter: VoidFunction;
-  onFilterName: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFilterDescription: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFilterStatus: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function TodosToolbar({
   isFiltered,
-  filterName,
-  filterRole,
-  optionsRole,
-  onFilterName,
-  onFilterRole,
+  placeholder,
+  filterDescription,
+  filterStatus,
+  optionsStatus,
+  onFilterDescription,
+  onFilterStatus,
   onResetFilter,
 }: Props) {
   return (
@@ -38,8 +40,8 @@ export default function TodosToolbar({
         fullWidth
         select
         label="Todo Status"
-        value={filterRole}
-        onChange={onFilterRole}
+        value={filterStatus}
+        onChange={onFilterStatus}
         SelectProps={{
           MenuProps: {
             PaperProps: {
@@ -54,7 +56,7 @@ export default function TodosToolbar({
           textTransform: 'capitalize',
         }}
       >
-        {optionsRole.map((option) => (
+        {optionsStatus.map((option) => (
           <MenuItem
             key={option}
             value={option}
@@ -72,9 +74,9 @@ export default function TodosToolbar({
 
       <TextField
         fullWidth
-        value={filterName}
-        onChange={onFilterName}
-        placeholder="Search..."
+        value={filterDescription}
+        onChange={onFilterDescription}
+        placeholder={placeholder}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

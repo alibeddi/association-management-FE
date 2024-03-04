@@ -4,11 +4,18 @@ import axios from '../../../utils/axios';
 // get Created By me
 export const getTodosCreatedbyMe = createAsyncThunk(
   'TODOS/GET-ME',
-  async (payload: { page: number; limit?: number }) => {
-    const { page, limit } = payload;
+  async (payload: {
+    page: number;
+    limit?: number;
+    filterDescription?: string;
+    filterStatus?: string;
+  }) => {
+    const { page, limit, filterDescription, filterStatus } = payload;
     const params = {
-      page,
+      page: page + 1,
       limit,
+      ...(filterDescription ? { search: filterDescription } : {}),
+      ...(filterStatus !== 'all' ? { status: filterStatus } : {}),
     };
     let data;
     try {
@@ -27,11 +34,18 @@ export const getTodosCreatedbyMe = createAsyncThunk(
 // get Assigned to me
 export const getTodosAssignedToMe = createAsyncThunk(
   'TODOS/GET-ASSIGN',
-  async (payload: { page: number; limit?: number }) => {
-    const { page, limit } = payload;
+  async (payload: {
+    page: number;
+    limit?: number;
+    filterDescription?: string;
+    filterStatus?: string;
+  }) => {
+    const { page, limit, filterDescription, filterStatus } = payload;
     const params = {
       page: page + 1,
       limit,
+      ...(filterDescription ? { search: filterDescription } : {}),
+      ...(filterStatus !== 'all' ? { status: filterStatus } : {}),
     };
     let data;
     try {

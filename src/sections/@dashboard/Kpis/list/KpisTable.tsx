@@ -64,7 +64,7 @@ export default function KpisTable() {
 
   const [tableData, setTableData] = useState<IKpi[]>([]);
   const [search, setSearch] = useState('');
-  const [filterFrontType, setFilterRole] = useState('all');
+  const [filterFrontType, setFilterFrontType] = useState('all');
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const { kpis } = useSelector((state: RootState) => state?.kpis);
@@ -81,7 +81,10 @@ export default function KpisTable() {
 
   const isFiltered = search !== '' || filterFrontType !== 'all';
 
-  const isNotFound = (!tableData.length && !!search) || !tableData.length;
+  const isNotFound =
+    (!tableData.length && !!search) ||
+    (!tableData.length && !!filterFrontType) ||
+    !tableData.length;
 
   const dataInPage = tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -100,12 +103,12 @@ export default function KpisTable() {
 
   const handleFilterFrontType = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
-    setFilterRole(event.target.value);
+    setFilterFrontType(event.target.value);
   };
 
   const handleResetFilter = () => {
     setSearch('');
-    setFilterRole('all');
+    setFilterFrontType('all');
   };
 
   const handleOpenConfirm = (id?: string) => {

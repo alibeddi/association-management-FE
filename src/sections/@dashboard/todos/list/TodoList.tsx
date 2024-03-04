@@ -1,7 +1,14 @@
 import { useState } from 'react';
 // @mui
 import {
-  CardHeader, CardProps, Checkbox, CheckboxProps, Divider, FormControlLabel, IconButton, MenuItem, Stack
+  CardHeader,
+  Checkbox,
+  CheckboxProps,
+  Divider,
+  FormControlLabel,
+  IconButton,
+  MenuItem,
+  Stack,
 } from '@mui/material';
 // components
 import { Todo, TodoStatus } from '../../../../@types/Todo';
@@ -12,18 +19,13 @@ import { dispatch } from '../../../../redux/store';
 
 // ----------------------------------------------------------------------
 
-type ItemProps = {
-  id: string;
-  label: string;
-};
-
-interface Props extends CardProps {
+interface Props {
   title?: string;
   subheader?: string;
   list: Todo[];
 }
 
-export default function TodoList({ title, subheader, list, ...other }: Props) {
+export default function TodoList({ title, subheader, list }: Props) {
   return (
     <>
       <CardHeader title={title} subheader={subheader} />
