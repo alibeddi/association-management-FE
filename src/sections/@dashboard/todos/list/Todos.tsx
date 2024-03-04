@@ -65,6 +65,7 @@ export default function Todos() {
     } else {
       dispatch(getTodosAssignedToMe({ page: 0 }));
     }
+    handleResetFilter();
   };
   const handleResetFilter = () => {
     setFilterDescription('');
