@@ -1,23 +1,14 @@
 import { useState } from 'react';
 // @mui
 import {
-  Card,
-  Stack,
-  Divider,
-  Checkbox,
-  MenuItem,
-  CardProps,
-  CardHeader,
-  IconButton,
-  CheckboxProps,
-  FormControlLabel,
+  CardHeader, CardProps, Checkbox, CheckboxProps, Divider, FormControlLabel, IconButton, MenuItem, Stack
 } from '@mui/material';
 // components
+import { Todo, TodoStatus } from '../../../../@types/Todo';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
-import { Todo, TodoStatus } from '../../../../@types/Todo';
-import { dispatch } from '../../../../redux/store';
 import { deleteOneTodo, updateTodo } from '../../../../redux/slices/todos/actions';
+import { dispatch } from '../../../../redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -33,32 +24,12 @@ interface Props extends CardProps {
 }
 
 export default function TodoList({ title, subheader, list, ...other }: Props) {
-  const handleClickComplete = (task: Todo) => {
-    // const tasksCompleted = selected.includes(taskId)
-    //   ? selected.filter((value) => value !== taskId)
-    //   : [...selected, taskId];
-    dispatch(
-      updateTodo({
-        todoId: task._id,
-        body: {
-          status: task.status === TodoStatus.COMPLETED ? TodoStatus.TODO : TodoStatus.COMPLETED,
-        },
-      })
-    );
-    // setSelected(tasksCompleted);
-  };
-
   return (
     <>
       <CardHeader title={title} subheader={subheader} />
 
       {list.map((task) => (
-        <TaskItem
-          key={task._id}
-          task={task}
-          checked={task.status === TodoStatus.COMPLETED}
-          onChange={() => handleClickComplete(task)}
-        />
+        <TaskItem key={task._id} task={task} />
       ))}
     </>
   );
@@ -70,8 +41,7 @@ interface TaskItemProps extends CheckboxProps {
   task: Todo;
 }
 
-function TaskItem({ task, checked, onChange }: TaskItemProps) {
-  
+function TaskItem({ task }: TaskItemProps) {
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
     setOpenPopover(event.currentTarget);
@@ -96,6 +66,17 @@ function TaskItem({ task, checked, onChange }: TaskItemProps) {
     dispatch(deleteOneTodo({ todoId: task._id }));
   };
 
+  const onChange = () => {
+    dispatch(
+      updateTodo({
+        todoId: task._id,
+        body: {
+          status: task.status === TodoStatus.COMPLETED ? TodoStatus.TODO : TodoStatus.COMPLETED,
+        },
+      })
+    );
+  };
+
   return (
     <>
       <Stack
@@ -103,14 +84,14 @@ function TaskItem({ task, checked, onChange }: TaskItemProps) {
         sx={{
           px: 2,
           py: 0.75,
-          ...(checked && {
+          ...(task.status === TodoStatus.COMPLETED && {
             color: 'text.disabled',
             textDecoration: 'line-through',
           }),
         }}
       >
         <FormControlLabel
-          control={<Checkbox checked={checked} onChange={onChange} />}
+          control={<Checkbox checked={task.status === TodoStatus.COMPLETED} onChange={onChange} />}
           label={task.description}
           sx={{ flexGrow: 1, m: 0 }}
         />
