@@ -3,10 +3,11 @@ import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import { nanoid } from '@reduxjs/toolkit';
 import { useSnackbar } from 'notistack';
-import  { useState } from 'react'
+import  { Dispatch, SetStateAction, useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 import EmptyContent from '../../../../components/empty-content';
 import Iconify from '../../../../components/iconify';
+import { useTable } from '../../../../components/table';
 import { statsClientResponseFilter } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch } from '../../../../redux/store';
 import { validNotEmptyFilters } from '../../../../utils';
@@ -14,13 +15,17 @@ import StatResponseFilterSelect from './StatResponseFilterSelect';
 
 type IProps = {
   onClose : () => void;
+  filters:  IFilterStatClientResponse[];
+  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
 }
 
 const StatClientResponseFormFilter = ({
-  onClose
+  onClose,
+  filters,
+  setFilters
 }:IProps) =>  {
+  const {page,rowsPerPage} = useTable({defaultOrderBy: 'createdAt', defaultOrder: 'desc'})
   const {enqueueSnackbar} = useSnackbar()
-  const [filters,setFilters] = useState<IFilterStatClientResponse[] | []>([]);
   const [isSubmitting,setIsSubmitting] = useState<boolean>(false)
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -32,20 +37,21 @@ const StatClientResponseFormFilter = ({
       return;
     }
     await dispatch(statsClientResponseFilter({
-      page:1,
-      limit:10,
+      page: page+1,
+      limit:rowsPerPage,
       filterValue:filters
-    })).unwrap().then(res=>{enqueueSnackbar("success");onClose();}).catch(err=>enqueueSnackbar(err.messsage))
-    
+    })).unwrap().then(res=>{enqueueSnackbar("success");onClose();}).catch(err=>enqueueSnackbar(err.message,{
+      variant:"error"
+    }))
     setIsSubmitting(false)
   }
   const handleAdd = () => setFilters([...filters, { id:nanoid() , type: '', value: '' }]);
-  const handleRemove = (id: string) => setFilters(filters.filter((ele) => ele.id !== id));
+  const handleRemove = (id: string) => setFilters(filters.filter((elt) => elt.id !== id));
+  
   return (
     <Stack>
 
-
-      <Button onClick={()=>handleAdd()} startIcon={<Iconify icon='icons8:plus' />}> Add new Filter</Button>
+ <Button onClick={()=>handleAdd()} startIcon={<Iconify icon='icons8:plus' />}> Add new Filter</Button>
 
    
     <Stack  style={{
@@ -59,7 +65,7 @@ const StatClientResponseFormFilter = ({
       flex:1
     }}>
       {
-        filters?.length > 0 ? <StatResponseFilterSelect filters={filters} setFilters={setFilters} onDelete={handleRemove}/>: <EmptyContent title="no filter"/>
+        filters?.length > 0 ? <StatResponseFilterSelect filters={filters} setFilters={setFilters} onDelete={handleRemove}/> : <EmptyContent title="no filter"/>
       }
 
       <Stack sx={{

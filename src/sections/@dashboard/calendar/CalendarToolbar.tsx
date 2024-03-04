@@ -31,6 +31,7 @@ type Props = {
   onOpenFilter: VoidFunction;
   onChangeView?: (newView: ICalendarViewValue) => void;
   addEvent: () => void;
+  hasPermissionCreate:Boolean
 };
 
 export default function CalendarToolbar({
@@ -41,8 +42,10 @@ export default function CalendarToolbar({
   onPrevDate,
   onChangeView,
   onOpenFilter,
-  addEvent
+  addEvent,
+  hasPermissionCreate
 }: Props) {
+  
   const isDesktop = useResponsive('up', 'sm');
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
@@ -65,13 +68,16 @@ export default function CalendarToolbar({
         sx={{ p: 2.5, pr: 2 }}
       >
         <Stack>
-           <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              onClick={addEvent}
-            >
-              New Event
-            </Button>
+          {
+            hasPermissionCreate && <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={addEvent}
+          >
+            New Event
+          </Button>
+          }
+           
         </Stack>
         <Stack direction="row" alignItems="center" spacing={1}>
           <IconButton onClick={onPrevDate}>

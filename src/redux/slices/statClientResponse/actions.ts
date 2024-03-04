@@ -141,34 +141,27 @@ export const deleteManyStatClientResponse = createAsyncThunk(
     }
   }
 );
+export const statsClientResponseFilter = createAsyncThunk('STAT_CLIENT_RESPONSE/FILTER',async (payload:{
+  page: number;
+  limit?: number;
+  orderBy?: string;
+  order?: string;
+  filterClientName?: string;
+  filterValue: IFilterStatClientResponse[]
+})=>{
+  const { page, limit,filterValue  } = payload;
+let data;
+try {
 
-export const statsClientResponseFilter = createAsyncThunk(
-  'STAT_CLIENT_RESPONSE/FILTER',
-  async (payload: {
-    page: number;
-    limit?: number;
-    orderBy?: string;
-    order?: string;
-    filterClientName?: string;
-    filterValue: IFilterStatClientResponse[];
-  }) => {
-    const { page, filterClientName, limit, filterValue } = payload;
-    const params = {
-      page: page + 1,
-      limit,
-      ...(filterClientName ? { clientName: filterClientName } : {}),
-    };
-    let data;
-    try {
-      const query = generateFilterStatClientResponse(filterValue, limit, page);
-      const response = await axios.get(`/stat-client-responses/filter?${query}`);
-      data = response.data;
-      if (response.status === 200) {
-        return data.data;
-      }
-      throw new Error(response.statusText);
-    } catch (error) {
-      return Promise.reject(error?.message ? error.message : data.message);
-    }
+  const query = generateFilterStatClientResponse(filterValue,limit,page)
+
+  const response = await axios.get(`/stat-client-responses/filter?${query}`)
+  data = response.data;
+  if(response.status ===200){
+    return data.data;
   }
-);
+  throw new Error(response.statusText)
+} catch (error) {
+  return Promise.reject(error?.message ? error.message : data.message)
+}
+})

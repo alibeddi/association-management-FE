@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { TextField, MenuItem } from '@mui/material';
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 import AsyncSelectKpis from '../../../../components/AsyncSelect/AsyncSelectKpis';
@@ -10,20 +10,21 @@ type IProp = {
 }
 
 const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
-  const handleChange = (id: string, value: string) => setFilters(prev => prev.map(ele => ele.id !== id ? ele : { ...ele, value }));
-
+  const handleChange = (id: string, value: string) => setFilters(prev => prev.map(elt => elt.id !== id ? elt : { ...elt, value }));
   switch (filter.type) {
-    case 'adminName':
+    case 'admin':
       return (
         <AdminAsyncSelect
+        key={filter.id}
         name={filter.id} 
         handleChange={handleChange}
         />
       );
     case 'kpis':
-      return <AsyncSelectKpis name={filter.id}  handleChange={handleChange}/>;
+      return <AsyncSelectKpis key={filter.id} name={filter.id}  handleChange={handleChange}/>;
     case 'clientContact':
       return <TextField
+      key={filter.id}
       name={filter.id}
       value={filter.value}
       placeholder="enter client contact"
@@ -31,13 +32,14 @@ const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
       />
     case 'clientName':
       return  <TextField
+      key={filter.id}
       name={filter.id}
       value={filter.value}
       placeholder="enter client name"
       onChange={(e)=>handleChange(filter.id,e.target.value)}
       />
     case 'statClient':
-      return <StatClientAsyncSelect name={filter.id}  handleChange={handleChange} />
+      return <StatClientAsyncSelect  key={filter.id} name={filter.id}  handleChange={handleChange} />
     default:
       return (
         <TextField disabled value="">

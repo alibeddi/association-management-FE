@@ -3,7 +3,7 @@ import merge from 'lodash/merge';
 
 import { EventInput } from '@fullcalendar/core';
 // form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Stack, Button, Tooltip, IconButton, DialogActions } from '@mui/material';
@@ -11,7 +11,6 @@ import { LoadingButton } from '@mui/lab';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // time
-import { isBefore } from 'date-fns';
 import { addOneHour } from '../../../utils';
 
 
@@ -34,6 +33,7 @@ type Props = {
   } | null;
   onCancel: VoidFunction;
   onDeleteEvent: VoidFunction;
+  hasPermissionDelete:Boolean
   onCreateUpdateEvent: (newEvent: ICalendarEvent) => void;
 };
 
@@ -65,6 +65,7 @@ export default function CalendarForm({
   onCreateUpdateEvent,
   onDeleteEvent,
   onCancel,
+  hasPermissionDelete
 }: Props) {
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
@@ -79,13 +80,10 @@ export default function CalendarForm({
 
   const {
     reset,
-    watch,
-    control,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
@@ -101,23 +99,18 @@ export default function CalendarForm({
       console.error(error);
     }
   };
-
-  const isDateError =
-    values.startDate && values.endDate
-      ? isBefore(new Date(values.endDate), new Date(values.startDate))
-      : false;
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={3} sx={{ px: 3 }}>
        <RHFDateTimePicker name='startDate' label="start date" />
 
-<RHFDateTimePicker name='endDate' label="end date" />
+    <RHFDateTimePicker name='endDate' label="end date" />
 
         </Stack>
       </LocalizationProvider>
       <DialogActions>
-        {hasEventData && (
+        {hasEventData && hasPermissionDelete && (
           <Tooltip title="Delete Event">
             <IconButton onClick={onDeleteEvent}>
               <Iconify icon="eva:trash-2-outline" />
