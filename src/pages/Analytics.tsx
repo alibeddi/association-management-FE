@@ -1,33 +1,20 @@
-import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 // @mui
+import { Container, Grid, TextField, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { Stack } from '@mui/system';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 
-// _mock_
-import { _analyticPost, _analyticOrderTimeline, _analyticTraffic } from '../_mock/arrays';
-// components
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import { useSettingsContext } from '../components/settings';
 // sections
-import {
-  AnalyticsTasks,
-  AnalyticsNewsUpdate,
-  AnalyticsOrderTimeline,
-  AnalyticsCurrentVisits,
-  AnalyticsWebsiteVisits,
-  AnalyticsTrafficBySite,
-  AnalyticsWidgetSummary,
-  AnalyticsCurrentSubject,
-  AnalyticsConversionRates,
-} from '../sections/@dashboard/general/analytics';
-import { RootState, useDispatch, useSelector } from '../redux/store';
 import { getAnalytics, getNbStatClientResponsesByOffice } from '../redux/slices/analytics/actions';
-import { ic_operators } from '../assets/icons/navbar';
+import { RootState, useDispatch, useSelector } from '../redux/store';
+import {
+  AnalyticsCurrentVisits,
+  AnalyticsWidgetSummary
+} from '../sections/@dashboard/general/analytics';
 
 import { useDateRangePicker } from '../components/date-range-picker';
 // ----------------------------------------------------------------------
@@ -69,7 +56,6 @@ export default function GeneralAnalyticsPage() {
   }, [dispatch, picker.startDate, picker.endDate]);
 
   return (
-    <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Grid container spacing={3}>
           <Grid item xs={4}>
@@ -176,6 +162,5 @@ export default function GeneralAnalyticsPage() {
           </Grid>
         </Container>
       </LocalizationProvider>
-    </>
   );
 }
