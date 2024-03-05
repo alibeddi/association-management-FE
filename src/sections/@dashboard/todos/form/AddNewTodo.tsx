@@ -143,6 +143,7 @@ export default function AddNewTodo({
                     placeholder="Add your new todo..."
                     value={value}
                     onChange={onChange}
+                    style={{ height: '70px' }}
                   >
                     <Mention
                       displayTransform={mentionDisplayTransform}
