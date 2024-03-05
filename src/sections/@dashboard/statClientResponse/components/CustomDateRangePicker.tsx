@@ -34,7 +34,7 @@ const CustomDateRangePicker = ({name,handleChange}:IAsyncSelectFilter) => {
     
   }
   return (
-<LocalizationProvider dateAdapter={AdapterDayjs}>
+<>
       <DateRangePicker  
       startDate={startDate}
                   endDate={endDate}
@@ -47,7 +47,7 @@ const CustomDateRangePicker = ({name,handleChange}:IAsyncSelectFilter) => {
                   variant="calendar"
                   />
                  <Button  onClick={onOpenPicker}>{isSelectedValuePicker ? shortLabel : 'Select Date'}</Button>
-      </LocalizationProvider>
+                 </>
   )
 }
 
