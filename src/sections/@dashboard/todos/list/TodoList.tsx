@@ -11,7 +11,7 @@ import {
 } from '../../../../redux/slices/todos/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { AddNewTodo } from '../form';
-import { TaskItem } from './TodoIteml';
+import { TaskItem } from './TodoItem';
 import TodosToolbar from './TodosToolbar';
 
 const TODO_STATUS_OPTIONS = ['all', 'todo', 'completed'];

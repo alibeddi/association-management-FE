@@ -1,6 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Box, ListItemAvatar, ListItemText, MenuItem, Stack } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  FormHelperText,
+  ListItemAvatar,
+  ListItemText,
+  MenuItem,
+  Stack,
+} from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -14,6 +22,7 @@ import { useLocales } from '../../../../locales';
 import { createNewTodo, updateTodo } from '../../../../redux/slices/todos/actions';
 import { getUsers } from '../../../../redux/slices/users/actions';
 import { dispatch } from '../../../../redux/store';
+import { extractMentions } from '../utils/extractMentions';
 import './mentions.css';
 
 type FormValues = {
@@ -44,12 +53,9 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
   const {
     handleSubmit,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
     control,
-    watch,
   } = methods;
-
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentTodo) {
@@ -63,8 +69,10 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
   const onSubmit = async (data: FormValues) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
+      const body = extractMentions(data.todo);
+      console.log(body);
       if (isEdit && currentTodo) {
-        dispatch(updateTodo({ todoId: currentTodo?._id, body: data }))
+        dispatch(updateTodo({ todoId: currentTodo?._id, body }))
           .unwrap()
           .then((res) => {
             enqueueSnackbar(`${translate(res.message)}`);
@@ -72,7 +80,7 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
           })
           .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
       } else {
-        dispatch(createNewTodo({ body: data }))
+        dispatch(createNewTodo({ body }))
           .unwrap()
           .then((res) => {
             enqueueSnackbar(`${translate(res.message)}`);
@@ -92,8 +100,7 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
         callback(
           data.docs.map((user: User) => ({
             id: user._id,
-            display: user.username,
-            profilePicture: user?.avatar,
+            display: user.username || user.email,
           }))
         );
       })
@@ -101,7 +108,7 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
   };
 
   const mentionDisplayTransform: DisplayTransformFunc = (id: string, display: string) =>
-    `@${display}`;
+    `${display}`;
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -110,7 +117,6 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
           display: 'flex',
           flexDirection: 'row',
           gap: '0.75rem',
-          alignItems: 'center',
           maxWidth: '800px',
           margin: '15px',
         }}
@@ -119,33 +125,42 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
           <Controller
             control={control}
             name="todo"
-            render={({ field: { onChange, value } }) => (
-              <MentionsInput
-                singleLine
-                placeholder="Add your new todo..."
-                value={value}
-                onChange={onChange}
-                allowSuggestionsAboveCursor // To enable keyboard navigation for selecting tagged users
-              >
-                <Mention
-                  displayTransform={mentionDisplayTransform}
-                  data={fetchUsers}
-                  trigger="@"
-                  markup="@[__display__](__id__)" // To highlight tagged users
-                  renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                    <MenuItem>
-                      <ListItemAvatar>
-                        <Avatar src={suggestion.display} alt={suggestion.display} />
-                      </ListItemAvatar>
-                      <ListItemText primary={highlightedDisplay} />
-                    </MenuItem>
-                  )}
-                />
-              </MentionsInput>
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <>
+                <Stack sx={{ border: '1px solid #e3e5e7', padding: '8px', borderRadius: '4px' }}>
+                  <MentionsInput
+                    singleLine
+                    placeholder="Add your new todo..."
+                    value={value}
+                    onChange={onChange}
+                    allowSuggestionsAboveCursor // To enable keyboard navigation for selecting tagged users
+                  >
+                    <Mention
+                      displayTransform={mentionDisplayTransform}
+                      data={fetchUsers}
+                      trigger="@"
+                      style={{
+                        backgroundColor: '#CEE4E5',
+                        paddingBottom: '3px',
+                      }}
+                      markup="@[__display__](__id__)" // To highlight tagged users
+                      renderSuggestion={(suggestion, search, highlightedDisplay) => (
+                        <MenuItem>
+                          <ListItemAvatar>
+                            <Avatar src={suggestion.display} alt={suggestion.display} />
+                          </ListItemAvatar>
+                          <ListItemText primary={highlightedDisplay} />
+                        </MenuItem>
+                      )}
+                    />
+                  </MentionsInput>
+                </Stack>
+                {error && <FormHelperText error>{error.message}</FormHelperText>}
+              </>
             )}
           />
         </Stack>
-        <Stack alignItems="flex-end" sx={{ marginTop: 2 }}>
+        <Stack alignItems="flex-end" sx={{ marginTop: '5px' }}>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
             <Iconify icon={isEdit ? 'ic:baseline-edit' : 'ic:sharp-add'} />
             {isEdit ? 'save' : 'add'}

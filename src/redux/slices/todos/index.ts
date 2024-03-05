@@ -34,7 +34,7 @@ const slice = createSlice({
       })
       .addCase(createNewTodo.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.todos.docs = [...state.todos.docs, action.payload.data];
+        state.todos.docs = [action.payload.data, ...state.todos.docs];
       })
       .addCase(createNewTodo.rejected, (state) => {
         state.status = IStatus.FAILED;

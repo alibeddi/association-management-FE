@@ -2,7 +2,6 @@ import { useState } from 'react';
 // @mui
 import {
   Button,
-  CardHeader,
   Checkbox,
   CheckboxProps,
   Divider,
@@ -13,11 +12,12 @@ import {
 } from '@mui/material';
 // components
 import { Todo, TodoStatus } from '../../../../@types/Todo';
+import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
-import { deleteOneTodo, updateTodo } from '../../../../redux/slices/todos/actions';
+import { updateTodo } from '../../../../redux/slices/todos/actions';
 import { dispatch } from '../../../../redux/store';
-import ConfirmDialog from '../../../../components/confirm-dialog';
+import { convertToHtml } from '../utils/convertToHtml';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +28,10 @@ interface TaskItemProps extends CheckboxProps {
 }
 
 export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
+  const { _id, status, description } = task;
+
+  const htmlString = `<p>${convertToHtml(description)}</p>`;
+
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const [openConfirm, setOpenConfirm] = useState(false);
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
@@ -48,12 +52,12 @@ export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
 
   const handleMarkComplete = () => {
     handleClosePopover();
-    dispatch(updateTodo({ todoId: task._id, body: { status: TodoStatus.COMPLETED } }));
+    dispatch(updateTodo({ todoId: _id, body: { status: TodoStatus.COMPLETED } }));
   };
 
   const handleEdit = () => {
     handleClosePopover();
-    console.log('EDIT', task._id);
+    console.log('EDIT', _id);
   };
 
   const handleDelete = () => {
@@ -64,9 +68,9 @@ export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
   const onChange = () => {
     dispatch(
       updateTodo({
-        todoId: task._id,
+        todoId: _id,
         body: {
-          status: task.status === TodoStatus.COMPLETED ? TodoStatus.TODO : TodoStatus.COMPLETED,
+          status: status === TodoStatus.COMPLETED ? TodoStatus.TODO : TodoStatus.COMPLETED,
         },
       })
     );
@@ -79,15 +83,15 @@ export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
         sx={{
           px: 2,
           py: 0.75,
-          ...(task.status === TodoStatus.COMPLETED && {
+          ...(status === TodoStatus.COMPLETED && {
             color: 'text.disabled',
             textDecoration: 'line-through',
           }),
         }}
       >
         <FormControlLabel
-          control={<Checkbox checked={task.status === TodoStatus.COMPLETED} onChange={onChange} />}
-          label={task.description}
+          control={<Checkbox checked={status === TodoStatus.COMPLETED} onChange={onChange} />}
+          label={<span dangerouslySetInnerHTML={{ __html: htmlString }}></span>}
           sx={{ flexGrow: 1, m: 0 }}
         />
 
@@ -132,7 +136,7 @@ export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
             variant="contained"
             color="error"
             onClick={() => {
-              onDeleteRow(task._id);
+              onDeleteRow(_id);
               handleCloseConfirm();
             }}
           >
