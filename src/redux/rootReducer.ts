@@ -8,6 +8,7 @@ import workTimeReducer from './slices/workTimes';
 import statClientResReducer from './slices/statClientResponse';
 import callsReducer from './slices/calls';
 import statsClientReducer from './slices/statsClient';
+import analyticsReducer from './slices/analytics';
 import todoReducer from './slices/todos';
 
 // ----------------------------------------------------------------------
@@ -23,6 +24,7 @@ const combinedReducer = combineReducers({
   statsClient: statsClientReducer,
   statClientResponses: statClientResReducer,
   todos: todoReducer,
+  analytics: analyticsReducer,
 });
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'LOGOUT') {

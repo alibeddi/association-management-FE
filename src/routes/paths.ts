@@ -39,4 +39,5 @@ export const PATH_DASHBOARD = {
   todoList: {
     root: path(ROOTS_DASHBOARD, '/todo-list'),
   },
+  analytics: path(ROOTS_DASHBOARD, '/analytics'),
 };

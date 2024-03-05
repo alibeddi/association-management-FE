@@ -11,6 +11,7 @@ import {
   ic_stat_client_response,
   ic_call,
   ic_stats_client,
+  ic_analytics,
   ic_todolist,
 } from '../../../assets/icons/navbar';
 
@@ -24,6 +25,7 @@ const ICONS = {
   calls: icon(ic_call),
   statsClient: icon(ic_stats_client),
   statClientResponse: icon(ic_stat_client_response),
+  analytics: icon(ic_analytics),
   todoList: icon(ic_todolist),
 };
 
@@ -42,6 +44,7 @@ export default function navConfig(user: AuthUserType) {
     MethodCode.LIST
   );
   const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
+  const hasAccessToAnalytics = hasPermission(userPermissions, ModelCode.ANALYTICS, MethodCode.LIST);
   const hasAccessToStatClient = hasPermission(
     userPermissions,
     ModelCode.STAT_CLIENT,
@@ -103,6 +106,12 @@ export default function navConfig(user: AuthUserType) {
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
           toBeDisplayed: hasAccessToStatClientAnswers,
+        },
+        {
+          title: 'Analytics',
+          path: PATH_DASHBOARD.analytics,
+          icon: ICONS.analytics,
+          toBeDisplayed: hasAccessToAnalytics,
         },
       ],
     },

@@ -8,6 +8,7 @@ export enum ModelCode {
   MY_WORKTIME = 'MY_WORKTIME',
   STAT_CLIENT = 'STAT_CLIENT',
   STAT_CLIENT_RESPONSE = 'STAT_CLIENT_RESPONSE',
+  ANALYTICS = 'ANALYTICS',
 }
 
 export enum MethodCode {

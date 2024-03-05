@@ -30,6 +30,7 @@ import {
   StatsClientEdit,
   StatsClientNew,
   StatsClientShow,
+  Analytics,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -134,6 +135,14 @@ export default function Router() {
           path: 'todo-list',
           element: <Outlet />,
           children: [{ path: '', element: <MyTodoList /> }],
+        },
+        {
+          path: 'analytics',
+          element: (
+            <PermissionGuard model={ModelCode.ANALYTICS} method={MethodCode.LIST}>
+              <Analytics />
+            </PermissionGuard>
+          ),
         },
       ],
     },

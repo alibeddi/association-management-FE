@@ -1,9 +1,19 @@
-import { Button, Card, IconButton, Table, TableBody, TableContainer, Tooltip } from '@mui/material';
+import {
+  Button,
+  Card,
+  Dialog,
+  IconButton,
+  Table,
+  TableBody,
+  TableContainer,
+  Tooltip,
+} from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import {
@@ -67,6 +77,7 @@ export default function StatClientResponsesTable() {
   const [tableData, setTableData] = useState<StatClientResponse[]>([]);
   const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
 
   const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
 
@@ -104,7 +115,9 @@ export default function StatClientResponsesTable() {
   const handleOpenConfirm = (id?: string) => {
     setOpenConfirm(true);
   };
-
+  const handleClosefFilter = () => {
+    setOpenFilter(false);
+  };
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
@@ -144,7 +157,6 @@ export default function StatClientResponsesTable() {
           filterClientName={filterClientName}
           onFilterName={handleFilterName}
           placeholder="Search by Client Name..."
-          
         />
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
@@ -218,7 +230,7 @@ export default function StatClientResponsesTable() {
           onChangeDense={onChangeDense}
         />
       </Card>
-
+      <FilterModal open={openFilter} onClose={handleClosefFilter} />
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
