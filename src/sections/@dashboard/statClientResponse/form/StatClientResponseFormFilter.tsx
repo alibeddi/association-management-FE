@@ -72,9 +72,11 @@ const StatClientResponseFormFilter = ({
         display:"flex",
         flexDirection:"row",
         "& *": {
-          flexBasis: "100%"
+          flexBasis: "100%",
+          
         },
-        gap:'1rem'
+        
+        gap:'1rem',
 
       }}>
       <LoadingButton variant="contained" type="submit" loading={isSubmitting} onClick={()=>handleSubmit()}>

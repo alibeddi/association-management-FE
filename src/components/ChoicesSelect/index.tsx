@@ -16,7 +16,8 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getOnekpi({ kpiId: value.value }));
+    if(typeof value.value === "string")
+   { dispatch(getOnekpi({ kpiId: value.value }));}
   }, [dispatch, value]);
 
   const { kpi } = useSelector((store: RootState) => store.kpis);

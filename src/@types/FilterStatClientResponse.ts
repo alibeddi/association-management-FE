@@ -1,8 +1,8 @@
-import { IResponseFilter } from "./AsyncSelectFilter"
+import { DateFilterRange, IResponseFilter, valueFilterType } from "./AsyncSelectFilter"
 
 export type IFilterStatClientResponse = {
   id:string;
   type:string;
-  value:string;
+  value:valueFilterType;
   choices?:IResponseFilter 
 }

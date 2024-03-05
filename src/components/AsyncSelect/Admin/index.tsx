@@ -42,14 +42,17 @@ const Admin = (({
     <AsyncPaginate
     getOptionLabel={(option:User)=>option.name || option?.email}
     getOptionValue={(option)=>option._id}
+    isMulti
     additional={{
       page:1
     }}
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an users"
-    onChange={(e)=>{
-      if(e){ handleChange(name,e._id);}
+    onChange={(users)=>{
+      const userId = users.map((user) => user?._id)
+      if(userId){ handleChange(name,userId)}
+    
     }}
     styles={StyledAsyncPaginate}
     />

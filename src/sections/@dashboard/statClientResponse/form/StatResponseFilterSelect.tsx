@@ -31,10 +31,21 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             <Stack sx={{
               display:'flex',
               flexDirection:'row',
-              gap:'1rem'
+              gap:'1rem',
+              "& .css-b62m3t-container":{
+                maxWidth:"50%"
+              }
             }} >
-            <Stack sx={{display:"flex",flexDirection:'row',"& *":{flexBasis:'100%'},gap:"1rem",flex:1}}>
-            <Select name={elt.id} defaultValue={elt.type} onChange={(e)=> handleChangeOptionfilter(e.target.name,e.target.value) } >
+            <Stack 
+            sx={{display:"flex",flexDirection:'row',
+            "& *":{flexBasis:'100%'},gap:"1rem",
+            flex:1,
+            "& .css-12a83d4-MultiValueRemove":{
+              flexBasis:'initial'
+            },
+          }}
+            >
+            <Select sx={{alignSelf:"flex-start"}} name={elt.id} defaultValue={elt.type} onChange={(e)=> handleChangeOptionfilter(e.target.name,e.target.value) } >
               {
                 MENU_ITEM_FILTER.map(({label,value})=><MenuItem value={value}>{label}</MenuItem>)
               }
