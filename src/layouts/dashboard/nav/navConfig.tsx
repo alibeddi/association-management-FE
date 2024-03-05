@@ -11,7 +11,7 @@ import {
   ic_stat_client_response,
   ic_call,
   ic_stats_client,
-  ic_analytics
+  ic_analytics,
 } from '../../../assets/icons/navbar';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
@@ -36,8 +36,14 @@ export default function navConfig(user: AuthUserType) {
     ModelCode.PERMISSION_GROUP,
     MethodCode.LIST
   );
-  const hasAccessToCalendar = hasPermission(userPermissions, ModelCode.MY_WORKTIME, MethodCode.LIST);
+  const hasAccessToCalendar = hasPermission(
+    userPermissions,
+    ModelCode.MY_WORKTIME,
+    MethodCode.LIST
+  );
   const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
+  const hasAccessToAnalytics = hasPermission(userPermissions, ModelCode.ANALYTICS, MethodCode.LIST);
+  console.log(hasAccessToAnalytics)
   const config = [
     {
       subheader: '',
@@ -88,7 +94,7 @@ export default function navConfig(user: AuthUserType) {
           title: 'Analytics',
           path: PATH_DASHBOARD.analytics,
           icon: ICONS.analytics,
-          toBeDisplayed: true,
+          toBeDisplayed: hasAccessToAnalytics,
         },
       ],
     },

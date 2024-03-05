@@ -132,7 +132,11 @@ export default function Router() {
         },
         {
           path: 'analytics',
-          element: <Analytics />,
+          element: (
+            <PermissionGuard model={ModelCode.ANALYTICS} method={MethodCode.LIST}>
+              <Analytics />
+            </PermissionGuard>
+          ),
         },
       ],
     },
