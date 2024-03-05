@@ -56,19 +56,18 @@ export default function TodoList() {
   const dataInPage = todos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   useEffect(() => {
+    const params = {
+      page,
+      limit: rowsPerPage,
+      filterDescription,
+      filterStatus,
+      filterStartDate,
+      filterEndDate,
+    };
     if (filterTodos === 'Assigned To me') {
-      dispatch(getTodosAssignedToMe({ page, limit: rowsPerPage, filterDescription, filterStatus }));
+      dispatch(getTodosAssignedToMe(params));
     } else {
-      dispatch(
-        getTodosCreatedbyMe({
-          page,
-          limit: rowsPerPage,
-          filterDescription,
-          filterStatus,
-          filterStartDate,
-          filterEndDate,
-        })
-      );
+      dispatch(getTodosCreatedbyMe(params));
     }
   }, [page, rowsPerPage, filterDescription, filterStatus, filterStartDate, filterEndDate]);
 

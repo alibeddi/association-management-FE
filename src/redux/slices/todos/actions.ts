@@ -27,7 +27,7 @@ export const getTodosCreatedbyMe = createAsyncThunk(
           }
         : {}),
     };
-    console.log({ params });
+
     let data;
     try {
       const response = await axios.get('/todos', { params });
@@ -50,13 +50,22 @@ export const getTodosAssignedToMe = createAsyncThunk(
     limit?: number;
     filterDescription?: string;
     filterStatus?: string;
+    filterStartDate?: Date | null;
+    filterEndDate?: Date | null;
   }) => {
-    const { page, limit, filterDescription, filterStatus } = payload;
+    const { page, limit, filterDescription, filterStatus, filterEndDate, filterStartDate } =
+      payload;
     const params = {
       page: page + 1,
       limit,
       ...(filterDescription ? { search: filterDescription } : {}),
       ...(filterStatus !== 'all' ? { status: filterStatus } : {}),
+      ...(filterStartDate && filterEndDate
+        ? {
+            startDate: fDate(filterStartDate, 'yyyy-MM-dd'),
+            endDate: fDate(filterEndDate, 'yyyy-MM-dd'),
+          }
+        : {}),
     };
     let data;
     try {
