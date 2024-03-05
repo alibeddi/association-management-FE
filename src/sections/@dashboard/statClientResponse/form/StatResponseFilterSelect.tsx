@@ -17,6 +17,7 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
   const handleChangeOptionfilter = (name:string,value:string) => {
     setFilters(pre=>pre.map(elt=>elt.id === name ? {...elt,type:value} : elt))
   }
+  console.log({filters})
   return (
     <Stack sx={{
       gap:"1rem",
@@ -65,7 +66,7 @@ const StatResponseFilterSelect = ({filters,setFilters,onDelete}:IProps) => {
             }} onClick={()=>onDelete(elt.id)}/>
             </Stack>
               
-            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect value={elt}  setFilters={setFilters}/> : null}
+            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect key={elt.id} value={elt}  setFilters={setFilters}/> : null}
           </Stack>: null
           
           
