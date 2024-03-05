@@ -32,7 +32,7 @@ export default function TodoList() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [filterTodos, setFilterTodos] = useState('Created By me');
-  const { assignedTodos, myTodos } = useSelector((state: RootState) => state.todos);
+  const { todos: data } = useSelector((state: RootState) => state.todos);
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
@@ -61,8 +61,8 @@ export default function TodoList() {
   }, [page, rowsPerPage, filterDescription, filterStatus]);
 
   useEffect(() => {
-    setTodos(filterTodos === 'Created By me' ? myTodos.docs : assignedTodos?.docs);
-  }, [assignedTodos, myTodos, filterTodos]);
+    setTodos(data?.docs);
+  }, [data, filterTodos]);
 
   const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setPage(0);
@@ -161,7 +161,7 @@ export default function TodoList() {
             />
           )}
           <TablePaginationCustom
-            count={myTodos.meta.totalDocs || 0}
+            count={data.meta.totalDocs || 0}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
