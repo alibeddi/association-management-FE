@@ -1107,7 +1107,7 @@
   resolved "https://registry.npmjs.org/@babel/regjsgen/-/regjsgen-0.8.0.tgz"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.11.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.18.3", "@babel/runtime@^7.18.9", "@babel/runtime@^7.20.6", "@babel/runtime@^7.21.0", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.9", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.11.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.18.3", "@babel/runtime@^7.18.9", "@babel/runtime@^7.20.6", "@babel/runtime@^7.21.0", "@babel/runtime@^7.22.6", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.9", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.23.9"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.9.tgz"
   integrity sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==
@@ -1911,7 +1911,7 @@
     hey-listen "^1.0.8"
     tslib "^2.3.1"
 
-"@mui/base@^5.0.0-beta.35":
+"@mui/base@^5.0.0-beta.22", "@mui/base@^5.0.0-beta.35":
   version "5.0.0-beta.35"
   resolved "https://registry.npmjs.org/@mui/base/-/base-5.0.0-beta.35.tgz"
   integrity sha512-3h3jsQW7Ef4AZNHb0HYPdycD2WDrXRt8sV4wZLXFoZMe4t+Gp7fCPYL7+tfQr+ehux+JB2UCvG6J2R5/eyS9Hw==
@@ -2018,7 +2018,7 @@
   resolved "https://registry.npmjs.org/@mui/types/-/types-7.2.13.tgz"
   integrity sha512-qP9OgacN62s+l8rdDhSFRe05HWtLLJ5TGclC9I1+tQngbssu0m2dmFZs+Px53AcOs9fD7TbYd4gc9AXzVqO/+g==
 
-"@mui/utils@^5.10.3", "@mui/utils@^5.15.7", "@mui/utils@^5.15.8", "@mui/utils@^5.15.9":
+"@mui/utils@^5.10.3", "@mui/utils@^5.13.7", "@mui/utils@^5.14.16", "@mui/utils@^5.15.7", "@mui/utils@^5.15.8", "@mui/utils@^5.15.9":
   version "5.15.9"
   resolved "https://registry.npmjs.org/@mui/utils/-/utils-5.15.9.tgz"
   integrity sha512-yDYfr61bCYUz1QtwvpqYy/3687Z8/nS4zv7lv/ih/6ZFGMl1iolEvxRmR84v2lOYxlds+kq1IVYbXxDKh8Z9sg==
@@ -2027,6 +2027,20 @@
     "@types/prop-types" "^15.7.11"
     prop-types "^15.8.1"
     react-is "^18.2.0"
+
+"@mui/x-date-pickers-pro@^6.19.6":
+  version "6.19.6"
+  resolved "https://registry.npmjs.org/@mui/x-date-pickers-pro/-/x-date-pickers-pro-6.19.6.tgz"
+  integrity sha512-6TwlGgAGE0TMIrfYaOrGhh79YyHDKt9ze22irPBOwz7IQeJ6vnGLzE1KJ+ddklQjaGtN9X7O++55r8mfs3mLSA==
+  dependencies:
+    "@babel/runtime" "^7.23.2"
+    "@mui/base" "^5.0.0-beta.22"
+    "@mui/utils" "^5.14.16"
+    "@mui/x-date-pickers" "6.19.6"
+    "@mui/x-license-pro" "6.10.2"
+    clsx "^2.0.0"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
 
 "@mui/x-date-pickers@^5.0.14":
   version "5.0.20"
@@ -2045,6 +2059,27 @@
     prop-types "^15.7.2"
     react-transition-group "^4.4.5"
     rifm "^0.12.1"
+
+"@mui/x-date-pickers@6.19.6":
+  version "6.19.6"
+  resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-6.19.6.tgz"
+  integrity sha512-QW9AFcPi0vLpkUhmquhhyhLaBvB0AZJuu3NTrE173qNKx3Z3n51aCLY9bc7c6i4ltZMMsVRHlvzQjsve04TC8A==
+  dependencies:
+    "@babel/runtime" "^7.23.2"
+    "@mui/base" "^5.0.0-beta.22"
+    "@mui/utils" "^5.14.16"
+    "@types/react-transition-group" "^4.4.8"
+    clsx "^2.0.0"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
+"@mui/x-license-pro@6.10.2":
+  version "6.10.2"
+  resolved "https://registry.npmjs.org/@mui/x-license-pro/-/x-license-pro-6.10.2.tgz"
+  integrity sha512-Baw3shilU+eHgU+QYKNPFUKvfS5rSyNJ98pQx02E0gKA22hWp/XAt88K1qUfUMPlkPpvg/uci6gviQSSLZkuKw==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    "@mui/utils" "^5.13.7"
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
@@ -2588,7 +2623,7 @@
     "@types/react" "*"
     csstype "^3.0.2"
 
-"@types/react-transition-group@^4.4.0", "@types/react-transition-group@^4.4.10", "@types/react-transition-group@^4.4.5":
+"@types/react-transition-group@^4.4.0", "@types/react-transition-group@^4.4.10", "@types/react-transition-group@^4.4.5", "@types/react-transition-group@^4.4.8":
   version "4.4.10"
   resolved "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.10.tgz"
   integrity sha512-hT/+s0VQs2ojCX823m60m5f0sL5idt9SO6Tj6Dg+rdphGPIeJbJ6CxvBYkgkGKrYeDjvIpKTR38UzmtHJOGW3Q==
@@ -3890,6 +3925,11 @@ clsx@^1.1.0, clsx@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/clsx/-/clsx-1.2.1.tgz"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
+
+clsx@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/clsx/-/clsx-2.1.0.tgz"
+  integrity sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==
 
 clsx@^2.1.0:
   version "2.1.0"

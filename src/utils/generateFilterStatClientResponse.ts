@@ -1,4 +1,5 @@
 import { IFilterStatClientResponse } from '../@types/FilterStatClientResponse';
+import { fDate } from './formatTime';
 
 export const generateFilterStatClientResponse = (
   filter: IFilterStatClientResponse[],
@@ -26,6 +27,9 @@ export const generateFilterStatClientResponse = (
       element.value.forEach((value,index)=>{
         url += `${url.length > 0 ? '&' : ''}${element.type}[${index}]=${value}`;
       })
+    }else if(element.type === "range" && typeof element.value !== "string"){
+      url += `${url.length > 0 ? '&' : ''}startDate=${fDate(element.value.startDate,'yyyy-MM-dd')}`;
+      url += `${url.length > 0 ? '&' : ''}endDate=${fDate(element.value.endDate,'yyyy-MM-dd')}`;
     }
     else if (element.type !== 'response') {
       url += `${url.length > 0 ? '&' : ''}${element.type}=${element.value}`;

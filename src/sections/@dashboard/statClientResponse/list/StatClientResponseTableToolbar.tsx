@@ -47,7 +47,7 @@ export default function StatClientResponseTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-     
+
       {filters.length > 0 && (
         <Button
           color="error"
