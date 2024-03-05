@@ -29,6 +29,7 @@ import {
   StatsClientEdit,
   StatsClientNew,
   StatsClientShow,
+  Analytics,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -128,6 +129,10 @@ export default function Router() {
             { path: 'view/:id', element: <StatsClientShow /> },
             { path: 'edit/:id', element: <StatsClientEdit /> },
           ],
+        },
+        {
+          path: 'analytics',
+          element: <Analytics />,
         },
       ],
     },

@@ -5,6 +5,7 @@ import ic_settings from './ic_settings.svg';
 import ic_call from './ic_call.svg';
 import ic_stats_client from './ic_stats_client.svg';
 import ic_stat_client_response from './ic_stat_client_response.svg';
+import ic_analytics from './ic_analytics.svg';
 
 export {
   ic_calendar,
@@ -14,4 +15,5 @@ export {
   ic_call,
   ic_stats_client,
   ic_stat_client_response,
+  ic_analytics
 };
