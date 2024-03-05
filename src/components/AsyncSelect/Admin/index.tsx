@@ -51,7 +51,7 @@ const Admin = (({
     placeholder="Select an users"
     onChange={(users)=>{
       const userId = users.map((user) => user?._id)
-      if(userId){ handleChange(name,userId);}
+      if(userId){ handleChange(name,userId)}
     
     }}
     styles={StyledAsyncPaginate}
