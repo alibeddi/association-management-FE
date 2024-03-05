@@ -43,7 +43,6 @@ export default function navConfig(user: AuthUserType) {
   );
   const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
   const hasAccessToAnalytics = hasPermission(userPermissions, ModelCode.ANALYTICS, MethodCode.LIST);
-  console.log(hasAccessToAnalytics)
   const config = [
     {
       subheader: '',
