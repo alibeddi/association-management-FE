@@ -71,9 +71,9 @@ export default function TodoList() {
     setPage(0);
     setFilterTodos(newValue);
     if (newValue === 'Created By me') {
-      dispatch(getTodosCreatedbyMe({ page: 0 }));
+      dispatch(getTodosCreatedbyMe({ page: 0, limit: rowsPerPage }));
     } else {
-      dispatch(getTodosAssignedToMe({ page: 0 }));
+      dispatch(getTodosAssignedToMe({ page: 0, limit: rowsPerPage }));
     }
     handleResetFilter();
   };
