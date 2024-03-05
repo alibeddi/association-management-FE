@@ -31,8 +31,15 @@ type FormValues = {
 type Props = {
   isEdit?: boolean;
   currentTodo?: Todo | null;
+  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
 };
-export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
+export default function AddNewTodo({
+  isEdit = false,
+  currentTodo,
+  setIsEdit,
+  setCurrentTodo,
+}: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
 
@@ -53,7 +60,7 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
   const {
     handleSubmit,
     reset,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting },
     control,
   } = methods;
 
@@ -66,16 +73,19 @@ export default function AddNewTodo({ isEdit = false, currentTodo }: Props) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [isEdit, currentTodo]);
+
   const onSubmit = async (data: FormValues) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const body = extractMentions(data.todo);
-      console.log(body);
+
       if (isEdit && currentTodo) {
         dispatch(updateTodo({ todoId: currentTodo?._id, body }))
           .unwrap()
           .then((res) => {
             enqueueSnackbar(`${translate(res.message)}`);
+            setIsEdit(false);
+            setCurrentTodo(null);
             reset();
           })
           .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));

@@ -23,11 +23,12 @@ import { convertToHtml } from '../utils/convertToHtml';
 
 interface TaskItemProps extends CheckboxProps {
   task: Todo;
-  onDeleteRow: (id: string) => void;
+  onDeleteTodo: (id: string) => void;
+  onEditTodo: (task: Todo) => void;
   canDelete: boolean;
 }
 
-export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
+export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItemProps) {
   const { _id, status, description } = task;
 
   const htmlString = `<p>${convertToHtml(description)}</p>`;
@@ -57,7 +58,7 @@ export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
 
   const handleEdit = () => {
     handleClosePopover();
-    console.log('EDIT', _id);
+    onEditTodo(task);
   };
 
   const handleDelete = () => {
@@ -91,7 +92,7 @@ export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
       >
         <FormControlLabel
           control={<Checkbox checked={status === TodoStatus.COMPLETED} onChange={onChange} />}
-          label={<span dangerouslySetInnerHTML={{ __html: htmlString }}></span>}
+          label={<span dangerouslySetInnerHTML={{ __html: htmlString }} />}
           sx={{ flexGrow: 1, m: 0 }}
         />
 
@@ -136,7 +137,7 @@ export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
             variant="contained"
             color="error"
             onClick={() => {
-              onDeleteRow(_id);
+              onDeleteTodo(_id);
               handleCloseConfirm();
             }}
           >

@@ -31,10 +31,13 @@ export default function TodoList() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const [filterTodos, setFilterTodos] = useState('Created By me');
   const { todos: data } = useSelector((state: RootState) => state.todos);
 
+  const [filterTodos, setFilterTodos] = useState('Created By me');
   const [todos, setTodos] = useState<Todo[]>([]);
+
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
   const [filterDescription, setFilterDescription] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -87,6 +90,12 @@ export default function TodoList() {
       }
     }
   };
+
+  const handleEditTodo = (task: Todo) => {
+    setIsEdit(true);
+    setCurrentTodo(task);
+  };
+
   const handleResetFilter = () => {
     setFilterDescription('');
     setFilterStatus('all');
@@ -121,7 +130,14 @@ export default function TodoList() {
 
         <Divider />
 
-        {filterTodos === 'Created By me' && <AddNewTodo />}
+        {filterTodos === 'Created By me' && (
+          <AddNewTodo
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            setCurrentTodo={setCurrentTodo}
+            currentTodo={currentTodo}
+          />
+        )}
 
         <TodosToolbar
           placeholder="search by text..."
@@ -147,7 +163,8 @@ export default function TodoList() {
             <TaskItem
               key={task._id}
               task={task}
-              onDeleteRow={handleDeleteTodo}
+              onDeleteTodo={handleDeleteTodo}
+              onEditTodo={handleEditTodo}
               canDelete={filterTodos === 'Created By me'}
             />
           ))}
