@@ -1,4 +1,4 @@
-.mention-input input {
+.mention-input textarea {
   display: block;
   width: 100%;
   position: absolute;
@@ -20,7 +20,6 @@
   border-radius: 6px 6px 0px;
   border: none;
 }
-.mention-input input:focus {
+.mention-input textarea:focus {
   outline: none;
-  /* border: 1px solid #e3e5e7; */
 }

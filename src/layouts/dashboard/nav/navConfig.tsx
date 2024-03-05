@@ -36,8 +36,22 @@ export default function navConfig(user: AuthUserType) {
     ModelCode.PERMISSION_GROUP,
     MethodCode.LIST
   );
-  const hasAccessToCalendar = hasPermission(userPermissions, ModelCode.MY_WORKTIME, MethodCode.LIST);
+  const hasAccessToCalendar = hasPermission(
+    userPermissions,
+    ModelCode.MY_WORKTIME,
+    MethodCode.LIST
+  );
   const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
+  const hasAccessToStatClient = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.LIST
+  );
+  const hasAccessToStatClientAnswers = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT_RESPONSE,
+    MethodCode.LIST
+  );
   const config = [
     {
       subheader: '',
@@ -82,13 +96,13 @@ export default function navConfig(user: AuthUserType) {
           title: 'stats client',
           path: PATH_DASHBOARD.statsClient.root,
           icon: ICONS.statsClient,
-          toBeDisplayed: true,
+          toBeDisplayed: hasAccessToStatClient,
         },
         {
           title: 'Stats client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
-          toBeDisplayed: true,
+          toBeDisplayed: hasAccessToStatClientAnswers,
         },
       ],
     },

@@ -139,11 +139,10 @@ export default function AddNewTodo({
               <>
                 <Stack sx={{ border: '1px solid #e3e5e7', padding: '8px', borderRadius: '4px' }}>
                   <MentionsInput
-                    singleLine
+                    // singleLine
                     placeholder="Add your new todo..."
                     value={value}
                     onChange={onChange}
-                    allowSuggestionsAboveCursor // To enable keyboard navigation for selecting tagged users
                   >
                     <Mention
                       displayTransform={mentionDisplayTransform}
@@ -152,10 +151,11 @@ export default function AddNewTodo({
                       style={{
                         backgroundColor: '#CEE4E5',
                         paddingBottom: '3px',
+                        zIndex: 2,
                       }}
                       markup="@[__display__](__id__)" // To highlight tagged users
                       renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                        <MenuItem>
+                        <MenuItem sx={{ zIndex: 99999 }}>
                           <ListItemAvatar>
                             <Avatar src={suggestion.display} alt={suggestion.display} />
                           </ListItemAvatar>

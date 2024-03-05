@@ -36,9 +36,11 @@ type ItemsProps = {
 function Items({ items, isLastGroup }: ItemsProps) {
   return (
     <>
-      {items.map((list) => (
-        <NavList key={list.title + list.path} data={list} depth={1} hasChild={!!list.children} />
-      ))}
+      {items.map((list) =>
+        list.toBeDisplayed ? (
+          <NavList key={list.title + list.path} data={list} depth={1} hasChild={!!list.children} />
+        ) : null
+      )}
 
       {!isLastGroup && (
         <Box
