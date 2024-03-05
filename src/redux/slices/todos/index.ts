@@ -12,14 +12,12 @@ import {
 
 type TodoInitialState = {
   todo: Todo;
-  myTodos: PaginationModel<Todo>;
-  assignedTodos: PaginationModel<Todo>;
+  todos: PaginationModel<Todo>;
   status: IStatus;
 };
 
 const initialState: TodoInitialState = {
-  myTodos: { docs: [], meta: {} as Meta },
-  assignedTodos: { docs: [], meta: {} as Meta },
+  todos: { docs: [], meta: {} as Meta },
   todo: {} as Todo,
   status: IStatus.IDLE,
 };
@@ -36,7 +34,7 @@ const slice = createSlice({
       })
       .addCase(createNewTodo.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.myTodos.docs = [...state.myTodos.docs, action.payload.data];
+        state.todos.docs = [...state.todos.docs, action.payload.data];
       })
       .addCase(createNewTodo.rejected, (state) => {
         state.status = IStatus.FAILED;
@@ -48,7 +46,7 @@ const slice = createSlice({
       })
       .addCase(getTodosCreatedbyMe.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.myTodos = action.payload.data;
+        state.todos = action.payload.data;
       })
       .addCase(getTodosCreatedbyMe.rejected, (state) => {
         state.status = IStatus.FAILED;
@@ -60,7 +58,7 @@ const slice = createSlice({
       })
       .addCase(getTodosAssignedToMe.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.assignedTodos = action.payload.data;
+        state.todos = action.payload.data;
       })
       .addCase(getTodosAssignedToMe.rejected, (state) => {
         state.status = IStatus.FAILED;
@@ -72,9 +70,7 @@ const slice = createSlice({
       })
       .addCase(deleteOneTodo.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.myTodos.docs = state.myTodos.docs.filter(
-          (todo) => todo._id !== action.meta.arg.todoId
-        );
+        state.todos.docs = state.todos.docs.filter((todo) => todo._id !== action.meta.arg.todoId);
       })
       .addCase(deleteOneTodo.rejected, (state) => {
         state.status = IStatus.FAILED;
@@ -86,7 +82,7 @@ const slice = createSlice({
       })
       .addCase(updateTodo.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.myTodos.docs = state.myTodos.docs.map((todo) =>
+        state.todos.docs = state.todos.docs.map((todo) =>
           todo._id !== action.meta.arg.todoId ? todo : action.payload.data
         );
       })
