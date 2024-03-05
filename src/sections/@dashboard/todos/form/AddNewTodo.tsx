@@ -139,7 +139,6 @@ export default function AddNewTodo({
               <>
                 <Stack sx={{ border: '1px solid #e3e5e7', padding: '8px', borderRadius: '4px' }}>
                   <MentionsInput
-                    // singleLine
                     placeholder="Add your new todo..."
                     value={value}
                     onChange={onChange}

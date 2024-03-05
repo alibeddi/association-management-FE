@@ -59,9 +59,18 @@ export default function TodoList() {
     if (filterTodos === 'Assigned To me') {
       dispatch(getTodosAssignedToMe({ page, limit: rowsPerPage, filterDescription, filterStatus }));
     } else {
-      dispatch(getTodosCreatedbyMe({ page, limit: rowsPerPage, filterDescription, filterStatus }));
+      dispatch(
+        getTodosCreatedbyMe({
+          page,
+          limit: rowsPerPage,
+          filterDescription,
+          filterStatus,
+          filterStartDate,
+          filterEndDate,
+        })
+      );
     }
-  }, [page, rowsPerPage, filterDescription, filterStatus]);
+  }, [page, rowsPerPage, filterDescription, filterStatus, filterStartDate, filterEndDate]);
 
   useEffect(() => {
     setTodos(data?.docs);

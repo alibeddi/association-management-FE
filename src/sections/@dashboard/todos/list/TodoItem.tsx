@@ -95,7 +95,6 @@ export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItem
           label={<span dangerouslySetInnerHTML={{ __html: htmlString }} />}
           sx={{ flexGrow: 1, m: 0 }}
         />
-
         <IconButton
           size="large"
           color={openPopover ? 'inherit' : 'default'}

@@ -82,7 +82,7 @@ export default function TodosToolbar({
         ))}
       </TextField>
 
-      {/* <DatePicker
+      <DatePicker
         label="Start date"
         value={filterStartDate}
         onChange={onFilterStartDate}
@@ -110,7 +110,7 @@ export default function TodosToolbar({
             }}
           />
         )}
-      /> */}
+      />
 
       <TextField
         fullWidth
