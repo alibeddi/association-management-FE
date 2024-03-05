@@ -24,9 +24,10 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 interface TaskItemProps extends CheckboxProps {
   task: Todo;
   onDeleteRow: (id: string) => void;
+  canDelete: boolean;
 }
 
-export function TaskItem({ task, onDeleteRow }: TaskItemProps) {
+export function TaskItem({ task, onDeleteRow, canDelete }: TaskItemProps) {
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const [openConfirm, setOpenConfirm] = useState(false);
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
@@ -109,12 +110,16 @@ export function TaskItem({ task, onDeleteRow }: TaskItemProps) {
           <Iconify icon="eva:edit-fill" />
           Edit
         </MenuItem>
-        <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
-        </MenuItem>
+        {canDelete && (
+          <>
+            <Divider sx={{ borderStyle: 'dashed' }} />
+            <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+              <Iconify icon="eva:trash-2-outline" />
+              Delete
+            </MenuItem>
+          </>
+        )}
       </MenuPopover>
 
       <ConfirmDialog

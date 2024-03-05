@@ -21,21 +21,13 @@ export default function TodoList() {
   const {
     dense,
     page,
-    order,
-    orderBy,
     rowsPerPage,
     setPage,
     //
-    selected,
-    setSelected,
-    onSelectRow,
-    onSelectAllRows,
-    //
-    onSort,
     onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
-  } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
+  } = useTable();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -152,7 +144,7 @@ export default function TodoList() {
         <Grid item xs={12} md={6} lg={8}>
           <CardHeader title="Tasks" />
           {todos.map((task) => (
-            <TaskItem key={task._id} task={task} onDeleteRow={handleDeleteTodo} />
+            <TaskItem key={task._id} task={task} onDeleteRow={handleDeleteTodo} canDelete={filterTodos === 'Created By me'} />
           ))}
 
           {isNotFound && (
