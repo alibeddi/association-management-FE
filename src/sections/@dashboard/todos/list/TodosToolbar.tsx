@@ -47,6 +47,7 @@ export default function TodosToolbar({
       sx={{ px: 2.5, py: 3 }}
     >
       <TextField
+        InputLabelProps={{ shrink: true }}
         fullWidth
         select
         label="Todo Status"

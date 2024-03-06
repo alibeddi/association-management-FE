@@ -33,6 +33,7 @@ export default {
   },
 
   suggestions: {
+    zIndex: 999,
     list: {
       backgroundColor: 'white',
       fontSize: 14,
