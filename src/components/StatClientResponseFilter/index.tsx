@@ -7,20 +7,16 @@ import { StatClientResponseFormFilter } from '../../sections/@dashboard/statClie
 
 type IProps = {
   open: boolean,
-  onClose: () => void,
-  filters:  IFilterStatClientResponse[];
-  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
+  onClose: () => void
 }
 
 const StatClientResponseFilter = ({
   open,
   onClose,
-  filters,
-  setFilters
 }:IProps) => 
    (
     <Dialog open={open} onClose={onClose}>
-    <StatClientResponseFormFilter filters={filters} setFilters={setFilters} onClose={onClose}/>
+    <StatClientResponseFormFilter   onClose={onClose}/>
   </Dialog>
   )
 

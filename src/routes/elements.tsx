@@ -22,6 +22,7 @@ export const UserEdit = Loadable(lazy(()=> import('../pages/User/UserEdit')))
 
 
 export const Calendar = Loadable(lazy(() => import('../pages/Calendar')));
+export const Analytics = Loadable(lazy(() => import('../pages/Analytics')));
 // kpis
 export const Kpis = Loadable(lazy(() => import('../pages/Kpis/KpisListPage')));
 export const KpiNew = Loadable(lazy(() => import('../pages/Kpis/KpiNewPage')));
@@ -40,10 +41,12 @@ export const StatClientResponseView = Loadable(
 export const StatClientResponseEdit = Loadable(
   lazy(() => import('../pages/StatClientResponse/StatClientResponseEdit'))
 );
-export const Call = Loadable(lazy(()=>import('../pages/Calls')));
-export const StatsClient = Loadable(lazy(()=>import('../pages/statsClient')))
-export const StatsClientNew = Loadable(lazy(()=>import('../pages/statsClient/statsClientNew')))
-export const StatsClientEdit = Loadable(lazy(()=>import('../pages/statsClient/statsClientEdit')))
-export const StatsClientShow = Loadable(lazy(()=>import('../pages/statsClient/statsClientShow')))
+export const Call = Loadable(lazy(() => import('../pages/Calls')));
+export const StatsClient = Loadable(lazy(() => import('../pages/statsClient')));
+export const StatsClientNew = Loadable(lazy(() => import('../pages/statsClient/statsClientNew')));
+export const StatsClientEdit = Loadable(lazy(() => import('../pages/statsClient/statsClientEdit')));
+export const StatsClientShow = Loadable(lazy(() => import('../pages/statsClient/statsClientShow')));
+// todo list
+export const MyTodoList = Loadable(lazy(() => import('../pages/Todos/TodoListPage')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

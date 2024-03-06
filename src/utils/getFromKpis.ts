@@ -8,7 +8,7 @@ interface MyObject {
 export default function processObject(array: IKpi[]) {
   const results: string[] = [];
 
-  array.forEach((elt) => {
+  array?.forEach((elt) => {
     const name = elt._id;
     results.push(name);
   });

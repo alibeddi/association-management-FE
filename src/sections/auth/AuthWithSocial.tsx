@@ -26,7 +26,6 @@ export default function AuthWithSocial() {
       if (loginWithGithub) {
         loginWithGithub();
       }
-      console.log('GITHUB LOGIN');
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +36,6 @@ export default function AuthWithSocial() {
       if (loginWithTwitter) {
         loginWithTwitter();
       }
-      console.log('TWITTER LOGIN');
     } catch (error) {
       console.error(error);
     }

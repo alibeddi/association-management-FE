@@ -1,18 +1,23 @@
 import { Office } from './Office';
+import { Permission } from './Permission';
+import { PermissionGroup } from './PermissionGroup';
 
 export interface User {
   _id: string;
+  username: string;
   name: string;
-  firstName: string;
-  lastName: string;
   email: string;
+  avatar: string;
   office: Office;
-  createdAt: Date | null;
+  role: RoleCode;
+  OAuthToken?: string;
+  permissionGroup?: PermissionGroup[];
+  extraPermission?: Permission[];
+  deletedAt: Date | null;
+  createdAt: Date;
 }
 
-export type IUserAccountGeneral = {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-};
+export const enum RoleCode {
+  SUPER_ADMIN = 'SUPER ADMIN',
+  ADMIN = 'ADMIN',
+}

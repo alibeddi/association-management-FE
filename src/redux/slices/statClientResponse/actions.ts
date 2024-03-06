@@ -41,7 +41,7 @@ export const getAllStatClientResponses = createAsyncThunk(
     order?: string;
     filterClientName?: string;
   }) => {
-    const { page, order = 'desc', orderBy = 'createdAt', filterClientName, limit  } = payload;
+    const { page, order = 'desc', orderBy = 'createdAt', filterClientName, limit } = payload;
     const params = {
       page: page + 1,
       limit,
