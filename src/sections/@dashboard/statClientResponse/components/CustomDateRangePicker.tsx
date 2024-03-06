@@ -1,8 +1,10 @@
 import { Button } from '@mui/material';
 import { IAsyncSelectFilter } from '../../../../@types/AsyncSelectFilter';
 import DateRangePicker , {  useDateRangePicker } from '../../../../components/date-range-picker';
+import { handleChangefilter } from '../../../../redux/slices/statClientResponse';
+import { dispatch } from '../../../../redux/store';
 
-const CustomDateRangePicker = ({name,handleChange}:IAsyncSelectFilter) => {
+const CustomDateRangePicker = ({name}:IAsyncSelectFilter) => {
   const {
     startDate,
     endDate,
@@ -19,7 +21,7 @@ const CustomDateRangePicker = ({name,handleChange}:IAsyncSelectFilter) => {
   const handleChangeStartDate = (newValue: Date | null) =>{
     onChangeStartDate(newValue)
     if(!isError){
-      handleChange(name,{startDate:newValue,endDate})
+      dispatch(handleChangefilter({id:name,value:{startDate:newValue,endDate}}))
 
     }
     
@@ -27,7 +29,7 @@ const CustomDateRangePicker = ({name,handleChange}:IAsyncSelectFilter) => {
   const handleChangeCloseDate = (newValue : Date | null) => {
     onChangeEndDate(newValue);
     if(!isError){
-      handleChange(name,{startDate,endDate:newValue})
+      dispatch(handleChangefilter({id:name,value:{startDate,endDate:newValue}}))
     }
     
   }

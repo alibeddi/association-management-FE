@@ -87,7 +87,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
         })
       )
         .unwrap()
-        .then((res) => {enqueueSnackbar(res.message);navigate(PATH_DASHBOARD.statsClient.root)})
+        .then((res) => {enqueueSnackbar(res.message);})
         .catch((error) => enqueueSnackbar(error.message, { variant: 'error' }));
     } else {
       await dispatch(
@@ -97,9 +97,10 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
         })
       )
         .unwrap()
-        .then((res) => {enqueueSnackbar(res.message);navigate(PATH_DASHBOARD.statsClient.root)})
+        .then((res) => {enqueueSnackbar(res.message)})
         .catch((error) => enqueueSnackbar(error.message, { variant: 'error' }));
     }
+    navigate(PATH_DASHBOARD.statsClient.root)
   };
   const styleFlexColumn = {
     display: 'flex',
