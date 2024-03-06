@@ -7,6 +7,7 @@ import {  useDispatch } from '../../../redux/store';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 import { StyledAsyncPaginate } from '../styles';
 import { setParams } from '../../../utils/setParams';
+import { handleChangefilter } from '../../../redux/slices/statClientResponse';
 
 
 interface Params {
@@ -17,7 +18,6 @@ interface Params {
 }
 
 const AsyncSelectKpis = ({
-  handleChange,
   name,
 }:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
@@ -52,7 +52,7 @@ const AsyncSelectKpis = ({
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an kpis"
-    onChange={(e)=>{if(e) handleChange(name,e._id);}}
+    onChange={(e)=>{if(e) dispatch(handleChangefilter({id:name,value:e._id}));}}
     styles={StyledAsyncPaginate}
     />
   )

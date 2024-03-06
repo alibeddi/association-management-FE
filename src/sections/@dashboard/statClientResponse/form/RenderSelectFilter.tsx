@@ -7,34 +7,34 @@ import { AdminAsyncSelect, StatClientAsyncSelect } from '../../../../components/
 import { MENU_ITEM_VALUE } from '../../../../constant/menuItemFilter';
 import CustomDateRangePicker from '../components/CustomDateRangePicker';
 import { valueFilterType } from '../../../../@types/AsyncSelectFilter';
+import { dispatch } from '../../../../redux/store';
+import { handleChangefilter } from '../../../../redux/slices/statClientResponse';
 
 
 
 type IProp = {
   filter: IFilterStatClientResponse;
-  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
 }
 
-const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
-  const handleChange = (id: string, value: valueFilterType ) => setFilters(prev => prev.map(elt => elt.id !== id ? elt : { ...elt, value }));
+const RenderSelectFilter = ({ filter  }: IProp) => {
   switch (filter.type) {
     case MENU_ITEM_VALUE.admin:
       return (
         <AdminAsyncSelect
         key={filter.id}
         name={filter.id} 
-        handleChange={handleChange}
+
         />
       );
     case MENU_ITEM_VALUE.kpis:
-      return <AsyncSelectKpis key={filter.id} name={filter.id}  handleChange={handleChange}/>;
+      return <AsyncSelectKpis key={filter.id} name={filter.id}  />;
     case MENU_ITEM_VALUE.clientContact:
       return <TextField
       key={filter.id}
       name={filter.id}
       value={filter.value}
       placeholder="enter client contact"
-      onChange={(e)=>handleChange(filter.id,e.target.value)}
+      onChange={(e)=>dispatch(handleChangefilter({id:filter.id,value:e.target.value}))}
       />
     case MENU_ITEM_VALUE.clientName:
       return  <TextField
@@ -42,12 +42,12 @@ const RenderSelectFilter = ({ filter, setFilters }: IProp) => {
       name={filter.id}
       value={filter.value}
       placeholder="enter client name"
-      onChange={(e)=>handleChange(filter.id,e.target.value)}
+      onChange={(e)=>dispatch(handleChangefilter({id:filter.id,value:e.target.value}))}
       />
     case MENU_ITEM_VALUE.statClient:
-      return <StatClientAsyncSelect  key={filter.id} name={filter.id}  handleChange={handleChange} />
+      return <StatClientAsyncSelect  key={filter.id} name={filter.id}   />
     case MENU_ITEM_VALUE.range:
-      return   <CustomDateRangePicker key={filter.id} name={filter.id} handleChange={handleChange} /> 
+      return   <CustomDateRangePicker key={filter.id} name={filter.id}  /> 
     default:
       return (
         <TextField disabled value="select filter type"/>

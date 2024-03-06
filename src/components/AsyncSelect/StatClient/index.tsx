@@ -6,10 +6,10 @@ import { IStatsClient } from '../../../@types/statsClient';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 import { StyledAsyncPaginate } from '../styles';
 import { setParams } from '../../../utils/setParams';
+import { handleChangefilter } from '../../../redux/slices/statClientResponse';
 
 
 const StatClient = (({
-  handleChange,
   name
 }:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
@@ -42,7 +42,7 @@ const StatClient = (({
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an stats Clients"
-    onChange={(e)=>{if(e) {handleChange(name,e._id);}}}
+    onChange={(e)=>{if(e) {dispatch(handleChangefilter({id:name,value:e._id}))}}}
     styles={StyledAsyncPaginate}
     />
   )

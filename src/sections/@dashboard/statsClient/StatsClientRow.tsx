@@ -116,7 +116,7 @@ export default function StatsClientRow({
               }}
               >
               {
-                kpis.map((kpi:IKpi)=> `${kpi.label} ,` ).join('').slice(0,-1)
+                kpis?.map((kpi:IKpi)=> `${kpi.label} ,` ).join('').slice(0,-1)
               }
               </Box>
 

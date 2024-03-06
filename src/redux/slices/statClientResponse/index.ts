@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { IFilterStatClientResponse } from '../../../@types/FilterStatClientResponse';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { StatClientResponse } from '../../../@types/StatClientResponse';
 import { IStatus } from '../../../@types/status';
@@ -16,18 +17,38 @@ type StatClientResState = {
   statClientResponses: PaginationModel<StatClientResponse>;
   statClientResponse: StatClientResponse;
   status: IStatus;
+  filters: IFilterStatClientResponse[] | []
 };
 
 const initialState: StatClientResState = {
   statClientResponses: { docs: [], meta: {} as Meta },
   statClientResponse: {} as StatClientResponse,
   status: IStatus.IDLE,
+  filters: [],
 };
 
 const slice = createSlice({
   name: 'statClientResponses',
   initialState,
-  reducers: {},
+  reducers: {
+    addFilter: (state) => {
+      state.filters = [...state.filters,{ id:nanoid() , type: '', value: '' }]
+    },
+    removeFilter: (state,{payload}) => {
+      state.filters = state.filters.filter(filter=> filter.id !== payload.id)
+    },
+    handleChangeOptionfilter:(state,{payload})=>{
+      const {name,value} = payload;
+      state.filters = state.filters.map(elt=> elt.id === name ? {...elt,type:value} : elt )
+    } ,
+    handleChangefilter : (state,{payload}) => {
+      const {id,value} = payload;
+      state.filters = state.filters.map(elt => elt.id !== id ? elt: {...elt,value})
+    },
+    setFilters: (state) => {
+      state.filters = []
+    }
+  },
   extraReducers: (builder) => {
     // create
     builder
@@ -116,4 +137,5 @@ const slice = createSlice({
   },
 });
 
+export const {addFilter , removeFilter,handleChangeOptionfilter,handleChangefilter,setFilters} = slice.actions;
 export default slice.reducer;

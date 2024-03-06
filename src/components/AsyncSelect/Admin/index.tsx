@@ -6,6 +6,7 @@ import { User } from '../../../@types/User';
 import { IAsyncSelectFilter } from '../../../@types/AsyncSelectFilter';
 import { StyledAsyncPaginate } from '../styles';
 import { setParams } from '../../../utils/setParams';
+import { handleChangefilter } from '../../../redux/slices/statClientResponse';
 
 interface Params {
   page: number;
@@ -14,7 +15,6 @@ interface Params {
   name?: string; 
 }
 const Admin = (({
-  handleChange,
   name
 }:IAsyncSelectFilter) => {
   const dispatch = useDispatch()
@@ -51,7 +51,7 @@ const Admin = (({
     placeholder="Select an users"
     onChange={(users)=>{
       const userId = users.map((user) => user?._id)
-      if(userId){ handleChange(name,userId)}
+      if(userId){ dispatch(handleChangefilter({id:name,value:userId}))}
     
     }}
     styles={StyledAsyncPaginate}

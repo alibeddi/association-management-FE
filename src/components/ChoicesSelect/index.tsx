@@ -11,7 +11,7 @@ import { IResponseFilter } from '../../@types/AsyncSelectFilter';
 
 
 
-const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,  setFilters: Dispatch<SetStateAction<[] | IFilterStatClientResponse[]>>;
+const ChoicesSelect = ({ value }: { value: IFilterStatClientResponse
 }) => {
   const dispatch = useDispatch();
 
@@ -44,39 +44,39 @@ const ChoicesSelect = ({ value,setFilters }: { value: IFilterStatClientResponse,
       </Box>
     );
   }
-  const handleChangeFilters = (choices:IResponseFilter) => {
-    setFilters(prev => {
-      const index = prev.findIndex(filter => filter.id === (kpi ? kpi._id : null));
+  // const handleChangeFilters = (choices:IResponseFilter) => {
+  //   setFilters(prev => {
+  //     const index = prev.findIndex(filter => filter.id === (kpi ? kpi._id : null));
   
-      if (index !== -1) {
-        const updatedFilters = [...prev];
-        updatedFilters[index] = {
-          ...updatedFilters[index],
-          type: 'response',
-          value:"response",
-          choices
-        };
-        return updatedFilters;
-      } 
-        return [
-          ...prev,
-          {
-            id: kpi ? kpi._id : new Date().toString(),
-            type: 'response',
-            value:"response",
-            choices
-          }
-        ];
+  //     if (index !== -1) {
+  //       const updatedFilters = [...prev];
+  //       updatedFilters[index] = {
+  //         ...updatedFilters[index],
+  //         type: 'response',
+  //         value:"response",
+  //         choices
+  //       };
+  //       return updatedFilters;
+  //     } 
+  //       return [
+  //         ...prev,
+  //         {
+  //           id: kpi ? kpi._id : new Date().toString(),
+  //           type: 'response',
+  //           value:"response",
+  //           choices
+  //         }
+  //       ];
       
-    });
-  };
+  //   });
+  // };
     const handleCheckboxChange = (choice: string) => {
     const updatedChoices = {
       ...selectedChoices,
       [choice]: !selectedChoices[choice]
     };
     setSelectedChoices(updatedChoices);
-    handleChangeFilters(updatedChoices)
+    // handleChangeFilters(updatedChoices)
   };
 
   return (
