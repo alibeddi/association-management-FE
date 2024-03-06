@@ -14,7 +14,6 @@ import { IResponseFilter } from '../../@types/AsyncSelectFilter';
 const ChoicesSelect = ({ value }: { value: IFilterStatClientResponse
 }) => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     if(typeof value.value === "string")
    { 

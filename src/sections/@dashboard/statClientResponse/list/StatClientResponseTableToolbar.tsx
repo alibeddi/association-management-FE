@@ -32,7 +32,6 @@ export default function StatClientResponseTableToolbar({
   const dispatch = useDispatch()
   const handleClostFilter = () => setOpenFilter(false)
   const {filters} = useSelector(store=>store.statClientResponses)
-  console.log({filters})
   const resetFilterStatClientResponse = async () => {
     dispatch(setFilters())
     await dispatch(getAllStatClientResponses({

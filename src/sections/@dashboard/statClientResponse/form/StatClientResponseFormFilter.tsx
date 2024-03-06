@@ -15,7 +15,6 @@ import StatResponseFilterSelect from './StatResponseFilterSelect';
 type IProps = {
   onClose : () => void;
 }
-
 const StatClientResponseFormFilter = ({
   onClose
 }:IProps) =>  {

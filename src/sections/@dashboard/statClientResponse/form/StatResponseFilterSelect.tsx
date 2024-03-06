@@ -1,5 +1,6 @@
 import { Button, MenuItem, Select } from '@mui/material'
 import { Box, Stack } from '@mui/system'
+import { nanoid } from '@reduxjs/toolkit'
 import  { Dispatch, SetStateAction, useState } from 'react'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse'
 import ChoicesSelect from '../../../../components/ChoicesSelect'
@@ -23,7 +24,8 @@ const StatResponseFilterSelect = ({filters}:IProps) => (
       {
          filters.map((elt)=>(
           
-          !['response','page','limit'].includes(elt.type) ? <Stack key={elt.id} sx={{display:"flex",flexDirection:'column',gap:"1rem"}}>
+          !['response','page','limit'].includes(elt.type) ? 
+          <Stack key={elt.id} sx={{display:"flex",flexDirection:'column',gap:"1rem"}}>
             <Stack sx={{
               display:'flex',
               flexDirection:'row',
@@ -31,7 +33,9 @@ const StatResponseFilterSelect = ({filters}:IProps) => (
               "& .css-b62m3t-container":{
                 maxWidth:"50%"
               }
-            }} >
+            }} 
+            
+            >
             <Stack 
             sx={{display:"flex",flexDirection:'row',
             "& *":{flexBasis:'100%'},gap:"1rem",
@@ -46,7 +50,7 @@ const StatResponseFilterSelect = ({filters}:IProps) => (
                 MENU_ITEM_FILTER.map(({label,value})=><MenuItem value={value}>{label}</MenuItem>)
               }
             </Select>
-            <RenderSelectFilter filter={elt}  />
+            <RenderSelectFilter filter={elt}/>
             </Stack>
           <Button  color="error" startIcon={<Iconify icon="material-symbols:delete" 
            />} sx={{
