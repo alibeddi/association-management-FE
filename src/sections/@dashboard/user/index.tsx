@@ -1,37 +1,29 @@
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import {
   Button,
-  Card,
-  Container,
-  Divider,
-  IconButton,
-  Tab,
-  Table,
+  Card, IconButton, Table,
   TableBody,
-  TableContainer,
-  Tabs,
-  Tooltip,
+  TableContainer, Tooltip
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
-import UserTableRow from './userTableRow';
+import ConfirmDialog from '../../../components/confirm-dialog';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
 import {
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
-  useTable,
+  useTable
 } from '../../../components/table';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
-import { IUserAccountGeneral } from '../../../@types/User';
-import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { deleteOne, getUsers } from '../../../redux/slices/users/actions';
+import { dispatch, RootState, useSelector } from '../../../redux/store';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import UserTableRow from './userTableRow';
 
 // ----------------------------------------------------------------------
 
@@ -137,18 +129,21 @@ export default function UserListPage() {
   };
 
   const handleDeleteRow = (id: string) => {
-    dispatch(deleteOne({ userId: id })).unwrap().then(res=>{
-      enqueueSnackbar(res.message);
-      const deleteRow = tableData.filter((row) => row._id !== id);
-      setSelected([]);
-      setTableData(deleteRow);
+    dispatch(deleteOne({ userId: id }))
+      .unwrap()
+      .then((res) => {
+        enqueueSnackbar(res.message);
+        const deleteRow = tableData.filter((row) => row._id !== id);
+        setSelected([]);
+        setTableData(deleteRow);
 
-      if (page > 0) {
-        if (dataInPage.length < 2) {
-          setPage(page - 1);
+        if (page > 0) {
+          if (dataInPage.length < 2) {
+            setPage(page - 1);
+          }
         }
-      }
-    }).catch(err=>  enqueueSnackbar(`${err.message}`, { variant: 'error' }))
+      })
+      .catch((err) => enqueueSnackbar(`${err.message}`, { variant: 'error' }));
   };
 
   const handleDeleteRows = (selectedRows: string[]) => {
@@ -238,7 +233,7 @@ export default function UserListPage() {
                     selected={selected.includes(row._id)}
                     onSelectRow={() => onSelectRow(row._id)}
                     onDeleteRow={() => handleDeleteRow(row._id)}
-                    onEditRow={() => handleEditRow(row.firstName)}
+                    onEditRow={() => handleEditRow(row._id)}
                   />
                 ))}
 

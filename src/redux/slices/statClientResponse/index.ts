@@ -9,7 +9,7 @@ import {
   editStatClientResponse,
   getAllStatClientResponses,
   getOneStatClientResponse,
-  statsClientResponseFilter,
+  statsClientResponseFilter
 } from './actions';
 
 type StatClientResState = {

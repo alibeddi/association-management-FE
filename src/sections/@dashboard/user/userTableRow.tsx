@@ -1,23 +1,15 @@
 import { useState } from 'react';
 // @mui
 import {
-  Stack,
-  Avatar,
   Button,
-  Checkbox,
-  TableRow,
-  MenuItem,
-  TableCell,
-  IconButton,
-  Typography,
+  Checkbox, IconButton, MenuItem, Stack, TableCell, TableRow, Typography
 } from '@mui/material';
 // @types
-import { IUserAccountGeneral, User } from '../../../@types/User';
+import { User } from '../../../@types/User';
 // components
-import Label from '../../../components/label';
+import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
-import ConfirmDialog from '../../../components/confirm-dialog';
 import { fDate } from '../../../utils/formatTime';
 // ----------------------------------------------------------------------
 

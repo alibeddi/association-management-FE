@@ -12,6 +12,7 @@ import {
   ic_call,
   ic_stats_client,
   ic_analytics,
+  ic_todolist,
 } from '../../../assets/icons/navbar';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
@@ -25,6 +26,7 @@ const ICONS = {
   statsClient: icon(ic_stats_client),
   statClientResponse: icon(ic_stat_client_response),
   analytics: icon(ic_analytics),
+  todoList: icon(ic_todolist),
 };
 
 export default function navConfig(user: AuthUserType) {
@@ -43,6 +45,16 @@ export default function navConfig(user: AuthUserType) {
   );
   const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
   const hasAccessToAnalytics = hasPermission(userPermissions, ModelCode.ANALYTICS, MethodCode.LIST);
+  const hasAccessToStatClient = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.LIST
+  );
+  const hasAccessToStatClientAnswers = hasPermission(
+    userPermissions,
+    ModelCode.STAT_CLIENT_RESPONSE,
+    MethodCode.LIST
+  );
   const config = [
     {
       subheader: '',
@@ -72,6 +84,12 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: hasAccessToCalendar,
         },
         {
+          title: 'Todo List',
+          path: PATH_DASHBOARD.todoList.root,
+          icon: ICONS.todoList,
+          toBeDisplayed: true,
+        },
+        {
           title: 'calls',
           path: PATH_DASHBOARD.calls,
           icon: ICONS.calls,
@@ -81,13 +99,13 @@ export default function navConfig(user: AuthUserType) {
           title: 'stats client',
           path: PATH_DASHBOARD.statsClient.root,
           icon: ICONS.statsClient,
-          toBeDisplayed: true,
+          toBeDisplayed: hasAccessToStatClient,
         },
         {
           title: 'Stats client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
-          toBeDisplayed: true,
+          toBeDisplayed: hasAccessToStatClientAnswers,
         },
         {
           title: 'Analytics',

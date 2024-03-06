@@ -6,7 +6,7 @@
   },
   "overrides": [
     {
-      "files": ["webpack.config.js"],
+      "files": ["webpack.config.js", "react-hooks"],
       "parserOptions": {
         "project": null
       }
@@ -32,6 +32,8 @@
     }
   },
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "no-alert": 0,
     "camelcase": 0,
     "no-console": 0,
