@@ -7,7 +7,7 @@ import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientRe
 // components
 import Iconify from '../../../../components/iconify';
 import StatClientResponseFilter from "../../../../components/StatClientResponseFilter";
-import { setFilters } from '../../../../redux/slices/statClientResponse';
+import { resetFilters } from '../../../../redux/slices/statClientResponse';
 import { getAllStatClientResponses } from '../../../../redux/slices/statClientResponse/actions';
 import { useSelector } from '../../../../redux/store';
 
@@ -33,7 +33,7 @@ export default function StatClientResponseTableToolbar({
   const handleClostFilter = () => setOpenFilter(false)
   const {filters} = useSelector(store=>store.statClientResponses)
   const resetFilterStatClientResponse = async () => {
-    dispatch(setFilters())
+    dispatch(resetFilters())
     await dispatch(getAllStatClientResponses({
       page:0,
       limit:5

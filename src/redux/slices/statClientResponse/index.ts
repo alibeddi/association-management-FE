@@ -45,9 +45,38 @@ const slice = createSlice({
       const {id,value} = payload;
       state.filters = state.filters.map(elt => elt.id !== id ? elt: {...elt,value})
     },
-    setFilters: (state) => {
+    resetFilters: (state) => {
       state.filters = []
-    }
+    },
+    handleChoiceFilters: (state, { payload }) => {
+      const { id, choices } = payload;
+      const index = state.filters.findIndex(filter => filter.id === id);
+      const updatedFilters = [...state.filters];
+     
+      if (index !== -1) {
+
+         updatedFilters[index] = {
+           ...updatedFilters[index],
+           type: 'response',
+           value: "response",
+           choices
+         };
+      } else {
+
+         updatedFilters.push({
+           id: id || nanoid(),
+           type: 'response',
+           value: "response",
+           choices
+         });
+      }
+     
+      return {
+         ...state,
+         filters: updatedFilters
+      };
+     }
+     
   },
   extraReducers: (builder) => {
     // create
@@ -137,5 +166,5 @@ const slice = createSlice({
   },
 });
 
-export const {addFilter , removeFilter,handleChangeOptionfilter,handleChangefilter,setFilters} = slice.actions;
+export const {addFilter , removeFilter,handleChangeOptionfilter,handleChangefilter,resetFilters,handleChoiceFilters} = slice.actions;
 export default slice.reducer;

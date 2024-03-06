@@ -7,6 +7,7 @@ import { getOnekpi } from '../../redux/slices/kpis/actions';
 import { IFilterStatClientResponse } from '../../@types/FilterStatClientResponse';
 import { FrontType } from '../../@types/Kpi';
 import { IResponseFilter } from '../../@types/AsyncSelectFilter';
+import { handleChoiceFilters } from '../../redux/slices/statClientResponse';
 
 
 
@@ -44,30 +45,10 @@ const ChoicesSelect = ({ value }: { value: IFilterStatClientResponse
     );
   }
   const handleChangeFilters = (choices:IResponseFilter) => {
-    setFilters(prev => {
-      const index = prev.findIndex(filter => filter.id === (kpi ? kpi._id : null));
-  
-      if (index !== -1) {
-        const updatedFilters = [...prev];
-        updatedFilters[index] = {
-          ...updatedFilters[index],
-          type: 'response',
-          value:"response",
-          choices
-        };
-        return updatedFilters;
-      } 
-        return [
-          ...prev,
-          {
-            id: kpi ? kpi._id : new Date().toString(),
-            type: 'response',
-            value:"response",
-            choices
-          }
-        ];
-      
-    });
+    dispatch(handleChoiceFilters({
+      id: kpi?._id,
+      choices
+    }))
   };
     const handleCheckboxChange = (choice: string) => {
     const updatedChoices = {
