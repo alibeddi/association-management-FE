@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useSettingsContext } from '../../components/settings';
 import UserListPage from '../../sections/@dashboard/user';
 
- export function UserList() {
+ export default function UserList() {
   const { themeStretch } = useSettingsContext();
   return (
     <>

@@ -1,12 +1,14 @@
 import { LoadingButton } from '@mui/lab'
 import { Button, Card, Grid } from '@mui/material'
 import { Box, Stack } from '@mui/system'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { Navigate, useNavigate } from 'react-router'
+import {  useNavigate } from 'react-router'
 import { Office } from '../../../@types/offices'
 import { User } from '../../../@types/User'
 import FormProvider, { RHFAutocomplete, RHFTextField } from "../../../components/hook-form"
+import { getAllPermissionGroups } from '../../../redux/slices/groupPermissions/actions'
+import { dispatch, useSelector } from '../../../redux/store'
 import { PATH_DASHBOARD } from '../../../routes/paths'
 
 
@@ -16,6 +18,10 @@ type IProps = {
 }
 
 const UserForm = ({user,isEdit=false}:IProps) => {
+  useEffect(()=>{
+      dispatch(getAllPermissionGroups())
+  },[dispatch])
+  const {permissionGroups} = useSelector(store=>store.permissions_groups)
   const defaultValues = useMemo(()=>({
     name:user?.name || "",
     email:user?.email || "",
@@ -29,6 +35,9 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root)
   const {handleSubmit,watch,formState:{isSubmitting,isDirty}} = methods
   const onSubmit = () => {}
+  const values = watch()
+  console.log(values);
+  
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -47,13 +56,13 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               name="name"
               label="name"
               value={defaultValues?.name}
-              disabled={!isEdit}
+              disabled
               />
               <RHFTextField
               name='email'
               label="email"
               value={defaultValues?.email}
-              disabled={!isEdit}
+              disabled
               />
                <RHFTextField
               name='role'
@@ -73,16 +82,17 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               name="permissionGroup"
               value={defaultValues?.permissionGroup}
               label="permissionGroup"
+              
               multiple
               freeSolo
               getOptionLabel={(option)=>option && typeof option !== 'string' ? option?.name : option}
-              options={[]}
+              options={permissionGroups.docs}
               disabled={!isEdit}
               />
               <RHFAutocomplete
-              name="extrePermission"
+              name="extraPermission"
               value={defaultValues?.extraPermission}
-              label="extrePermission"
+              label="extraPermission"
               multiple
               freeSolo
               getOptionLabel={(option)=> option && typeof option !== 'string' ? `${option?.model} ${option.method} `: option}
@@ -90,7 +100,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               disabled={!isEdit}
               />
             </Box>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+            <Stack alignItems="flex-end" sx={{ mt: 3,display:"flex",flexDirection:"row",gap:"1rem",justifyContent:"flex-end" }}>
             {isEdit && (
               
                 <LoadingButton
