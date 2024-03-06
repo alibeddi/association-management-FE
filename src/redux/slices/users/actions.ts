@@ -27,21 +27,19 @@ export const getUsers = createAsyncThunk(
   }
 );
 
-// export const getUser  = createAsyncThunk('users/GETONE',async (payload:{id:string})=>{
-//   let data;
-//   try {
-//     const response = await axios.get(`/users`, {
-//       params: { page: body.page + 1, limit: body.limit,name:body.filterName },
-//     });
-//     data = await response.data;
-//     if (response.status === 200) {
-//       return data.data;
-//     }
-//     throw new Error(response.statusText);
-//   } catch (err) {
-//     return Promise.reject(err.message ? err.message : data?.message);
-//   }
-// })
+export const getUser  = createAsyncThunk('users/GETONE',async ({id}:{id:string})=>{
+  let data;
+  try {
+    const response = await axios.get(`/users/${id}`);
+    data = await response.data;
+    if (response.status === 200) {
+      return data.data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+})
 
 
 // DELETE ONE

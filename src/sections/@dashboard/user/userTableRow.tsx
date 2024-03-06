@@ -13,6 +13,9 @@ import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
 import { fDate } from '../../../utils/formatTime';
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import { hasPermission } from '../Permissions/utils';
+import { MethodCode, ModelCode } from '../../../@types/Permission';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +35,11 @@ export default function UserTableRow({
   onDeleteRow,
 }: Props) {
   const { name, email, office, createdAt,_id:userId } = row;
+  const {user} = useAuthContext();
+  const userPermissions = user?.permissionGroup[0].permissions;
+  const hasPermissionViewUser = hasPermission(userPermissions,ModelCode.USER,MethodCode.VIEW)
+  const hasPermissionEditUser = hasPermission(userPermissions,ModelCode.USER,MethodCode.EDIT)
+  const hasPermissionDeleteUser = hasPermission(userPermissions,ModelCode.USER,MethodCode.DELETE)
   const navigate = useNavigate()
   const handleEditUser = () => navigate(`${PATH_DASHBOARD.operators.edit}/${userId}`)
   const handleViewUser = () => navigate(`${PATH_DASHBOARD.operators.view}/${userId}`)
@@ -86,7 +94,7 @@ export default function UserTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
+    {hasPermissionViewUser &&    <MenuItem
           onClick={() => {
             handleViewUser()
           }}
@@ -94,8 +102,8 @@ export default function UserTableRow({
         >
           <Iconify icon="carbon:view-filled" />
           View
-        </MenuItem>
-        <MenuItem
+        </MenuItem>}
+       {hasPermissionEditUser && <MenuItem
           onClick={() => {
             handleEditUser()
           }}
@@ -103,8 +111,8 @@ export default function UserTableRow({
         >
           <Iconify icon="eva:edit-fill" />
           Edit
-        </MenuItem>
-        <MenuItem
+        </MenuItem>}
+ {hasPermissionDeleteUser &&       <MenuItem
           onClick={() => {
             handleOpenConfirm();
             handleClosePopover();
@@ -113,7 +121,7 @@ export default function UserTableRow({
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete
-        </MenuItem>
+        </MenuItem>}
         
       </MenuPopover>
 
