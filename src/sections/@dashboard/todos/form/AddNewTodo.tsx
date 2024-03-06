@@ -23,7 +23,7 @@ import { createNewTodo, updateTodo } from '../../../../redux/slices/todos/action
 import { getUsers } from '../../../../redux/slices/users/actions';
 import { dispatch } from '../../../../redux/store';
 import { extractMentions } from '../utils/extractMentions';
-import './mentions.css';
+import style from './style';
 
 type FormValues = {
   todo: string;
@@ -70,7 +70,6 @@ export default function AddNewTodo({
     }
     if (!isEdit) {
       reset(defaultValues);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [isEdit, currentTodo]);
 
@@ -103,7 +102,10 @@ export default function AddNewTodo({
     }
   };
 
-  const fetchUsers = (search: string, callback: any) => {
+  const fetchUsers = (
+    search: string,
+    callback: (users: Array<{ id: string; display: string }>) => void
+  ) => {
     dispatch(getUsers({ page: 0, limit: 100, search }))
       .unwrap()
       .then((data) => {
@@ -142,16 +144,15 @@ export default function AddNewTodo({
                     placeholder="Add your new todo..."
                     value={value}
                     onChange={onChange}
-                    style={{ height: '70px' }}
+                    style={{ ...style }}
                   >
                     <Mention
                       displayTransform={mentionDisplayTransform}
                       data={fetchUsers}
                       trigger="@"
                       style={{
-                        backgroundColor: '#CEE4E5',
+                        backgroundColor: '#EFF9F3',
                         paddingBottom: '3px',
-                        zIndex: 2,
                       }}
                       markup="@[__display__](__id__)" // To highlight tagged users
                       renderSuggestion={(suggestion, search, highlightedDisplay) => (
@@ -170,7 +171,7 @@ export default function AddNewTodo({
             )}
           />
         </Stack>
-        <Stack alignItems="flex-end" sx={{ marginTop: '5px' }}>
+        <Stack alignItems="flex-end" sx={{ marginTop: '5px', alignSelf: 'flex-end' }}>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
             <Iconify icon={isEdit ? 'ic:baseline-edit' : 'ic:sharp-add'} />
             {isEdit ? 'save' : 'add'}
