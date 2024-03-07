@@ -85,6 +85,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               <RHFAutocomplete
               name="office"
               label="office"
+              multiple
               getOptionLabel={(option)=>option}
               options={[]}
               disabled={!isEdit}
