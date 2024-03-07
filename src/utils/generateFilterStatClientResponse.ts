@@ -9,12 +9,16 @@ export const generateFilterStatClientResponse = (
   let url = '';
   let nbrKpis = 0;
   filter.forEach((element) => {
-    if (element.type === "kpis") {
-      url += `${url.length > 0 ? '&' : ''}kpis[${nbrKpis}][kpi]=${element.value}`;
-      const relatedReponse = filter.find(elt => elt.type === "response" && elt.id === element.value)
-
-      if (relatedReponse?.choices) {
-        Object.entries(relatedReponse?.choices).forEach(([key, value]) => {
+     if(Array.isArray(element.value)){
+      element.value.forEach((value,index)=>{
+        url += `${url.length > 0 ? '&' : ''}${element.type}[${index}]=${value}`;
+      })
+    }
+    else if (element.type === "kpis" && typeof element.value === "object" && "_id" in element.value) {
+      url += `${url.length > 0 ? '&' : ''}kpis[${nbrKpis}][kpi]=${element.value?._id}`;
+      const relatedReponse = element.choices
+      if (relatedReponse) {
+        Object.entries(relatedReponse).forEach(([key, value]) => {
           if (value) {
             const encodedValue = encodeURIComponent(key);
             url += `&kpis[${nbrKpis}][response][]=${encodedValue}`;
@@ -23,12 +27,10 @@ export const generateFilterStatClientResponse = (
       }
       nbrKpis += 1;
 
-    }else if(Array.isArray(element.value)){
-      element.value.forEach((value,index)=>{
-        url += `${url.length > 0 ? '&' : ''}${element.type}[${index}]=${value}`;
-      })
-    }else if(element.type === "range" && typeof element.value !== "string"){
+    }else if(element.type === "range" && typeof element.value === "object" && "startDate" in element.value){
+
       url += `${url.length > 0 ? '&' : ''}startDate=${fDate(element.value.startDate,'yyyy-MM-dd')}`;
+ 
       url += `${url.length > 0 ? '&' : ''}endDate=${fDate(element.value.endDate,'yyyy-MM-dd')}`;
     }
     else if (element.type !== 'response') {

@@ -21,16 +21,16 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
     case MENU_ITEM_VALUE.admin:
       return (
         <AdminAsyncSelect
-        key={filter.id}
+        
         name={filter.id} 
 
         />
       );
     case MENU_ITEM_VALUE.kpis:
-      return <AsyncSelectKpis key={filter.id} name={filter.id}  />;
+      return <AsyncSelectKpis name={filter.id}  />
     case MENU_ITEM_VALUE.clientContact:
       return <TextField
-      key={filter.id}
+      
       name={filter.id}
       value={filter.value}
       placeholder="enter client contact"
@@ -38,16 +38,16 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
       />
     case MENU_ITEM_VALUE.clientName:
       return  <TextField
-      key={filter.id}
+      
       name={filter.id}
       value={filter.value}
       placeholder="enter client name"
       onChange={(e)=>dispatch(handleChangefilter({id:filter.id,value:e.target.value}))}
       />
     case MENU_ITEM_VALUE.statClient:
-      return <StatClientAsyncSelect  key={filter.id} name={filter.id}   />
+      return <StatClientAsyncSelect   name={filter.id}   />
     case MENU_ITEM_VALUE.range:
-      return   <CustomDateRangePicker key={filter.id} name={filter.id}  /> 
+      return   <CustomDateRangePicker  name={filter.id}  /> 
     default:
       return (
         <TextField disabled value="select filter type"/>

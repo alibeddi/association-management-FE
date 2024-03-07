@@ -57,20 +57,9 @@ const slice = createSlice({
 
          updatedFilters[index] = {
            ...updatedFilters[index],
-           type: 'response',
-           value: "response",
            choices
          };
-      } else {
-
-         updatedFilters.push({
-           id: id || nanoid(),
-           type: 'response',
-           value: "response",
-           choices
-         });
-      }
-     
+      } 
       return {
          ...state,
          filters: updatedFilters

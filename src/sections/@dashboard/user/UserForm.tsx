@@ -36,8 +36,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const {handleSubmit,watch,formState:{isSubmitting,isDirty}} = methods
   const onSubmit = () => {}
   const values = watch()
-  console.log(values);
-  
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>

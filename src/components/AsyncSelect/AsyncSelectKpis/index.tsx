@@ -52,7 +52,7 @@ const AsyncSelectKpis = ({
     loadOptions={loadOptions}
     isSearchable
     placeholder="Select an kpis"
-    onChange={(e)=>{if(e) dispatch(handleChangefilter({id:name,value:e._id}));}}
+    onChange={(e)=>{if(e) dispatch(handleChangefilter({id:name,value:e}));}}
     styles={StyledAsyncPaginate}
     />
   )
