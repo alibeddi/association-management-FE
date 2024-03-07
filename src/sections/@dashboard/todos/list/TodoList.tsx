@@ -105,6 +105,7 @@ export default function TodoList() {
   };
 
   const handleResetFilter = () => {
+    setPage(0);
     setFilterDescription('');
     setFilterStatus('all');
     setFilterEndDate(null);
