@@ -16,8 +16,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 // routes
 import { Provider } from 'react-redux';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
@@ -38,30 +36,30 @@ import { store } from './redux/store';
 export default function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-    <Provider store={store}>
-      <AuthProvider>
-        <HelmetProvider>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <SettingsProvider>
-              <BrowserRouter>
-                <ScrollToTop />
-                <MotionLazyContainer>
-                  <ThemeProvider>
-                    <ThemeSettings>
-                      <ThemeLocalization>
-                        <SnackbarProvider>
-                          <Router />
-                        </SnackbarProvider>
-                      </ThemeLocalization>
-                    </ThemeSettings>
-                  </ThemeProvider>
-                </MotionLazyContainer>
-              </BrowserRouter>
-            </SettingsProvider>
-          </LocalizationProvider>
-        </HelmetProvider>
-      </AuthProvider>
-    </Provider>
-    </LocalizationProvider> 
+      <Provider store={store}>
+        <AuthProvider>
+          <HelmetProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <SettingsProvider>
+                <BrowserRouter>
+                  <ScrollToTop />
+                  <MotionLazyContainer>
+                    <ThemeProvider>
+                      <ThemeSettings>
+                        <ThemeLocalization>
+                          <SnackbarProvider>
+                            <Router />
+                          </SnackbarProvider>
+                        </ThemeLocalization>
+                      </ThemeSettings>
+                    </ThemeProvider>
+                  </MotionLazyContainer>
+                </BrowserRouter>
+              </SettingsProvider>
+            </LocalizationProvider>
+          </HelmetProvider>
+        </AuthProvider>
+      </Provider>
+    </LocalizationProvider>
   );
 }
