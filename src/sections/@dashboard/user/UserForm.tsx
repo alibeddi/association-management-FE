@@ -1,7 +1,9 @@
+import * as Yup from "yup"
 import { LoadingButton } from '@mui/lab'
 import { Button, Card, Grid } from '@mui/material'
 import { Box, Stack } from '@mui/system'
 import { useEffect, useMemo } from 'react'
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from 'react-hook-form'
 import {  useNavigate } from 'react-router'
 import { Office } from '../../../@types/offices'
@@ -21,22 +23,33 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   useEffect(()=>{
       dispatch(getAllPermissionGroups())
   },[dispatch])
-  const {permissionGroups} = useSelector(store=>store.permissions_groups)
+  const {permissions} = useSelector(store=>store.permissions)
   const defaultValues = useMemo(()=>({
     name:user?.name || "",
     email:user?.email || "",
-    office:user?.office || {} as Office,
+    office:user?.office || "",
     role:user?.role || "",
     permissionGroup: user?.permissionGroup || [],
     extraPermission: user?.extraPermission || []
   }),[user])
-  const methods = useForm({defaultValues})
+  const newUser = Yup.object().shape({
+    name: Yup.string().min(2).required('name is required'),
+    email: Yup.string().email().required("email is required"),
+    office: Yup.string(),
+    extraPermission: Yup.array().of(Yup.object().shape({
+      _id: Yup.string()
+    })),
+    role: Yup.string()
+  })
+  const methods = useForm({
+    resolver:yupResolver(newUser),
+    defaultValues
+  })
   const navigate = useNavigate()
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root)
   const {handleSubmit,watch,formState:{isSubmitting,isDirty}} = methods
   const onSubmit = () => {}
   const values = watch()
-
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -54,47 +67,41 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               <RHFTextField
               name="name"
               label="name"
-              value={defaultValues?.name}
+     
               disabled
               />
               <RHFTextField
               name='email'
               label="email"
-              value={defaultValues?.email}
+
               disabled
               />
                <RHFTextField
               name='role'
               label="role"
-              value={defaultValues?.role}
+
               disabled={!isEdit}
               />
               <RHFAutocomplete
               name="office"
-              value={defaultValues?.office}
               label="office"
-              getOptionLabel={(option)=>option && typeof option !== 'string' ? option?.name : option}
+              getOptionLabel={(option)=>option}
               options={[]}
               disabled={!isEdit}
               />
-               <RHFAutocomplete
-              name="permissionGroup"
-              value={defaultValues?.permissionGroup}
-              label="permissionGroup"
-              
-              multiple
-              freeSolo
-              getOptionLabel={(option)=>option && typeof option !== 'string' ? option?.name : option}
-              options={permissionGroups.docs}
-              disabled={!isEdit}
-              />
-              <RHFAutocomplete
+ <RHFAutocomplete
               name="extraPermission"
-              value={defaultValues?.extraPermission}
               label="extraPermission"
               multiple
               freeSolo
-              getOptionLabel={(option)=> option && typeof option !== 'string' ? `${option?.model} ${option.method} `: option}
+              getOptionLabel={(option)=> option }
+              options={[]}
+              disabled={!isEdit}
+              />
+              <RHFAutocomplete
+              name="permissionGroup"
+              label="permissionGroup"
+              getOptionLabel={(option)=> option }
               options={[]}
               disabled={!isEdit}
               />

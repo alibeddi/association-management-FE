@@ -36,7 +36,7 @@ export default function UserEdit() {
         }
        ]}
        />
-       <UserForm user={user} isEdit />
+       <UserForm user={user} isEdit key={user._id} />
       </Container>
     </>
   );

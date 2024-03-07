@@ -36,7 +36,7 @@ export default function UserView() {
         }
        ]}
        />
-       <UserForm user={user} />
+       <UserForm user={user} key={user._id} />
       </Container>
     </>
   );

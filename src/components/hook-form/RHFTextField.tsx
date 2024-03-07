@@ -47,7 +47,7 @@ export default function RHFTextField({
             defaultValue={defaultValue}
             fullWidth
             onWheel={handleWheel}
-            value={field.value === null ? '' : field.value}
+            value={field.value}
             multiline={multiline !== undefined && true}
             rows={rows}
             onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
