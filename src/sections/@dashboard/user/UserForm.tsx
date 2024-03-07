@@ -93,7 +93,6 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               name="extraPermission"
               label="extraPermission"
               multiple
-              freeSolo
               getOptionLabel={(option)=> option }
               options={[]}
               disabled={!isEdit}
@@ -101,6 +100,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               <RHFAutocomplete
               name="permissionGroup"
               label="permissionGroup"
+              multiple
               getOptionLabel={(option)=> option }
               options={[]}
               disabled={!isEdit}
