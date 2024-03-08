@@ -27,7 +27,7 @@ import MenuPopover from '../../../components/menu-popover';
 import Scrollbar from '../../../components/scrollbar';
 import {
   getAllNotifications,
-  getUnreadNotificationsNumber,
+  getNotificationsCounts,
   marlAllNotificationsAsRead,
 } from '../../../redux/slices/notifications/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
@@ -38,9 +38,10 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 export default function NotificationsPopover() {
   const navigate = useNavigate();
 
-  const { notifications: fetchedNotification, unreadNotifications } = useSelector(
+  const { notifications: fetchedNotification, notificationCounts } = useSelector(
     (state: RootState) => state.notifications
   );
+  const { unread } = notificationCounts;
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
 
@@ -48,7 +49,7 @@ export default function NotificationsPopover() {
 
   useEffect(() => {
     dispatch(getAllNotifications({ page: 0, limit: 10 }));
-    dispatch(getUnreadNotificationsNumber());
+    dispatch(getNotificationsCounts());
   }, []);
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export default function NotificationsPopover() {
         onClick={handleOpenPopover}
         sx={{ width: 40, height: 40 }}
       >
-        <Badge badgeContent={unreadNotifications} color="error">
+        <Badge badgeContent={unread} color="error">
           <Iconify icon="eva:bell-fill" />
         </Badge>
       </IconButtonAnimate>
@@ -85,11 +86,11 @@ export default function NotificationsPopover() {
             <Typography variant="subtitle1">Notifications</Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              You have {unreadNotifications} unread messages
+              You have {unread} unread messages
             </Typography>
           </Box>
 
-          {unreadNotifications > 0 && (
+          {unread > 0 && (
             <Tooltip title=" Mark all as read">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
                 <Iconify icon="eva:done-all-fill" />
@@ -158,7 +159,7 @@ function NotificationItem({ notification }: { notification: Notification }) {
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(notification.seen && {
+        ...(seen && {
           bgcolor: 'action.selected',
         }),
       }}

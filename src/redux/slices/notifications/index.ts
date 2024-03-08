@@ -2,20 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Notification } from '../../../@types/Notification';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
-import {
-  getAllNotifications,
-  getUnreadNotificationsNumber,
-  marlAllNotificationsAsRead,
-} from './actions';
+import { getAllNotifications, getNotificationsCounts, marlAllNotificationsAsRead } from './actions';
 
+export type ICount = { total: number; read: number; unread: number };
 type NotificationInitialState = {
-  unreadNotifications: number;
+  notificationCounts: ICount;
   notifications: PaginationModel<Notification>;
   status: IStatus;
 };
 
 const initialState: NotificationInitialState = {
-  unreadNotifications: 0,
+  notificationCounts: { total: 0, read: 0, unread: 0 },
   notifications: { docs: [], meta: {} as Meta },
   status: IStatus.IDLE,
 };
@@ -39,14 +36,14 @@ const slice = createSlice({
       });
     // GET UNREAD NOTIFICATIONS NUMBER
     builder
-      .addCase(getUnreadNotificationsNumber.pending, (state) => {
+      .addCase(getNotificationsCounts.pending, (state) => {
         state.status = IStatus.LOADING;
       })
-      .addCase(getUnreadNotificationsNumber.fulfilled, (state, action) => {
+      .addCase(getNotificationsCounts.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.unreadNotifications = action.payload.unreadNotifications;
+        state.notificationCounts = action.payload.result;
       })
-      .addCase(getUnreadNotificationsNumber.rejected, (state) => {
+      .addCase(getNotificationsCounts.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
     // MARK ALL AS READ
@@ -54,9 +51,9 @@ const slice = createSlice({
       .addCase(marlAllNotificationsAsRead.pending, (state) => {
         state.status = IStatus.LOADING;
       })
-      .addCase(marlAllNotificationsAsRead.fulfilled, (state, action) => {
+      .addCase(marlAllNotificationsAsRead.fulfilled, (state) => {
         state.status = IStatus.SUCCEEDED;
-        state.unreadNotifications = 0;
+        state.notificationCounts = { total: 0, read: 0, unread: 0 };
       })
       .addCase(marlAllNotificationsAsRead.rejected, (state) => {
         state.status = IStatus.FAILED;
