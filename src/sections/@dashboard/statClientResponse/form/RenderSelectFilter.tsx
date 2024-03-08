@@ -13,6 +13,7 @@ import { IKpi } from '../../../../@types/Kpi';
 import axios from '../../../../utils/axios';
 import RHFAsyncSelect from '../../../../components/hook-form/RHFAsyncSelect';
 import { User } from '../../../../@types/User';
+import { IStatsClient } from '../../../../@types/statsClient';
 
 
 
@@ -86,7 +87,26 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
       onChange={(e)=>dispatch(handleChangefilter({id:filter.id,value:e.target.value}))}
       />
     case MENU_ITEM_VALUE.statClient:
-      return <StatClientAsyncSelect   name={filter.id}   />
+      return (
+        <RHFAsyncSelect
+        name="statClient"
+        label="statClient"
+        placeholder='select a stat client'
+        required
+        isSearchable
+        getOptionLabel={(option:IStatsClient)=>option.name }
+        getOptionValue={(option)=>option._id}
+        fetchData={async (params) => {
+          const response = await axios.get(`/stat-clients?page=${params.page}&limit=${params.limit}&filterName=${params.name}`)
+          const data = await response.data;
+          return data;
+        }}
+        onChange={(e:User)=>{if(e) {dispatch(handleChangefilter({id:filter.id,value:e._id}))}}}
+        sx={{
+          padding: ".5rem 1rem"
+        }}
+        />
+      )
     case MENU_ITEM_VALUE.range:
       return   <CustomDateRangePicker  name={filter.id}  /> 
     default:
