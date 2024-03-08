@@ -23,7 +23,6 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   useEffect(()=>{
       dispatch(getAllPermissionGroups())
   },[dispatch])
-  const {permissionGroups} = useSelector(store=>store.permissions_groups)
   const defaultValues = useMemo(()=>({
     name:user?.name || "",
     email:user?.email || "",
@@ -47,11 +46,9 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   })
   const navigate = useNavigate()
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root)
-  const {handleSubmit,watch,formState:{isSubmitting,isDirty}} = methods
-  const onSubmit = () => {}
-  const values = watch()
+  const {watch,formState:{isSubmitting,isDirty}} = methods
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} >
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>

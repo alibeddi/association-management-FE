@@ -41,8 +41,7 @@ export default function UserTableRow({
   const hasPermissionEditUser = hasPermission(userPermissions,ModelCode.USER,MethodCode.EDIT)
   const hasPermissionDeleteUser = hasPermission(userPermissions,ModelCode.USER,MethodCode.DELETE)
   const navigate = useNavigate()
-  // TODO
-  // const handleEditUser = () => navigate(`${PATH_DASHBOARD.operators.edit}/${userId}`)
+
   const handleViewUser = () => navigate(`${PATH_DASHBOARD.operators.view}/${userId}`)
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -104,16 +103,6 @@ export default function UserTableRow({
           <Iconify icon="carbon:view-filled" />
           View
         </MenuItem>}
-        {/* TODO */}
-       {/* {hasPermissionEditUser && <MenuItem
-          onClick={() => {
-            handleEditUser()
-          }}
-          sx={{ color: 'principal.main' }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
-        </MenuItem>} */}
  {hasPermissionDeleteUser &&       <MenuItem
           onClick={() => {
             handleOpenConfirm();
