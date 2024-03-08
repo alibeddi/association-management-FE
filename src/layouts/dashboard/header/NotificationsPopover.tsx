@@ -9,10 +9,12 @@ import {
   Divider,
   IconButton,
   List,
+  ListItem,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
   ListSubheader,
+  MenuItem,
   Stack,
   Tooltip,
   Typography,
@@ -159,9 +161,6 @@ export function NotificationItem({ notification }: { notification: Notification 
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(seen && {
-          bgcolor: 'action.selected',
-        }),
       }}
     >
       <ListItemAvatar>
@@ -179,5 +178,74 @@ export function NotificationItem({ notification }: { notification: Notification 
         }
       />
     </ListItemButton>
+  );
+}
+
+// ----------------------------------------------------------------------
+
+export function NotificationRow({ notification }: { notification: Notification }) {
+  const { from, message, seen, seenAt, doc, docModel, createdAt } = notification;
+  const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
+
+  const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
+    setOpenPopover(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setOpenPopover(null);
+  };
+
+  return (
+    <ListItem
+      sx={{
+        py: 1.5,
+        px: 2.5,
+        mt: '1px',
+      }}
+    >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        sx={{
+          flexGrow: 1,
+        }}
+      >
+        <ListItemAvatar>
+          <Avatar sx={{ bgcolor: 'background.neutral' }}>{from?.avatar}</Avatar>
+        </ListItemAvatar>
+
+        <ListItemText
+          disableTypography
+          primary={message}
+          secondary={
+            <Stack direction="row" sx={{ mt: 0.5, typography: 'caption', color: 'text.disabled' }}>
+              <Iconify icon="eva:clock-fill" width={16} sx={{ mr: 0.5 }} />
+              <Typography variant="caption">{fToNow(createdAt)}</Typography>
+            </Stack>
+          }
+        />
+
+        <IconButton
+          size="large"
+          color={openPopover ? 'inherit' : 'default'}
+          onClick={handleOpenPopover}
+        >
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </Stack>
+
+      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top">
+        {!seen && (
+          <MenuItem onClick={() => {}}>
+            <Iconify icon="eva:checkmark-circle-2-fill" />
+            Mark As Read
+          </MenuItem>
+        )}
+        <MenuItem onClick={() => {}}>
+          <Iconify icon="carbon:view-filled" />
+          More Details
+        </MenuItem>
+      </MenuPopover>
+    </ListItem>
   );
 }

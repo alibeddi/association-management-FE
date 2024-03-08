@@ -53,7 +53,11 @@ const slice = createSlice({
       })
       .addCase(marlAllNotificationsAsRead.fulfilled, (state) => {
         state.status = IStatus.SUCCEEDED;
-        state.notificationCounts = { total: 0, read: 0, unread: 0 };
+        state.notificationCounts = {
+          ...state.notificationCounts,
+          read: state.notificationCounts.total,
+          unread: 0,
+        };
       })
       .addCase(marlAllNotificationsAsRead.rejected, (state) => {
         state.status = IStatus.FAILED;

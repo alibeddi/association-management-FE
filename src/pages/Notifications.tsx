@@ -1,14 +1,21 @@
-import { Card, Container, Divider, Grid, Tab, Tabs } from '@mui/material';
+import { Button, Card, Container, Divider, Grid, Stack, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Notification } from '../@types/Notification';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import EmptyContent from '../components/empty-content';
+import Iconify from '../components/iconify';
 import Label from '../components/label';
 import { TablePaginationCustom, useTable } from '../components/table';
-import { NotificationItem } from '../layouts/dashboard/header/NotificationsPopover';
+import {
+  NotificationItem,
+  NotificationRow,
+} from '../layouts/dashboard/header/NotificationsPopover';
 import { useLocales } from '../locales';
-import { getAllNotifications } from '../redux/slices/notifications/actions';
+import {
+  getAllNotifications,
+  marlAllNotificationsAsRead,
+} from '../redux/slices/notifications/actions';
 import { dispatch, RootState, useSelector } from '../redux/store';
 
 export default function Notifications() {
@@ -34,14 +41,19 @@ export default function Notifications() {
 
   useEffect(() => {
     dispatch(getAllNotifications({ page, limit: rowsPerPage, filterStatus }));
-  }, [page, rowsPerPage, filterStatus]);
+  }, [page, rowsPerPage, filterStatus, notificationCounts]);
 
   useEffect(() => {
     setNotifications(fetchedNotifcations.docs);
   }, [fetchedNotifcations]);
   const handleFilterStatus = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setPage(0);
+    setFilterStatus('all');
     setFilterStatus(newValue);
+  };
+
+  const handleMarkAllAsRead = () => {
+    dispatch(marlAllNotificationsAsRead());
   };
 
   const { total, read, unread } = notificationCounts;
@@ -83,9 +95,16 @@ export default function Notifications() {
           </Tabs>
 
           <Divider />
-          <Grid item xs={12} md={6} lg={8}>
+          {filterStatus === 'unread' && notifications.length > 0 && (
+            <Stack alignItems="flex-end" sx={{ mx: '5px' }}>
+              <Button onClick={handleMarkAllAsRead} sx={{ gap: 1 }}>
+                Mark all as read <Iconify icon="mdi:tick-all" />
+              </Button>
+            </Stack>
+          )}
+          <Grid sx={{ my: 2 }} item xs={12} md={6} lg={8}>
             {notifications.map((notification) => (
-              <NotificationItem notification={notification} />
+              <NotificationRow notification={notification} />
             ))}
             {isNotFound && (
               <EmptyContent
