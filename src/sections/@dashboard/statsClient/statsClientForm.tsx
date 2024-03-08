@@ -67,7 +67,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     });
   const handleRemove = (index: number) => remove(index);
   const values = watch();
-  console.log(values,fields);
+ 
   
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const submit = async (data: IStatsClientFormProps) => {
