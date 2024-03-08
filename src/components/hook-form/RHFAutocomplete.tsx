@@ -20,6 +20,7 @@ interface Props<
   codeInOrderOfName?: boolean;
   soloSelected?: boolean;
   required?:boolean
+
 }
 
 export default function RHFAutocomplete<

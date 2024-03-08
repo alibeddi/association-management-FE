@@ -6,6 +6,7 @@ import {PaginationModel} from "../../@types/Pagination"
 import { useLocales } from '../../locales';
 import { dispatch } from '../../redux/store';
 import { setParams } from '../../utils/setParams';
+import { StyledAsyncPaginate } from '../AsyncSelect/styles';
 
 interface Props<T>  {
   name: string;
@@ -19,6 +20,7 @@ interface Props<T>  {
   fetchData: (params:Params) => Promise<any>
   getOptionLabel: (option: T) => string;
  getOptionValue: (option: T) => any;
+ sx?: any;
 }
 interface Params {
   page: number;
@@ -38,6 +40,7 @@ const RHFAsyncSelect = <T,>({
   isSearchable=true,
   getOptionLabel,
   getOptionValue,
+  sx={},
   ...other
 }:Props<T>) => {
   const {control} = useFormContext()
@@ -54,7 +57,6 @@ const RHFAsyncSelect = <T,>({
     // const {docs,meta}= await dispatch(fetchData(params))
     const data = await  fetchData(params)
     const {docs,meta} = data.data;
-    console.log(data,"docs ",docs)
     const hasMore = meta.hasMore;
     setPage(prev => hasMore ?  prev + 1 : page);
     return {
@@ -72,6 +74,9 @@ const RHFAsyncSelect = <T,>({
     render={({field,fieldState:{error}})=>(
       <Tooltip title={`${translate(helperText)}` || `${translate(label)}` }>
         <AsyncPaginate
+         onChange={(e) => {
+          field.onChange((e));
+        }}
         isMulti={isMulti}
         additional={{
           page:1
@@ -82,8 +87,7 @@ const RHFAsyncSelect = <T,>({
         isSearchable={isSearchable}
         placeholder={placeholder || "select item"}
         required={required}
-
-
+        styles={StyledAsyncPaginate(sx)}
         {...other}
       />
       </Tooltip>

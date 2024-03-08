@@ -54,7 +54,7 @@ const Admin = (({
       if(userId){ dispatch(handleChangefilter({id:name,value:userId}))}
     
     }}
-    styles={StyledAsyncPaginate}
+    styles={StyledAsyncPaginate()}
     />
   )
 })

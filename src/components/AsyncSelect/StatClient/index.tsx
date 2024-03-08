@@ -43,7 +43,7 @@ const StatClient = (({
     isSearchable
     placeholder="Select an stats Clients"
     onChange={(e)=>{if(e) {dispatch(handleChangefilter({id:name,value:e._id}))}}}
-    styles={StyledAsyncPaginate}
+    styles={StyledAsyncPaginate()}
     />
   )
 })

@@ -110,6 +110,8 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     gap: '1rem',
   };
 
+console.log("sqfqsdf ",fields,values);
+
   return (
     <FormProvider
       methods={methods}
@@ -149,18 +151,12 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                     alignItems: 'center',
                     gap: '1rem',
                     width: '100%',
+                    height:'100%',
+                    "& .css-b62m3t-container":{
+                      flexBasis:"80%"
+                    }
                   }}
                 >
-                  {/* <RHFAutocomplete
-                    freeSolo
-                    label={`Question n°: ${index+1}`}
-                    name={`kpis[${index}]`}
-                    defaultValue={s || ''}
-                    getOptionLabel={(option) => option && typeof option !== 'string' ? option?.label : option}
-                    options={kpis.docs}
-                    required
-                    sx={{ flexBasis: '80%' }}
-                  /> */}
                   <RHFAsyncSelect
                   name={`kpis[${index}]`}
                   label="kpi"
@@ -170,14 +166,12 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                   getOptionLabel={(option:IKpi) => option && typeof option !== 'string' ? option?.label : option}
                   getOptionValue={(option)=>option}
                   fetchData={async (params) => {
-
                     const response = await axios.get(`/kpis?page=${params.page}&limit=${params.limit}&filterName=${params.name}`)
-                    
-                    
-          const data = await response.data;
-
-  
+                    const data = await response.data;
                     return data;
+                  }}
+                  sx={{
+                    padding: ".5rem 1rem"
                   }}
                   />
                   <Button
