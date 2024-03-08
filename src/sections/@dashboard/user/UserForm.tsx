@@ -24,7 +24,6 @@ const UserForm = ({user,isEdit=false}:IProps) => {
       dispatch(getAllPermissionGroups())
   },[dispatch])
   const {permissionGroups} = useSelector(store=>store.permissions_groups)
-  console.log(permissionGroups)
   const defaultValues = useMemo(()=>({
     name:user?.name || "",
     email:user?.email || "",

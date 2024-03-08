@@ -110,7 +110,6 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     gap: '1rem',
   };
 
-console.log("sqfqsdf ",fields,values);
 
   return (
     <FormProvider

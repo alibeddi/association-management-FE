@@ -18,7 +18,6 @@ const StatResponseFilterSelect = ({filters}:IProps) =>
   const methods = useForm()
   const {watch} = methods;
   const values = watch()
-  console.log("filters => ",filters,"values => ",values)
   return <FormProvider methods={methods} >
     <Stack sx={{
       gap:"1rem",
