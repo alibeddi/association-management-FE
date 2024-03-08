@@ -150,7 +150,7 @@ export default function NotificationsPopover() {
 
 // ----------------------------------------------------------------------
 
-function NotificationItem({ notification }: { notification: Notification }) {
+export function NotificationItem({ notification }: { notification: Notification }) {
   const { from, message, seen, seenAt, doc, docModel, createdAt } = notification;
 
   return (

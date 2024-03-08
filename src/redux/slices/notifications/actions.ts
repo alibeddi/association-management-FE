@@ -3,12 +3,14 @@ import axios from '../../../utils/axios';
 
 export const getAllNotifications = createAsyncThunk(
   'NOTIFICATION/GET-ALL',
-  async (payload: { page: number; limit: number }) => {
+  async (payload: { page: number; limit: number; filterStatus?: string }) => {
     let data;
-    const { page, limit = 10 } = payload;
+    const { page, limit = 10, filterStatus } = payload;
+    const seen = filterStatus === 'read';
     const params = {
       page: page + 1,
       limit,
+      ...(filterStatus !== 'all' ? { seen } : {}),
     };
     try {
       const response = await axios.get('/notifications', { params });
