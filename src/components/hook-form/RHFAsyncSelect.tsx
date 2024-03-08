@@ -1,4 +1,3 @@
-import { placeholder } from '@babel/types';
 import { Tooltip } from '@mui/material';
 import React, { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form';
@@ -17,9 +16,9 @@ interface Props<T>  {
   disable?:boolean;
   isSearchable?:boolean;
   placeholder?:string;
-  fetchData: (params:Params) => PaginationModel<T>
+  fetchData: (params:Params) => Promise<any>
   getOptionLabel: (option: T) => string;
- getOptionValue: (option: T) => string;
+ getOptionValue: (option: T) => any;
 }
 interface Params {
   page: number;
@@ -43,7 +42,7 @@ const RHFAsyncSelect = <T,>({
 }:Props<T>) => {
   const {control} = useFormContext()
   const {translate} = useLocales()
-  const [page,setPage] = useState<number>(0)
+  const [page,setPage] = useState<number>(1)
   const [filterName,setFilterName] = useState<string | null>(null)
   const loadOptions = async (searchQuery: string) => {
    
@@ -52,7 +51,10 @@ const RHFAsyncSelect = <T,>({
       setPage(0)
     } 
     const params = setParams({page,limit:10,filterName:filterName || ""})
-    const {docs,meta}= await dispatch(fetchData(params))
+    // const {docs,meta}= await dispatch(fetchData(params))
+    const data = await  fetchData(params)
+    const {docs,meta} = data.data;
+    console.log(data,"docs ",docs)
     const hasMore = meta.hasMore;
     setPage(prev => hasMore ?  prev + 1 : page);
     return {

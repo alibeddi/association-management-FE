@@ -20,6 +20,8 @@ import { IStatsClient, IStatsClientFormProps } from '../../../@types/statsClient
 import { setDefaultValuesStatsClient } from '../../../utils/setDefaultValuesStatsClient';
 
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import RHFAsyncSelect from '../../../components/hook-form/RHFAsyncSelect';
+import axios from '../../../utils/axios';
 
 type IProps = {
   statsClientProp?: IStatsClient | null;
@@ -29,15 +31,16 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const statsClient = statsClientProp;
-  // TODO: make scroll to get 10 other
-  useEffect(() => {
-    dispatch(
-      getKpis({
-        page: 0,
-        limit: 200,
-      })
-    );
-  }, [dispatch]);
+  // // TODO: make scroll to get 10 other
+  // useEffect(() => {
+  //   dispatch(
+  //     getKpis({
+  //       page: 0,
+  //       limit: 200,
+  //     })
+  //   );
+  // }, [dispatch]);
+
   const { enqueueSnackbar } = useSnackbar();
   const newKpisSchema = Yup.object().shape({
     name: Yup.string().required(),
@@ -148,7 +151,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                     width: '100%',
                   }}
                 >
-                  <RHFAutocomplete
+                  {/* <RHFAutocomplete
                     freeSolo
                     label={`Question n°: ${index+1}`}
                     name={`kpis[${index}]`}
@@ -157,8 +160,26 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                     options={kpis.docs}
                     required
                     sx={{ flexBasis: '80%' }}
-                  />
+                  /> */}
+                  <RHFAsyncSelect
+                  name={`kpis[${index}]`}
+                  label="kpi"
+                  placeholder='select a kpi'
+                  required
+                  isSearchable
+                  getOptionLabel={(option:IKpi) => option && typeof option !== 'string' ? option?.label : option}
+                  getOptionValue={(option)=>option}
+                  fetchData={async (params) => {
 
+                    const response = await axios.get(`/kpis?page=${params.page}&limit=${params.limit}&filterName=${params.name}`)
+                    
+                    
+          const data = await response.data;
+
+  
+                    return data;
+                  }}
+                  />
                   <Button
                     variant="contained"
                     color="error"

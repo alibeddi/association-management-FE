@@ -23,7 +23,8 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   useEffect(()=>{
       dispatch(getAllPermissionGroups())
   },[dispatch])
-  const {permissions} = useSelector(store=>store.permissions)
+  const {permissionGroups} = useSelector(store=>store.permissions_groups)
+  console.log(permissionGroups)
   const defaultValues = useMemo(()=>({
     name:user?.name || "",
     email:user?.email || "",
@@ -90,7 +91,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               options={[]}
               disabled={!isEdit}
               />
- <RHFAutocomplete
+            <RHFAutocomplete
               name="extraPermission"
               label="extraPermission"
               multiple
