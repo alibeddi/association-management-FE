@@ -2,7 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Notification } from '../../../@types/Notification';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
-import { getAllNotifications, getNotificationsCounts, marlAllNotificationsAsRead } from './actions';
+import {
+  getAllNotifications,
+  getNotificationsCounts,
+  markOneNotificationAsRead,
+  marlAllNotificationsAsRead,
+} from './actions';
 
 export type ICount = { total: number; read: number; unread: number };
 type NotificationInitialState = {
@@ -60,6 +65,26 @@ const slice = createSlice({
         };
       })
       .addCase(marlAllNotificationsAsRead.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // MARK ONE AS READ
+    builder
+      .addCase(markOneNotificationAsRead.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(markOneNotificationAsRead.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.notifications.docs = state.notifications.docs.filter(
+          (notification) => notification._id !== action.meta.arg
+        );
+        const { read, unread, total } = state.notificationCounts;
+        state.notificationCounts = {
+          read: read + 1,
+          unread: unread - 1,
+          total,
+        };
+      })
+      .addCase(markOneNotificationAsRead.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

@@ -19,6 +19,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import { useSnackbar } from 'notistack';
 // utils
 import { fToNow } from '../../../utils/formatTime';
 // components
@@ -30,6 +31,7 @@ import Scrollbar from '../../../components/scrollbar';
 import {
   getAllNotifications,
   getNotificationsCounts,
+  markOneNotificationAsRead,
   marlAllNotificationsAsRead,
 } from '../../../redux/slices/notifications/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
@@ -184,7 +186,10 @@ export function NotificationItem({ notification }: { notification: Notification 
 // ----------------------------------------------------------------------
 
 export function NotificationRow({ notification }: { notification: Notification }) {
-  const { from, message, seen, seenAt, doc, docModel, createdAt } = notification;
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { _id, from, message, seen, seenAt, doc, docModel, createdAt } = notification;
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
 
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
@@ -193,6 +198,16 @@ export function NotificationRow({ notification }: { notification: Notification }
 
   const handleClosePopover = () => {
     setOpenPopover(null);
+  };
+
+  const markNotificationAsRead = () => {
+    dispatch(markOneNotificationAsRead(_id))
+      .unwrap()
+      .then((res) => {
+        enqueueSnackbar(res.message);
+      })
+      .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
+    handleClosePopover();
   };
 
   return (
@@ -236,12 +251,16 @@ export function NotificationRow({ notification }: { notification: Notification }
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top">
         {!seen && (
-          <MenuItem onClick={() => {}}>
+          <MenuItem onClick={markNotificationAsRead}>
             <Iconify icon="eva:checkmark-circle-2-fill" />
             Mark As Read
           </MenuItem>
         )}
-        <MenuItem onClick={() => {}}>
+        <MenuItem
+          onClick={() => {
+            navigate(PATH_DASHBOARD.todoList);
+          }}
+        >
           <Iconify icon="carbon:view-filled" />
           More Details
         </MenuItem>

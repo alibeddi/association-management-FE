@@ -52,3 +52,20 @@ export const marlAllNotificationsAsRead = createAsyncThunk('NOTIFICATION/PATCH',
     return Promise.reject(err.message ? err.message : data?.message);
   }
 });
+
+export const markOneNotificationAsRead = createAsyncThunk(
+  'NOTIFICATION/PATCH-ONE',
+  async (notificationId: string) => {
+    let data;
+    try {
+      const response = await axios.patch(`/notifications/${notificationId}`);
+      data = await response.data;
+      if (response.status === 200) {
+        return data.data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
