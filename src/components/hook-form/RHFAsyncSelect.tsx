@@ -20,8 +20,8 @@ interface Props<T>  {
   fetchData: (params:Params) => Promise<any>
   getOptionLabel: (option: T) => string;
  getOptionValue: (option: T) => any;
- onChange?: any;
- sx?: any;
+ onChange?: Function;
+ sx?: React.CSSProperties;
 }
 interface Params {
   page: number;

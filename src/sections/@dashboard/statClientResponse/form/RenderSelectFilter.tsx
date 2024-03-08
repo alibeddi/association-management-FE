@@ -37,8 +37,8 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
           const data = await response.data;
           return data;
         }}
-        onChange={(users:any)=>{
-          const userId = users?.map((user:any) => user?._id)
+        onChange={(users:User[])=>{
+          const userId = users?.map((user) => user?._id)
           if(userId){ dispatch(handleChangefilter({id:filter.id,value:userId}))}
         
         }}
@@ -62,7 +62,7 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
           const data = await response.data;
           return data;
         }}
-        onChange={(e:any)=>{if(e) dispatch(handleChangefilter({id:filter.id,value:e}));}}
+        onChange={(e:IKpi)=>{if(e) dispatch(handleChangefilter({id:filter.id,value:e}));}}
         sx={{
           padding: ".5rem 1rem"
         }}
@@ -85,7 +85,6 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
       onChange={(e)=>dispatch(handleChangefilter({id:filter.id,value:e.target.value}))}
       />
     case MENU_ITEM_VALUE.statClient:
-      // return <StatClientAsyncSelect   name={filter.id}   />
       return (
         <RHFAsyncSelect
         name="statClient"
