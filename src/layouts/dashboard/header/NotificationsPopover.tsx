@@ -1,40 +1,43 @@
-import { noCase } from 'change-case';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 // @mui
 import {
-  Box,
-  Stack,
-  List,
-  Badge,
-  Button,
   Avatar,
-  Tooltip,
+  Badge,
+  Box,
+  Button,
   Divider,
   IconButton,
-  Typography,
-  ListItemText,
-  ListSubheader,
+  List,
   ListItemAvatar,
   ListItemButton,
+  ListItemText,
+  ListSubheader,
+  Stack,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 // utils
 import { fToNow } from '../../../utils/formatTime';
 // components
-import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
-import MenuPopover from '../../../components/menu-popover';
+import { Notification } from '../../../@types/Notification';
 import { IconButtonAnimate } from '../../../components/animate';
-import { dispatch, RootState, useSelector } from '../../../redux/store';
+import Iconify from '../../../components/iconify';
+import MenuPopover from '../../../components/menu-popover';
+import Scrollbar from '../../../components/scrollbar';
 import {
   getAllNotifications,
   getUnreadNotificationsNumber,
   marlAllNotificationsAsRead,
 } from '../../../redux/slices/notifications/actions';
-import { Notification } from '../../../@types/Notification';
+import { dispatch, RootState, useSelector } from '../../../redux/store';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 
 // ---------------------------------------------------------------------
 
 export default function NotificationsPopover() {
+  const navigate = useNavigate();
+
   const { notifications: fetchedNotification, unreadNotifications } = useSelector(
     (state: RootState) => state.notifications
   );
@@ -128,7 +131,14 @@ export default function NotificationsPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
+          <Button
+            onClick={() => {
+              handleClosePopover();
+              navigate(PATH_DASHBOARD.Notifications);
+            }}
+            fullWidth
+            disableRipple
+          >
             View All
           </Button>
         </Box>

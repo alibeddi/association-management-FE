@@ -31,6 +31,7 @@ import {
   StatsClientNew,
   StatsClientShow,
   Analytics,
+  Notifications,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -141,6 +142,14 @@ export default function Router() {
           element: (
             <PermissionGuard model={ModelCode.ANALYTICS} method={MethodCode.LIST}>
               <Analytics />
+            </PermissionGuard>
+          ),
+        },
+        {
+          path: 'notifications',
+          element: (
+            <PermissionGuard model={ModelCode.NOTIFICATION} method={MethodCode.LIST}>
+              <Notifications />
             </PermissionGuard>
           ),
         },

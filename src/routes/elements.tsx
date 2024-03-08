@@ -41,7 +41,11 @@ export const StatsClient = Loadable(lazy(() => import('../pages/statsClient')));
 export const StatsClientNew = Loadable(lazy(() => import('../pages/statsClient/statsClientNew')));
 export const StatsClientEdit = Loadable(lazy(() => import('../pages/statsClient/statsClientEdit')));
 export const StatsClientShow = Loadable(lazy(() => import('../pages/statsClient/statsClientShow')));
+
 // todo list
 export const MyTodoList = Loadable(lazy(() => import('../pages/Todos/TodoListPage')));
+
+// todo list
+export const Notifications = Loadable(lazy(() => import('../pages/Notifications')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

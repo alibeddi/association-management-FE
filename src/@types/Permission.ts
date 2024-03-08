@@ -10,6 +10,7 @@ export enum ModelCode {
   STAT_CLIENT_RESPONSE = 'STAT_CLIENT_RESPONSE',
   ANALYTICS = 'ANALYTICS',
   TODO = 'TODO',
+  NOTIFICATION = 'NOTIFICATION',
 }
 
 export enum MethodCode {

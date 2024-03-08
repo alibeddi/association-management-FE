@@ -87,7 +87,7 @@ export default function navConfig(user: AuthUserType) {
         },
         {
           title: 'Todo List',
-          path: PATH_DASHBOARD.todoList.root,
+          path: PATH_DASHBOARD.todoList,
           icon: ICONS.todoList,
           toBeDisplayed: hasAccessToTodoList,
         },
