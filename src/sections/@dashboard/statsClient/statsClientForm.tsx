@@ -31,15 +31,6 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const statsClient = statsClientProp;
-  // // TODO: make scroll to get 10 other
-  // useEffect(() => {
-  //   dispatch(
-  //     getKpis({
-  //       page: 0,
-  //       limit: 200,
-  //     })
-  //   );
-  // }, [dispatch]);
 
   const { enqueueSnackbar } = useSnackbar();
   const newKpisSchema = Yup.object().shape({
@@ -76,6 +67,8 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     });
   const handleRemove = (index: number) => remove(index);
   const values = watch();
+  console.log(values,fields);
+  
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const submit = async (data: IStatsClientFormProps) => {
     const kpisArray: string[] = getFromKpis(data.kpis);
@@ -160,6 +153,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                   name={`kpis[${index}]`}
                   label="kpi"
                   placeholder='select a kpi'
+                  value={s}
                   required
                   isSearchable
                   getOptionLabel={(option:IKpi) => option && typeof option !== 'string' ? option?.label : option}

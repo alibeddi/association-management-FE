@@ -17,6 +17,7 @@ interface Props<T>  {
   disable?:boolean;
   isSearchable?:boolean;
   placeholder?:string;
+  value?: any;
   fetchData: (params:Params) => Promise<any>
   getOptionLabel: (option: T) => string;
  getOptionValue: (option: T) => any;
@@ -42,6 +43,7 @@ const RHFAsyncSelect = <T,>({
   getOptionLabel,
   getOptionValue,
   sx={},
+  value,
   onChange:onChangeProp,
   ...other
 }:Props<T>) => {
@@ -70,14 +72,6 @@ const RHFAsyncSelect = <T,>({
     };
   };
 
-  // const handleChange = (e: any) => {
-  //   if (onChangeProp) {
-  //     onChangeProp(e);
-  //   } else {
-  //     field.onChange(e);
-  //   }
-  // };
-
   return (
     <Controller
     name={name}
@@ -94,6 +88,7 @@ const RHFAsyncSelect = <T,>({
           }
           
         }}
+        defaultValue={value}
         isMulti={isMulti}
         additional={{
           page:1
