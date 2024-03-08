@@ -58,7 +58,6 @@ const RHFAsyncSelect = <T,>({
       setPage(0)
     } 
     const params = setParams({page,limit:10,filterName:filterName || ""})
-    // const {docs,meta}= await dispatch(fetchData(params))
     const data = await  fetchData(params)
     const {docs,meta} = data.data;
     const hasMore = meta.hasMore;
