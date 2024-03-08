@@ -1,18 +1,14 @@
+import { Box, Drawer, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-// @mui
-import { Box, Drawer, Stack } from '@mui/material';
-// hooks
-import useResponsive from '../../../hooks/useResponsive';
-// config
-import { NAV } from '../../../config-global';
-// components
+import { useAuthContext } from '../../../auth/useAuthContext';
 import Logo from '../../../components/logo';
 import { NavSectionVertical } from '../../../components/nav-section';
 import Scrollbar from '../../../components/scrollbar';
-//
-import { useAuthContext } from '../../../auth/useAuthContext';
+import { NAV } from '../../../config-global';
+import useResponsive from '../../../hooks/useResponsive';
+import NavAccount from './NavAccount';
 import navConfigItems from './navConfig';
 import NavToggleButton from './NavToggleButton';
 
@@ -57,7 +53,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
       }}
     >
       <Stack
-        spacing={3}
+        spacing={5}
         sx={{
           pt: 3,
           pb: 2,
@@ -68,6 +64,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         <StyledRoot>
           <Logo />
         </StyledRoot>
+        <NavAccount />
       </Stack>
 
       <NavSectionVertical data={navConfig} />
