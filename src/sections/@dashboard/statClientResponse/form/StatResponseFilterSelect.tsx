@@ -1,21 +1,25 @@
 import { Button, MenuItem, Select } from '@mui/material'
 import { Box, Stack } from '@mui/system'
-import { nanoid } from '@reduxjs/toolkit'
-import  { Dispatch, SetStateAction, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import FormProvider from "../../../../components/hook-form"
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse'
-import ChoicesSelect from '../../../../components/ChoicesSelect'
 import Iconify from '../../../../components/iconify'
 import { MENU_ITEM_FILTER } from '../../../../constant/menuItemFilter'
 import { handleChangeOptionfilter, removeFilter } from '../../../../redux/slices/statClientResponse'
 import { dispatch } from '../../../../redux/store'
 import FilterSection from '../components/FilterSection'
-import RenderSelectFilter from './RenderSelectFilter'
 
 type IProps = {
   filters:  IFilterStatClientResponse[]
 }
 
-const StatResponseFilterSelect = ({filters}:IProps) => (
+const StatResponseFilterSelect = ({filters}:IProps) => 
+{ 
+  const methods = useForm()
+  const {watch} = methods;
+  const values = watch()
+  console.log("filters => ",filters,"values => ",values)
+  return <FormProvider methods={methods} >
     <Stack sx={{
       gap:"1rem",
       display:"flex"
@@ -69,7 +73,8 @@ const StatResponseFilterSelect = ({filters}:IProps) => (
       }
      
     </Stack>
-  )
+    </FormProvider>
+  }
 
 
 export default StatResponseFilterSelect

@@ -20,6 +20,7 @@ interface Props<T>  {
   fetchData: (params:Params) => Promise<any>
   getOptionLabel: (option: T) => string;
  getOptionValue: (option: T) => any;
+ onChange?: any;
  sx?: any;
 }
 interface Params {
@@ -41,6 +42,7 @@ const RHFAsyncSelect = <T,>({
   getOptionLabel,
   getOptionValue,
   sx={},
+  onChange:onChangeProp,
   ...other
 }:Props<T>) => {
   const {control} = useFormContext()
@@ -67,6 +69,15 @@ const RHFAsyncSelect = <T,>({
       }
     };
   };
+
+  // const handleChange = (e: any) => {
+  //   if (onChangeProp) {
+  //     onChangeProp(e);
+  //   } else {
+  //     field.onChange(e);
+  //   }
+  // };
+
   return (
     <Controller
     name={name}
@@ -75,7 +86,13 @@ const RHFAsyncSelect = <T,>({
       <Tooltip title={`${translate(helperText)}` || `${translate(label)}` }>
         <AsyncPaginate
          onChange={(e) => {
-          field.onChange((e));
+          if(!e) return;
+          if(onChangeProp){
+            onChangeProp(e)
+          }else{
+            field.onChange((e));
+          }
+          
         }}
         isMulti={isMulti}
         additional={{

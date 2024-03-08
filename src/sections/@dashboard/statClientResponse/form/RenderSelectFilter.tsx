@@ -9,6 +9,10 @@ import CustomDateRangePicker from '../components/CustomDateRangePicker';
 import { valueFilterType } from '../../../../@types/AsyncSelectFilter';
 import { dispatch } from '../../../../redux/store';
 import { handleChangefilter } from '../../../../redux/slices/statClientResponse';
+import { IKpi } from '../../../../@types/Kpi';
+import axios from '../../../../utils/axios';
+import RHFAsyncSelect from '../../../../components/hook-form/RHFAsyncSelect';
+import { User } from '../../../../@types/User';
 
 
 
@@ -20,14 +24,51 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
   switch (filter.type) {
     case MENU_ITEM_VALUE.admin:
       return (
-        <AdminAsyncSelect
+        <RHFAsyncSelect
+        name="admin"
+        label="admin"
+        placeholder='select a admin'
+        required
+        isMulti
+        isSearchable
+        getOptionLabel={(option:User)=>option.name || option?.email}
+        getOptionValue={(option)=>option._id}
+        fetchData={async (params) => {
+          const response = await axios.get(`/users?page=${params.page}&limit=${params.limit}&filterName=${params.name}`)
+          const data = await response.data;
+          return data;
+        }}
+        onChange={(users:any)=>{
+          const userId = users?.map((user:any) => user?._id)
+          if(userId){ dispatch(handleChangefilter({id:filter.id,value:userId}))}
         
-        name={filter.id} 
-
+        }}
+        sx={{
+          padding: ".5rem 1rem"
+        }}
         />
-      );
+      )
     case MENU_ITEM_VALUE.kpis:
-      return <AsyncSelectKpis name={filter.id}  />
+      return (
+        <RHFAsyncSelect
+        name="kpis"
+        label="kpi"
+        placeholder='select a kpi'
+        required
+        isSearchable
+        getOptionLabel={(option:IKpi) => option && typeof option !== 'string' ? option?.label : option}
+        getOptionValue={(option)=>option}
+        fetchData={async (params) => {
+          const response = await axios.get(`/kpis?page=${params.page}&limit=${params.limit}&filterName=${params.name}`)
+          const data = await response.data;
+          return data;
+        }}
+        onChange={(e:any)=>{if(e) dispatch(handleChangefilter({id:filter.id,value:e}));}}
+        sx={{
+          padding: ".5rem 1rem"
+        }}
+        />
+      )
     case MENU_ITEM_VALUE.clientContact:
       return <TextField
       
