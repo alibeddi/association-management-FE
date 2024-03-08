@@ -17,7 +17,7 @@ interface Props<T>  {
   disable?:boolean;
   isSearchable?:boolean;
   placeholder?:string;
-  value?: any;
+  value?: T;
   fetchData: (params:Params) => Promise<any>
   getOptionLabel: (option: T) => string;
  getOptionValue: (option: T) => any;
