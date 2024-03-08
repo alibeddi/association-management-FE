@@ -1,4 +1,6 @@
-export const StyledAsyncPaginate = (customStyles: Record<string, any> = {}) => ({
+import React from "react";
+
+export const StyledAsyncPaginate = (customStyles: React.CSSProperties = {}) => ({
   indicatorsContainer: () => ({ display: "none" }), 
   control: (provided: object) => ({
     ...provided,
