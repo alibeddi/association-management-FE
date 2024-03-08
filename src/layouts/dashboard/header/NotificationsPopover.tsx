@@ -26,6 +26,7 @@ import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { getAllNotifications } from '../../../redux/slices/notifications/actions';
+import { Notification } from '../../../@types/Notification';
 
 // ----------------------------------------------------------------------
 const _notifications = [...Array(5)].map((_, index) => ({
@@ -63,13 +64,17 @@ export default function NotificationsPopover() {
   console.log({ fetchedNotification });
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
 
-  const [notifications, setNotifications] = useState(_notifications);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  const totalUnRead = notifications.filter((item) => item.seen === true).length;
 
-  // useEffect(() => {
-  //   dispatch(getAllNotifications({ page: 0, limit: 10 }));
-  // }, []);
+  useEffect(() => {
+    dispatch(getAllNotifications({ page: 0, limit: 10 }));
+  }, []);
+
+  useEffect(() => {
+    setNotifications(fetchedNotification.docs);
+  }, [fetchedNotification]);
 
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
     setOpenPopover(event.currentTarget);
@@ -131,7 +136,7 @@ export default function NotificationsPopover() {
             }
           >
             {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+              <NotificationItem key={notification._id} notification={notification} />
             ))}
           </List>
 
@@ -144,7 +149,7 @@ export default function NotificationsPopover() {
             }
           >
             {notifications.slice(2, 5).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+              <NotificationItem key={notification._id} notification={notification} />
             ))}
           </List>
         </Scrollbar>
@@ -173,8 +178,8 @@ type NotificationItemProps = {
   isUnRead: boolean;
 };
 
-function NotificationItem({ notification }: { notification: NotificationItemProps }) {
-  const { avatar, title } = renderContent(notification);
+function NotificationItem({ notification }: { notification: Notification }) {
+  const { from, to, message, todoId, seen, seenAt, doc, docModel, createdAt } = notification;
 
   return (
     <ListItemButton
@@ -182,22 +187,22 @@ function NotificationItem({ notification }: { notification: NotificationItemProp
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(notification.isUnRead && {
+        ...(notification.seen && {
           bgcolor: 'action.selected',
         }),
       }}
     >
       <ListItemAvatar>
-        <Avatar sx={{ bgcolor: 'background.neutral' }}>{avatar}</Avatar>
+        <Avatar sx={{ bgcolor: 'background.neutral' }}>{from?.avatar}</Avatar>
       </ListItemAvatar>
 
       <ListItemText
         disableTypography
-        primary={title}
+        primary={message}
         secondary={
           <Stack direction="row" sx={{ mt: 0.5, typography: 'caption', color: 'text.disabled' }}>
             <Iconify icon="eva:clock-fill" width={16} sx={{ mr: 0.5 }} />
-            <Typography variant="caption">{fToNow(notification.createdAt)}</Typography>
+            <Typography variant="caption">{fToNow(createdAt)}</Typography>
           </Stack>
         }
       />

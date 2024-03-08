@@ -5,7 +5,8 @@ export const enum NOTIFICATIONS_DOCS {
   TODO = 'Todo',
 }
 export interface Notification {
-  from: string | User;
+  _id: string;
+  from: User;
   to: string | User;
   message: string;
   todoId: string;
@@ -13,4 +14,5 @@ export interface Notification {
   seenAt: Date;
   doc: string | Todo;
   docModel: NOTIFICATIONS_DOCS;
+  createdAt: Date;
 }

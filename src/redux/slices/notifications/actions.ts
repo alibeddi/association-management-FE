@@ -11,7 +11,7 @@ export const getAllNotifications = createAsyncThunk(
       limit,
     };
     try {
-      const response = await axios.get('/kpis', { params });
+      const response = await axios.get('/notifications', { params });
       data = await response.data;
       if (response.status === 200) {
         return data.data;
