@@ -2,8 +2,6 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { TextField, MenuItem } from '@mui/material';
 
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
-import AsyncSelectKpis from '../../../../components/AsyncSelect/AsyncSelectKpis';
-import { AdminAsyncSelect, StatClientAsyncSelect } from '../../../../components/AsyncSelect';
 import { MENU_ITEM_VALUE } from '../../../../constant/menuItemFilter';
 import CustomDateRangePicker from '../components/CustomDateRangePicker';
 import { valueFilterType } from '../../../../@types/AsyncSelectFilter';
@@ -87,6 +85,7 @@ const RenderSelectFilter = ({ filter  }: IProp) => {
       onChange={(e)=>dispatch(handleChangefilter({id:filter.id,value:e.target.value}))}
       />
     case MENU_ITEM_VALUE.statClient:
+      // return <StatClientAsyncSelect   name={filter.id}   />
       return (
         <RHFAsyncSelect
         name="statClient"
