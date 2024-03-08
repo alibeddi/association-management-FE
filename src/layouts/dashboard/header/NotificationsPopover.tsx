@@ -25,51 +25,27 @@ import Scrollbar from '../../../components/scrollbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
-import { getAllNotifications } from '../../../redux/slices/notifications/actions';
+import {
+  getAllNotifications,
+  getUnreadNotificationsNumber,
+  marlAllNotificationsAsRead,
+} from '../../../redux/slices/notifications/actions';
 import { Notification } from '../../../@types/Notification';
 
-// ----------------------------------------------------------------------
-const _notifications = [...Array(5)].map((_, index) => ({
-  id: 'kdsljfhbvks',
-  title: [
-    'Your order is placed',
-    'Sylvan King',
-    'You have new message',
-    'You have new mail',
-    'Delivery processing',
-  ][index],
-  description: [
-    'waiting for shipping',
-    'answered to your comment on the Minimal',
-    '5 unread messages',
-    'sent from Guido Padberg',
-    'Your order is being shipped',
-  ][index],
-  avatar: [
-    null,
-    'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg',
-    null,
-    null,
-    null,
-  ][index],
-  type: ['order_placed', 'friend_interactive', 'chat_message', 'mail', 'order_shipped'][index],
-  createdAt: new Date(),
-  isUnRead: [true, true, false, false, false][index],
-}));
+// ---------------------------------------------------------------------
 
 export default function NotificationsPopover() {
-  const { notifications: fetchedNotification } = useSelector(
+  const { notifications: fetchedNotification, unreadNotifications } = useSelector(
     (state: RootState) => state.notifications
   );
-  console.log({ fetchedNotification });
+
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const totalUnRead = notifications.filter((item) => item.seen === true).length;
-
   useEffect(() => {
     dispatch(getAllNotifications({ page: 0, limit: 10 }));
+    dispatch(getUnreadNotificationsNumber());
   }, []);
 
   useEffect(() => {
@@ -85,12 +61,7 @@ export default function NotificationsPopover() {
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        isUnRead: false,
-      }))
-    );
+    dispatch(marlAllNotificationsAsRead());
   };
 
   return (
@@ -100,7 +71,7 @@ export default function NotificationsPopover() {
         onClick={handleOpenPopover}
         sx={{ width: 40, height: 40 }}
       >
-        <Badge badgeContent={totalUnRead} color="error">
+        <Badge badgeContent={unreadNotifications} color="error">
           <Iconify icon="eva:bell-fill" />
         </Badge>
       </IconButtonAnimate>
@@ -111,11 +82,11 @@ export default function NotificationsPopover() {
             <Typography variant="subtitle1">Notifications</Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              You have {totalUnRead} unread messages
+              You have {unreadNotifications} unread messages
             </Typography>
           </Box>
 
-          {totalUnRead > 0 && (
+          {unreadNotifications > 0 && (
             <Tooltip title=" Mark all as read">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
                 <Iconify icon="eva:done-all-fill" />
@@ -168,18 +139,8 @@ export default function NotificationsPopover() {
 
 // ----------------------------------------------------------------------
 
-type NotificationItemProps = {
-  id: string;
-  title: string;
-  description: string;
-  avatar: string | null;
-  type: string;
-  createdAt: Date;
-  isUnRead: boolean;
-};
-
 function NotificationItem({ notification }: { notification: Notification }) {
-  const { from, to, message, todoId, seen, seenAt, doc, docModel, createdAt } = notification;
+  const { from, message, seen, seenAt, doc, docModel, createdAt } = notification;
 
   return (
     <ListItemButton
@@ -208,46 +169,4 @@ function NotificationItem({ notification }: { notification: Notification }) {
       />
     </ListItemButton>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function renderContent(notification: NotificationItemProps) {
-  const title = (
-    <Typography variant="subtitle2">
-      {notification.title}
-      <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {noCase(notification.description)}
-      </Typography>
-    </Typography>
-  );
-
-  if (notification.type === 'order_placed') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_package.svg" />,
-      title,
-    };
-  }
-  if (notification.type === 'order_shipped') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_shipping.svg" />,
-      title,
-    };
-  }
-  if (notification.type === 'mail') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_mail.svg" />,
-      title,
-    };
-  }
-  if (notification.type === 'chat_message') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_chat.svg" />,
-      title,
-    };
-  }
-  return {
-    avatar: notification.avatar ? <img alt={notification.title} src={notification.avatar} /> : null,
-    title,
-  };
 }

@@ -22,3 +22,31 @@ export const getAllNotifications = createAsyncThunk(
     }
   }
 );
+
+export const getUnreadNotificationsNumber = createAsyncThunk('NOTIFICATION/UNREAD', async () => {
+  let data;
+  try {
+    const response = await axios.get('/notifications/unread');
+    data = await response.data;
+    if (response.status === 200) {
+      return data.data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+});
+
+export const marlAllNotificationsAsRead = createAsyncThunk('NOTIFICATION/PATCH', async () => {
+  let data;
+  try {
+    const response = await axios.patch('/notifications');
+    data = await response.data;
+    if (response.status === 200) {
+      return data.data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+});
