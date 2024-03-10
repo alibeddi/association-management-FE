@@ -5,18 +5,16 @@ import { Notification } from '../@types/Notification';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import EmptyContent from '../components/empty-content';
 import Iconify from '../components/iconify';
-import Label from '../components/label';
 import { TablePaginationCustom, useTable } from '../components/table';
 import {
-  NotificationItem,
-  NotificationRow,
+  NotificationRow
 } from '../layouts/dashboard/header/NotificationsPopover';
 import { useLocales } from '../locales';
 import {
   getAllNotifications,
   marlAllNotificationsAsRead,
 } from '../redux/slices/notifications/actions';
-import { dispatch, RootState, useSelector } from '../redux/store';
+import { RootState, dispatch, useSelector } from '../redux/store';
 
 export default function Notifications() {
   const {
@@ -30,7 +28,7 @@ export default function Notifications() {
     onChangeRowsPerPage,
   } = useTable();
   const { translate } = useLocales();
-  const { notificationCounts, notifications: fetchedNotifcations } = useSelector(
+  const { unread, notifications: fetchedNotifcations } = useSelector(
     (state: RootState) => state.notifications
   );
 
@@ -41,7 +39,7 @@ export default function Notifications() {
 
   useEffect(() => {
     dispatch(getAllNotifications({ page, limit: rowsPerPage, filterStatus }));
-  }, [page, rowsPerPage, filterStatus, notificationCounts]);
+  }, [page, rowsPerPage, filterStatus, unread]);
 
   useEffect(() => {
     setNotifications(fetchedNotifcations.docs);
@@ -55,12 +53,10 @@ export default function Notifications() {
   const handleMarkAllAsRead = () => {
     dispatch(marlAllNotificationsAsRead());
   };
-
-  const { total, read, unread } = notificationCounts;
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: total },
-    { value: 'unread', label: 'Unread', color: 'info', count: unread },
-    { value: 'read', label: 'Read', color: 'success', count: read },
+    { value: 'all', label: 'All', color: 'default' },
+    { value: 'unread', label: 'Unread', color: 'info' },
+    { value: 'read', label: 'Read', color: 'success' },
   ] as const;
 
   return (
@@ -81,16 +77,7 @@ export default function Notifications() {
             }}
           >
             {TABS.map((tab) => (
-              <Tab
-                key={tab.value}
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label color={tab.color} sx={{ mr: 1 }}>
-                    {tab.count}
-                  </Label>
-                }
-              />
+              <Tab key={tab.value} value={tab.value} label={tab.label} />
             ))}
           </Tabs>
 

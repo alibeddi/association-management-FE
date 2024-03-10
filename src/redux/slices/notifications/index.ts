@@ -9,15 +9,14 @@ import {
   marlAllNotificationsAsRead,
 } from './actions';
 
-export type ICount = { total: number; read: number; unread: number };
 type NotificationInitialState = {
-  notificationCounts: ICount;
+  unread: number;
   notifications: PaginationModel<Notification>;
   status: IStatus;
 };
 
 const initialState: NotificationInitialState = {
-  notificationCounts: { total: 0, read: 0, unread: 0 },
+  unread: 0,
   notifications: { docs: [], meta: {} as Meta },
   status: IStatus.IDLE,
 };
@@ -46,7 +45,7 @@ const slice = createSlice({
       })
       .addCase(getNotificationsCounts.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
-        state.notificationCounts = action.payload.result;
+        state.unread = action.payload.unread;
       })
       .addCase(getNotificationsCounts.rejected, (state) => {
         state.status = IStatus.FAILED;
@@ -58,11 +57,7 @@ const slice = createSlice({
       })
       .addCase(marlAllNotificationsAsRead.fulfilled, (state) => {
         state.status = IStatus.SUCCEEDED;
-        state.notificationCounts = {
-          ...state.notificationCounts,
-          read: state.notificationCounts.total,
-          unread: 0,
-        };
+        state.unread = 0;
       })
       .addCase(marlAllNotificationsAsRead.rejected, (state) => {
         state.status = IStatus.FAILED;
@@ -77,12 +72,7 @@ const slice = createSlice({
         state.notifications.docs = state.notifications.docs.filter(
           (notification) => notification._id !== action.meta.arg
         );
-        const { read, unread, total } = state.notificationCounts;
-        state.notificationCounts = {
-          read: read + 1,
-          unread: unread - 1,
-          total,
-        };
+        state.unread -= 1;
       })
       .addCase(markOneNotificationAsRead.rejected, (state) => {
         state.status = IStatus.FAILED;

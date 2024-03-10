@@ -42,11 +42,9 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 export default function NotificationsPopover() {
   const navigate = useNavigate();
 
-  const { notifications: fetchedNotification, notificationCounts } = useSelector(
+  const { notifications: fetchedNotification, unread } = useSelector(
     (state: RootState) => state.notifications
   );
-  const { unread } = notificationCounts;
-
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -204,7 +202,7 @@ export function NotificationRow({ notification }: { notification: Notification }
     dispatch(markOneNotificationAsRead(_id))
       .unwrap()
       .then((res) => {
-        enqueueSnackbar(res.message);
+        enqueueSnackbar('This notification is marked as read');
       })
       .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
     handleClosePopover();

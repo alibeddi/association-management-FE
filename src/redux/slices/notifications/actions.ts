@@ -25,10 +25,10 @@ export const getAllNotifications = createAsyncThunk(
   }
 );
 
-export const getNotificationsCounts = createAsyncThunk('NOTIFICATION/COUNTS', async () => {
+export const getNotificationsCounts = createAsyncThunk('NOTIFICATION/UNREAD', async () => {
   let data;
   try {
-    const response = await axios.get('/notifications/counts');
+    const response = await axios.get('/notifications/unread');
     data = await response.data;
     if (response.status === 200) {
       return data.data;
