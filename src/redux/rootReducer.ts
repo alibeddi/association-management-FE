@@ -10,6 +10,7 @@ import callsReducer from './slices/calls';
 import statsClientReducer from './slices/statsClient';
 import analyticsReducer from './slices/analytics';
 import todoReducer from './slices/todos';
+import notificationReducer from './slices/notifications';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,7 @@ const combinedReducer = combineReducers({
   statClientResponses: statClientResReducer,
   todos: todoReducer,
   analytics: analyticsReducer,
+  notifications: notificationReducer,
 });
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'LOGOUT') {

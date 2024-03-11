@@ -171,7 +171,7 @@ export default function AddNewTodo({
             )}
           />
         </Stack>
-        <Stack alignItems="flex-end" sx={{ marginTop: '5px', alignSelf: 'flex-end' }}>
+        <Stack sx={{ marginTop: '5px', alignSelf: 'flex-end' }}>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
             <Iconify icon={isEdit ? 'ic:baseline-edit' : 'ic:sharp-add'} />
             {isEdit ? 'save' : 'add'}
