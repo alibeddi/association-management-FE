@@ -83,7 +83,6 @@ const RHFAsyncSelect = <T,>({
         }}
         className="test__select"
         value={value}
-        // value={isObjectEmpty(field.value) ? [] : field.value}
         isMulti={isMulti}
         additional={{
           page:1
