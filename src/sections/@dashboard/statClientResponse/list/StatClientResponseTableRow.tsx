@@ -89,7 +89,7 @@ export default function StatClientResponseTableRow({
         </TableCell>
         <TableCell>
           <Typography variant="subtitle2" noWrap>
-            {statClient}
+            {statClient?.name}
           </Typography>
         </TableCell>
         <TableCell
