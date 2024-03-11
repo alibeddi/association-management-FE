@@ -29,7 +29,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const defaultValues = useMemo(()=>({
     name:user?.name || "no name",
     email:user?.email || "",
-    office:user?.office || [],
+    office:user?.office || {} as Office,
     role:user?.role || "",
     permissionGroup: user?.permissionGroup || [],
     extraPermission: user?.extraPermission || []
@@ -108,10 +108,9 @@ const UserForm = ({user,isEdit=false}:IProps) => {
                name="office"
                label="office"
                placeholder="select office"
-               // @ts-ignore
                value={values.office}
               isSearchable
-               getOptionLabel={(option:Office) => option.name}
+               getOptionLabel={(option:Office) => "name" in option ?  option?.name :'no office'}
                getOptionValue={(option)=> typeof option ==="string" ? option :  option._id}
                fetchData={async (params) => {
                 const response = await axios.get(`/offices${setQuery(params)}`)
@@ -136,7 +135,6 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               }}
                disable={!isEdit}
               />
-              {/* .css-1nmdiq5-menu */}
             <RHFAutocomplete
               name="extraPermission"
               label="extraPermission"
