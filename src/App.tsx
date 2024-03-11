@@ -36,7 +36,7 @@ import { store } from './redux/store';
 
 export default function App() {
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    
     <Provider store={store}>
       <AuthProvider>
         <HelmetProvider>
@@ -61,6 +61,6 @@ export default function App() {
         </HelmetProvider>
       </AuthProvider>
     </Provider>
-    </LocalizationProvider> 
+  
   );
 }
