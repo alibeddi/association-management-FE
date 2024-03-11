@@ -1,11 +1,13 @@
 import {
   Button,
   Card,
-  Dialog,
+  Divider,
   IconButton,
+  Tab,
   Table,
   TableBody,
   TableContainer,
+  Tabs,
   Tooltip,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
@@ -29,6 +31,7 @@ import {
   deleteStatClientResponse,
   getAllStatClientResponses,
 } from '../../../../redux/slices/statClientResponse/actions';
+import { getAllStatsClient } from '../../../../redux/slices/statsClient/action';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
@@ -78,9 +81,22 @@ export default function StatClientResponsesTable() {
   const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
+  const [filterStatClient, setFilterStatClient] = useState('Created By me');
 
   const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
-
+  const { statsClients } = useSelector((state: RootState) => state.statsClient);
+  const { meta: statsClientsMeta, docs: statsClientsDocs } = statsClients;
+  const {
+    hasMore,
+    hasNextPage,
+    hasPrevPage,
+    limit,
+    nextPage,
+    pagingCounter,
+    totalDocs,
+    totalPages,
+  } = statsClientsMeta;
+  console.log({ statsClientsMeta });
   useEffect(() => {
     dispatch(
       getAllStatClientResponses({ page, limit: rowsPerPage, orderBy, order, filterClientName })
@@ -94,6 +110,12 @@ export default function StatClientResponsesTable() {
   const isFiltered = filterClientName !== '';
 
   const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
+
+  const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
+    setPage(0);
+    setFilterStatClient(newValue);
+    handleResetFilter();
+  };
 
   const handleViewRow = (row: StatClientResponse) => {
     navigate(`${PATH_DASHBOARD.statClientResponse.view}/${row._id}`);
@@ -147,6 +169,41 @@ export default function StatClientResponsesTable() {
       })
       .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
   };
+  const CustomScrollButton = ({
+    direction,
+    onClick,
+
+  }: {
+    direction: 'left' | 'right';
+    onClick: () => void;
+
+  }) => {
+    return (
+      <IconButton
+        disabled={direction === 'left' ? hasNextPage : hasPrevPage}
+        onClick={() => {
+          onClick();
+          dispatch(
+            getAllStatsClient({
+              page:
+                direction === 'left'
+                  ? statsClientsMeta.prevPage - 1
+                  : statsClientsMeta.nextPage - 1,
+              limit: 10,
+            })
+          );
+        }}
+        size="small"
+        color="inherit"
+      >
+        {direction === 'left' ? (
+          <Iconify icon="grommet-icons:form-previous" />
+        ) : (
+          <Iconify icon="grommet-icons:form-next" />
+        )}
+      </IconButton>
+    );
+  };
 
   return (
     <>
@@ -158,6 +215,23 @@ export default function StatClientResponsesTable() {
           onFilterName={handleFilterName}
           placeholder="Search by Client Name..."
         />
+        <Tabs
+          value={filterStatClient}
+          onChange={handleChangeTabs}
+          sx={{
+            px: 2,
+            bgcolor: 'background.neutral',
+          }}
+          ScrollButtonComponent={CustomScrollButton}
+          variant="scrollable"
+          scrollButtons
+          aria-label="scrollable auto tabs example"
+        >
+          {statsClientsDocs.map((tab) => (
+            <Tab key={tab._id} label={tab.name} value={tab._id} />
+          ))}
+        </Tabs>
+        <Divider />
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
             dense={dense}
