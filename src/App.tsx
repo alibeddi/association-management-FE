@@ -23,6 +23,7 @@ import ThemeProvider from './theme';
 import ThemeLocalization from './locales';
 // components
 
+
 import { MotionLazyContainer } from './components/animate';
 import ScrollToTop from './components/scroll-to-top';
 import { SettingsProvider, ThemeSettings } from './components/settings';
@@ -35,7 +36,7 @@ import { store } from './redux/store';
 
 export default function App() {
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    
     <Provider store={store}>
       <AuthProvider>
         <HelmetProvider>
@@ -60,6 +61,6 @@ export default function App() {
         </HelmetProvider>
       </AuthProvider>
     </Provider>
-    </LocalizationProvider> 
+  
   );
 }

@@ -104,6 +104,7 @@ export default function UserTableRow({
           View
         </MenuItem>}
 
+
        {hasPermissionEditUser && <MenuItem
           onClick={() => {
             handleEditUser()
@@ -113,6 +114,7 @@ export default function UserTableRow({
           <Iconify icon="eva:edit-fill" />
           Edit
         </MenuItem>}
+
  {hasPermissionDeleteUser &&       <MenuItem
           onClick={() => {
             handleOpenConfirm();

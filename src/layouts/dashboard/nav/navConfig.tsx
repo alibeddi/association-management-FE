@@ -55,6 +55,8 @@ export default function navConfig(user: AuthUserType) {
     ModelCode.STAT_CLIENT_RESPONSE,
     MethodCode.LIST
   );
+  const hasAccessToTodoList = hasPermission(userPermissions, ModelCode.TODO, MethodCode.LIST);
+
   const config = [
     {
       subheader: '',
@@ -85,9 +87,9 @@ export default function navConfig(user: AuthUserType) {
         },
         {
           title: 'Todo List',
-          path: PATH_DASHBOARD.todoList.root,
+          path: PATH_DASHBOARD.todoList,
           icon: ICONS.todoList,
-          toBeDisplayed: true,
+          toBeDisplayed: hasAccessToTodoList,
         },
         {
           title: 'calls',

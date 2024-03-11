@@ -26,9 +26,16 @@ interface TaskItemProps extends CheckboxProps {
   onDeleteTodo: (id: string) => void;
   onEditTodo: (task: Todo) => void;
   canDelete: boolean;
+  highlighted?: string;
 }
 
-export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItemProps) {
+export function TaskItem({
+  task,
+  onDeleteTodo,
+  canDelete,
+  onEditTodo,
+  highlighted,
+}: TaskItemProps) {
   const { _id, status, description } = task;
 
   const htmlString = `<p>${convertToHtml(description)}</p>`;
@@ -81,20 +88,27 @@ export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItem
     <>
       <Stack
         direction="row"
+        justifyContent="space-between"
+        alignItems="center"
         sx={{
           px: 2,
-          py: 0.75,
           ...(status === TodoStatus.COMPLETED && {
             color: 'text.disabled',
             textDecoration: 'line-through',
           }),
+          ...(highlighted &&
+            highlighted === _id && {
+              backgroundColor: '#AFE1AF',
+            }),
         }}
       >
-        <FormControlLabel
-          control={<Checkbox checked={status === TodoStatus.COMPLETED} onChange={onChange} />}
-          label={<span dangerouslySetInnerHTML={{ __html: htmlString }} />}
-          sx={{ flexGrow: 1, m: 0 }}
-        />
+        <Stack direction="row">
+          <FormControlLabel
+            control={<Checkbox checked={status === TodoStatus.COMPLETED} onChange={onChange} />}
+            label={<></>}
+          />
+          <span dangerouslySetInnerHTML={{ __html: htmlString }} />
+        </Stack>
         <IconButton
           size="large"
           color={openPopover ? 'inherit' : 'default'}

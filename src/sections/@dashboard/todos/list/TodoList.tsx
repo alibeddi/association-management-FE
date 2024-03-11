@@ -1,6 +1,7 @@
 import { Card, CardHeader, Divider, Grid, Tab, Tabs } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { Todo } from '../../../../@types/Todo';
 import EmptyContent from '../../../../components/empty-content';
 import { TablePaginationCustom, useTable } from '../../../../components/table';
@@ -9,7 +10,7 @@ import {
   getTodosAssignedToMe,
   getTodosCreatedbyMe,
 } from '../../../../redux/slices/todos/actions';
-import { dispatch, RootState, useSelector } from '../../../../redux/store';
+import { RootState, dispatch, useSelector } from '../../../../redux/store';
 import { AddNewTodo } from '../form';
 import { TaskItem } from './TodoItem';
 import TodosToolbar from './TodosToolbar';
@@ -28,6 +29,9 @@ export default function TodoList() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+
+  const location = useLocation();
+  const highlightedTodoId = location.state?.highlightedTodoId;
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -56,6 +60,12 @@ export default function TodoList() {
   const dataInPage = todos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   useEffect(() => {
+    if (highlightedTodoId) {
+      setFilterTodos('Assigned To me');
+    }
+  }, [highlightedTodoId]);
+
+  useEffect(() => {
     const params = {
       page,
       limit: rowsPerPage,
@@ -69,7 +79,15 @@ export default function TodoList() {
     } else {
       dispatch(getTodosCreatedbyMe(params));
     }
-  }, [page, rowsPerPage, filterDescription, filterStatus, filterStartDate, filterEndDate]);
+  }, [
+    filterTodos,
+    page,
+    rowsPerPage,
+    filterDescription,
+    filterStatus,
+    filterStartDate,
+    filterEndDate,
+  ]);
 
   useEffect(() => {
     setTodos(data?.docs);
@@ -105,6 +123,7 @@ export default function TodoList() {
   };
 
   const handleResetFilter = () => {
+    setPage(0);
     setFilterDescription('');
     setFilterStatus('all');
     setFilterEndDate(null);
@@ -169,6 +188,7 @@ export default function TodoList() {
           <CardHeader title="Tasks" />
           {todos.map((task) => (
             <TaskItem
+              highlighted={highlightedTodoId}
               key={task._id}
               task={task}
               onDeleteTodo={handleDeleteTodo}
