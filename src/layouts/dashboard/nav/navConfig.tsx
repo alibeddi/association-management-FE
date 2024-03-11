@@ -61,7 +61,7 @@ export default function navConfig(user: AuthUserType) {
       items: [
         {
           title: 'operators',
-          path: PATH_DASHBOARD.operators,
+          path: PATH_DASHBOARD.operators.root,
           icon: ICONS.operators,
           toBeDisplayed: hasAccessToUsers,
         },

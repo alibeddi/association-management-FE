@@ -20,6 +20,8 @@ import { IStatsClient, IStatsClientFormProps } from '../../../@types/statsClient
 import { setDefaultValuesStatsClient } from '../../../utils/setDefaultValuesStatsClient';
 
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import RHFAsyncSelect from '../../../components/hook-form/RHFAsyncSelect';
+import axios from '../../../utils/axios';
 
 type IProps = {
   statsClientProp?: IStatsClient | null;
@@ -29,15 +31,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const statsClient = statsClientProp;
-  // TODO: make scroll to get 10 other
-  useEffect(() => {
-    dispatch(
-      getKpis({
-        page: 0,
-        limit: 200,
-      })
-    );
-  }, [dispatch]);
+
   const { enqueueSnackbar } = useSnackbar();
   const newKpisSchema = Yup.object().shape({
     name: Yup.string().required(),
@@ -73,6 +67,8 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     });
   const handleRemove = (index: number) => remove(index);
   const values = watch();
+ 
+  
   const { kpis } = useSelector((state: RootState) => state.kpis);
   const submit = async (data: IStatsClientFormProps) => {
     const kpisArray: string[] = getFromKpis(data.kpis);
@@ -106,6 +102,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
     display: 'flex',
     gap: '1rem',
   };
+
 
   return (
     <FormProvider
@@ -146,19 +143,30 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                     alignItems: 'center',
                     gap: '1rem',
                     width: '100%',
+                    height:'100%',
+                    "& .css-b62m3t-container":{
+                      flexBasis:"80%"
+                    }
                   }}
                 >
-                  <RHFAutocomplete
-                    freeSolo
-                    label={`Question n°: ${index+1}`}
-                    name={`kpis[${index}]`}
-                    defaultValue={s || ''}
-                    getOptionLabel={(option) => option && typeof option !== 'string' ? option?.label : option}
-                    options={kpis.docs}
-                    required
-                    sx={{ flexBasis: '80%' }}
+                  <RHFAsyncSelect
+                  name={`kpis[${index}]`}
+                  label="kpi"
+                  placeholder='select a kpi'
+                  value={s}
+                  required
+                  isSearchable
+                  getOptionLabel={(option:IKpi) => option && typeof option !== 'string' ? option?.label : option}
+                  getOptionValue={(option)=>option}
+                  fetchData={async (params) => {
+                    const response = await axios.get(`/kpis?page=${params.page}&limit=${params.limit}&filterName=${params.name}`)
+                    const data = await response.data;
+                    return data;
+                  }}
+                  sx={{
+                    padding: ".5rem 1rem"
+                  }}
                   />
-
                   <Button
                     variant="contained"
                     color="error"

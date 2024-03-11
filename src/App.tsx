@@ -11,18 +11,18 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
-// @mui
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 // routes
 import { Provider } from 'react-redux';
-
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
 // locales
 import ThemeLocalization from './locales';
 // components
+
 
 import { MotionLazyContainer } from './components/animate';
 import ScrollToTop from './components/scroll-to-top';

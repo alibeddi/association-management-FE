@@ -1,4 +1,11 @@
-export const StyledAsyncPaginate =  {
-  indicatorsContainer: () => ({ display: "none" }), // Hides the indicators container
-  control: (provided:object) => ({ ...provided, height: '100%' }), // Sets height of the control
-}
+import React from "react";
+
+export const StyledAsyncPaginate = (customStyles: React.CSSProperties = {}) => ({
+  indicatorsContainer: () => ({ display: "none" }), 
+  control: (provided: object) => ({
+    ...provided,
+    height: "100%",
+    width: "100%",
+    ...customStyles
+  }) 
+});

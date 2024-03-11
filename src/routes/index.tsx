@@ -19,7 +19,7 @@ import {
   KpiView,
   LoginPage,
   MyTodoList,
-  OperatorList,
+  UserList,
   Page404,
   PermissionGroup,
   StatClientResponseEdit,
@@ -30,7 +30,10 @@ import {
   StatsClientEdit,
   StatsClientNew,
   StatsClientShow,
+  UserEdit,
+  UserView,
   Analytics,
+
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -67,7 +70,12 @@ export default function Router() {
               <Outlet />
             </PermissionGuard>
           ),
-          children: [{ path: '', element: <OperatorList /> }],
+          children: [{ path: '', element: <UserList /> },
+          {
+            path:'view/:id',element:  <UserView/>
+          },{
+            path:'edit/:id',element:<UserEdit/>
+          }],
         },
         {
           path: 'kpis',
