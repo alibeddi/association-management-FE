@@ -32,7 +32,6 @@ export default function TodoList() {
 
   const location = useLocation();
   const highlightedTodoId = location.state?.highlightedTodoId;
-  console.log({ highlightedTodoId });
 
   const { enqueueSnackbar } = useSnackbar();
 
