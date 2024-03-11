@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
 
 import { FrontType, IKpi } from '../../../@types/Kpi';
-import FormProvider, { RHFAutocomplete, RHFTextField } from '../../../components/hook-form';
+import FormProvider, {  RHFTextField } from '../../../components/hook-form';
 import RenderField from '../../../components/RenderField';
 import { getKpis } from '../../../redux/slices/kpis/actions';
 import { createStatsClient, updateStatsClient } from '../../../redux/slices/statsClient/action';

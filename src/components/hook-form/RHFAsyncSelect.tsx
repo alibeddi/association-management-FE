@@ -2,10 +2,9 @@ import { Tooltip } from '@mui/material';
 import React, { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
-import {PaginationModel} from "../../@types/Pagination"
 import { useLocales } from '../../locales';
-import { dispatch } from '../../redux/store';
-import { setParams } from '../../utils/setParams';
+import { isObjectEmpty } from '../../utils';
+import { Params, setParams } from '../../utils/setParams';
 import { StyledAsyncPaginate } from '../AsyncSelect/styles';
 
 interface Props<T>  {
@@ -24,12 +23,7 @@ interface Props<T>  {
  onChange?: Function;
  sx?: React.CSSProperties;
 }
-interface Params {
-  page: number;
-  limit: number;
-  orderBy?: string;
-  name?: string; 
-}
+
 const RHFAsyncSelect = <T,>({
   name,
   label,
@@ -55,9 +49,9 @@ const RHFAsyncSelect = <T,>({
    
     if(searchQuery){
       setFilterName(searchQuery)
-      setPage(0)
+      setPage(1)
     } 
-    const params = setParams({page,limit:10,filterName:filterName || ""})
+    const params = setParams({page,limit:10,name:searchQuery || ""})
     const data = await  fetchData(params)
     const {docs,meta} = data.data;
     const hasMore = meta.hasMore;
@@ -70,13 +64,13 @@ const RHFAsyncSelect = <T,>({
       }
     };
   };
-
+ 
   return (
     <Controller
     name={name}
     control={control}
     render={({field,fieldState:{error}})=>(
-      <Tooltip title={`${translate(helperText)}` || `${translate(label)}` }>
+      
         <AsyncPaginate
          onChange={(e) => {
           if(!e) return;
@@ -87,11 +81,14 @@ const RHFAsyncSelect = <T,>({
           }
           
         }}
-        defaultValue={value}
+        className="test__select"
+        value={value}
+        // value={isObjectEmpty(field.value) ? [] : field.value}
         isMulti={isMulti}
         additional={{
           page:1
         }}
+        isDisabled={disable}
         loadOptions={loadOptions}
         getOptionLabel={(option:T)=>getOptionLabel(option)}
         getOptionValue={(option:T)=>getOptionValue(option)}
@@ -101,7 +98,7 @@ const RHFAsyncSelect = <T,>({
         styles={StyledAsyncPaginate(sx)}
         {...other}
       />
-      </Tooltip>
+      
     )}
     />
   )

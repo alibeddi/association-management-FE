@@ -5,6 +5,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { Autocomplete, AutocompleteProps, TextField, Tooltip } from '@mui/material';
 // translation
 import { useLocales } from '../../locales';
+import { isObjectEmpty } from '../../utils';
 
 // ----------------------------------------------------------------------
 
@@ -39,13 +40,7 @@ export default function RHFAutocomplete<
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
   const { control } = useFormContext();
   const { translate } = useLocales();
-  function isObjectEmpty(obj: any): boolean {
-    if (typeof obj === 'object' && obj !== null) {
-      return Object.keys(obj).length === 0;
-    }
 
-    return true;
-  }
   return (
     <Controller
       name={name}

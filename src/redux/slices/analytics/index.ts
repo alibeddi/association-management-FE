@@ -21,7 +21,7 @@ const initialState: AnalyticsState = {
   nbStatClientResponsesByOffice: [
     {
       nbStatClientResponses: 0,
-      office: { _id: '', name: '', address: '', createdAt: null },
+      office: { _id: '', name: '', address: '', createdAt: undefined },
     },
   ],
   status: IStatus.IDLE,
