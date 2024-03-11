@@ -201,7 +201,7 @@ export function NotificationRow({ notification }: { notification: Notification }
   const markNotificationAsRead = () => {
     dispatch(markOneNotificationAsRead(_id))
       .unwrap()
-      .then((res) => {
+      .then(() => {
         enqueueSnackbar('This notification is marked as read');
       })
       .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
@@ -256,7 +256,7 @@ export function NotificationRow({ notification }: { notification: Notification }
         )}
         <MenuItem
           onClick={() => {
-            navigate(PATH_DASHBOARD.todoList);
+            navigate(PATH_DASHBOARD.todoList, { state: { highlightedTodoId: doc } });
           }}
         >
           <Iconify icon="carbon:view-filled" />

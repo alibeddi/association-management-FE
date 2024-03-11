@@ -26,9 +26,16 @@ interface TaskItemProps extends CheckboxProps {
   onDeleteTodo: (id: string) => void;
   onEditTodo: (task: Todo) => void;
   canDelete: boolean;
+  highlighted?: string;
 }
 
-export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItemProps) {
+export function TaskItem({
+  task,
+  onDeleteTodo,
+  canDelete,
+  onEditTodo,
+  highlighted,
+}: TaskItemProps) {
   const { _id, status, description } = task;
 
   const htmlString = `<p>${convertToHtml(description)}</p>`;
@@ -89,6 +96,10 @@ export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItem
             color: 'text.disabled',
             textDecoration: 'line-through',
           }),
+          ...(highlighted &&
+            highlighted === _id && {
+              backgroundColor: '#AFE1AF',
+            }),
         }}
       >
         <Stack direction="row">
