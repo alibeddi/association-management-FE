@@ -163,7 +163,7 @@ export default function UserListPage() {
     }
   };
   const handleEditRow = (id: string) => {
-    navigate(PATH_DASHBOARD.operators);
+    navigate(PATH_DASHBOARD.operators.root);
   };
 
   const handleResetFilter = () => {
@@ -182,7 +182,7 @@ export default function UserListPage() {
         heading="User List"
         links={[
           { name: 'Dashboard', href: PATH_DASHBOARD.root },
-          { name: 'User', href: PATH_DASHBOARD.operators },
+          { name: 'User', href: PATH_DASHBOARD.operators.root },
           { name: 'List' },
         ]}
       />

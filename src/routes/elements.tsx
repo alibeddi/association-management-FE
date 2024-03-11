@@ -15,7 +15,12 @@ const Loadable = (Component: ElementType) => (props: any) =>
 
 export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
 export const PermissionGroup = Loadable(lazy(() => import('../pages/PermissionGroup')));
-export const OperatorList = Loadable(lazy(() => import('../pages/User')));
+///
+export const UserList = Loadable(lazy(() => import('../pages/User/UserList')));
+export const UserView = Loadable(lazy(()=>import('../pages/User/UserView')))
+export const UserEdit = Loadable(lazy(()=> import('../pages/User/UserEdit')))
+
+
 export const Calendar = Loadable(lazy(() => import('../pages/Calendar')));
 export const Analytics = Loadable(lazy(() => import('../pages/Analytics')));
 // kpis

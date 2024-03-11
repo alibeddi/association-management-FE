@@ -14,7 +14,11 @@ export const PATH_AUTH = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
-  operators: path(ROOTS_DASHBOARD, '/operators'),
+  operators: {
+    root:path(ROOTS_DASHBOARD, '/operators'),
+    edit: path(ROOTS_DASHBOARD,'/operators/edit'),
+    view: path(ROOTS_DASHBOARD,'/operators/view')
+  },
   kpis: {
     root: path(ROOTS_DASHBOARD, '/kpis'),
     edit: path(ROOTS_DASHBOARD, '/kpis/edit'),

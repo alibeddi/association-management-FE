@@ -27,7 +27,7 @@ const StatsClientEdit = () => {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Create a new stats client"
+          heading="Edit a stats client"
           links={[
             {
               name: 'Dashboard',
