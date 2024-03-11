@@ -81,7 +81,9 @@ export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItem
     <>
       <Stack
         direction="row"
+        justifyContent="space-between"
         sx={{
+          width: '100%',
           px: 2,
           py: 0.75,
           ...(status === TodoStatus.COMPLETED && {
@@ -90,11 +92,20 @@ export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItem
           }),
         }}
       >
-        <FormControlLabel
-          control={<Checkbox checked={status === TodoStatus.COMPLETED} onChange={onChange} />}
-          label={<span dangerouslySetInnerHTML={{ __html: htmlString }} />}
-          sx={{ flexGrow: 1, m: 0 }}
-        />
+        <Stack
+          direction="row"
+          sx={{
+            px: 2,
+            py: 0.75,
+          }}
+        >
+          <FormControlLabel
+            control={<Checkbox checked={status === TodoStatus.COMPLETED} onChange={onChange} />}
+            label={<></>}
+            sx={{ flexGrow: 1, m: 0 }}
+          />
+          <span dangerouslySetInnerHTML={{ __html: htmlString }} />
+        </Stack>
         <IconButton
           size="large"
           color={openPopover ? 'inherit' : 'default'}
