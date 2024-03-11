@@ -153,7 +153,7 @@ export default function NotificationsPopover() {
 // ----------------------------------------------------------------------
 
 export function NotificationItem({ notification }: { notification: Notification }) {
-  const { from, message, seen, seenAt, doc, docModel, createdAt } = notification;
+  const { from, message, createdAt } = notification;
 
   return (
     <ListItemButton
@@ -187,7 +187,7 @@ export function NotificationRow({ notification }: { notification: Notification }
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { _id, from, message, seen, seenAt, doc, docModel, createdAt } = notification;
+  const { _id, from, message, seen, doc, createdAt } = notification;
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
 
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
@@ -257,6 +257,9 @@ export function NotificationRow({ notification }: { notification: Notification }
         <MenuItem
           onClick={() => {
             navigate(PATH_DASHBOARD.todoList, { state: { highlightedTodoId: doc } });
+            if (!seen) {
+              markNotificationAsRead();
+            }
           }}
         >
           <Iconify icon="carbon:view-filled" />
