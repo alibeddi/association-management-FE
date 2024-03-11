@@ -82,27 +82,19 @@ export function TaskItem({ task, onDeleteTodo, canDelete, onEditTodo }: TaskItem
       <Stack
         direction="row"
         justifyContent="space-between"
+        alignItems="center"
         sx={{
-          width: '100%',
           px: 2,
-          py: 0.75,
           ...(status === TodoStatus.COMPLETED && {
             color: 'text.disabled',
             textDecoration: 'line-through',
           }),
         }}
       >
-        <Stack
-          direction="row"
-          sx={{
-            px: 2,
-            py: 0.75,
-          }}
-        >
+        <Stack direction="row">
           <FormControlLabel
             control={<Checkbox checked={status === TodoStatus.COMPLETED} onChange={onChange} />}
             label={<></>}
-            sx={{ flexGrow: 1, m: 0 }}
           />
           <span dangerouslySetInnerHTML={{ __html: htmlString }} />
         </Stack>
