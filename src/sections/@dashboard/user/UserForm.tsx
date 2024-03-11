@@ -49,7 +49,6 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const navigate = useNavigate()
   const {enqueueSnackbar} = useSnackbar()
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root)
-<<<<<<< HEAD
   const {handleSubmit,watch,formState:{isSubmitting,isDirty,errors}} = methods
   const onSubmit = (data:{
     email:string;
@@ -73,11 +72,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
         overflow:"initial"
       }
     }>
-=======
-  const {watch,formState:{isSubmitting,isDirty}} = methods
-  return (
-    <FormProvider methods={methods} >
->>>>>>> 2b7c8bf862e4cca82b1eb453e202b44787abe4e1
+
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
