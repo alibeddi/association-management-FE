@@ -14,6 +14,7 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
+import { IStatsClient } from '../../../../@types/statsClient';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
@@ -82,11 +83,48 @@ export default function StatClientResponsesTable() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [filterStatClient, setFilterStatClient] = useState<string>();
+  const [tableHead, setTableHead] = useState<
+    {
+      id?: string;
+      label: string;
+      align: string;
+    }[]
+  >([]);
 
   const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
   const { statsClients } = useSelector((state: RootState) => state.statsClient);
 
-  const { meta: statsClientsMeta, docs: statsClientsDocs } = statsClients;
+  const { docs: statsClientsDocs } = statsClients;
+
+  console.log(tableHead);
+
+  useEffect(() => {
+    setFilterStatClient(statsClientsDocs[0]?._id);
+  }, [statsClients]);
+
+  useEffect(() => {
+    const currentStatClient = statsClientsDocs.find(
+      (statClient) => statClient._id === filterStatClient
+    );
+    if (currentStatClient) {
+      const kpis = currentStatClient.kpis.map((kpi) => ({
+        id: kpi._id,
+        label: kpi.label,
+        align: 'left',
+      }));
+      setTableHead([
+        { id: 'admin', label: 'Admin', align: 'left' },
+        { id: 'clientName', label: 'Client Name', align: 'left' },
+        { id: 'clientContact', label: 'Client Contact', align: 'left' },
+        { id: 'statClient', label: 'stat-Client', align: 'left' },
+        ...(kpis ? kpis : []),
+        { id: 'createdAt', label: 'Created At', align: 'left' },
+        { label: '', align: 'center' },
+      ]);
+    }
+  }, [filterStatClient, statsClients]);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     dispatch(
@@ -100,10 +138,6 @@ export default function StatClientResponsesTable() {
       })
     );
   }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName, filterStatClient]);
-
-  useEffect(() => {
-    setFilterStatClient(statsClientsDocs[0]?._id);
-  }, [statsClients]);
 
   useEffect(() => {
     setTableData(statClientResponses?.docs);
@@ -223,7 +257,7 @@ export default function StatClientResponsesTable() {
               <TableHeadCustom
                 order={order}
                 orderBy={orderBy}
-                headLabel={TABLE_HEAD}
+                headLabel={tableHead}
                 rowCount={tableData.length}
                 numSelected={selected.length}
                 onSort={onSort}
