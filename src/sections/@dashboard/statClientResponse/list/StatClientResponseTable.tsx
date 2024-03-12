@@ -14,7 +14,6 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
-import { IStatsClient } from '../../../../@types/statsClient';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
@@ -32,23 +31,10 @@ import {
   deleteStatClientResponse,
   getAllStatClientResponses,
 } from '../../../../redux/slices/statClientResponse/actions';
-import { getAllStatsClient } from '../../../../redux/slices/statsClient/action';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
 import StatClientResponseTableToolbar from './StatClientResponseTableToolbar';
-
-// ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'admin', label: 'Admin', align: 'left' },
-  { id: 'clientName', label: 'Client Name', align: 'left' },
-  { id: 'clientContact', label: 'Client Contact', align: 'left' },
-  { id: 'statClient', label: 'stat-Client', align: 'left' },
-  { id: 'kpis', label: 'Kpis', align: 'left' },
-  { id: 'createdAt', label: 'Created At', align: 'left' },
-  { label: '', align: 'center' },
-];
 
 // ----------------------------------------------------------------------
 
@@ -96,8 +82,6 @@ export default function StatClientResponsesTable() {
 
   const { docs: statsClientsDocs } = statsClients;
 
-  console.log(tableHead);
-
   useEffect(() => {
     setFilterStatClient(statsClientsDocs[0]?._id);
   }, [statsClients]);
@@ -117,7 +101,7 @@ export default function StatClientResponsesTable() {
         { id: 'clientName', label: 'Client Name', align: 'left' },
         { id: 'clientContact', label: 'Client Contact', align: 'left' },
         { id: 'statClient', label: 'stat-Client', align: 'left' },
-        ...(kpis ? kpis : []),
+        ...kpis,
         { id: 'createdAt', label: 'Created At', align: 'left' },
         { label: '', align: 'center' },
       ]);

@@ -36,7 +36,9 @@ export default function StatClientResponseTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { admin, clientName, clientContact, statClient, createdAt, _id } = row;
+  console.log(row);
+
+  const { admin, clientName, clientContact, statClient, createdAt, _id, kpis } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
   const navigate = useNavigate();
@@ -92,15 +94,15 @@ export default function StatClientResponseTableRow({
             {statClient?.name}
           </Typography>
         </TableCell>
-        <TableCell
-          onClick={() => navigate(`${PATH_DASHBOARD.statClientResponse.view}/${_id}`)}
-          align="left"
-          sx={{ textTransform: 'capitalize', cursor: 'pointer' }}
-        >
-          <Typography variant="subtitle2" noWrap>
-            click here to see the answers
-          </Typography>
-        </TableCell>
+
+        {kpis.map((kpis) => (
+          <TableCell align="left" sx={{ textTransform: 'capitalize', cursor: 'pointer' }}>
+            <Typography variant="subtitle2" noWrap>
+              {kpis.response.length ? kpis.response : '____'}
+            </Typography>
+          </TableCell>
+        ))}
+
         <TableCell align="left">
           <Typography variant="subtitle2" noWrap>
             {fDate(createdAt)}
