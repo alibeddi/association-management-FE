@@ -31,15 +31,12 @@ const UserForm = ({user,isEdit=false}:IProps) => {
     email:user?.email || "",
     office:user?.office || {} as Office,
     role:user?.role || "",
-    permissionGroup: user?.permissionGroup || [],
+    permissionGroup: user?.permissionGroup || [{} as PermissionGroup],
     extraPermission: user?.extraPermission || []
   }),[user])
   const newUser = Yup.object().shape({
     name: Yup.string().min(2).required('name is required'),
     email: Yup.string().email().required("email is required"),
-    extraPermission: Yup.array().of(Yup.object().shape({
-      _id: Yup.string()
-    })),
     role: Yup.string()
   })
   const methods = useForm({
@@ -135,16 +132,6 @@ const UserForm = ({user,isEdit=false}:IProps) => {
               }}
                disable={!isEdit}
               />
-            <RHFAutocomplete
-              name="extraPermission"
-              label="extraPermission"
-              multiple
-              value={defaultValues.extraPermission}
-              getOptionLabel={(option)=> typeof option === "string" ? option :  option._id }
-              options={[]}
-              disabled={!isEdit}
-              />
-             
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3,display:"flex",flexDirection:"row",gap:"1rem",justifyContent:"flex-end" }}>
             {isEdit && (
