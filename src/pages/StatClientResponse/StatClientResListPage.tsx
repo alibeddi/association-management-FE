@@ -27,7 +27,7 @@ export default function ClientStatusListPage() {
   >([]);
 
   useEffect(() => {
-    dispatch(getAllStatsClient({ page: 0, limit: 10 }));
+    dispatch(getAllStatsClient({ page: 0, limit: 100 }));
   }, []);
 
   useEffect(() => {

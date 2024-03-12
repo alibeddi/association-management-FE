@@ -81,27 +81,29 @@ export default function StatClientResponsesTable() {
   const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
-  const [filterStatClient, setFilterStatClient] = useState('Created By me');
+  const [filterStatClient, setFilterStatClient] = useState<string>();
 
   const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
   const { statsClients } = useSelector((state: RootState) => state.statsClient);
+
   const { meta: statsClientsMeta, docs: statsClientsDocs } = statsClients;
-  const {
-    hasMore,
-    hasNextPage,
-    hasPrevPage,
-    limit,
-    nextPage,
-    pagingCounter,
-    totalDocs,
-    totalPages,
-  } = statsClientsMeta;
-  console.log({ statsClientsMeta });
+
   useEffect(() => {
     dispatch(
-      getAllStatClientResponses({ page, limit: rowsPerPage, orderBy, order, filterClientName })
+      getAllStatClientResponses({
+        page,
+        limit: rowsPerPage,
+        orderBy,
+        order,
+        filterClientName,
+        filterStatClient,
+      })
     );
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName]);
+  }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName, filterStatClient]);
+
+  useEffect(() => {
+    setFilterStatClient(statsClientsDocs[0]?._id);
+  }, [statsClients]);
 
   useEffect(() => {
     setTableData(statClientResponses?.docs);
@@ -169,41 +171,6 @@ export default function StatClientResponsesTable() {
       })
       .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
   };
-  const CustomScrollButton = ({
-    direction,
-    onClick,
-
-  }: {
-    direction: 'left' | 'right';
-    onClick: () => void;
-
-  }) => {
-    return (
-      <IconButton
-        disabled={direction === 'left' ? hasNextPage : hasPrevPage}
-        onClick={() => {
-          onClick();
-          dispatch(
-            getAllStatsClient({
-              page:
-                direction === 'left'
-                  ? statsClientsMeta.prevPage - 1
-                  : statsClientsMeta.nextPage - 1,
-              limit: 10,
-            })
-          );
-        }}
-        size="small"
-        color="inherit"
-      >
-        {direction === 'left' ? (
-          <Iconify icon="grommet-icons:form-previous" />
-        ) : (
-          <Iconify icon="grommet-icons:form-next" />
-        )}
-      </IconButton>
-    );
-  };
 
   return (
     <>
@@ -222,7 +189,6 @@ export default function StatClientResponsesTable() {
             px: 2,
             bgcolor: 'background.neutral',
           }}
-          ScrollButtonComponent={CustomScrollButton}
           variant="scrollable"
           scrollButtons
           aria-label="scrollable auto tabs example"
