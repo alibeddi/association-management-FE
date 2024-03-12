@@ -1,19 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { IPropsEditUser } from '../../../@types/editUser';
 import { Office } from '../../../@types/offices';
 import { Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { formatDataEditUser } from '../../../utils';
 import axios from '../../../utils/axios';
 
-export type IPropsEditUser = {
-  userId?:string;
-  email?:string;
-  name?: string;
-  role: string;
-  office?:Office;
-  permissionGroup?: PermissionGroup[] | string[];
-  extraPermission?: Permission[];
 
-}
 
 export const getUsers = createAsyncThunk(
   'users/GETALL',
@@ -56,9 +49,9 @@ export const getUser  = createAsyncThunk('users/GETONE',async ({id}:{id:string})
 export const editUser = createAsyncThunk('users/EDIT',async (payload:IPropsEditUser) => {
   let data;
   try {
-    payload.permissionGroup = payload.permissionGroup?.map(elt=> typeof elt !== "string" ?  elt._id : elt)
+    payload = formatDataEditUser(payload)
     const response = await axios.patch(`/users/${payload.userId}`,{
-      office:payload.office?._id,permissionGroup:payload.permissionGroup
+      office:payload.office?._id,permissionGroup:payload.permissionGroup,extraPermissions:payload.extraPermission
     });
     data = await response.data;
     if (response.status === 200) {

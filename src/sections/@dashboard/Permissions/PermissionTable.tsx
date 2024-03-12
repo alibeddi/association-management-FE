@@ -110,14 +110,14 @@ const PermissionTable = ({
                           : 0,
                     }}
                   >
-                    {!['idle', 'loading'].includes(status) ? (
+                    {!['idle', 'loading']?.includes(status) ? (
                       <CheckboxComponent
                         checked={
                           permissionsAsString
-                            ? permissionsAsString.includes(`${row}_${column}`)
+                            ? permissionsAsString?.includes(`${row}_${column}`)
                             : false
                         }
-                        disabled={!defaultPermissionsAsString.includes(`${row}_${column}`)}
+                        disabled={!defaultPermissionsAsString?.includes(`${row}_${column}`)}
                         model={row}
                         action={column}
                         setSelectedPermissions={setSelectedPermissions}

@@ -1,8 +1,8 @@
 import * as Yup from "yup"
-import { LoadingButton } from '@mui/lab'
-import { Button, Card, Grid } from '@mui/material'
+import { LoadingButton, TabContext, TabList, TabPanel } from '@mui/lab'
+import { Button, Card, Grid, Tab, Tabs } from '@mui/material'
 import { Box, Stack } from '@mui/system'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSnackbar } from 'notistack';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -10,21 +10,35 @@ import {  useNavigate } from 'react-router'
 import { Office } from '../../../@types/offices'
 import { User } from '../../../@types/User'
 import FormProvider, { RHFAsyncSelect, RHFAutocomplete, RHFTextField } from "../../../components/hook-form"
-import { dispatch, useSelector } from '../../../redux/store'
+import { dispatch, RootState, useSelector } from '../../../redux/store'
 import { PATH_DASHBOARD } from '../../../routes/paths'
 import { PermissionGroup } from "../../../@types/PermissionGroup"
 import axios from "../../../utils/axios"
 import { setQuery } from "../../../utils/setParams"
-import { editUser, IPropsEditUser } from "../../../redux/slices/users/actions"
-
-
+import { editUser } from "../../../redux/slices/users/actions"
+import PermissionTable from "../Permissions/PermissionTable"
+import { extractEntitiesAndActions } from "../../../utils/extractEntitiesAndActions"
+import { getPermissions } from "../../../redux/slices/permissions/actions"
+import { getAllPermissionGroups } from "../../../redux/slices/groupPermissions/actions"
+import { extractEntitiesAndActionsStrings } from "../../../utils/extractEntitiesAndActionsStrings"
+import { isObjectEmpty } from "../../../utils"
+import { IPropsEditUser } from "../../../@types/editUser"
 
 type IProps = {
-  user?: User;
+  user: User;
   isEdit?: boolean;
 }
-
+const USER_FILTER = ['user details','extra permission'];
 const UserForm = ({user,isEdit=false}:IProps) => {
+  useEffect(() => {
+    dispatch(getPermissions());
+    dispatch(getAllPermissionGroups());
+  }, []);
+  const [filterTab,setFilterTab] = useState('user details')
+  const { permissionGroups, permissionGroup } = useSelector(
+    (state: RootState) => state.permissions_groups
+  );
+  const { permissions } = useSelector((state: RootState) => state.permissions);
 
   const defaultValues = useMemo(()=>({
     name:user?.name || "no name",
@@ -47,14 +61,10 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const {enqueueSnackbar} = useSnackbar()
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root)
   const {handleSubmit,watch,formState:{isSubmitting,isDirty,errors}} = methods
-  const onSubmit = (data:{
-    email:string;
-    name:string;
-    userId?:string;
-    role:string;
-    
-  }) => {
+  const onSubmit = (data:IPropsEditUser) => {
     data.userId = user?._id;
+    data.extraPermission = selectedPermissions;
+
     dispatch(editUser(data)).unwrap().then(res=>{
       enqueueSnackbar("User updated successfully");
       onCancel()
@@ -62,15 +72,36 @@ const UserForm = ({user,isEdit=false}:IProps) => {
       variant:"error"
     }))
   }
+  const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
+    setFilterTab(newValue);
+  };
+  const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup ? permissionGroup?.permissions : []);
+  const formattedPermissions = !isObjectEmpty(user) && user?.permissionGroup[0] ? extractEntitiesAndActions(permissions.docs) : {entities:[],actions:[]};
+  const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
   const values = watch()
+  useEffect(()=>{
+    if(user && user?.permissionGroup &&  user?.permissionGroup.length > 0) setSelectedPermissions(user.permissionGroup[0].permissions)
+  },[user])
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} style={
       {
         overflow:"initial"
       }
     }>
-
-      <Grid container spacing={3}>
+      <TabContext value={filterTab}>
+      <TabList
+          onChange={handleChangeTabs}
+          sx={{
+            px: 2,
+            bgcolor: 'background.neutral',
+          }}
+        >
+          {USER_FILTER.map((tab) => (
+            <Tab key={tab} label={tab} value={tab} />
+          ))}
+        </TabList>
+        <TabPanel value={USER_FILTER[0]}>
+           <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
           <Box
@@ -154,7 +185,25 @@ const UserForm = ({user,isEdit=false}:IProps) => {
             </Stack>
           </Card>
         </Grid>
-      </Grid>
+        
+      </Grid> 
+        </TabPanel>
+    
+      <TabPanel value={USER_FILTER[1]}>
+ <Card sx={{p:3}}>
+          <PermissionTable 
+           actions={formattedPermissions.actions}
+           entities={formattedPermissions.entities}
+           defaultPermissionsAsString={defaultPermissionsAsString}
+           setSelectedPermissions={setSelectedPermissions}
+           selectedPermissions={selectedPermissions}
+          />
+          </Card>
+      </TabPanel>   
+      </TabContext>
+
+         
+
     </FormProvider>
   )
 }
