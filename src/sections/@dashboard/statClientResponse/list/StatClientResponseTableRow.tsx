@@ -8,16 +8,15 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { MethodCode, ModelCode } from '../../../../@types/Permission';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import { useAuthContext } from '../../../../auth/useAuthContext';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fDate } from '../../../../utils/formatTime';
 import { hasPermission } from '../../Permissions/utils';
+import RenderTableCell from './utils/renderTableCellContent';
 
 type Props = {
   row: StatClientResponse;
@@ -36,12 +35,10 @@ export default function StatClientResponseTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  console.log(row);
 
-  const { admin, clientName, clientContact, statClient, createdAt, _id, kpis } = row;
+  const { admin, clientName, clientContact, statClient, createdAt, kpis } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
-  const navigate = useNavigate();
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
@@ -95,13 +92,7 @@ export default function StatClientResponseTableRow({
           </Typography>
         </TableCell>
 
-        {kpis.map((kpis) => (
-          <TableCell align="left" sx={{ textTransform: 'capitalize', cursor: 'pointer' }}>
-            <Typography variant="subtitle2" noWrap>
-              {kpis.response.length ? kpis.response : '____'}
-            </Typography>
-          </TableCell>
-        ))}
+        {kpis.map((kpi) => RenderTableCell(kpi))}
 
         <TableCell align="left">
           <Typography variant="subtitle2" noWrap>

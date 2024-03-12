@@ -86,6 +86,7 @@ export default function StatClientForm({
   } = methods;
 
   const onSubmit = async (data: CombinedFormValuesType) => {
+    console.log({ data });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const body = {
@@ -93,6 +94,7 @@ export default function StatClientForm({
         clientContact: data.clientContact,
         kpis: formatFormValues(data, kpis),
       };
+      console.log({ body });
       if (isEdit && currentStatClientResponse) {
         dispatch(
           editStatClientResponse({
