@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import {
   Button,
   Card,
@@ -10,7 +11,6 @@ import {
   Tabs,
   Tooltip,
 } from '@mui/material';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
@@ -256,6 +256,7 @@ export default function StatClientResponsesTable() {
               <TableBody>
                 {tableData?.map((row: StatClientResponse) => (
                   <StatClientResponseTableRow
+                    filterStatClient={filterStatClient}
                     key={row._id}
                     row={row}
                     selected={selected.includes(row._id)}

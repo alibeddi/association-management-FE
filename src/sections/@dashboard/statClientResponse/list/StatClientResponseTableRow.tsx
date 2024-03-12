@@ -14,8 +14,10 @@ import { useAuthContext } from '../../../../auth/useAuthContext';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
+import { RootState, useSelector } from '../../../../redux/store';
 import { fDate } from '../../../../utils/formatTime';
 import { hasPermission } from '../../Permissions/utils';
+import { generateKpiTableArray } from './utils/generateKpiTableArray';
 import RenderTableCell from './utils/renderTableCellContent';
 
 type Props = {
@@ -25,6 +27,7 @@ type Props = {
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewRow: VoidFunction;
+  filterStatClient: string | undefined;
 };
 
 export default function StatClientResponseTableRow({
@@ -34,9 +37,16 @@ export default function StatClientResponseTableRow({
   onSelectRow,
   onDeleteRow,
   onViewRow,
+  filterStatClient,
 }: Props) {
+  const { statsClients } = useSelector((state: RootState) => state.statsClient);
+  const currentStatClient = statsClients.docs.find(
+    (statClient) => statClient._id === filterStatClient
+  );
 
   const { admin, clientName, clientContact, statClient, createdAt, kpis } = row;
+
+  const generatedKpiResponseRow = generateKpiTableArray(currentStatClient?.kpis, kpis);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -92,7 +102,7 @@ export default function StatClientResponseTableRow({
           </Typography>
         </TableCell>
 
-        {kpis.map((kpi) => RenderTableCell(kpi))}
+        {generatedKpiResponseRow.map((kpi) => RenderTableCell(kpi))}
 
         <TableCell align="left">
           <Typography variant="subtitle2" noWrap>
