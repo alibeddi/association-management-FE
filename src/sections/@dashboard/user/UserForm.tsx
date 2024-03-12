@@ -75,7 +75,11 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setFilterTab(newValue);
   };
-  const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup ? permissionGroup?.permissions : []);
+  console.log(user)
+  const allPermission = user.permissionGroup;
+  console.log(allPermission)
+  // eslint-disable-next-line
+  const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup && user.extraPermission ? [...permissionGroup?.permissions,...user.extraPermission] : []);
   const formattedPermissions = !isObjectEmpty(user) && user?.permissionGroup[0] ? extractEntitiesAndActions(permissions.docs) : {entities:[],actions:[]};
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
   const values = watch()
@@ -100,6 +104,20 @@ const UserForm = ({user,isEdit=false}:IProps) => {
             <Tab key={tab} label={tab} value={tab} />
           ))}
         </TabList>
+        <Stack alignItems="flex-end" sx={{ mt: 3,display:"flex",flexDirection:"row",gap:"1rem",justifyContent:"flex-end" }}>
+            {isEdit && (
+              
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  loading={isSubmitting}
+                >
+                  Save Changes
+                </LoadingButton>
+              
+            )}
+    
+            </Stack>
         <TabPanel value={USER_FILTER[0]}>
            <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
@@ -164,25 +182,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
                disable={!isEdit}
               />
             </Box>
-            <Stack alignItems="flex-end" sx={{ mt: 3,display:"flex",flexDirection:"row",gap:"1rem",justifyContent:"flex-end" }}>
-            {isEdit && (
-              
-                <LoadingButton
-                  type="submit"
-                  variant="contained"
-                  loading={isSubmitting}
-                >
-                  Save Changes
-                </LoadingButton>
-              
-            )}
-            <Button
-            variant="outlined"
-            onClick={()=>onCancel()} 
-            >
-              Cancel
-            </Button>
-            </Stack>
+            
           </Card>
         </Grid>
         
@@ -190,13 +190,14 @@ const UserForm = ({user,isEdit=false}:IProps) => {
         </TabPanel>
     
       <TabPanel value={USER_FILTER[1]}>
- <Card sx={{p:3}}>
+      <Card sx={{p:3}}>
           <PermissionTable 
            actions={formattedPermissions.actions}
            entities={formattedPermissions.entities}
            defaultPermissionsAsString={defaultPermissionsAsString}
            setSelectedPermissions={setSelectedPermissions}
            selectedPermissions={selectedPermissions}
+           viewMode={!isEdit}
           />
           </Card>
       </TabPanel>   

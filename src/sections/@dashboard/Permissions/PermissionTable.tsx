@@ -24,6 +24,7 @@ type Props = {
   defaultPermissionsAsString: string[];
   setSelectedPermissions: Dispatch<SetStateAction<Permission[]>>;
   selectedPermissions: Permission[];
+  viewMode?:boolean;
 };
 
 const PermissionTable = ({
@@ -32,6 +33,7 @@ const PermissionTable = ({
   defaultPermissionsAsString,
   setSelectedPermissions,
   selectedPermissions,
+  viewMode=false
 }: Props) => {
   const { translate, currentLang } = useLocales();
   const { status } = useSelector((state: RootState) => state.permissions);
@@ -117,7 +119,7 @@ const PermissionTable = ({
                             ? permissionsAsString?.includes(`${row}_${column}`)
                             : false
                         }
-                        disabled={!defaultPermissionsAsString?.includes(`${row}_${column}`)}
+                        disabled={!defaultPermissionsAsString?.includes(`${row}_${column}`) || viewMode}
                         model={row}
                         action={column}
                         setSelectedPermissions={setSelectedPermissions}

@@ -1,6 +1,6 @@
 import { Tooltip } from '@mui/material';
 import React, { useState } from 'react'
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext,FieldValues } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
 import { useLocales } from '../../locales';
 import { isObjectEmpty } from '../../utils';
@@ -44,6 +44,7 @@ const RHFAsyncSelect = <T,>({
   const {control} = useFormContext()
   const {translate} = useLocales()
   const [page,setPage] = useState<number>(1)
+  const [valueInput,setValueInput] = useState<T|T[]|undefined>(value)
   const [filterName,setFilterName] = useState<string | null>(null)
   const loadOptions = async (searchQuery: string) => {
    
@@ -77,12 +78,13 @@ const RHFAsyncSelect = <T,>({
           if(onChangeProp){
             onChangeProp(e)
           }else{
-            field.onChange((e));
+            field.onChange((e as FieldValues));
+            // @ts-ignore
+            setValueInput(e)
           }
           
         }}
-        className="test__select"
-        value={value}
+        value={valueInput}
         isMulti={isMulti}
         additional={{
           page:1
