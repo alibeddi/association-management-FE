@@ -40,13 +40,22 @@ export const getAllStatClientResponses = createAsyncThunk(
     orderBy?: string;
     order?: string;
     filterClientName?: string;
+    filterStatClient?: string;
   }) => {
-    const { page, order = 'desc', orderBy = 'createdAt', filterClientName, limit } = payload;
+    const {
+      page,
+      order = 'desc',
+      orderBy = 'createdAt',
+      filterClientName,
+      limit,
+      filterStatClient,
+    } = payload;
     const params = {
       page: page + 1,
       limit,
       sort: order === 'desc' ? `-${orderBy}` : `+${orderBy}`,
       ...(filterClientName ? { clientName: filterClientName } : {}),
+      ...(filterStatClient ? { statClient: filterStatClient } : {}),
     };
     let data;
     try {
@@ -141,27 +150,29 @@ export const deleteManyStatClientResponse = createAsyncThunk(
     }
   }
 );
-export const statsClientResponseFilter = createAsyncThunk('STAT_CLIENT_RESPONSE/FILTER',async (payload:{
-  page: number;
-  limit?: number;
-  orderBy?: string;
-  order?: string;
-  filterClientName?: string;
-  filterValue: IFilterStatClientResponse[]
-})=>{
-  const { page, limit,filterValue  } = payload;
-let data;
-try {
+export const statsClientResponseFilter = createAsyncThunk(
+  'STAT_CLIENT_RESPONSE/FILTER',
+  async (payload: {
+    page: number;
+    limit?: number;
+    orderBy?: string;
+    order?: string;
+    filterClientName?: string;
+    filterValue: IFilterStatClientResponse[];
+  }) => {
+    const { page, limit, filterValue } = payload;
+    let data;
+    try {
+      const query = generateFilterStatClientResponse(filterValue, limit, page);
 
-  const query = generateFilterStatClientResponse(filterValue,limit,page)
-
-  const response = await axios.get(`/stat-client-responses/filter?${query}`)
-  data = response.data;
-  if(response.status ===200){
-    return data.data;
+      const response = await axios.get(`/stat-client-responses/filter?${query}`);
+      data = response.data;
+      if (response.status === 200) {
+        return data.data;
+      }
+      throw new Error(response.statusText);
+    } catch (error) {
+      return Promise.reject(error?.message ? error.message : data.message);
+    }
   }
-  throw new Error(response.statusText)
-} catch (error) {
-  return Promise.reject(error?.message ? error.message : data.message)
-}
-})
+);

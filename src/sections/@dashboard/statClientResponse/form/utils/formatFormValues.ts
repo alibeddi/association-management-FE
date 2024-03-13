@@ -4,7 +4,7 @@ export const formatFormValues = (values: any, kpis: IKpi[]): { kpi: string; resp
   const formFields = Object.keys(values);
   return formFields.reduce((array, field) => {
     const foundKpi = kpis.find((kpi) => kpi.name === field);
-    if (foundKpi && values[field]) {
+    if (foundKpi) {
       array.push({
         kpi: foundKpi._id,
         response: typeof values[field] !== 'object' ? [values[field]] : values[field],

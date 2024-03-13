@@ -18,7 +18,7 @@ import {
   createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
-  updateGroupPermission,
+  updateGroupPermission
 } from '../../../redux/slices/groupPermissions/actions';
 import { getPermissions } from '../../../redux/slices/permissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
