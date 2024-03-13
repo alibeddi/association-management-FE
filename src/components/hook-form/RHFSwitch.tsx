@@ -28,7 +28,7 @@ export default function RHFSwitch({ name, label, helperText, disabled = false, .
     <Controller
       name={name}
       control={control}
-      defaultValue="false"
+      defaultValue={false}
       render={({ field, fieldState: { error } }) => (
         <>
           <Tooltip title={`${translate(helperText)}` || `${translate(label)}`}>

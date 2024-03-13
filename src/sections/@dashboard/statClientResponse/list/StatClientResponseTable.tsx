@@ -1,14 +1,16 @@
+import { useSnackbar } from 'notistack';
 import {
   Button,
   Card,
-  Dialog,
+  Divider,
   IconButton,
+  Tab,
   Table,
   TableBody,
   TableContainer,
+  Tabs,
   Tooltip,
 } from '@mui/material';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
@@ -33,18 +35,6 @@ import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
 import StatClientResponseTableToolbar from './StatClientResponseTableToolbar';
-
-// ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'admin', label: 'Admin', align: 'left' },
-  { id: 'clientName', label: 'Client Name', align: 'left' },
-  { id: 'clientContact', label: 'Client Contact', align: 'left' },
-  { id: 'statClient', label: 'stat-Client', align: 'left' },
-  { id: 'kpis', label: 'Kpis', align: 'left' },
-  { id: 'createdAt', label: 'Created At', align: 'left' },
-  { label: '', align: 'center' },
-];
 
 // ----------------------------------------------------------------------
 
@@ -78,14 +68,60 @@ export default function StatClientResponsesTable() {
   const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
+  const [filterStatClient, setFilterStatClient] = useState<string>();
+  const [tableHead, setTableHead] = useState<
+    {
+      id?: string;
+      label: string;
+      align: string;
+    }[]
+  >([]);
 
   const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
+  const { statsClients } = useSelector((state: RootState) => state.statsClient);
+
+  const { docs: statsClientsDocs } = statsClients;
+
+  useEffect(() => {
+    setFilterStatClient(statsClientsDocs[0]?._id);
+  }, [statsClients]);
+
+  useEffect(() => {
+    const currentStatClient = statsClientsDocs.find(
+      (statClient) => statClient._id === filterStatClient
+    );
+    if (currentStatClient) {
+      const kpis = currentStatClient.kpis.map((kpi) => ({
+        id: kpi._id,
+        label: kpi.label,
+        align: 'left',
+      }));
+      setTableHead([
+        { id: 'admin', label: 'Admin', align: 'left' },
+        { id: 'clientName', label: 'Client Name', align: 'left' },
+        { id: 'clientContact', label: 'Client Contact', align: 'left' },
+        { id: 'statClient', label: 'stat-Client', align: 'left' },
+        ...kpis,
+        { id: 'createdAt', label: 'Created At', align: 'left' },
+        { label: '', align: 'center' },
+      ]);
+    }
+  }, [filterStatClient, statsClients]);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     dispatch(
-      getAllStatClientResponses({ page, limit: rowsPerPage, orderBy, order, filterClientName })
+      getAllStatClientResponses({
+        page,
+        limit: rowsPerPage,
+        orderBy,
+        order,
+        filterClientName,
+        filterStatClient,
+      })
     );
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName]);
+  }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName, filterStatClient]);
 
   useEffect(() => {
     setTableData(statClientResponses?.docs);
@@ -94,6 +130,12 @@ export default function StatClientResponsesTable() {
   const isFiltered = filterClientName !== '';
 
   const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
+
+  const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
+    setPage(0);
+    setFilterStatClient(newValue);
+    handleResetFilter();
+  };
 
   const handleViewRow = (row: StatClientResponse) => {
     navigate(`${PATH_DASHBOARD.statClientResponse.view}/${row._id}`);
@@ -158,6 +200,22 @@ export default function StatClientResponsesTable() {
           onFilterName={handleFilterName}
           placeholder="Search by Client Name..."
         />
+        <Tabs
+          value={filterStatClient}
+          onChange={handleChangeTabs}
+          sx={{
+            px: 2,
+            bgcolor: 'background.neutral',
+          }}
+          variant="scrollable"
+          scrollButtons
+          aria-label="scrollable auto tabs example"
+        >
+          {statsClientsDocs.map((tab) => (
+            <Tab key={tab._id} label={tab.name} value={tab._id} />
+          ))}
+        </Tabs>
+        <Divider />
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <TableSelectedAction
             dense={dense}
@@ -183,7 +241,7 @@ export default function StatClientResponsesTable() {
               <TableHeadCustom
                 order={order}
                 orderBy={orderBy}
-                headLabel={TABLE_HEAD}
+                headLabel={tableHead}
                 rowCount={tableData.length}
                 numSelected={selected.length}
                 onSort={onSort}
@@ -198,6 +256,7 @@ export default function StatClientResponsesTable() {
               <TableBody>
                 {tableData?.map((row: StatClientResponse) => (
                   <StatClientResponseTableRow
+                    filterStatClient={filterStatClient}
                     key={row._id}
                     row={row}
                     selected={selected.includes(row._id)}
