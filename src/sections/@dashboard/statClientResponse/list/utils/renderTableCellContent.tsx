@@ -65,7 +65,7 @@ const RenderTableCell = (item: { kpi: IKpi; response: Array<any> }) => {
               padding: '1px 1rem',
             }}
           >
-            {response[0].toString()}
+            {response[0]?.toString()}
           </Box>
         </TableCell>
       );
