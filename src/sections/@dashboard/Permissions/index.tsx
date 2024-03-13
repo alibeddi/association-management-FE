@@ -18,7 +18,7 @@ import {
   createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
-  updateGroupPermission
+  updateGroupPermission,
 } from '../../../redux/slices/groupPermissions/actions';
 import { getPermissions } from '../../../redux/slices/permissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
@@ -77,16 +77,22 @@ function Permissions() {
 
   const onSubmit = async ({ group }: { group: string }) => {
     if (isEdit) {
-      dispatch(updateGroupPermission({ id: permissionGroup?._id, body: { name: group } })).unwrap().then(res => {
-        reset({ group: '' });
-        setIsEdit(false);
-        enqueueSnackbar(`${translate(res.message)}`);
-      }).catch(err=>enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+      dispatch(updateGroupPermission({ id: permissionGroup?._id, body: { name: group } }))
+        .unwrap()
+        .then((res) => {
+          reset({ group: '' });
+          setIsEdit(false);
+          enqueueSnackbar(`${translate(res.message)}`);
+        })
+        .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
     } else {
-      dispatch(createNewGroupPermission({ name: group })).unwrap().then(res => {
-     enqueueSnackbar(`${translate(res?.message)}`);
+      dispatch(createNewGroupPermission({ name: group }))
+        .unwrap()
+        .then((res) => {
+          enqueueSnackbar(`${translate(res?.message)}`);
           reset();
-      }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+        })
+        .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
     }
   };
 
@@ -216,12 +222,16 @@ function Permissions() {
                     id: permissionGroup?._id,
                     body: { permissions: updatedPermissions },
                   })
-                ).unwrap()
-                .then(res => {
-                   reset({ group: '' });
+                )
+                  .unwrap()
+                  .then((res) => {
+                    reset({ group: '' });
                     setIsEdit(false);
                     enqueueSnackbar(`${translate(res.message)}`);
-                }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+                  })
+                  .catch((err) =>
+                    enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' })
+                  );
               }}
               loading={isSubmitting}
             >
