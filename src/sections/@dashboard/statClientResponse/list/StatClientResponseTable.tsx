@@ -111,16 +111,18 @@ export default function StatClientResponsesTable() {
   useEffect(() => {}, []);
 
   useEffect(() => {
-    dispatch(
-      getAllStatClientResponses({
-        page,
-        limit: rowsPerPage,
-        orderBy,
-        order,
-        filterClientName,
-        filterStatClient,
-      })
-    );
+    if (filterStatClient) {
+      dispatch(
+        getAllStatClientResponses({
+          page,
+          limit: rowsPerPage,
+          orderBy,
+          order,
+          filterClientName,
+          filterStatClient,
+        })
+      );
+    }
   }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName, filterStatClient]);
 
   useEffect(() => {
