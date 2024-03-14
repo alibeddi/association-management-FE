@@ -14,12 +14,17 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { DisplayTransformFunc, Mention, MentionsInput } from 'react-mentions';
 import * as Yup from 'yup';
+import { Office } from '../../../../@types/Office';
 import { Todo } from '../../../../@types/Todo';
 import { User } from '../../../../@types/User';
 import FormProvider from '../../../../components/hook-form';
 import Iconify from '../../../../components/iconify';
 import { useLocales } from '../../../../locales';
-import { createNewTodo, updateTodo } from '../../../../redux/slices/todos/actions';
+import {
+  createNewTodo,
+  getOfficesAndUsers,
+  updateTodo,
+} from '../../../../redux/slices/todos/actions';
 import { getUsers } from '../../../../redux/slices/users/actions';
 import { dispatch } from '../../../../redux/store';
 import { extractMentions } from '../utils/extractMentions';
@@ -106,13 +111,15 @@ export default function AddNewTodo({
     search: string,
     callback: (users: Array<{ id: string; display: string }>) => void
   ) => {
-    dispatch(getUsers({ page: 0, limit: 100, search }))
+    dispatch(getOfficesAndUsers({ page: 1, limit: 100, search }))
       .unwrap()
       .then((data) => {
+        console.log(data.data);
+        const docs = [...data.data.offices, ...data.data.users];
         callback(
-          data.docs.map((user: User) => ({
-            id: user._id,
-            display: user.username || user.email,
+          docs.map((doc: User | Office) => ({
+            id: doc._id,
+            display: doc?.username || doc?.email || doc?.name,
           }))
         );
       })

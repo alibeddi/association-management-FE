@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Office } from '../../../@types/Office';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
 import { Todo } from '../../../@types/Todo';
+import { User } from '../../../@types/User';
 import {
   createNewTodo,
   deleteOneTodo,
+  getOfficesAndUsers,
   getTodosAssignedToMe,
   getTodosCreatedbyMe,
   updateTodo,
@@ -13,12 +16,14 @@ import {
 type TodoInitialState = {
   todo: Todo;
   todos: PaginationModel<Todo>;
+  mentions: { offices: Office[]; users: User[]; meta: Meta };
   status: IStatus;
 };
 
 const initialState: TodoInitialState = {
   todos: { docs: [], meta: {} as Meta },
   todo: {} as Todo,
+  mentions: { offices: [], users: [], meta: {} as Meta },
   status: IStatus.IDLE,
 };
 
@@ -87,6 +92,18 @@ const slice = createSlice({
         );
       })
       .addCase(updateTodo.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+    // get all users and offices
+    builder
+      .addCase(getOfficesAndUsers.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(getOfficesAndUsers.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.mentions = action.payload.data;
+      })
+      .addCase(getOfficesAndUsers.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
