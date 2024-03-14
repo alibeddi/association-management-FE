@@ -51,7 +51,7 @@ export const editUser = createAsyncThunk('users/EDIT',async (payload:IPropsEditU
   try {
     payload = formatDataEditUser(payload)
     const response = await axios.patch(`/users/${payload.userId}`,{
-      office:payload.office?._id,permissionGroup:payload.permissionGroup,extraPermissions:payload.extraPermission
+      office:payload.office?._id,permissionGroup:payload.permissionGroup,extraPermissions:payload.extraPermissions
     });
     data = await response.data;
     if (response.status === 200) {

@@ -46,7 +46,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
     office:user?.office || {} as Office,
     role:user?.role || "",
     permissionGroup: user?.permissionGroup || [{} as PermissionGroup],
-    extraPermission: user?.extraPermission || []
+    extraPermission: user?.extraPermissions || []
   }),[user])
   const newUser = Yup.object().shape({
     name: Yup.string().min(2).required('name is required'),
@@ -63,7 +63,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const {handleSubmit,watch,formState:{isSubmitting,isDirty,errors}} = methods
   const onSubmit = (data:IPropsEditUser) => {
     data.userId = user?._id;
-    data.extraPermission = selectedPermissions;
+    data.extraPermissions = selectedPermissions;
 
     dispatch(editUser(data)).unwrap().then(res=>{
       enqueueSnackbar("User updated successfully");
@@ -75,16 +75,18 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setFilterTab(newValue);
   };
-  console.log(user)
-  const allPermission = user.permissionGroup;
-  console.log(allPermission)
-  // eslint-disable-next-line
-  const [selectedPermissions, setSelectedPermissions] = useState(permissionGroup && user.extraPermission ? [...permissionGroup?.permissions,...user.extraPermission] : []);
-  const formattedPermissions = !isObjectEmpty(user) && user?.permissionGroup[0] ? extractEntitiesAndActions(permissions.docs) : {entities:[],actions:[]};
-  const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
   const values = watch()
+  const allPermission = user.permissionGroup;
+  let combinedPermissions:any[] = [];
+  const [selectedPermissions, setSelectedPermissions] = useState(combinedPermissions);
+  const formattedPermissions = !isObjectEmpty(user) && user?.permissionGroup && user?.permissionGroup[0] ? extractEntitiesAndActions([...permissions.docs]) : {entities:[],actions:[]};
+  const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);  
   useEffect(()=>{
-    if(user && user?.permissionGroup &&  user?.permissionGroup.length > 0) setSelectedPermissions(user.permissionGroup[0].permissions)
+    combinedPermissions =[]
+    const extraPermission = user?.extraPermissions || [];
+    const groupPermission = user?.permissionGroup ? user?.permissionGroup[0].permissions : [];
+    if(!!user && user.permissionGroup && user?.extraPermissions) combinedPermissions = [...groupPermission, ...extraPermission];
+    if(user && user?.permissionGroup &&  user?.permissionGroup.length > 0) setSelectedPermissions(combinedPermissions)
   },[user])
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} style={

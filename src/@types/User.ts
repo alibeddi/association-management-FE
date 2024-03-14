@@ -12,7 +12,7 @@ export interface User {
   role: RoleCode;
   OAuthToken?: string;
   permissionGroup: PermissionGroup[];
-  extraPermission?: Permission[];
+  extraPermissions?: Permission[];
   deletedAt: Date | null;
   createdAt: Date;
 }

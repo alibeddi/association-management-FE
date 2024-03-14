@@ -11,11 +11,11 @@ export function formatDataEditUser(data: IPropsEditUser) {
     ?.map((group: any) => group.permissions ?? [])
     .flat();
   
-  let extraPermission = data.extraPermission;
+  let extraPermissions = data.extraPermissions;
   
-  if (extraPermission) {
+  if (extraPermissions) {
     // @ts-ignore
-    extraPermission = extraPermission.filter((elt: Permission) =>
+    extraPermissions = extraPermissions.filter((elt: Permission) =>
       !subPermissionsGroupPermission.some((subPerm: Permission) => 
         subPerm._id === elt._id
       )
@@ -25,13 +25,22 @@ export function formatDataEditUser(data: IPropsEditUser) {
   data.permissionGroup = data.permissionGroup.map((elt: any) => 
     typeof elt === "string" ? elt : elt._id
   );
-  
-  return {
-    ...data,
-    extraPermission: extraPermission && extraPermission.length > 0 ? 
-      extraPermission.map((elt: any) => 
-        typeof elt === "string" ? elt : elt._id
-      ) : 
-      undefined,
-  };
+  data.extraPermissions = extraPermissions && extraPermissions.length > 0 ? 
+  extraPermissions.map((elt: any) => 
+    typeof elt === "string" ? elt : elt._id
+  ) : 
+  undefined;
+  // @ts-ignore
+  const countMap: { [key: string]: number } = {};
+  let uniqueArray;
+  if( data.extraPermissions){
+    data.extraPermissions.forEach(str => {
+      if(typeof str==="string") countMap[str] = (countMap[str] || 0) + 1
+    })
+  // @ts-ignore
+      uniqueArray = data.extraPermissions.filter(str => countMap[str] === 1);
+  }
+
+   
+  return {...data,extraPermissions:uniqueArray};
 }

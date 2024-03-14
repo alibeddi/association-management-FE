@@ -9,6 +9,6 @@ export type IPropsEditUser = {
   role: string;
   office?:Office;
   permissionGroup?: PermissionGroup[] | string[];
-  extraPermission?: Permission[] | string[];
+  extraPermissions?: Permission[] | string[];
 
 }
