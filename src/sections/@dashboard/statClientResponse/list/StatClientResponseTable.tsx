@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import FilterModal from '../../../../components/FilterModal';
@@ -59,6 +59,9 @@ export default function StatClientResponsesTable() {
   } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const statsClientId = location.state?.statsClientId;
+
   const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -83,8 +86,12 @@ export default function StatClientResponsesTable() {
   const { docs: statsClientsDocs } = statsClients;
 
   useEffect(() => {
-    setFilterStatClient(statsClientsDocs[0]?._id);
-  }, [statsClients]);
+    if (statsClientId) {
+      setFilterStatClient(statsClientId);
+    } else {
+      setFilterStatClient(statsClientsDocs[0]?._id);
+    }
+  }, [statsClients, statsClientId]);
 
   useEffect(() => {
     const currentStatClient = statsClientsDocs.find(
@@ -107,8 +114,6 @@ export default function StatClientResponsesTable() {
       ]);
     }
   }, [filterStatClient, statsClients]);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (filterStatClient) {
