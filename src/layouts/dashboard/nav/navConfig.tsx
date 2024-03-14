@@ -68,7 +68,7 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: hasAccessToUsers,
         },
         {
-          title: 'kpis',
+          title: 'KPIS',
           path: PATH_DASHBOARD.kpis.root,
           icon: ICONS.settings,
           toBeDisplayed: hasAccessToKpis,
