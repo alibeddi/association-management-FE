@@ -1,5 +1,6 @@
 import { IPropsEditUser } from "../@types/editUser";
 import { Permission } from "../@types/Permission";
+import { PermissionGroup } from "../@types/PermissionGroup";
 
 export function formatDataEditUser(data: IPropsEditUser) {
   
@@ -8,7 +9,7 @@ export function formatDataEditUser(data: IPropsEditUser) {
   }
   
   const subPermissionsGroupPermission = data.permissionGroup
-    ?.map((group: any) => group.permissions ?? [])
+    ?.map((group) => typeof group !== "string" ?  group.permissions ?? [] : [])
     .flat();
   
   let extraPermissions = data.extraPermissions;
@@ -22,11 +23,11 @@ export function formatDataEditUser(data: IPropsEditUser) {
     );
   }
   
-  data.permissionGroup = data.permissionGroup.map((elt: any) => 
+  data.permissionGroup = data.permissionGroup.map((elt) => 
     typeof elt === "string" ? elt : elt._id
   );
   data.extraPermissions = extraPermissions && extraPermissions.length > 0 ? 
-  extraPermissions.map((elt: any) => 
+  extraPermissions.map((elt) => 
     typeof elt === "string" ? elt : elt._id
   ) : 
   undefined;

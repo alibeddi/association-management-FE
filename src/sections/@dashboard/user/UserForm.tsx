@@ -23,6 +23,7 @@ import { getAllPermissionGroups } from "../../../redux/slices/groupPermissions/a
 import { extractEntitiesAndActionsStrings } from "../../../utils/extractEntitiesAndActionsStrings"
 import { isObjectEmpty } from "../../../utils"
 import { IPropsEditUser } from "../../../@types/editUser"
+import { Permission } from "../../../@types/Permission"
 
 type IProps = {
   user: User;
@@ -77,7 +78,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
   };
   const values = watch()
   const allPermission = user.permissionGroup;
-  let combinedPermissions:any[] = [];
+  let combinedPermissions:Permission[] = [];
   const [selectedPermissions, setSelectedPermissions] = useState(combinedPermissions);
   const formattedPermissions = !isObjectEmpty(user) && user?.permissionGroup && user?.permissionGroup[0] ? extractEntitiesAndActions([...permissions.docs]) : {entities:[],actions:[]};
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);  
