@@ -14,14 +14,16 @@ export function formatDataEditUser(data: IPropsEditUser) {
   
   let extraPermissions = data.extraPermissions;
   
+
   if (extraPermissions) {
-    // @ts-ignore
-    extraPermissions = extraPermissions.filter((elt: Permission) =>
-      !subPermissionsGroupPermission.some((subPerm: Permission) => 
+    extraPermissions = (extraPermissions as Permission[]).filter((elt: Permission | string) => {
+      if (typeof elt === "string") return false; 
+      return !subPermissionsGroupPermission.some((subPerm: Permission) => 
         subPerm._id === elt._id
-      )
-    );
+      );
+    });
   }
+  
   
   data.permissionGroup = data.permissionGroup.map((elt) => 
     typeof elt === "string" ? elt : elt._id
@@ -31,14 +33,12 @@ export function formatDataEditUser(data: IPropsEditUser) {
     typeof elt === "string" ? elt : elt._id
   ) : 
   undefined;
-  // @ts-ignore
   const countMap: { [key: string]: number } = {};
   let uniqueArray;
   if( data.extraPermissions){
     data.extraPermissions.forEach(str => {
       if(typeof str==="string") countMap[str] = (countMap[str] || 0) + 1
     })
-  // @ts-ignore
       uniqueArray = data.extraPermissions.filter(str => countMap[str] === 1);
   }
 

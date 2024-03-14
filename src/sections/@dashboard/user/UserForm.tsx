@@ -46,7 +46,7 @@ const UserForm = ({user,isEdit=false}:IProps) => {
     email:user?.email || "",
     office:user?.office || {} as Office,
     role:user?.role || "",
-    permissionGroup: user?.permissionGroup || [{} as PermissionGroup],
+    permissionGroup: user?.permissionGroup || [],
     extraPermission: user?.extraPermissions || []
   }),[user])
   const newUser = Yup.object().shape({
