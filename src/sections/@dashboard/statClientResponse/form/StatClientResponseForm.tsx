@@ -103,7 +103,9 @@ export default function StatClientForm({
           .unwrap()
           .then((res) => {
             enqueueSnackbar(res.message);
-            navigate(PATH_DASHBOARD.statClientResponse.root);
+            navigate(PATH_DASHBOARD.statClientResponse.root, {
+              state: { statsClientId: currentStatClientResponse.statClient },
+            });
           })
           .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
       } else {
@@ -116,7 +118,9 @@ export default function StatClientForm({
           .unwrap()
           .then((res) => {
             enqueueSnackbar(res.message);
-            navigate(PATH_DASHBOARD.statClientResponse.root);
+            navigate(PATH_DASHBOARD.statClientResponse.root, {
+              state: { statsClientId: statsClient._id },
+            });
           })
           .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
       }

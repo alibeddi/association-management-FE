@@ -64,10 +64,7 @@ module.exports = smp.wrap({
     children: true,
   },
   devServer: {
-    allowedHosts: 'all',
-    historyApiFallback: true,
-    inline: true,
-    contentBase: path.resolve(__dirname, 'build'),
+    noCache: true,
   },
   plugins: [
     new webpack.optimize.AggressiveMergingPlugin(),
@@ -75,6 +72,7 @@ module.exports = smp.wrap({
     new HtmlWebPackPlugin({
       template: './public/index.html',
       favicon: './public/favicon/favicon.ico',
+      cache: false,
     }),
     new Dotenv({
       path: './.env',
