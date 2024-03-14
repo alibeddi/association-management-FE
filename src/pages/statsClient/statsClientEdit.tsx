@@ -40,7 +40,7 @@ const StatsClientEdit = () => {
             { name: 'New stats client' },
           ]}
         />
-        <StatsClientForm key={statsClient._id} statsClientProp={statsClient} />
+        <StatsClientForm key={`${statsClient._id}${new Date().toDateString()}`} statsClientProp={statsClient} />
       </Container>
     </>
   );

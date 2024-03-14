@@ -23,20 +23,24 @@ export default function UserEdit() {
       <Helmet>
         <title>Users</title>
       </Helmet>
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth={themeStretch ? false : 'xl'} sx={{
+        ".css-2s58ym-MuiPaper-root-MuiCard-root":{
+          overflow:"initial"
+        },
+      }}>
        <CustomBreadcrumbs
-       heading='View a user details'
+       heading='Edit a user details'
        links={[
         {
           name:'user',
           href: PATH_DASHBOARD.operators.root
         },
         {
-          name:'view user'
+          name:'edit user'
         }
        ]}
        />
-       <UserForm user={user} isEdit key={user._id} />
+       <UserForm user={user} isEdit key={`${user._id}${new Date().toISOString()}`}  />
       </Container>
     </>
   );

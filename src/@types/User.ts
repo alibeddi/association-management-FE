@@ -11,8 +11,8 @@ export interface User {
   office: Office | null;
   role: RoleCode;
   OAuthToken?: string;
-  permissionGroup?: PermissionGroup[];
-  extraPermission?: Permission[];
+  permissionGroup: PermissionGroup[];
+  extraPermissions?: Permission[];
   deletedAt: Date | null;
   createdAt: Date;
 }
