@@ -1,7 +1,6 @@
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import {
   Button,
@@ -11,13 +10,15 @@ import {
   Table,
   TableBody,
   TableContainer,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 // routes
 
 // sections
+import { MethodCode, ModelCode } from '../../../@types/Permission';
+import { IStatsClient } from '../../../@types/statsClient';
+import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import {
@@ -25,23 +26,20 @@ import {
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
-  useTable,
+  useTable
 } from '../../../components/table';
 import { useLocales } from '../../../locales';
-import { RootState, useDispatch, useSelector } from '../../../redux/store';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import StatsClientRow from './StatsClientRow';
-import StatsClientTableToolbar from './StatsClientToolbar';
-import { useAuthContext } from '../../../auth/useAuthContext';
-import { hasPermission } from '../Permissions/utils';
-import { MethodCode, ModelCode } from '../../../@types/Permission';
-import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis/actions';
+import { getKpis } from '../../../redux/slices/kpis/actions';
 import {
   deleteManyStatsClient,
   deleteStatsClient,
-  getAllStatsClient,
+  getAllStatsClient
 } from '../../../redux/slices/statsClient/action';
-import { IStatsClient } from '../../../@types/statsClient';
+import { RootState, useDispatch, useSelector } from '../../../redux/store';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import { findPermission } from '../Permissions/utils';
+import StatsClientRow from './StatsClientRow';
+import StatsClientTableToolbar from './StatsClientToolbar';
 
 export default function StatsClientList() {
   const {
@@ -134,19 +132,22 @@ export default function StatsClientList() {
   };
 
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
 
   // check current user permissions
-  const isAllowedToEditStatClient = hasPermission(
-    userPermissions,
+  const isAllowedToEditStatClient = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.STAT_CLIENT,
     MethodCode.EDIT
   );
-  const isAllowedToDeleteStatClient = hasPermission(
-    userPermissions,
+
+  const isAllowedToDeleteStatClient = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.STAT_CLIENT,
     MethodCode.DELETE
   );
+
   if (isAllowedToDeleteStatClient && isAllowedToEditStatClient) {
     TABLE_HEAD.push({ label: 'edit', align: 'center' }, { label: 'delete', align: 'center' });
   }

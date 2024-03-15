@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import { Permission } from '../../../@types/Permission';
+import { MethodCode, ModelCode, Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
@@ -18,7 +18,7 @@ import {
   createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
-  updateGroupPermission,
+  updateGroupPermission
 } from '../../../redux/slices/groupPermissions/actions';
 import { getPermissions } from '../../../redux/slices/permissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
@@ -27,7 +27,7 @@ import { extractEntitiesAndActions } from '../../../utils/extractEntitiesAndActi
 import { extractEntitiesAndActionsStrings } from '../../../utils/extractEntitiesAndActionsStrings';
 import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';
-import { hasPermission } from './utils';
+import { findPermission } from './utils';
 
 function Permissions() {
   const navigate = useNavigate();
@@ -42,9 +42,18 @@ function Permissions() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
-  const createGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
-  const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
+  const createGroupPermission = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.PERMISSION_GROUP,
+    MethodCode.DELETE
+  );
+  const editGroupPermission = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.PERMISSION_GROUP,
+    MethodCode.EDIT
+  );
 
   type FormValuesProps = {
     group: string;

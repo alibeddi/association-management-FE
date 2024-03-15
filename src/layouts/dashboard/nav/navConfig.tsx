@@ -2,7 +2,7 @@ import { MethodCode, ModelCode } from '../../../@types/Permission';
 import { AuthUserType } from '../../../auth/types';
 import SvgColor from '../../../components/svg-color';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import { hasPermission } from '../../../sections/@dashboard/Permissions/utils';
+import { findPermission } from '../../../sections/@dashboard/Permissions/utils';
 import {
   ic_operators,
   ic_settings,
@@ -32,33 +32,66 @@ const ICONS = {
 };
 
 export default function navConfig(user: AuthUserType) {
-  const userPermissions = user?.permissionGroup[0].permissions;
-  const hasAccessToKpis = hasPermission(userPermissions, ModelCode.KPI, MethodCode.LIST);
-  const hasAccessToUsers = hasPermission(userPermissions, ModelCode.USER, MethodCode.LIST);
-  const hasAccessToGroupPermissions = hasPermission(
-    userPermissions,
+  const hasAccessToKpis = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.LIST
+  );
+  const hasAccessToUsers = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.USER,
+    MethodCode.LIST
+  );
+  const hasAccessToGroupPermissions = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.PERMISSION_GROUP,
     MethodCode.LIST
   );
-  const hasAccessToCalendar = hasPermission(
-    userPermissions,
+  const hasAccessToCalendar = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.MY_WORKTIME,
     MethodCode.LIST
   );
-  const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
-  const hasAccessToAnalytics = hasPermission(userPermissions, ModelCode.ANALYTICS, MethodCode.LIST);
-  const hasAccessToStatClient = hasPermission(
-    userPermissions,
+  const hasAccessToCalls = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.CALLS,
+    MethodCode.LIST
+  );
+  const hasAccessToAnalytics = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    'ANALYTICS',
+    'LIST'
+  );
+  const hasAccessToStatClient = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.STAT_CLIENT,
     MethodCode.LIST
   );
-  const hasAccessToStatClientAnswers = hasPermission(
-    userPermissions,
+  const hasAccessToStatClientAnswers = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.STAT_CLIENT_RESPONSE,
     MethodCode.LIST
   );
-  const hasAccessToTodoList = hasPermission(userPermissions, ModelCode.TODO, MethodCode.LIST);
-  const hasAccessToOffices = hasPermission(userPermissions, ModelCode.OFFICE, MethodCode.LIST);
+  const hasAccessToTodoList = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.TODO,
+    MethodCode.LIST
+  );
+  const hasAccessToOffices = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.OFFICE,
+    MethodCode.LIST
+  );
 
   const config = [
     {
@@ -120,7 +153,7 @@ export default function navConfig(user: AuthUserType) {
         },
         {
           title: 'offices',
-          path: PATH_DASHBOARD.analytics,
+          path: PATH_DASHBOARD.offices,
           icon: ICONS.offices,
           toBeDisplayed: hasAccessToOffices,
         },

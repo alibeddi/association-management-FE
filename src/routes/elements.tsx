@@ -17,9 +17,8 @@ export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
 export const PermissionGroup = Loadable(lazy(() => import('../pages/PermissionGroup')));
 ///
 export const UserList = Loadable(lazy(() => import('../pages/User/UserList')));
-export const UserView = Loadable(lazy(()=>import('../pages/User/UserView')))
-export const UserEdit = Loadable(lazy(()=> import('../pages/User/UserEdit')))
-
+export const UserView = Loadable(lazy(() => import('../pages/User/UserView')));
+export const UserEdit = Loadable(lazy(() => import('../pages/User/UserEdit')));
 
 export const Calendar = Loadable(lazy(() => import('../pages/Calendar')));
 export const Analytics = Loadable(lazy(() => import('../pages/Analytics')));
@@ -50,7 +49,10 @@ export const StatsClientShow = Loadable(lazy(() => import('../pages/statsClient/
 // todo list
 export const MyTodoList = Loadable(lazy(() => import('../pages/Todos/TodoListPage')));
 
-// todo list
+// Notification
 export const Notifications = Loadable(lazy(() => import('../pages/Notifications')));
+
+// Offices
+export const Offices = Loadable(lazy(() => import('../pages/OfficesList')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
