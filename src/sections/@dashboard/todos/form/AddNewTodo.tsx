@@ -7,7 +7,7 @@ import {
   ListItemAvatar,
   ListItemText,
   MenuItem,
-  Stack,
+  Stack
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useMemo } from 'react';
@@ -23,11 +23,11 @@ import { useLocales } from '../../../../locales';
 import {
   createNewTodo,
   getOfficesAndUsers,
-  updateTodo,
+  updateTodo
 } from '../../../../redux/slices/todos/actions';
-import { getUsers } from '../../../../redux/slices/users/actions';
 import { dispatch } from '../../../../redux/store';
 import { extractMentions } from '../utils/extractMentions';
+import { isUser } from '../utils/isUser';
 import style from './style';
 
 type FormValues = {
@@ -114,12 +114,11 @@ export default function AddNewTodo({
     dispatch(getOfficesAndUsers({ page: 1, limit: 100, search }))
       .unwrap()
       .then((data) => {
-        console.log(data.data);
         const docs = [...data.data.offices, ...data.data.users];
         callback(
           docs.map((doc: User | Office) => ({
             id: doc._id,
-            display: doc?.username || doc?.email || doc?.name,
+            display: isUser(doc) ? doc.username || doc.email : doc.name,
           }))
         );
       })
