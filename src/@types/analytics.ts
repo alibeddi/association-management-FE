@@ -1,4 +1,4 @@
-import { Office } from './Office';
+import { Office } from './offices';
 
 export interface Analytics {
   nbStatClients: number;

@@ -23,7 +23,7 @@ export default function UserView() {
       <Helmet>
         <title>Users</title>
       </Helmet>
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth={themeStretch ? false : 'xl'} >
        <CustomBreadcrumbs
        heading='View a user details'
        links={[
@@ -36,7 +36,7 @@ export default function UserView() {
         }
        ]}
        />
-       <UserForm user={user} key={user._id} />
+       <UserForm user={user} key={`${user._id}${new Date().toISOString()}`} />
       </Container>
     </>
   );

@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
 
 import { FrontType, IKpi } from '../../../@types/Kpi';
-import FormProvider, { RHFAutocomplete, RHFTextField } from '../../../components/hook-form';
+import FormProvider, {  RHFTextField } from '../../../components/hook-form';
 import RenderField from '../../../components/RenderField';
 import { getKpis } from '../../../redux/slices/kpis/actions';
 import { createStatsClient, updateStatsClient } from '../../../redux/slices/statsClient/action';
@@ -22,6 +22,7 @@ import { setDefaultValuesStatsClient } from '../../../utils/setDefaultValuesStat
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import RHFAsyncSelect from '../../../components/hook-form/RHFAsyncSelect';
 import axios from '../../../utils/axios';
+import { setQuery } from '../../../utils/setParams';
 
 type IProps = {
   statsClientProp?: IStatsClient | null;
@@ -136,7 +137,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
             {fields?.length > 0 ? (
               fields?.map((s, index) => (
                 <Stack
-                  key={index}
+                  key={s._id}
                   sx={{
                     flexDirection: 'row',
                     display: 'flex',
@@ -159,7 +160,7 @@ const StatsClientForm = ({ statsClientProp = null }: IProps) => {
                   getOptionLabel={(option:IKpi) => option && typeof option !== 'string' ? option?.label : option}
                   getOptionValue={(option)=>option}
                   fetchData={async (params) => {
-                    const response = await axios.get(`/kpis?page=${params.page}&limit=${params.limit}&filterName=${params.name}`)
+                    const response = await axios.get(`/kpis${setQuery(params)}`)
                     const data = await response.data;
                     return data;
                   }}

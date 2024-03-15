@@ -114,29 +114,38 @@ export default function UserTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {hasPermissionViewUser && (
-          <MenuItem
-            onClick={() => {
-              handleViewUser();
-            }}
-            sx={{ color: 'principal.main' }}
-          >
-            <Iconify icon="carbon:view-filled" />
-            View
-          </MenuItem>
-        )}
-        {hasPermissionDeleteUser && (
-          <MenuItem
-            onClick={() => {
-              handleOpenConfirm();
-              handleClosePopover();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="eva:trash-2-outline" />
-            Delete
-          </MenuItem>
-        )}
+    {hasPermissionViewUser &&    <MenuItem
+          onClick={() => {
+            handleViewUser()
+          }}
+          sx={{ color: 'principal.main' }}
+        >
+          <Iconify icon="carbon:view-filled" />
+          View
+        </MenuItem>}
+
+
+       {hasPermissionEditUser && <MenuItem
+          onClick={() => {
+            handleEditUser()
+          }}
+          sx={{ color: 'principal.main' }}
+        >
+          <Iconify icon="eva:edit-fill" />
+          Edit
+        </MenuItem>}
+
+ {hasPermissionDeleteUser &&       <MenuItem
+          onClick={() => {
+            handleOpenConfirm();
+            handleClosePopover();
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="eva:trash-2-outline" />
+          Delete
+        </MenuItem>}
+        
       </MenuPopover>
 
       <ConfirmDialog

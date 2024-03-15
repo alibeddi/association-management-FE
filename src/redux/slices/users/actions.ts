@@ -1,4 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { IPropsEditUser } from '../../../@types/editUser';
+import { Office } from '../../../@types/offices';
+import { Permission } from '../../../@types/Permission';
+import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { formatDataEditUser } from '../../../utils';
 import axios from '../../../utils/axios';
 
 
@@ -41,6 +46,22 @@ export const getUser  = createAsyncThunk('users/GETONE',async ({id}:{id:string})
   }
 })
 
+export const editUser = createAsyncThunk('users/EDIT',async (payload:IPropsEditUser) => {
+  let data;
+  try {
+    payload = formatDataEditUser(payload)
+    const response = await axios.patch(`/users/${payload.userId}`,{
+      office:payload.office?._id,permissionGroup:payload.permissionGroup,extraPermissions:payload.extraPermissions
+    });
+    data = await response.data;
+    if (response.status === 200) {
+      return data.data;
+    }
+    throw new Error(response.statusText);
+  } catch (err) {
+    return Promise.reject(err.message ? err.message : data?.message);
+  }
+})
 
 // DELETE ONE
 export const deleteOne = createAsyncThunk('users/DELETE', async (payload: { userId: string }) => {

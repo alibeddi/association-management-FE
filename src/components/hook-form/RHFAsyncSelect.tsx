@@ -1,11 +1,10 @@
 import { Tooltip } from '@mui/material';
 import React, { useState } from 'react'
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext,FieldValues } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
-import {PaginationModel} from "../../@types/Pagination"
 import { useLocales } from '../../locales';
-import { dispatch } from '../../redux/store';
-import { setParams } from '../../utils/setParams';
+import { isObjectEmpty } from '../../utils';
+import { Params, setParams } from '../../utils/setParams';
 import { StyledAsyncPaginate } from '../AsyncSelect/styles';
 
 interface Props<T>  {
@@ -24,12 +23,7 @@ interface Props<T>  {
  onChange?: Function;
  sx?: React.CSSProperties;
 }
-interface Params {
-  page: number;
-  limit: number;
-  orderBy?: string;
-  name?: string; 
-}
+
 const RHFAsyncSelect = <T,>({
   name,
   label,
@@ -50,14 +44,15 @@ const RHFAsyncSelect = <T,>({
   const {control} = useFormContext()
   const {translate} = useLocales()
   const [page,setPage] = useState<number>(1)
+  const [valueInput,setValueInput] = useState<T|T[]|undefined>(value)
   const [filterName,setFilterName] = useState<string | null>(null)
   const loadOptions = async (searchQuery: string) => {
    
     if(searchQuery){
       setFilterName(searchQuery)
-      setPage(0)
+      setPage(1)
     } 
-    const params = setParams({page,limit:10,filterName:filterName || ""})
+    const params = setParams({page,limit:10,name:searchQuery || ""})
     const data = await  fetchData(params)
     const {docs,meta} = data.data;
     const hasMore = meta.hasMore;
@@ -70,28 +65,33 @@ const RHFAsyncSelect = <T,>({
       }
     };
   };
-
+ 
   return (
     <Controller
     name={name}
     control={control}
     render={({field,fieldState:{error}})=>(
-      <Tooltip title={`${translate(helperText)}` || `${translate(label)}` }>
+      
         <AsyncPaginate
          onChange={(e) => {
           if(!e) return;
           if(onChangeProp){
             onChangeProp(e)
           }else{
-            field.onChange((e));
+            field.onChange((e as FieldValues));
+            // @ts-ignore
+            setValueInput(e)
           }
           
         }}
-        defaultValue={value}
+
+        
+        value={valueInput}
         isMulti={isMulti}
         additional={{
           page:1
         }}
+        isDisabled={disable}
         loadOptions={loadOptions}
         getOptionLabel={(option:T)=>getOptionLabel(option)}
         getOptionValue={(option:T)=>getOptionValue(option)}
@@ -101,7 +101,7 @@ const RHFAsyncSelect = <T,>({
         styles={StyledAsyncPaginate(sx)}
         {...other}
       />
-      </Tooltip>
+      
     )}
     />
   )

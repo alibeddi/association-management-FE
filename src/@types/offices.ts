@@ -2,7 +2,7 @@ export interface Office {
   _id?:string;
   name: string;
   address?: string;
-  createdAt?: Date;
+  createdAt?: Date | null;
   updatedAt?: Date;
   deletedAt?: Date;
 }
