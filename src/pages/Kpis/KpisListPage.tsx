@@ -23,12 +23,12 @@ export default function KpiListPage() {
   return (
     <>
       <Helmet>
-        <title>{`${translate('Kpis')}`}</title>
+        <title>{`${translate('KPIS')}`}</title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="kpis"
-          links={[{ name: 'kpis' }]}
+          heading="KPIS"
+          links={[{ name: 'KPIS' }]}
           action={
             isAllowedToCreateKpi && (
               <Button

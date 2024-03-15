@@ -15,9 +15,9 @@ export const PATH_AUTH = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   operators: {
-    root:path(ROOTS_DASHBOARD, '/operators'),
-    edit: path(ROOTS_DASHBOARD,'/operators/edit'),
-    view: path(ROOTS_DASHBOARD,'/operators/view')
+    root: path(ROOTS_DASHBOARD, '/operators'),
+    edit: path(ROOTS_DASHBOARD, '/operators/edit'),
+    view: path(ROOTS_DASHBOARD, '/operators/view'),
   },
   kpis: {
     root: path(ROOTS_DASHBOARD, '/kpis'),
@@ -43,4 +43,5 @@ export const PATH_DASHBOARD = {
   todoList: path(ROOTS_DASHBOARD, '/todo-list'),
   analytics: path(ROOTS_DASHBOARD, '/analytics'),
   Notifications: path(ROOTS_DASHBOARD, '/notifications'),
+  offices: path(ROOTS_DASHBOARD, '/offices'),
 };

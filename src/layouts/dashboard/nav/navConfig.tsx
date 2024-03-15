@@ -13,6 +13,7 @@ import {
   ic_stats_client,
   ic_analytics,
   ic_todolist,
+  ic_offices,
 } from '../../../assets/icons/navbar';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
@@ -27,6 +28,7 @@ const ICONS = {
   statClientResponse: icon(ic_stat_client_response),
   analytics: icon(ic_analytics),
   todoList: icon(ic_todolist),
+  offices: icon(ic_offices),
 };
 
 export default function navConfig(user: AuthUserType) {
@@ -56,6 +58,7 @@ export default function navConfig(user: AuthUserType) {
     MethodCode.LIST
   );
   const hasAccessToTodoList = hasPermission(userPermissions, ModelCode.TODO, MethodCode.LIST);
+  const hasAccessToOffices = hasPermission(userPermissions, ModelCode.OFFICE, MethodCode.LIST);
 
   const config = [
     {
@@ -68,7 +71,7 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: hasAccessToUsers,
         },
         {
-          title: 'kpis',
+          title: 'KPIS',
           path: PATH_DASHBOARD.kpis.root,
           icon: ICONS.settings,
           toBeDisplayed: hasAccessToKpis,
@@ -114,6 +117,12 @@ export default function navConfig(user: AuthUserType) {
           path: PATH_DASHBOARD.analytics,
           icon: ICONS.analytics,
           toBeDisplayed: hasAccessToAnalytics,
+        },
+        {
+          title: 'offices',
+          path: PATH_DASHBOARD.analytics,
+          icon: ICONS.offices,
+          toBeDisplayed: hasAccessToOffices,
         },
       ],
     },
