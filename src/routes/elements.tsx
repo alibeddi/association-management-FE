@@ -53,6 +53,6 @@ export const MyTodoList = Loadable(lazy(() => import('../pages/Todos/TodoListPag
 export const Notifications = Loadable(lazy(() => import('../pages/Notifications')));
 
 // Offices
-export const Offices = Loadable(lazy(() => import('../pages/OfficesList')));
+export const Offices = Loadable(lazy(() => import('../pages/Offices')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
