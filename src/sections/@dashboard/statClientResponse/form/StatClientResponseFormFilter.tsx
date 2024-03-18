@@ -8,7 +8,7 @@ import Iconify from '../../../../components/iconify';
 import { useTable } from '../../../../components/table';
 import { addFilter } from '../../../../redux/slices/statClientResponse';
 import { statsClientResponseFilter } from '../../../../redux/slices/statClientResponse/actions';
-import { dispatch, useSelector } from '../../../../redux/store';
+import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { validNotEmptyFilters } from '../../../../utils';
 import StatResponseFilterSelect from './StatResponseFilterSelect';
 
@@ -20,6 +20,7 @@ const StatClientResponseFormFilter = ({ onClose }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { filters } = useSelector((store) => store.statClientResponses);
+  const { statClientId } = useSelector((state: RootState) => state.statsClient);
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const isValid = validNotEmptyFilters(filters);
@@ -35,6 +36,7 @@ const StatClientResponseFormFilter = ({ onClose }: IProps) => {
         page: page + 1,
         limit: rowsPerPage,
         filterValue: filters,
+        filterStatClient: statClientId,
       })
     )
       .unwrap()
@@ -53,7 +55,6 @@ const StatClientResponseFormFilter = ({ onClose }: IProps) => {
   return (
     <Stack>
       <Button onClick={() => dispatch(addFilter())} startIcon={<Iconify icon="icons8:plus" />}>
-        {' '}
         Add new Filter
       </Button>
 

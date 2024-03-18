@@ -1,5 +1,5 @@
 import { Container } from '@mui/system';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
@@ -8,14 +8,12 @@ import { getSingleStatsClient } from '../../redux/slices/statsClient/action';
 import { useDispatch, useSelector } from '../../redux/store';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import StatsClientForm from '../../sections/@dashboard/statsClient/statsClientForm';
-import { actions } from '../../redux/slices/statsClient';
 
 const StatsClientEdit = () => {
   const { themeStretch } = useSettingsContext();
   const { id } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    
     if (id) dispatch(getSingleStatsClient({ id }));
   }, [dispatch, id]);
   const { statsClient } = useSelector((state) => state.statsClient);
@@ -40,7 +38,10 @@ const StatsClientEdit = () => {
             { name: 'New stats client' },
           ]}
         />
-        <StatsClientForm key={`${statsClient._id}${new Date().toDateString()}`} statsClientProp={statsClient} />
+        <StatsClientForm
+          key={`${statsClient._id}${new Date().toDateString()}`}
+          statsClientProp={statsClient}
+        />
       </Container>
     </>
   );

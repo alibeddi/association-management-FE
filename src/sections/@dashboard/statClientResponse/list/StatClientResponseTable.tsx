@@ -19,6 +19,8 @@ import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import {
+  emptyRows,
+  TableEmptyRows,
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
@@ -35,6 +37,9 @@ import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
 import StatClientResponseTableToolbar from './StatClientResponseTableToolbar';
+import { setCurrentStatClientId } from '../../../../redux/slices/statsClient';
+import { IStatus } from '../../../../@types/status';
+import LoadingTable from '../../../../components/loadingTable/LoadingTable';
 
 // ----------------------------------------------------------------------
 
@@ -80,10 +85,15 @@ export default function StatClientResponsesTable() {
     }[]
   >([]);
 
-  const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
+  const { statClientResponses, status } = useSelector(
+    (state: RootState) => state.statClientResponses
+  );
+
   const { statsClients } = useSelector((state: RootState) => state.statsClient);
 
   const { docs: statsClientsDocs } = statsClients;
+
+  const denseHeight = dense ? 52 : 72;
 
   useEffect(() => {
     if (statsClientId) {
@@ -134,9 +144,13 @@ export default function StatClientResponsesTable() {
     setTableData(statClientResponses?.docs);
   }, [statClientResponses]);
 
+  useEffect(() => {
+    dispatch(setCurrentStatClientId(filterStatClient));
+  }, [filterStatClient]);
+
   const isFiltered = filterClientName !== '';
 
-  const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
+  const isNotFound = status === IStatus.SUCCEEDED && !tableData.length;
 
   const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setPage(0);
@@ -261,24 +275,38 @@ export default function StatClientResponsesTable() {
               />
 
               <TableBody>
-                {tableData?.map((row: StatClientResponse) => (
-                  <StatClientResponseTableRow
-                    filterStatClient={filterStatClient}
-                    key={row._id}
-                    row={row}
-                    selected={selected.includes(row._id)}
-                    onSelectRow={() => onSelectRow(row._id)}
-                    onDeleteRow={() => {
-                      handleDeleteRow(row._id);
-                    }}
-                    onEditRow={() => {
-                      handleEditRow(row);
-                    }}
-                    onViewRow={() => {
-                      handleViewRow(row);
-                    }}
+                {status === IStatus.LOADING ? (
+                  <LoadingTable
+                    height={denseHeight}
+                    fields={tableHead.length}
+                    rowsPerPage={rowsPerPage}
                   />
-                ))}
+                ) : (
+                  tableData?.map((row: StatClientResponse) => (
+                    <>
+                      <StatClientResponseTableRow
+                        filterStatClient={filterStatClient}
+                        key={row._id}
+                        row={row}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => {
+                          handleDeleteRow(row._id);
+                        }}
+                        onEditRow={() => {
+                          handleEditRow(row);
+                        }}
+                        onViewRow={() => {
+                          handleViewRow(row);
+                        }}
+                      />
+                      <TableEmptyRows
+                        height={denseHeight}
+                        emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                      />
+                    </>
+                  ))
+                )}
 
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>

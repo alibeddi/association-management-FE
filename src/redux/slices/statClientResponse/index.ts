@@ -10,14 +10,14 @@ import {
   editStatClientResponse,
   getAllStatClientResponses,
   getOneStatClientResponse,
-  statsClientResponseFilter
+  statsClientResponseFilter,
 } from './actions';
 
 type StatClientResState = {
   statClientResponses: PaginationModel<StatClientResponse>;
   statClientResponse: StatClientResponse;
   status: IStatus;
-  filters: IFilterStatClientResponse[] | []
+  filters: IFilterStatClientResponse[] | [];
 };
 
 const initialState: StatClientResState = {
@@ -32,40 +32,38 @@ const slice = createSlice({
   initialState,
   reducers: {
     addFilter: (state) => {
-      state.filters = [...state.filters,{ id:nanoid() , type: '', value: '' }]
+      state.filters = [...state.filters, { id: nanoid(), type: '', value: '' }];
     },
-    removeFilter: (state,{payload}) => {
-      state.filters = state.filters.filter(filter=> filter.id !== payload.id)
+    removeFilter: (state, { payload }) => {
+      state.filters = state.filters.filter((filter) => filter.id !== payload.id);
     },
-    handleChangeOptionfilter:(state,{payload})=>{
-      const {name,value} = payload;
-      state.filters = state.filters.map(elt=> elt.id === name ? {...elt,type:value} : elt )
-    } ,
-    handleChangefilter : (state,{payload}) => {
-      const {id,value} = payload;
-      state.filters = state.filters.map(elt => elt.id !== id ? elt: {...elt,value})
+    handleChangeOptionfilter: (state, { payload }) => {
+      const { name, value } = payload;
+      state.filters = state.filters.map((elt) => (elt.id === name ? { ...elt, type: value } : elt));
+    },
+    handleChangefilter: (state, { payload }) => {
+      const { id, value } = payload;
+      state.filters = state.filters.map((elt) => (elt.id !== id ? elt : { ...elt, value }));
     },
     resetFilters: (state) => {
-      state.filters = []
+      state.filters = [];
     },
     handleChoiceFilters: (state, { payload }) => {
       const { id, choices } = payload;
-      const index = state.filters.findIndex(filter => filter.id === id);
+      const index = state.filters.findIndex((filter) => filter.id === id);
       const updatedFilters = [...state.filters];
-     
-      if (index !== -1) {
 
-         updatedFilters[index] = {
-           ...updatedFilters[index],
-           choices
-         };
-      } 
+      if (index !== -1) {
+        updatedFilters[index] = {
+          ...updatedFilters[index],
+          choices,
+        };
+      }
       return {
-         ...state,
-         filters: updatedFilters
+        ...state,
+        filters: updatedFilters,
       };
-     }
-     
+    },
   },
   extraReducers: (builder) => {
     // create
@@ -83,7 +81,7 @@ const slice = createSlice({
     // get all
     builder
       .addCase(getAllStatClientResponses.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(getAllStatClientResponses.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -142,18 +140,25 @@ const slice = createSlice({
         state.status = IStatus.FAILED;
       });
     builder
-    .addCase(statsClientResponseFilter.pending,(state)=>{
-      state.status = IStatus.LOADING;
-    })
-    .addCase(statsClientResponseFilter.fulfilled, (state, {payload}) => {
-      state.status = IStatus.SUCCEEDED;
-      state.statClientResponses = payload;
-    })
-    .addCase(statsClientResponseFilter.rejected, (state) => {
-      state.status = IStatus.FAILED;
-    });
+      .addCase(statsClientResponseFilter.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(statsClientResponseFilter.fulfilled, (state, { payload }) => {
+        state.status = IStatus.SUCCEEDED;
+        state.statClientResponses = payload;
+      })
+      .addCase(statsClientResponseFilter.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
   },
 });
 
-export const {addFilter , removeFilter,handleChangeOptionfilter,handleChangefilter,resetFilters,handleChoiceFilters} = slice.actions;
+export const {
+  addFilter,
+  removeFilter,
+  handleChangeOptionfilter,
+  handleChangefilter,
+  resetFilters,
+  handleChoiceFilters,
+} = slice.actions;
 export default slice.reducer;
