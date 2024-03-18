@@ -9,26 +9,30 @@ import { useSettingsContext } from '../../components/settings';
 import { useLocales } from '../../locales';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { KpisTable } from '../../sections/@dashboard/Kpis/list';
-import { hasPermission } from '../../sections/@dashboard/Permissions/utils';
+import { findPermission } from '../../sections/@dashboard/Permissions/utils';
 
 export default function KpiListPage() {
   const { translate } = useLocales();
   const { themeStretch } = useSettingsContext();
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
 
   // check current user permissions
-  const isAllowedToCreateKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.CREATE);
+  const isAllowedToCreateKpi = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.CREATE
+  );
 
   return (
     <>
       <Helmet>
-        <title>{`${translate('Kpis')}`}</title>
+        <title>{`${translate('KPIS')}`}</title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="kpis"
-          links={[{ name: 'kpis' }]}
+          heading="KPIS"
+          links={[{ name: 'KPIS' }]}
           action={
             isAllowedToCreateKpi && (
               <Button

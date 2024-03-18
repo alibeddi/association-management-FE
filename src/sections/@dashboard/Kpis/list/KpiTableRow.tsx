@@ -9,18 +9,18 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography,
+  Typography
 } from '@mui/material';
 // utils
 import { fDate } from '../../../../utils/formatTime';
 // components
 import { IKpi } from '../../../../@types/Kpi';
+import { MethodCode, ModelCode } from '../../../../@types/Permission';
+import { useAuthContext } from '../../../../auth/useAuthContext';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
-import { hasPermission } from '../../Permissions/utils';
-import { MethodCode, ModelCode } from '../../../../@types/Permission';
-import { useAuthContext } from '../../../../auth/useAuthContext';
+import { findPermission } from '../../Permissions/utils';
 
 type Props = {
   row: IKpi;
@@ -45,12 +45,26 @@ export default function KpiTableRow({
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
 
   // check current user permissions
-  const isAllowedToDeleteKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.DELETE);
-  const isAllowedToEditKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.EDIT);
-  const isAllowedToViewKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.VIEW);
+  const isAllowedToDeleteKpi = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.DELETE
+  );
+  const isAllowedToEditKpi = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.EDIT
+  );
+  const isAllowedToViewKpi = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.VIEW
+  );
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -116,7 +130,7 @@ export default function KpiTableRow({
             <Tooltip
               title={
                 <>
-                  {choices?.map((option:string, index:number) => (
+                  {choices?.map((option: string, index: number) => (
                     <p key={index}>{option}</p>
                   ))}
                 </>

@@ -134,3 +134,22 @@ export const updateTodo = createAsyncThunk(
     }
   }
 );
+
+export const getOfficesAndUsers = createAsyncThunk(
+  'USER_OFFICE/GET',
+  async (payload: { page: number; limit: number; search?: string }) => {
+    let data;
+    const { page, limit, search } = payload;
+    const params = { page, limit, ...(search ? { search } : {}) };
+    try {
+      const response = await axios.get('todos/users-offices', { params });
+      data = response.data;
+      if (response.status === 200) {
+        return data;
+      }
+      throw new Error(response.statusText);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);

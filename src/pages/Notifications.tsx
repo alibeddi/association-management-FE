@@ -6,9 +6,7 @@ import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import EmptyContent from '../components/empty-content';
 import Iconify from '../components/iconify';
 import { TablePaginationCustom, useTable } from '../components/table';
-import {
-  NotificationRow
-} from '../layouts/dashboard/header/NotificationsPopover';
+import { NotificationRow } from '../layouts/dashboard/header/NotificationsPopover';
 import { useLocales } from '../locales';
 import {
   getAllNotifications,

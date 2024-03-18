@@ -5,7 +5,7 @@ import {
   MenuItem,
   TableCell,
   TableRow,
-  Typography,
+  Typography
 } from '@mui/material';
 import { useState } from 'react';
 import { MethodCode, ModelCode } from '../../../../@types/Permission';
@@ -16,7 +16,7 @@ import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import { RootState, useSelector } from '../../../../redux/store';
 import { fDate } from '../../../../utils/formatTime';
-import { hasPermission } from '../../Permissions/utils';
+import { findPermission } from '../../Permissions/utils';
 import { generateKpiTableArray } from './utils/generateKpiTableArray';
 import RenderTableCell from './utils/renderTableCellContent';
 
@@ -52,12 +52,26 @@ export default function StatClientResponseTableRow({
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
 
   // check current user permissions
-  const isAllowedToDeleteKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.DELETE);
-  const isAllowedToEditKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.EDIT);
-  const isAllowedToViewKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.VIEW);
+  const isAllowedToDeleteKpi = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.DELETE
+  );
+  const isAllowedToEditKpi = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.EDIT
+  );
+  const isAllowedToViewKpi = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.KPI,
+    MethodCode.VIEW
+  );
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);

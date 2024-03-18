@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Permission } from '../../../@types/Permission';
+import { MethodCode, ModelCode, Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
@@ -12,11 +12,11 @@ import MenuPopover from '../../../components/menu-popover';
 import { useLocales } from '../../../locales';
 import {
   deleteGroupPermissionById,
-  getPermissionGroup,
+  getPermissionGroup
 } from '../../../redux/slices/groupPermissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import { hasPermission } from './utils';
+import { findPermission } from './utils';
 
 type Props = {
   group: PermissionGroup;
@@ -45,10 +45,20 @@ const GroupButton = ({
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { permissionGroup } = useSelector((state: RootState) => state.permissions_groups);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
 
-  const deleteGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
-  const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
+  const deleteGroupPermission = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.PERMISSION_GROUP,
+    MethodCode.DELETE
+  );
+
+  const editGroupPermission = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.PERMISSION_GROUP,
+    MethodCode.EDIT
+  );
 
   const isRowMenu = deleteGroupPermission || editGroupPermission;
   const handleOpenConfirm = () => {

@@ -1,20 +1,25 @@
 import { Button, Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink } from 'react-router-dom';
-import { useSettingsContext } from '../../components/settings';
-import CustomBreadcrumbs from '../../components/custom-breadcrumbs'
-import { PATH_DASHBOARD } from '../../routes/paths';
-import Iconify from '../../components/iconify';
-import StatsClientList from '../../sections/@dashboard/statsClient/StatsClientList';
-import { hasPermission } from '../../sections/@dashboard/Permissions/utils';
-import { useAuthContext } from '../../auth/useAuthContext';
 import { MethodCode, ModelCode } from '../../@types/Permission';
+import { useAuthContext } from '../../auth/useAuthContext';
+import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
+import Iconify from '../../components/iconify';
+import { useSettingsContext } from '../../components/settings';
+import { PATH_DASHBOARD } from '../../routes/paths';
+import { findPermission } from '../../sections/@dashboard/Permissions/utils';
+import StatsClientList from '../../sections/@dashboard/statsClient/StatsClientList';
 
 const StatsClient = () => {
-  const { themeStretch } = useSettingsContext()
-  const {user} = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
-  const isAllowedToCreateStatsClient = hasPermission(userPermissions,ModelCode.STAT_CLIENT,MethodCode.CREATE);
+  const { themeStretch } = useSettingsContext();
+  const { user } = useAuthContext();
+  const isAllowedToCreateStatsClient = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.STAT_CLIENT,
+    MethodCode.CREATE
+  );
+
   return (
     <>
       <Helmet>
@@ -22,7 +27,7 @@ const StatsClient = () => {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-      <CustomBreadcrumbs
+        <CustomBreadcrumbs
           heading="stats-client"
           links={[{ name: 'stats-client' }]}
           action={
@@ -38,7 +43,7 @@ const StatsClient = () => {
             )
           }
         />
-        <StatsClientList/>
+        <StatsClientList />
       </Container>
     </>
   );

@@ -1,11 +1,6 @@
 import { useState } from 'react';
 // @mui
-import {
-  Box,
-  Button,
-  Checkbox, TableCell,
-  TableRow, Tooltip, Typography
-} from '@mui/material';
+import { Box, Button, Checkbox, TableCell, TableRow, Tooltip, Typography } from '@mui/material';
 // utils
 // components
 import { IKpi } from '../../../@types/Kpi';
@@ -14,7 +9,7 @@ import { IStatsClient } from '../../../@types/statsClient';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
-import { hasPermission } from '../Permissions/utils';
+import { findPermission } from '../Permissions/utils';
 
 type Props = {
   row: IStatsClient;
@@ -40,21 +35,23 @@ export default function StatsClientRow({
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
 
   // check current user permissions
-  const isAllowedToDeleteStatClient = hasPermission(
-    userPermissions,
+  const isAllowedToDeleteStatClient = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.STAT_CLIENT,
     MethodCode.DELETE
   );
-  const isAllowedToEditStatClient = hasPermission(
-    userPermissions,
+  const isAllowedToEditStatClient = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.STAT_CLIENT,
     MethodCode.EDIT
   );
-  const isAllowedToViewStatClient = hasPermission(
-    userPermissions,
+  const isAllowedToViewStatClient = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
     ModelCode.STAT_CLIENT,
     MethodCode.VIEW
   );
@@ -96,32 +93,29 @@ export default function StatsClientRow({
               gap: '.5rem',
             }}
           >
-            <Tooltip 
-            
-            title={
-              <>
-              {
-                kpis?.map((kpi:IKpi,index)=>
-                  <p key={index}>{kpi.label}</p>
-                )
+            <Tooltip
+              title={
+                <>
+                  {kpis?.map((kpi: IKpi, index) => (
+                    <p key={index}>{kpi.label}</p>
+                  ))}
+                </>
               }
-              </>
-            }>
+            >
               <Box
-               sx={{
-                maxWidth: 100,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
+                sx={{
+                  maxWidth: 100,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
               >
-              {
-                kpis?.map((kpi:IKpi)=> `${kpi.label} ,` ).join('').slice(0,-1)
-              }
+                {kpis
+                  ?.map((kpi: IKpi) => `${kpi.label} ,`)
+                  .join('')
+                  .slice(0, -1)}
               </Box>
-
             </Tooltip>
-            
           </Typography>
         </TableCell>
         <TableCell

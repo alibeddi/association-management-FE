@@ -34,6 +34,4 @@ const slice = createSlice({
   },
 });
 
-// eslint-disable-next-line no-empty-pattern
-export const {} = slice.actions;
 export default slice.reducer;

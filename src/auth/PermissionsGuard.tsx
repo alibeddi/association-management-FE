@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { MethodCode, ModelCode } from '../@types/Permission';
-import { hasPermission } from '../sections/@dashboard/Permissions/utils';
+import { findPermission } from '../sections/@dashboard/Permissions/utils';
 import { useAuthContext } from './useAuthContext';
 
 type Props = {
@@ -9,10 +9,14 @@ type Props = {
 };
 export default function PermissionGuard({ children, model, method }: PropsWithChildren<Props>) {
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
-  const isAllowedToAccessPage = hasPermission(userPermissions, model, method);
+  const isAllowedToAccessThisPage = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    model,
+    method
+  );
 
-  if (!isAllowedToAccessPage) {
+  if (!isAllowedToAccessThisPage) {
     return <h1>Permission denied</h1>;
   }
 

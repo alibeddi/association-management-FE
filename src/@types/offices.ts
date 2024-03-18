@@ -1,5 +1,5 @@
 export interface Office {
-  _id?:string;
+  _id: string;
   name: string;
   address?: string;
   createdAt?: Date | null;

@@ -34,6 +34,7 @@ import {
   UserView,
   Analytics,
   Notifications,
+  Offices,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -70,12 +71,17 @@ export default function Router() {
               <Outlet />
             </PermissionGuard>
           ),
-          children: [{ path: '', element: <UserList /> },
-          {
-            path:'view/:id',element:  <UserView/>
-          },{
-            path:'edit/:id',element:<UserEdit/>
-          }],
+          children: [
+            { path: '', element: <UserList /> },
+            {
+              path: 'view/:id',
+              element: <UserView />,
+            },
+            {
+              path: 'edit/:id',
+              element: <UserEdit />,
+            },
+          ],
         },
         {
           path: 'kpis',
@@ -157,6 +163,14 @@ export default function Router() {
           element: (
             <PermissionGuard model={ModelCode.NOTIFICATION} method={MethodCode.LIST}>
               <Notifications />
+            </PermissionGuard>
+          ),
+        },
+        {
+          path: 'offices',
+          element: (
+            <PermissionGuard model={ModelCode.OFFICE} method={MethodCode.LIST}>
+              <Offices />
             </PermissionGuard>
           ),
         },
