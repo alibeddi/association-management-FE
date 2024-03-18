@@ -1,4 +1,3 @@
-import { TableBody } from '@mui/material';
 import LoadingTableRow from './LoadingTableRow';
 
 type Props = { fields: number; rowsPerPage?: number; noAvatar?: boolean; height: number };

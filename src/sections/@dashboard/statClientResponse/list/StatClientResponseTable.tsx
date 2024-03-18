@@ -73,7 +73,6 @@ export default function StatClientResponsesTable() {
   const { translate } = useLocales();
 
   const [tableData, setTableData] = useState<StatClientResponse[]>([]);
-  const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [filterStatClient, setFilterStatClient] = useState<string>();
@@ -133,12 +132,11 @@ export default function StatClientResponsesTable() {
           limit: rowsPerPage,
           orderBy,
           order,
-          filterClientName,
           filterStatClient,
         })
       );
     }
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName, filterStatClient]);
+  }, [dispatch, page, rowsPerPage, orderBy, order, filterStatClient]);
 
   useEffect(() => {
     setTableData(statClientResponses?.docs);
@@ -148,14 +146,11 @@ export default function StatClientResponsesTable() {
     dispatch(setCurrentStatClientId(filterStatClient));
   }, [filterStatClient]);
 
-  const isFiltered = filterClientName !== '';
-
   const isNotFound = status === IStatus.SUCCEEDED && !tableData.length;
 
   const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setPage(0);
     setFilterStatClient(newValue);
-    handleResetFilter();
   };
 
   const handleViewRow = (row: StatClientResponse) => {
@@ -166,14 +161,6 @@ export default function StatClientResponsesTable() {
     navigate(`${PATH_DASHBOARD.statClientResponse.edit}/${row._id}`);
   };
 
-  const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
-    setFilterClientName(event.target.value);
-  };
-
-  const handleResetFilter = () => {
-    setFilterClientName('');
-  };
 
   const handleOpenConfirm = (id?: string) => {
     setOpenConfirm(true);
@@ -203,7 +190,6 @@ export default function StatClientResponsesTable() {
             limit: rowsPerPage,
             orderBy,
             order,
-            filterClientName,
           })
         );
         setSelected([]);
@@ -214,13 +200,7 @@ export default function StatClientResponsesTable() {
   return (
     <>
       <Card>
-        <StatClientResponseTableToolbar
-          onResetFilter={handleResetFilter}
-          isFiltered={isFiltered}
-          filterClientName={filterClientName}
-          onFilterName={handleFilterName}
-          placeholder="Search by Client Name..."
-        />
+        <StatClientResponseTableToolbar />
         <Tabs
           value={filterStatClient}
           onChange={handleChangeTabs}
