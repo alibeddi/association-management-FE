@@ -1,4 +1,3 @@
-import { useSnackbar } from 'notistack';
 import {
   Button,
   Card,
@@ -9,14 +8,17 @@ import {
   TableBody,
   TableContainer,
   Tabs,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
+import { IStatus } from '../../../../@types/status';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
+import LoadingTable from '../../../../components/loadingTable/LoadingTable';
 import Scrollbar from '../../../../components/scrollbar';
 import {
   emptyRows,
@@ -25,21 +27,20 @@ import {
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
-  useTable,
+  useTable
 } from '../../../../components/table';
 import { useLocales } from '../../../../locales';
 import {
   deleteManyStatClientResponse,
   deleteStatClientResponse,
   getAllStatClientResponses,
+  statsClientResponseFilter
 } from '../../../../redux/slices/statClientResponse/actions';
+import { setCurrentStatClientId } from '../../../../redux/slices/statsClient';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
 import StatClientResponseTableToolbar from './StatClientResponseTableToolbar';
-import { setCurrentStatClientId } from '../../../../redux/slices/statsClient';
-import { IStatus } from '../../../../@types/status';
-import LoadingTable from '../../../../components/loadingTable/LoadingTable';
 
 // ----------------------------------------------------------------------
 
@@ -89,6 +90,7 @@ export default function StatClientResponsesTable() {
   );
 
   const { statsClients } = useSelector((state: RootState) => state.statsClient);
+  const { filters } = useSelector((state: RootState) => state.statClientResponses);
 
   const { docs: statsClientsDocs } = statsClients;
 
@@ -126,17 +128,28 @@ export default function StatClientResponsesTable() {
 
   useEffect(() => {
     if (filterStatClient) {
-      dispatch(
-        getAllStatClientResponses({
-          page,
-          limit: rowsPerPage,
-          orderBy,
-          order,
-          filterStatClient,
-        })
-      );
+      if (filters.length > 0) {
+        dispatch(
+          statsClientResponseFilter({
+            page: page + 1,
+            limit: rowsPerPage,
+            filterValue: filters,
+            filterStatClient,
+          })
+        );
+      } else {
+        dispatch(
+          getAllStatClientResponses({
+            page,
+            limit: rowsPerPage,
+            orderBy,
+            order,
+            filterStatClient,
+          })
+        );
+      }
     }
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterStatClient]);
+  }, [page, rowsPerPage, orderBy, order, filterStatClient, filters]);
 
   useEffect(() => {
     setTableData(statClientResponses?.docs);
@@ -160,7 +173,6 @@ export default function StatClientResponsesTable() {
   const handleEditRow = (row: StatClientResponse) => {
     navigate(`${PATH_DASHBOARD.statClientResponse.edit}/${row._id}`);
   };
-
 
   const handleOpenConfirm = (id?: string) => {
     setOpenConfirm(true);
