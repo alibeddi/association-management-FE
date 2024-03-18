@@ -1,9 +1,9 @@
 // @mui
 import { Box, TableCell, TableRow, Typography } from '@mui/material';
+import { Office } from '../../../../@types/offices';
 // utils
 import { fDate } from '../../../../utils/formatTime';
 // components
-import { Office } from '../../../../@types/Office';
 
 type Props = {
   row: Office;

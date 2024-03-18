@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Office } from '../../../@types/Office';
+import { Office } from '../../../@types/offices';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
 import { Todo } from '../../../@types/Todo';

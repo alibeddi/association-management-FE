@@ -1,38 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Office } from '../../../@types/Office';
+import { Office } from '../../../@types/offices';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
-import { getOffices } from './actions';
+import { getAllOffices } from './actions';
 
-type PermissionState = {
+type OfficeState = {
   offices: PaginationModel<Office>;
+  office: Office;
   status: IStatus;
 };
-
-const initialState: PermissionState = {
+const initialState: OfficeState = {
   offices: { docs: [], meta: {} as Meta },
+  office: {} as Office,
   status: IStatus.IDLE,
 };
-
 const slice = createSlice({
   name: 'offices',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers(builder) {
     builder
-      .addCase(getOffices.pending, (state) => {
-        state.status = IStatus.FAILED;
+      .addCase(getAllOffices.pending, (state) => {
+        state.status = IStatus.LOADING;
       })
-      .addCase(getOffices.fulfilled, (state, action) => {
+      .addCase(getAllOffices.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
         state.offices = action.payload;
       })
-      .addCase(getOffices.rejected, (state) => {
+      .addCase(getAllOffices.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
 });
 
-// eslint-disable-next-line no-empty-pattern
-export const {} = slice.actions;
 export default slice.reducer;

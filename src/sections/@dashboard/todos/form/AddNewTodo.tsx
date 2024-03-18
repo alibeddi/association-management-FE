@@ -7,14 +7,14 @@ import {
   ListItemAvatar,
   ListItemText,
   MenuItem,
-  Stack
+  Stack,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { DisplayTransformFunc, Mention, MentionsInput } from 'react-mentions';
 import * as Yup from 'yup';
-import { Office } from '../../../../@types/Office';
+import { Office } from '../../../../@types/offices';
 import { Todo } from '../../../../@types/Todo';
 import { User } from '../../../../@types/User';
 import FormProvider from '../../../../components/hook-form';
@@ -23,7 +23,7 @@ import { useLocales } from '../../../../locales';
 import {
   createNewTodo,
   getOfficesAndUsers,
-  updateTodo
+  updateTodo,
 } from '../../../../redux/slices/todos/actions';
 import { dispatch } from '../../../../redux/store';
 import { extractMentions } from '../utils/extractMentions';

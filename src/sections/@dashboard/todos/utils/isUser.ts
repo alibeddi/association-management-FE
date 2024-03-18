@@ -1,4 +1,4 @@
-import { Office } from '../../../../@types/Office';
+import { Office } from '../../../../@types/offices';
 import { User } from '../../../../@types/User';
 
 export function isUser(doc: User | Office): doc is User {

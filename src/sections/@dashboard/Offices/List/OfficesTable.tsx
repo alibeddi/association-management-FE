@@ -1,6 +1,6 @@
 import { Card, Table, TableBody, TableContainer } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Office } from '../../../../@types/Office';
+import { Office } from '../../../../@types/offices';
 import Scrollbar from '../../../../components/scrollbar';
 import {
   TableHeadCustom,
@@ -8,7 +8,7 @@ import {
   TablePaginationCustom,
   useTable,
 } from '../../../../components/table';
-import { getOffices } from '../../../../redux/slices/offices/actions';
+import { getAllOffices } from '../../../../redux/slices/offices/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import OfficesTableToolbar from './OfficesTableToolbar';
 import OfficeTableRow from './OfficeTableRow';
@@ -47,7 +47,7 @@ export default function OfficesTable() {
   const isNotFound = (!tableData.length && !!search) || !tableData.length;
 
   useEffect(() => {
-    dispatch(getOffices({ page, limit: rowsPerPage, orderBy, order, search }));
+    dispatch(getAllOffices({ page, limit: rowsPerPage, orderBy, order, search }));
   }, [dispatch, page, rowsPerPage, orderBy, order, search]);
 
   useEffect(() => {
@@ -82,7 +82,6 @@ export default function OfficesTable() {
               rowCount={tableData.length}
               numSelected={selected.length}
               onSort={onSort}
-            
             />
 
             <TableBody>
