@@ -97,7 +97,7 @@ export default function StatClientResponseTableRow({
         </TableCell>
         <TableCell align="left">
           <Typography variant="subtitle2" noWrap>
-            {admin.name}
+            {admin?.name || 'Admin'}
           </Typography>
         </TableCell>
         <TableCell>
