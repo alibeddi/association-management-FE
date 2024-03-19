@@ -219,7 +219,7 @@ export default function StatClientResponsesTable() {
           aria-label="scrollable auto tabs example"
         >
           {statsClientsDocs.map((tab) => (
-            <Tab key={tab._id} label={tab.name} value={tab._id} />
+            <Tab key={tab._id} label={tab.name} value={tab?._id} />
           ))}
         </Tabs>
         <Divider />
@@ -231,7 +231,7 @@ export default function StatClientResponsesTable() {
             onSelectAllRows={(checked) =>
               onSelectAllRows(
                 checked,
-                tableData.map((row) => row._id)
+                tableData.map((row) => row?._id)
               )
             }
             action={
@@ -264,12 +264,12 @@ export default function StatClientResponsesTable() {
                 {tableData?.map((row: StatClientResponse) => (
                   <StatClientResponseTableRow
                     filterStatClient={filterStatClient}
-                    key={row._id}
+                    key={row?._id}
                     row={row}
-                    selected={selected.includes(row._id)}
-                    onSelectRow={() => onSelectRow(row._id)}
+                    selected={selected.includes(row?._id)}
+                    onSelectRow={() => onSelectRow(row?._id)}
                     onDeleteRow={() => {
-                      handleDeleteRow(row._id);
+                      handleDeleteRow(row?._id);
                     }}
                     onEditRow={() => {
                       handleEditRow(row);
