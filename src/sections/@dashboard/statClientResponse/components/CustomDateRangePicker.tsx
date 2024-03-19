@@ -45,8 +45,12 @@ const CustomDateRangePicker = ({name}:IAsyncSelectFilter) => {
                   isSelected={isSelectedValuePicker}
                   isError={isError}
                   variant="calendar"
+                 
                   />
-                 <Button  onClick={onOpenPicker}>{isSelectedValuePicker ? shortLabel : 'Select Date'}</Button>
+                 <Button  sx={{
+                  width:"100%",
+                  height:"100%"
+                  }} onClick={onOpenPicker}>{isSelectedValuePicker ? shortLabel : 'Select Date'}</Button>
                  </>
   )
 }
