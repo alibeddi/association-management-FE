@@ -5,7 +5,7 @@ import {
   MenuItem,
   TableCell,
   TableRow,
-  Typography
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { MethodCode, ModelCode } from '../../../../@types/Permission';
@@ -97,7 +97,7 @@ export default function StatClientResponseTableRow({
         </TableCell>
         <TableCell align="left">
           <Typography variant="subtitle2" noWrap>
-            {admin.name}
+            {admin?.name || '_______'}
           </Typography>
         </TableCell>
         <TableCell>

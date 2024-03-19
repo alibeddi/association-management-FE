@@ -70,7 +70,6 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
   } = methods;
 
   const values = watch();
-
   let combinedPermissions: Permission[] = [];
   const [selectedPermissions, setSelectedPermissions] = useState(combinedPermissions);
 
@@ -168,7 +167,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
                 >
                   <RHFTextField name="name" label="name" disabled />
                   <RHFTextField name="email" label="email" disabled />
-                  <RHFSelect disabled={!isEdit} native name="role" label="role">
+                  <RHFSelect value={values.role} disabled={!isEdit} native name="role" label="role">
                     <option key={RoleCode.ADMIN} value={RoleCode.ADMIN}>
                       {RoleCode.ADMIN}
                     </option>
