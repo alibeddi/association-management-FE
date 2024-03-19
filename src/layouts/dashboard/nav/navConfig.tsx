@@ -15,6 +15,7 @@ import {
   ic_todolist,
   ic_offices,
 } from '../../../assets/icons/navbar';
+import { RoleCode } from '../../../@types/User';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
 
@@ -32,6 +33,7 @@ const ICONS = {
 };
 
 export default function navConfig(user: AuthUserType) {
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
   const hasAccessToKpis = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
@@ -65,8 +67,8 @@ export default function navConfig(user: AuthUserType) {
   const hasAccessToAnalytics = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
-    'ANALYTICS',
-    'LIST'
+    ModelCode.ANALYTICS,
+    MethodCode.LIST
   );
   const hasAccessToStatClient = findPermission(
     user?.permissionGroup,
@@ -101,61 +103,61 @@ export default function navConfig(user: AuthUserType) {
           title: 'Analytics',
           path: PATH_DASHBOARD.analytics,
           icon: ICONS.analytics,
-          toBeDisplayed: hasAccessToAnalytics,
+          toBeDisplayed: isSuperAdmin || hasAccessToAnalytics,
         },
         {
           title: 'offices',
           path: PATH_DASHBOARD.offices,
           icon: ICONS.offices,
-          toBeDisplayed: hasAccessToOffices,
+          toBeDisplayed: isSuperAdmin || hasAccessToOffices,
         },
         {
           title: 'operators',
           path: PATH_DASHBOARD.operators.root,
           icon: ICONS.operators,
-          toBeDisplayed: hasAccessToUsers,
+          toBeDisplayed: isSuperAdmin || hasAccessToUsers,
         },
         {
           title: 'group permissions',
           path: PATH_DASHBOARD.groupPermissions,
           icon: ICONS.groupPermissions,
-          toBeDisplayed: hasAccessToGroupPermissions,
+          toBeDisplayed: isSuperAdmin || hasAccessToGroupPermissions,
         },
         {
           title: 'calendar',
           path: PATH_DASHBOARD.calender,
           icon: ICONS.calendar,
-          toBeDisplayed: hasAccessToCalendar,
+          toBeDisplayed: isSuperAdmin || hasAccessToCalendar,
         },
         {
           title: 'Todo List',
           path: PATH_DASHBOARD.todoList,
           icon: ICONS.todoList,
-          toBeDisplayed: hasAccessToTodoList,
+          toBeDisplayed: isSuperAdmin || hasAccessToTodoList,
         },
         {
           title: 'Stats client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
-          toBeDisplayed: hasAccessToStatClientAnswers,
+          toBeDisplayed: isSuperAdmin || hasAccessToStatClientAnswers,
         },
         {
           title: 'stats client',
           path: PATH_DASHBOARD.statsClient.root,
           icon: ICONS.statsClient,
-          toBeDisplayed: hasAccessToStatClient,
+          toBeDisplayed: isSuperAdmin || hasAccessToStatClient,
         },
         {
           title: 'KPIS',
           path: PATH_DASHBOARD.kpis.root,
           icon: ICONS.settings,
-          toBeDisplayed: hasAccessToKpis,
+          toBeDisplayed: isSuperAdmin || hasAccessToKpis,
         },
         {
           title: 'calls',
           path: PATH_DASHBOARD.calls,
           icon: ICONS.calls,
-          toBeDisplayed: hasAccessToCalls,
+          toBeDisplayed: isSuperAdmin || hasAccessToCalls,
         },
       ],
     },
