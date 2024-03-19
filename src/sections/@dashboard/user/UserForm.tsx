@@ -198,7 +198,6 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
                     label="permissionGroup"
                     placeholder="select permission group"
                     isMulti
-                    // @ts-ignore
                     value={values.permissionGroup}
                     getOptionLabel={(option: PermissionGroup) => option.name}
                     getOptionValue={(option) => option._id}
