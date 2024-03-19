@@ -8,7 +8,7 @@ import {
   TableBody,
   TableContainer,
   Tabs,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
@@ -27,14 +27,14 @@ import {
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
-  useTable
+  useTable,
 } from '../../../../components/table';
 import { useLocales } from '../../../../locales';
 import {
   deleteManyStatClientResponse,
   deleteStatClientResponse,
   getAllStatClientResponses,
-  statsClientResponseFilter
+  statsClientResponseFilter,
 } from '../../../../redux/slices/statClientResponse/actions';
 import { setCurrentStatClientId } from '../../../../redux/slices/statsClient';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
@@ -275,31 +275,29 @@ export default function StatClientResponsesTable() {
                   />
                 ) : (
                   tableData?.map((row: StatClientResponse) => (
-                    <>
-                      <StatClientResponseTableRow
-                        filterStatClient={filterStatClient}
-                        key={row._id}
-                        row={row}
-                        selected={selected.includes(row._id)}
-                        onSelectRow={() => onSelectRow(row._id)}
-                        onDeleteRow={() => {
-                          handleDeleteRow(row._id);
-                        }}
-                        onEditRow={() => {
-                          handleEditRow(row);
-                        }}
-                        onViewRow={() => {
-                          handleViewRow(row);
-                        }}
-                      />
-                      <TableEmptyRows
-                        height={denseHeight}
-                        emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                      />
-                    </>
+                    <StatClientResponseTableRow
+                      filterStatClient={filterStatClient}
+                      key={row._id}
+                      row={row}
+                      selected={selected.includes(row._id)}
+                      onSelectRow={() => onSelectRow(row._id)}
+                      onDeleteRow={() => {
+                        handleDeleteRow(row._id);
+                      }}
+                      onEditRow={() => {
+                        handleEditRow(row);
+                      }}
+                      onViewRow={() => {
+                        handleViewRow(row);
+                      }}
+                    />
                   ))
                 )}
 
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                />
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>
             </Table>
