@@ -19,12 +19,12 @@ export default function StatClientResponseTableToolbar() {
   const { filters } = useSelector((store) => store.statClientResponses);
   const resetFilterStatClientResponse = async () => {
     dispatch(resetFilters());
-    await dispatch(
-      getAllStatClientResponses({
-        page: 0,
-        limit: 5,
-      })
-    );
+    // await dispatch(
+    //   getAllStatClientResponses({
+    //     page: 0,
+    //     limit: 5,
+    //   })
+    // );
   };
   return (
     <Stack

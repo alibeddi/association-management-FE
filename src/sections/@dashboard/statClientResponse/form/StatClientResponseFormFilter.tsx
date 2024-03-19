@@ -6,7 +6,7 @@ import { useState } from 'react';
 import EmptyContent from '../../../../components/empty-content';
 import Iconify from '../../../../components/iconify';
 import { useTable } from '../../../../components/table';
-import { addFilter } from '../../../../redux/slices/statClientResponse';
+import { addFilter, resetFilters } from '../../../../redux/slices/statClientResponse';
 import { statsClientResponseFilter } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { validNotEmptyFilters } from '../../../../utils';
@@ -52,6 +52,9 @@ const StatClientResponseFormFilter = ({ onClose }: IProps) => {
     setIsSubmitting(false);
   };
 
+  const resetFilterStatClientResponse = async () => {
+    dispatch(resetFilters());
+  };
   return (
     <Stack>
       <Button onClick={() => dispatch(addFilter())} startIcon={<Iconify icon="icons8:plus" />}>
@@ -96,7 +99,14 @@ const StatClientResponseFormFilter = ({ onClose }: IProps) => {
           >
             submit
           </LoadingButton>
-          <LoadingButton onClick={() => onClose()} variant="outlined" loading={isSubmitting}>
+          <LoadingButton
+            onClick={() => {
+              onClose();
+              resetFilterStatClientResponse();
+            }}
+            variant="outlined"
+            loading={isSubmitting}
+          >
             cancel
           </LoadingButton>
         </Stack>
