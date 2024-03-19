@@ -10,8 +10,10 @@ import { resetFilters, setIsFiltered } from '../../../../redux/slices/statClient
 import { useSelector } from '../../../../redux/store';
 
 // ----------------------------------------------------------------------
-
-export default function StatClientResponseTableToolbar() {
+type IProps = {
+  handleResetFilter: VoidFunction;
+};
+export default function StatClientResponseTableToolbar({ handleResetFilter }: IProps) {
   const [openFilter, setOpenFilter] = useState(false);
   const dispatch = useDispatch();
   const handleClostFilter = () => setOpenFilter(false);
@@ -43,7 +45,10 @@ export default function StatClientResponseTableToolbar() {
       ) : (
         <Button
           startIcon={<Iconify icon="mdi:filter" />}
-          onClick={() => setOpenFilter(!openFilter)}
+          onClick={() => {
+            setOpenFilter(!openFilter);
+            handleResetFilter();
+          }}
         >
           Filter
         </Button>

@@ -208,11 +208,14 @@ export default function StatClientResponsesTable() {
       })
       .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
   };
+  const handleResetFilter = () => {
+    setPage(0);
+  };
 
   return (
     <>
       <Card>
-        <StatClientResponseTableToolbar />
+        <StatClientResponseTableToolbar handleResetFilter={handleResetFilter} />
         <Tabs
           value={filterStatClient}
           onChange={handleChangeTabs}
@@ -274,30 +277,36 @@ export default function StatClientResponsesTable() {
                     rowsPerPage={rowsPerPage}
                   />
                 ) : (
-                  tableData?.map((row: StatClientResponse) => (
-                    <StatClientResponseTableRow
-                      filterStatClient={filterStatClient}
-                      key={row._id}
-                      row={row}
-                      selected={selected.includes(row._id)}
-                      onSelectRow={() => onSelectRow(row._id)}
-                      onDeleteRow={() => {
-                        handleDeleteRow(row._id);
-                      }}
-                      onEditRow={() => {
-                        handleEditRow(row);
-                      }}
-                      onViewRow={() => {
-                        handleViewRow(row);
-                      }}
+                  <>
+                    {tableData?.map((row: StatClientResponse) => (
+                      <StatClientResponseTableRow
+                        filterStatClient={filterStatClient}
+                        key={row._id}
+                        row={row}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => {
+                          handleDeleteRow(row._id);
+                        }}
+                        onEditRow={() => {
+                          handleEditRow(row);
+                        }}
+                        onViewRow={() => {
+                          handleViewRow(row);
+                        }}
+                      />
+                    ))}
+                    <TableEmptyRows
+                      height={denseHeight}
+                      emptyRows={emptyRows(
+                        page,
+                        rowsPerPage,
+                        statClientResponses.meta.totalDocs || 0
+                      )}
                     />
-                  ))
+                  </>
                 )}
 
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                />
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>
             </Table>
