@@ -6,8 +6,7 @@ import { useDispatch } from 'react-redux';
 // components
 import Iconify from '../../../../components/iconify';
 import StatClientResponseFilter from '../../../../components/StatClientResponseFilter';
-import { resetFilters } from '../../../../redux/slices/statClientResponse';
-import { getAllStatClientResponses } from '../../../../redux/slices/statClientResponse/actions';
+import { resetFilters, setIsFiltered } from '../../../../redux/slices/statClientResponse';
 import { useSelector } from '../../../../redux/store';
 
 // ----------------------------------------------------------------------
@@ -16,15 +15,10 @@ export default function StatClientResponseTableToolbar() {
   const [openFilter, setOpenFilter] = useState(false);
   const dispatch = useDispatch();
   const handleClostFilter = () => setOpenFilter(false);
-  const { filters } = useSelector((store) => store.statClientResponses);
+  const { isFiltered } = useSelector((store) => store.statClientResponses);
   const resetFilterStatClientResponse = async () => {
     dispatch(resetFilters());
-    // await dispatch(
-    //   getAllStatClientResponses({
-    //     page: 0,
-    //     limit: 5,
-    //   })
-    // );
+    dispatch(setIsFiltered(false));
   };
   return (
     <Stack
@@ -37,7 +31,7 @@ export default function StatClientResponseTableToolbar() {
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      {filters.length > 0 && (
+      {isFiltered ? (
         <Button
           color="error"
           sx={{ flexShrink: 0 }}
@@ -46,8 +40,7 @@ export default function StatClientResponseTableToolbar() {
         >
           Clear Filter
         </Button>
-      )}
-      {filters.length === 0 && (
+      ) : (
         <Button
           startIcon={<Iconify icon="mdi:filter" />}
           onClick={() => setOpenFilter(!openFilter)}
@@ -55,6 +48,7 @@ export default function StatClientResponseTableToolbar() {
           Filter
         </Button>
       )}
+
       <StatClientResponseFilter open={openFilter} onClose={handleClostFilter} />
     </Stack>
   );

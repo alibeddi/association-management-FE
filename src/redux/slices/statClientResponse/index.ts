@@ -17,6 +17,7 @@ type StatClientResState = {
   statClientResponses: PaginationModel<StatClientResponse>;
   statClientResponse: StatClientResponse;
   status: IStatus;
+  isFiltered: boolean;
   filters: IFilterStatClientResponse[] | [];
 };
 
@@ -24,6 +25,7 @@ const initialState: StatClientResState = {
   statClientResponses: { docs: [], meta: {} as Meta },
   statClientResponse: {} as StatClientResponse,
   status: IStatus.IDLE,
+  isFiltered: false,
   filters: [],
 };
 
@@ -47,6 +49,9 @@ const slice = createSlice({
     },
     resetFilters: (state) => {
       state.filters = [];
+    },
+    setIsFiltered: (state, action) => {
+      state.isFiltered = action.payload;
     },
     handleChoiceFilters: (state, { payload }) => {
       const { id, choices } = payload;
@@ -160,5 +165,6 @@ export const {
   handleChangefilter,
   resetFilters,
   handleChoiceFilters,
+  setIsFiltered,
 } = slice.actions;
 export default slice.reducer;

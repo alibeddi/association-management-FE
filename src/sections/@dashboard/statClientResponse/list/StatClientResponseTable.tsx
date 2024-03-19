@@ -90,7 +90,7 @@ export default function StatClientResponsesTable() {
   );
 
   const { statsClients } = useSelector((state: RootState) => state.statsClient);
-  const { filters } = useSelector((state: RootState) => state.statClientResponses);
+  const { filters, isFiltered } = useSelector((state: RootState) => state.statClientResponses);
 
   const { docs: statsClientsDocs } = statsClients;
 
@@ -128,7 +128,7 @@ export default function StatClientResponsesTable() {
 
   useEffect(() => {
     if (filterStatClient) {
-      if (filters.length > 0) {
+      if (isFiltered) {
         dispatch(
           statsClientResponseFilter({
             page: page + 1,
@@ -149,7 +149,7 @@ export default function StatClientResponsesTable() {
         );
       }
     }
-  }, [page, rowsPerPage, orderBy, order, filterStatClient, filters]);
+  }, [page, rowsPerPage, orderBy, order, filterStatClient, isFiltered]);
 
   useEffect(() => {
     setTableData(statClientResponses?.docs);

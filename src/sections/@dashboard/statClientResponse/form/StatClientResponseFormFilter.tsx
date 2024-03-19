@@ -6,7 +6,11 @@ import { useState } from 'react';
 import EmptyContent from '../../../../components/empty-content';
 import Iconify from '../../../../components/iconify';
 import { useTable } from '../../../../components/table';
-import { addFilter, resetFilters } from '../../../../redux/slices/statClientResponse';
+import {
+  addFilter,
+  resetFilters,
+  setIsFiltered,
+} from '../../../../redux/slices/statClientResponse';
 import { statsClientResponseFilter } from '../../../../redux/slices/statClientResponse/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { validNotEmptyFilters } from '../../../../utils';
@@ -22,6 +26,7 @@ const StatClientResponseFormFilter = ({ onClose }: IProps) => {
   const { filters } = useSelector((store) => store.statClientResponses);
   const { statClientId } = useSelector((state: RootState) => state.statsClient);
   const handleSubmit = async () => {
+    dispatch(setIsFiltered(true));
     setIsSubmitting(true);
     const isValid = validNotEmptyFilters(filters);
     if (!isValid) {
@@ -103,6 +108,7 @@ const StatClientResponseFormFilter = ({ onClose }: IProps) => {
             onClick={() => {
               onClose();
               resetFilterStatClientResponse();
+              dispatch(setIsFiltered(false));
             }}
             variant="outlined"
             loading={isSubmitting}
