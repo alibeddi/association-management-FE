@@ -9,7 +9,7 @@ import {
   TableCell,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from '@mui/material';
 // utils
 import { fDate } from '../../../../utils/formatTime';
@@ -21,6 +21,7 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import { findPermission } from '../../Permissions/utils';
+import { RoleCode } from '../../../../@types/User';
 
 type Props = {
   row: IKpi;
@@ -45,26 +46,18 @@ export default function KpiTableRow({
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   // check current user permissions
-  const isAllowedToDeleteKpi = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.DELETE
-  );
-  const isAllowedToEditKpi = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.EDIT
-  );
-  const isAllowedToViewKpi = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.VIEW
-  );
+  const isAllowedToDeleteKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.DELETE);
+  const isAllowedToEditKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.EDIT);
+  const isAllowedToViewKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.VIEW);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);

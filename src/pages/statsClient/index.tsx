@@ -2,6 +2,7 @@ import { Button, Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink } from 'react-router-dom';
 import { MethodCode, ModelCode } from '../../@types/Permission';
+import { RoleCode } from '../../@types/User';
 import { useAuthContext } from '../../auth/useAuthContext';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import Iconify from '../../components/iconify';
@@ -13,12 +14,16 @@ import StatsClientList from '../../sections/@dashboard/statsClient/StatsClientLi
 const StatsClient = () => {
   const { themeStretch } = useSettingsContext();
   const { user } = useAuthContext();
-  const isAllowedToCreateStatsClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.CREATE
-  );
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+
+  const isAllowedToCreateStatsClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.CREATE
+    );
 
   return (
     <>

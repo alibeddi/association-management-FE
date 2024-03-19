@@ -34,66 +34,66 @@ const ICONS = {
 
 export default function navConfig(user: AuthUserType) {
   const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
-  const hasAccessToKpis = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.LIST
-  );
-  const hasAccessToUsers = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.USER,
-    MethodCode.LIST
-  );
-  const hasAccessToGroupPermissions = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.PERMISSION_GROUP,
-    MethodCode.LIST
-  );
-  const hasAccessToCalendar = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.MY_WORKTIME,
-    MethodCode.LIST
-  );
-  const hasAccessToCalls = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.CALLS,
-    MethodCode.LIST
-  );
-  const hasAccessToAnalytics = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.ANALYTICS,
-    MethodCode.LIST
-  );
-  const hasAccessToStatClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.LIST
-  );
-  const hasAccessToStatClientAnswers = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT_RESPONSE,
-    MethodCode.LIST
-  );
-  const hasAccessToTodoList = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.TODO,
-    MethodCode.LIST
-  );
-  const hasAccessToOffices = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.OFFICE,
-    MethodCode.LIST
-  );
+  const hasAccessToKpis =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.LIST);
+  const hasAccessToUsers =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.USER, MethodCode.LIST);
+  const hasAccessToGroupPermissions =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.LIST
+    );
+  const hasAccessToCalendar =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.MY_WORKTIME,
+      MethodCode.LIST
+    );
+  const hasAccessToCalls =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.CALLS, MethodCode.LIST);
+  const hasAccessToAnalytics =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.ANALYTICS,
+      MethodCode.LIST
+    );
+  const hasAccessToStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.LIST
+    );
+  const hasAccessToStatClientAnswers =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT_RESPONSE,
+      MethodCode.LIST
+    );
+  const hasAccessToTodoList =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.TODO, MethodCode.LIST);
+  const hasAccessToOffices =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.OFFICE,
+      MethodCode.LIST
+    );
 
   const config = [
     {
@@ -103,61 +103,61 @@ export default function navConfig(user: AuthUserType) {
           title: 'Analytics',
           path: PATH_DASHBOARD.analytics,
           icon: ICONS.analytics,
-          toBeDisplayed: isSuperAdmin || hasAccessToAnalytics,
+          toBeDisplayed: hasAccessToAnalytics,
         },
         {
           title: 'offices',
           path: PATH_DASHBOARD.offices,
           icon: ICONS.offices,
-          toBeDisplayed: isSuperAdmin || hasAccessToOffices,
+          toBeDisplayed: hasAccessToOffices,
         },
         {
           title: 'operators',
           path: PATH_DASHBOARD.operators.root,
           icon: ICONS.operators,
-          toBeDisplayed: isSuperAdmin || hasAccessToUsers,
+          toBeDisplayed: hasAccessToUsers,
         },
         {
           title: 'group permissions',
           path: PATH_DASHBOARD.groupPermissions,
           icon: ICONS.groupPermissions,
-          toBeDisplayed: isSuperAdmin || hasAccessToGroupPermissions,
+          toBeDisplayed: hasAccessToGroupPermissions,
         },
         {
           title: 'calendar',
           path: PATH_DASHBOARD.calender,
           icon: ICONS.calendar,
-          toBeDisplayed: isSuperAdmin || hasAccessToCalendar,
+          toBeDisplayed: hasAccessToCalendar,
         },
         {
           title: 'Todo List',
           path: PATH_DASHBOARD.todoList,
           icon: ICONS.todoList,
-          toBeDisplayed: isSuperAdmin || hasAccessToTodoList,
+          toBeDisplayed: hasAccessToTodoList,
         },
         {
           title: 'Stats client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
-          toBeDisplayed: isSuperAdmin || hasAccessToStatClientAnswers,
+          toBeDisplayed: hasAccessToStatClientAnswers,
         },
         {
           title: 'stats client',
           path: PATH_DASHBOARD.statsClient.root,
           icon: ICONS.statsClient,
-          toBeDisplayed: isSuperAdmin || hasAccessToStatClient,
+          toBeDisplayed: hasAccessToStatClient,
         },
         {
           title: 'KPIS',
           path: PATH_DASHBOARD.kpis.root,
           icon: ICONS.settings,
-          toBeDisplayed: isSuperAdmin || hasAccessToKpis,
+          toBeDisplayed: hasAccessToKpis,
         },
         {
           title: 'calls',
           path: PATH_DASHBOARD.calls,
           icon: ICONS.calls,
-          toBeDisplayed: isSuperAdmin || hasAccessToCalls,
+          toBeDisplayed: hasAccessToCalls,
         },
       ],
     },

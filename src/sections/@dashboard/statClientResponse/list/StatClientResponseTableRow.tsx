@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 import { MethodCode, ModelCode } from '../../../../@types/Permission';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
+import { RoleCode } from '../../../../@types/User';
 import { useAuthContext } from '../../../../auth/useAuthContext';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
@@ -52,26 +53,18 @@ export default function StatClientResponseTableRow({
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   // check current user permissions
-  const isAllowedToDeleteKpi = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.DELETE
-  );
-  const isAllowedToEditKpi = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.EDIT
-  );
-  const isAllowedToViewKpi = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.VIEW
-  );
+  const isAllowedToDeleteKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.DELETE);
+  const isAllowedToEditKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.EDIT);
+  const isAllowedToViewKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.VIEW);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
