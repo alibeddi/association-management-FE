@@ -1,12 +1,6 @@
 // ----------------------------------------------------------------------
 
 export function emptyRows(page: number, rowsPerPage: number, arrayLength: number) {
-  console.log({
-    page,
-    rowsPerPage,
-    arrayLength,
-    result: page > 0 ? Math.max(0, (1 + page) * rowsPerPage - arrayLength) : 0,
-  });
   return page > 0 ? Math.max(0, (1 + page) * rowsPerPage - arrayLength) : 0;
 }
 
