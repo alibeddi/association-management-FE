@@ -1,4 +1,3 @@
-import { useSnackbar } from 'notistack';
 import {
   Button,
   Card,
@@ -11,14 +10,19 @@ import {
   Tabs,
   Tooltip,
 } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
+import { IStatus } from '../../../../@types/status';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
+import LoadingTable from '../../../../components/loadingTable/LoadingTable';
 import Scrollbar from '../../../../components/scrollbar';
 import {
+  emptyRows,
+  TableEmptyRows,
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
@@ -30,7 +34,9 @@ import {
   deleteManyStatClientResponse,
   deleteStatClientResponse,
   getAllStatClientResponses,
+  statsClientResponseFilter,
 } from '../../../../redux/slices/statClientResponse/actions';
+import { setCurrentStatClientId } from '../../../../redux/slices/statsClient';
 import { RootState, useDispatch, useSelector } from '../../../../redux/store';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import StatClientResponseTableRow from './StatClientResponseTableRow';
@@ -68,7 +74,6 @@ export default function StatClientResponsesTable() {
   const { translate } = useLocales();
 
   const [tableData, setTableData] = useState<StatClientResponse[]>([]);
-  const [filterClientName, setFilterClientName] = useState('');
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [filterStatClient, setFilterStatClient] = useState<string>();
@@ -80,10 +85,16 @@ export default function StatClientResponsesTable() {
     }[]
   >([]);
 
-  const { statClientResponses } = useSelector((state: RootState) => state.statClientResponses);
+  const { statClientResponses, status } = useSelector(
+    (state: RootState) => state.statClientResponses
+  );
+
   const { statsClients } = useSelector((state: RootState) => state.statsClient);
+  const { filters, isFiltered } = useSelector((state: RootState) => state.statClientResponses);
 
   const { docs: statsClientsDocs } = statsClients;
+
+  const denseHeight = dense ? 52 : 72;
 
   useEffect(() => {
     if (statsClientId) {
@@ -117,31 +128,42 @@ export default function StatClientResponsesTable() {
 
   useEffect(() => {
     if (filterStatClient) {
-      dispatch(
-        getAllStatClientResponses({
-          page,
-          limit: rowsPerPage,
-          orderBy,
-          order,
-          filterClientName,
-          filterStatClient,
-        })
-      );
+      if (isFiltered) {
+        dispatch(
+          statsClientResponseFilter({
+            page: page + 1,
+            limit: rowsPerPage,
+            filterValue: filters,
+            filterStatClient,
+          })
+        );
+      } else {
+        dispatch(
+          getAllStatClientResponses({
+            page,
+            limit: rowsPerPage,
+            orderBy,
+            order,
+            filterStatClient,
+          })
+        );
+      }
     }
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterClientName, filterStatClient]);
+  }, [page, rowsPerPage, orderBy, order, filterStatClient, isFiltered]);
 
   useEffect(() => {
     setTableData(statClientResponses?.docs);
   }, [statClientResponses]);
 
-  const isFiltered = filterClientName !== '';
+  useEffect(() => {
+    dispatch(setCurrentStatClientId(filterStatClient));
+  }, [filterStatClient]);
 
-  const isNotFound = (!tableData.length && !!filterClientName) || !tableData.length;
+  const isNotFound = status === IStatus.SUCCEEDED && !tableData.length;
 
   const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setPage(0);
     setFilterStatClient(newValue);
-    handleResetFilter();
   };
 
   const handleViewRow = (row: StatClientResponse) => {
@@ -150,15 +172,6 @@ export default function StatClientResponsesTable() {
 
   const handleEditRow = (row: StatClientResponse) => {
     navigate(`${PATH_DASHBOARD.statClientResponse.edit}/${row._id}`);
-  };
-
-  const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
-    setFilterClientName(event.target.value);
-  };
-
-  const handleResetFilter = () => {
-    setFilterClientName('');
   };
 
   const handleOpenConfirm = (id?: string) => {
@@ -189,24 +202,20 @@ export default function StatClientResponsesTable() {
             limit: rowsPerPage,
             orderBy,
             order,
-            filterClientName,
           })
         );
         setSelected([]);
       })
       .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
   };
+  const handleResetFilter = () => {
+    setPage(0);
+  };
 
   return (
     <>
       <Card>
-        <StatClientResponseTableToolbar
-          onResetFilter={handleResetFilter}
-          isFiltered={isFiltered}
-          filterClientName={filterClientName}
-          onFilterName={handleFilterName}
-          placeholder="Search by Client Name..."
-        />
+        <StatClientResponseTableToolbar handleResetFilter={handleResetFilter} />
         <Tabs
           value={filterStatClient}
           onChange={handleChangeTabs}
@@ -261,24 +270,42 @@ export default function StatClientResponsesTable() {
               />
 
               <TableBody>
-                {tableData?.map((row: StatClientResponse) => (
-                  <StatClientResponseTableRow
-                    filterStatClient={filterStatClient}
-                    key={row._id}
-                    row={row}
-                    selected={selected.includes(row._id)}
-                    onSelectRow={() => onSelectRow(row._id)}
-                    onDeleteRow={() => {
-                      handleDeleteRow(row._id);
-                    }}
-                    onEditRow={() => {
-                      handleEditRow(row);
-                    }}
-                    onViewRow={() => {
-                      handleViewRow(row);
-                    }}
+                {status === IStatus.LOADING ? (
+                  <LoadingTable
+                    height={denseHeight}
+                    fields={tableHead.length}
+                    rowsPerPage={rowsPerPage}
                   />
-                ))}
+                ) : (
+                  <>
+                    {tableData?.map((row: StatClientResponse) => (
+                      <StatClientResponseTableRow
+                        filterStatClient={filterStatClient}
+                        key={row._id}
+                        row={row}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => {
+                          handleDeleteRow(row._id);
+                        }}
+                        onEditRow={() => {
+                          handleEditRow(row);
+                        }}
+                        onViewRow={() => {
+                          handleViewRow(row);
+                        }}
+                      />
+                    ))}
+                    <TableEmptyRows
+                      height={denseHeight}
+                      emptyRows={emptyRows(
+                        page,
+                        rowsPerPage,
+                        statClientResponses.meta.totalDocs || 0
+                      )}
+                    />
+                  </>
+                )}
 
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>

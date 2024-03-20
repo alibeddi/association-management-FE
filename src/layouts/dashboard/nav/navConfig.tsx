@@ -15,6 +15,7 @@ import {
   ic_todolist,
   ic_offices,
 } from '../../../assets/icons/navbar';
+import { RoleCode } from '../../../@types/User';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
 
@@ -32,66 +33,67 @@ const ICONS = {
 };
 
 export default function navConfig(user: AuthUserType) {
-  const hasAccessToKpis = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.KPI,
-    MethodCode.LIST
-  );
-  const hasAccessToUsers = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.USER,
-    MethodCode.LIST
-  );
-  const hasAccessToGroupPermissions = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.PERMISSION_GROUP,
-    MethodCode.LIST
-  );
-  const hasAccessToCalendar = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.MY_WORKTIME,
-    MethodCode.LIST
-  );
-  const hasAccessToCalls = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.CALLS,
-    MethodCode.LIST
-  );
-  const hasAccessToAnalytics = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    'ANALYTICS',
-    'LIST'
-  );
-  const hasAccessToStatClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.LIST
-  );
-  const hasAccessToStatClientAnswers = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT_RESPONSE,
-    MethodCode.LIST
-  );
-  const hasAccessToTodoList = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.TODO,
-    MethodCode.LIST
-  );
-  const hasAccessToOffices = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.OFFICE,
-    MethodCode.LIST
-  );
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+  const hasAccessToKpis =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.LIST);
+  const hasAccessToUsers =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.USER, MethodCode.LIST);
+  const hasAccessToGroupPermissions =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.LIST
+    );
+  const hasAccessToCalendar =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.MY_WORKTIME,
+      MethodCode.LIST
+    );
+  const hasAccessToCalls =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.CALLS, MethodCode.LIST);
+  const hasAccessToAnalytics =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.ANALYTICS,
+      MethodCode.LIST
+    );
+  const hasAccessToStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.LIST
+    );
+  const hasAccessToStatClientAnswers =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT_RESPONSE,
+      MethodCode.LIST
+    );
+  const hasAccessToTodoList =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.TODO, MethodCode.LIST);
+  const hasAccessToOffices =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.OFFICE,
+      MethodCode.LIST
+    );
 
   const config = [
     {

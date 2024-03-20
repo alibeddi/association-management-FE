@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { MethodCode, ModelCode, Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { RoleCode } from '../../../@types/User';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
@@ -12,7 +13,7 @@ import MenuPopover from '../../../components/menu-popover';
 import { useLocales } from '../../../locales';
 import {
   deleteGroupPermissionById,
-  getPermissionGroup
+  getPermissionGroup,
 } from '../../../redux/slices/groupPermissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -45,20 +46,25 @@ const GroupButton = ({
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { permissionGroup } = useSelector((state: RootState) => state.permissions_groups);
   const { user } = useAuthContext();
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
-  const deleteGroupPermission = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.PERMISSION_GROUP,
-    MethodCode.DELETE
-  );
+  const deleteGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.DELETE
+    );
 
-  const editGroupPermission = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.PERMISSION_GROUP,
-    MethodCode.EDIT
-  );
+  const editGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.EDIT
+    );
 
   const isRowMenu = deleteGroupPermission || editGroupPermission;
   const handleOpenConfirm = () => {

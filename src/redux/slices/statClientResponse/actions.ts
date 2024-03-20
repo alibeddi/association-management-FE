@@ -157,19 +157,22 @@ export const statsClientResponseFilter = createAsyncThunk(
     limit?: number;
     orderBy?: string;
     order?: string;
-    filterClientName?: string;
+    filterStatClient?: string;
     filterValue: IFilterStatClientResponse[];
   }) => {
-    const { page, limit, filterValue } = payload;
+    const { page, limit, filterValue, filterStatClient } = payload;
     let data;
+    const params = { ...(filterStatClient ? { statClient: filterStatClient } : {}) };
     try {
       const query = generateFilterStatClientResponse(filterValue, limit, page);
 
-      const response = await axios.get(`/stat-client-responses/filter?${query}`);
+      const response = await axios.get(`/stat-client-responses/filter?${query}`, { params });
       data = response.data;
+
       if (response.status === 200) {
         return data.data;
       }
+
       throw new Error(response.statusText);
     } catch (error) {
       return Promise.reject(error?.message ? error.message : data.message);

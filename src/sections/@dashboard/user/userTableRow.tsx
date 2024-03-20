@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 // @types
-import { User } from '../../../@types/User';
+import { RoleCode, User } from '../../../@types/User';
 // components
 import { MethodCode, ModelCode } from '../../../@types/Permission';
 import { useAuthContext } from '../../../auth/useAuthContext';
@@ -42,24 +42,22 @@ export default function UserTableRow({
 }: Props) {
   const { name, email, office, createdAt, _id: userId } = row;
   const { user } = useAuthContext();
-  const hasPermissionViewUser = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.USER,
-    MethodCode.VIEW
-  );
-  const hasPermissionEditUser = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.USER,
-    MethodCode.EDIT
-  );
-  const hasPermissionDeleteUser = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.USER,
-    MethodCode.DELETE
-  );
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+
+  const hasPermissionViewUser =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.USER, MethodCode.VIEW);
+  const hasPermissionEditUser =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.USER, MethodCode.EDIT);
+  const hasPermissionDeleteUser =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.USER,
+      MethodCode.DELETE
+    );
   const navigate = useNavigate();
 
   const handleViewUser = () => navigate(`${PATH_DASHBOARD.operators.view}/${userId}`);

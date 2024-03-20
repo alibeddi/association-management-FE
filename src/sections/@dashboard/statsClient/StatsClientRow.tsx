@@ -10,6 +10,7 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
 import { findPermission } from '../Permissions/utils';
+import { RoleCode } from '../../../@types/User';
 
 type Props = {
   row: IStatsClient;
@@ -35,26 +36,33 @@ export default function StatsClientRow({
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   // check current user permissions
-  const isAllowedToDeleteStatClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.DELETE
-  );
-  const isAllowedToEditStatClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.EDIT
-  );
-  const isAllowedToViewStatClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.VIEW
-  );
+  const isAllowedToDeleteStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.DELETE
+    );
+  const isAllowedToEditStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.EDIT
+    );
+  const isAllowedToViewStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.VIEW
+    );
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);

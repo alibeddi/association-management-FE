@@ -1,57 +1,39 @@
 // @mui
-import { Stack, InputAdornment, TextField, Button } from '@mui/material';
-import { useState, Dispatch, SetStateAction } from 'react';
+import { Button, Stack } from '@mui/material';
+import { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 // components
 import Iconify from '../../../../components/iconify';
-import StatClientResponseFilter from "../../../../components/StatClientResponseFilter";
-import { resetFilters } from '../../../../redux/slices/statClientResponse';
-import { getAllStatClientResponses } from '../../../../redux/slices/statClientResponse/actions';
+import StatClientResponseFilter from '../../../../components/StatClientResponseFilter';
+import { resetFilters, setIsFiltered } from '../../../../redux/slices/statClientResponse';
 import { useSelector } from '../../../../redux/store';
 
 // ----------------------------------------------------------------------
-
-type Props = {
-  placeholder: string;
-  filterClientName?: string;
-  isFiltered?: boolean;
-  onResetFilter?: VoidFunction;
-  onFilterName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+type IProps = {
+  handleResetFilter: VoidFunction;
 };
-
-export default function StatClientResponseTableToolbar({
-  isFiltered,
-  filterClientName,
-  onFilterName,
-  onResetFilter,
-  placeholder
-}: Props) {
-  const [openFilter,setOpenFilter] = useState(false)
-  const dispatch = useDispatch()
-  const handleClostFilter = () => setOpenFilter(false)
-  const {filters} = useSelector(store=>store.statClientResponses)
+export default function StatClientResponseTableToolbar({ handleResetFilter }: IProps) {
+  const [openFilter, setOpenFilter] = useState(false);
+  const dispatch = useDispatch();
+  const handleClostFilter = () => setOpenFilter(false);
+  const { isFiltered } = useSelector((store) => store.statClientResponses);
   const resetFilterStatClientResponse = async () => {
-    dispatch(resetFilters())
-    await dispatch(getAllStatClientResponses({
-      page:0,
-      limit:5
-    }))
-  }
+    dispatch(resetFilters());
+    dispatch(setIsFiltered(false));
+  };
   return (
     <Stack
       spacing={2}
       alignItems="center"
-      justifyContent='flex-end'
+      justifyContent="flex-end"
       direction={{
         xs: 'column',
         sm: 'row',
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-
-      {filters.length > 0 && (
+      {isFiltered ? (
         <Button
           color="error"
           sx={{ flexShrink: 0 }}
@@ -60,9 +42,19 @@ export default function StatClientResponseTableToolbar({
         >
           Clear Filter
         </Button>
+      ) : (
+        <Button
+          startIcon={<Iconify icon="mdi:filter" />}
+          onClick={() => {
+            setOpenFilter(!openFilter);
+            handleResetFilter();
+          }}
+        >
+          Filter
+        </Button>
       )}
-      {filters.length === 0 &&  <Button startIcon={<Iconify icon="mdi:filter" />} onClick={()=>setOpenFilter(!openFilter)}>Filter</Button>}
-      <StatClientResponseFilter open={openFilter} onClose={handleClostFilter}    />
+
+      <StatClientResponseFilter open={openFilter} onClose={handleClostFilter} />
     </Stack>
   );
 }

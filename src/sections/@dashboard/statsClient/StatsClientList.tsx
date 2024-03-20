@@ -10,7 +10,7 @@ import {
   Table,
   TableBody,
   TableContainer,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 // routes
 
@@ -26,20 +26,21 @@ import {
   TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
-  useTable
+  useTable,
 } from '../../../components/table';
 import { useLocales } from '../../../locales';
 import { getKpis } from '../../../redux/slices/kpis/actions';
 import {
   deleteManyStatsClient,
   deleteStatsClient,
-  getAllStatsClient
+  getAllStatsClient,
 } from '../../../redux/slices/statsClient/action';
 import { RootState, useDispatch, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { findPermission } from '../Permissions/utils';
 import StatsClientRow from './StatsClientRow';
 import StatsClientTableToolbar from './StatsClientToolbar';
+import { RoleCode } from '../../../@types/User';
 
 export default function StatsClientList() {
   const {
@@ -132,21 +133,26 @@ export default function StatsClientList() {
   };
 
   const { user } = useAuthContext();
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   // check current user permissions
-  const isAllowedToEditStatClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.EDIT
-  );
+  const isAllowedToEditStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.EDIT
+    );
 
-  const isAllowedToDeleteStatClient = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.DELETE
-  );
+  const isAllowedToDeleteStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.DELETE
+    );
 
   if (isAllowedToDeleteStatClient && isAllowedToEditStatClient) {
     TABLE_HEAD.push({ label: 'edit', align: 'center' }, { label: 'delete', align: 'center' });
