@@ -228,7 +228,7 @@ export default function StatClientResponsesTable() {
           aria-label="scrollable auto tabs example"
         >
           {statsClientsDocs.map((tab) => (
-            <Tab key={tab._id} label={tab.name} value={tab._id} />
+            <Tab key={tab._id} label={tab.name} value={tab?._id} />
           ))}
         </Tabs>
         <Divider />
@@ -240,7 +240,7 @@ export default function StatClientResponsesTable() {
             onSelectAllRows={(checked) =>
               onSelectAllRows(
                 checked,
-                tableData.map((row) => row._id)
+                tableData.map((row) => row?._id)
               )
             }
             action={

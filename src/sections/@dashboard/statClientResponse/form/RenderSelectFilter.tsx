@@ -2,6 +2,7 @@ import { TextField } from '@mui/material';
 
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse';
 import { IKpi } from '../../../../@types/Kpi';
+import { Office } from '../../../../@types/offices';
 import { IStatsClient } from '../../../../@types/statsClient';
 import { User } from '../../../../@types/User';
 import RHFAsyncSelect from '../../../../components/hook-form/RHFAsyncSelect';
@@ -120,6 +121,33 @@ const RenderSelectFilter = ({ filter }: IProp) => {
       );
     case MENU_ITEM_VALUE.range:
       return <CustomDateRangePicker name={filter.id} />;
+    case MENU_ITEM_VALUE.office:
+      return (
+        <RHFAsyncSelect
+          name="offices"
+          label="offices"
+          placeholder="select a office"
+          required
+          isSearchable
+          getOptionLabel={(option: Office) => option.name}
+          getOptionValue={(option) => option}
+          fetchData={async (params) => {
+            const response = await axios.get(
+              `/offices?page=${params.page}&limit=${params.limit}&filterName=${params.name}`
+            );
+            const data = await response.data;
+            return data;
+          }}
+          onChange={(e: User) => {
+            if (e) {
+              dispatch(handleChangefilter({ id: filter?.id, value: e?._id }));
+            }
+          }}
+          sx={{
+            padding: '.5rem 1rem',
+          }}
+        />
+      );
     default:
       return <TextField disabled value="select filter type" />;
   }

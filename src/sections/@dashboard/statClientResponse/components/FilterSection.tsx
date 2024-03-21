@@ -8,7 +8,7 @@ type IProps = {
   filter : IFilterStatClientResponse
 }
 
-export default function FilterSection ({filter}:IProps){
+export default function  FilterSection ({filter}:IProps){
   return (
     <>
     <Box sx={{ gridRow: '1 / 2', gridColumn: '2 / 3',width:'100%' }}>
