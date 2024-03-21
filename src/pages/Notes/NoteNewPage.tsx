@@ -1,19 +1,19 @@
-import { Helmet } from 'react-helmet-async';
 import { Container } from '@mui/material';
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import { KpiForm } from '../../sections/@dashboard/Kpis/form';
+import { PATH_DASHBOARD } from '../../routes/paths';
+import { NoteForm } from '../../sections/@dashboard/Notes';
 
 // ----------------------------------------------------------------------
 
-export default function KpiNewPage() {
+export default function NoteNewPage() {
   const { themeStretch } = useSettingsContext();
 
   return (
     <>
       <Helmet>
-        <title> Kpi: Create a new Kpi </title>
+        <title> Note: Create a new Note </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -27,7 +27,7 @@ export default function KpiNewPage() {
             { name: 'New Kpi' },
           ]}
         />
-        <KpiForm />
+        <NoteForm />
       </Container>
     </>
   );
