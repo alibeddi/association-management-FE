@@ -27,6 +27,9 @@ export default function UserEdit() {
         ".css-2s58ym-MuiPaper-root-MuiCard-root":{
           overflow:"initial"
         },
+        ".css-137yw8i":{
+          overflow:"initial"
+        },
       }}>
        <CustomBreadcrumbs
        heading='Edit a user details'
