@@ -34,28 +34,36 @@ import { useGetEvents } from '../hooks/useGetEvents';
 import { useAuthContext } from '../auth/useAuthContext';
 import { findPermission } from '../sections/@dashboard/Permissions/utils';
 import { MethodCode, ModelCode } from '../@types/Permission';
+import { RoleCode } from '../@types/User';
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const hasPermissionCreate = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.MY_WORKTIME,
-    MethodCode.CREATE
-  );
-  const hasPermissionUpdate = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.MY_WORKTIME,
-    MethodCode.EDIT
-  );
-  const hasPermissionDelete = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.MY_WORKTIME,
-    MethodCode.DELETE
-  );
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+  const hasPermissionCreate =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.MY_WORKTIME,
+      MethodCode.CREATE
+    );
+  const hasPermissionUpdate =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.MY_WORKTIME,
+      MethodCode.EDIT
+    );
+  const hasPermissionDelete =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.MY_WORKTIME,
+      MethodCode.DELETE
+    );
   const { themeStretch } = useSettingsContext();
 
   const dispatch = useDispatch();

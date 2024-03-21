@@ -141,7 +141,7 @@ export default function TodoList() {
 
   return (
     <>
-      <Card sx={{ marginTop: 4 }}>
+      <Card sx={{ marginTop: 4, overflow: 'visible' }}>
         <Tabs
           value={filterTodos}
           onChange={handleChangeTabs}

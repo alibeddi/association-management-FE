@@ -8,6 +8,7 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router-d
 import * as Yup from 'yup';
 import { MethodCode, ModelCode, Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { RoleCode } from '../../../@types/User';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -18,7 +19,7 @@ import {
   createNewGroupPermission,
   getAllPermissionGroups,
   getPermissionGroup,
-  updateGroupPermission
+  updateGroupPermission,
 } from '../../../redux/slices/groupPermissions/actions';
 import { getPermissions } from '../../../redux/slices/permissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
@@ -42,18 +43,24 @@ function Permissions() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const { user } = useAuthContext();
-  const createGroupPermission = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.PERMISSION_GROUP,
-    MethodCode.DELETE
-  );
-  const editGroupPermission = findPermission(
-    user?.permissionGroup,
-    user?.extraPermissions,
-    ModelCode.PERMISSION_GROUP,
-    MethodCode.EDIT
-  );
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+
+  const createGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.DELETE
+    );
+  const editGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.EDIT
+    );
 
   type FormValuesProps = {
     group: string;
