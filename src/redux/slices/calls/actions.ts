@@ -19,7 +19,6 @@ export const  getMyCalls = createAsyncThunk('/calls/me',async () => {
 export const createCallsToday = createAsyncThunk('/calls/create',async (newCall:ICall) => {
   let data;
   try {
-    newCall.date = new Date()
     const response = await axios.post('/calls',newCall);
     data = await response.data;
     if(response.status === 200){
@@ -49,9 +48,7 @@ export const updateCall = createAsyncThunk('/calls/update',async ({newCall}:{new
 export const getCallByDate = createAsyncThunk('/calls/date',async ({date}:{date:Date | string}) => {
   let data;
   try {
-    const response = await axios.post("/calls/date",{
-      date
-    });
+    const response = await axios.get(`/calls/date?date=${date}`);
     data = response.data;
     if(response.status === 200){
       return data.data;
