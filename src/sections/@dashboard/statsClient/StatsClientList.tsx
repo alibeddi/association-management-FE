@@ -41,6 +41,8 @@ import { findPermission } from '../Permissions/utils';
 import StatsClientRow from './StatsClientRow';
 import StatsClientTableToolbar from './StatsClientToolbar';
 import { RoleCode } from '../../../@types/User';
+import { IStatus } from '../../../@types/status';
+import LoadingTable from '../../../components/loadingTable/LoadingTable';
 
 export default function StatsClientList() {
   const {
@@ -74,7 +76,7 @@ export default function StatsClientList() {
   useEffect(() => {
     dispatch(getAllStatsClient({ page, limit: rowsPerPage, orderBy, order, filterName }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
-  const { statsClients } = useSelector((state: RootState) => state?.statsClient);
+  const { statsClients,status } = useSelector((state: RootState) => state?.statsClient);
   useEffect(() => {
     setTableData(statsClients?.docs);
   }, [statsClients]);
@@ -83,7 +85,7 @@ export default function StatsClientList() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const isFiltered = filterName !== '';
   const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
-
+  const denseHeight = dense ? 52 : 72;
   const handleViewRow = (row: IStatsClient) => {
     navigate(`${PATH_DASHBOARD.statsClient.view}/${row._id}`, { state: { statsClient: row } });
   };
@@ -207,7 +209,13 @@ export default function StatsClientList() {
                 />
 
                 <TableBody>
-                  {tableData?.map((row: IStatsClient) => (
+                  {status === IStatus.LOADING ? (
+                  <LoadingTable
+                    height={denseHeight}
+                    fields={TABLE_HEAD.length}
+                    rowsPerPage={rowsPerPage}
+                  />
+                ) :tableData?.map((row: IStatsClient) => (
                     <StatsClientRow
                       key={row._id}
                       row={row}
