@@ -243,7 +243,6 @@ export default function CalendarPage() {
       console.error(error);
     }
   };
-
   const dataFiltered = applyFilter({
     inputData: events,
     filterStartDate: picker.startDate,

@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 
-export const splitIntervalIntoHours = ({startDate, endDate}:{startDate: Date | string | null,endDate:  Date | string | null}) =>{
+type Props = {startDate: Date | string | null ,endDate:  Date | string | null ,title:string | undefined }
+
+export const splitIntervalIntoHours = ({startDate, endDate,title}:Props) =>{
 
   if(!startDate || !endDate) return undefined;
   const start = dayjs(new Date(startDate))
@@ -10,11 +12,13 @@ export const splitIntervalIntoHours = ({startDate, endDate}:{startDate: Date | s
   let  interval =[];
   if(differenceHour!==0){
      interval = [{
+      title,
       startDate,
       endDate: dayjs(startDate).add(1,'hour').toDate()
     }];
     for(let i = 1; i < differenceHour; i +=1){
       interval.push({
+        title,
         startDate: start.add(i,'hour').toDate(),
         endDate: start.add(i+1,'hour').toDate()
       })
@@ -23,12 +27,14 @@ export const splitIntervalIntoHours = ({startDate, endDate}:{startDate: Date | s
     if(!isSameEnding){
       const lastEndDateInterval = interval[interval.length-1].endDate;
       interval.push({
+        title,
         startDate: lastEndDateInterval,
         endDate: end.toDate()
       })
     }
   }else{
     interval.push({
+        title,
         startDate,
         endDate
     })
