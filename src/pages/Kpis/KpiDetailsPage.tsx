@@ -7,7 +7,7 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import { getOnekpi } from '../../redux/slices/kpis/actions';
 import { dispatch, RootState, useSelector } from '../../redux/store';
-import { UserForm } from '../../sections/@dashboard/Kpis/form';
+import { KpiForm } from '../../sections/@dashboard/Kpis/form';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ export default function KpiDetailsPage() {
             { name: 'View Kpi' },
           ]}
         />
-        <UserForm kpiDetails currentKpi={kpi} />
+        <KpiForm kpiDetails currentKpi={kpi} />
       </Container>
     </>
   );

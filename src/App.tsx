@@ -7,6 +7,9 @@ import 'simplebar-react/dist/simplebar.min.css';
 // lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
+// editor
+import 'react-quill/dist/quill.snow.css';
+
 // ----------------------------------------------------------------------
 
 import { HelmetProvider } from 'react-helmet-async';
@@ -23,8 +26,6 @@ import ThemeProvider from './theme';
 // locales
 import ThemeLocalization from './locales';
 // components
-
-// with date-fns v3.x
 
 import { MotionLazyContainer } from './components/animate';
 import ScrollToTop from './components/scroll-to-top';

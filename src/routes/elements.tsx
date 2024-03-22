@@ -55,4 +55,10 @@ export const Notifications = Loadable(lazy(() => import('../pages/Notifications'
 // Offices
 export const Offices = Loadable(lazy(() => import('../pages/Offices')));
 
+// Notes
+export const NotesList = Loadable(lazy(() => import('../pages/Notes/NotesListPage')));
+export const NoteNew = Loadable(lazy(() => import('../pages/Notes/NoteNewPage')));
+export const NoteEdit = Loadable(lazy(() => import('../pages/Notes/NoteEditPage')));
+export const NoteDetails = Loadable(lazy(() => import('../pages/Notes/NoteDetailsPage')));
+
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

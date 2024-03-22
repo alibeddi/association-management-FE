@@ -14,6 +14,7 @@ import {
   ic_analytics,
   ic_todolist,
   ic_offices,
+  ic_notes,
 } from '../../../assets/icons/navbar';
 import { RoleCode } from '../../../@types/User';
 
@@ -30,6 +31,7 @@ const ICONS = {
   analytics: icon(ic_analytics),
   todoList: icon(ic_todolist),
   offices: icon(ic_offices),
+  notes: icon(ic_notes),
 };
 
 export default function navConfig(user: AuthUserType) {
@@ -94,6 +96,9 @@ export default function navConfig(user: AuthUserType) {
       ModelCode.OFFICE,
       MethodCode.LIST
     );
+  const hasAccessToNotes =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.NOTES, MethodCode.LIST);
 
   const config = [
     {
@@ -158,6 +163,12 @@ export default function navConfig(user: AuthUserType) {
           path: PATH_DASHBOARD.calls,
           icon: ICONS.calls,
           toBeDisplayed: hasAccessToCalls,
+        },
+        {
+          title: 'notes',
+          path: PATH_DASHBOARD.notes.root,
+          icon: ICONS.notes,
+          toBeDisplayed: hasAccessToNotes,
         },
       ],
     },
