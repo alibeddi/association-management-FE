@@ -28,16 +28,16 @@ export default function Dashboard() {
     }));
   },[dispatch,callDate])
 
-  const callSelected = useSelector((state:RootState)=>state.calls.call)
-  const handleCreateUpdate = async (call: ICall) => {
-    if(!callSelected){
-      call.date = callDate;
-      await dispatch(createCallsToday(call)).unwrap().then(res=>{
+  const {call} = useSelector((state:RootState)=>state.calls)
+  const handleCreateUpdate = async (callData: ICall) => {
+    if(!call){
+      callData.date = callDate;
+      await dispatch(createCallsToday(callData)).unwrap().then(res=>{
         enqueueSnackbar('created with success')
       }).catch(err=>{console.error(err);enqueueSnackbar(err.message,{variant:"error"})})
     }else{
-      const {_id,date} = callSelected;
-      const newCall = {calls:call.calls,_id,date}
+      const {_id,date} = call;
+      const newCall = {calls:callData.calls,_id,date}
       await dispatch(updateCall({newCall})).unwrap().then(res=> {
         const {data} = res;
         enqueueSnackbar('updated with success')
@@ -54,7 +54,7 @@ export default function Dashboard() {
         <Typography variant="h3" component="h1" paragraph>
           Calls
         </Typography>
-        <CallForm handleCreateUpdate={handleCreateUpdate} callSelected={callSelected}/>
+        <CallForm handleCreateUpdate={handleCreateUpdate} callSelected={call}/>
       </Container>
     </>
   );
