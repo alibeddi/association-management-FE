@@ -13,7 +13,10 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import { Note } from '../../../@types/Note';
 // components
 import FormProvider, {
-  RHFAutocomplete, RHFEditor, RHFSwitch, RHFTextField
+  RHFAutocomplete,
+  RHFEditor,
+  RHFSwitch,
+  RHFTextField,
 } from '../../../components/hook-form';
 import { useSnackbar } from '../../../components/snackbar';
 //
@@ -101,9 +104,6 @@ export default function BlogNewPostForm() {
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
               <RHFTextField name="title" label="Post Title" />
-
-              <RHFTextField name="description" label="Description" multiline rows={3} />
-
               <Stack spacing={1}>
                 <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                   Content
@@ -111,97 +111,21 @@ export default function BlogNewPostForm() {
 
                 <RHFEditor simple name="content" />
               </Stack>
-
-              <Stack spacing={1}>
-                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                  Cover
-                </Typography>
-              </Stack>
             </Stack>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Card sx={{ p: 3 }}>
-            <Stack spacing={3}>
-              <div>
-                <RHFSwitch
-                  name="publish"
-                  label="Publish"
-                  labelPlacement="start"
-                  sx={{ mb: 1, mx: 0, width: 1, justifyContent: 'space-between' }}
-                />
-
-                <RHFSwitch
-                  name="comments"
-                  label="Enable comments"
-                  labelPlacement="start"
-                  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-                />
-              </div>
-
-              <RHFAutocomplete
-                name="tags"
-                label="Tags"
-                multiple
-                freeSolo
-                options={TAGS_OPTION.map((option) => option)}
-                ChipProps={{ size: 'small' }}
-              />
-
-              <RHFTextField name="metaTitle" label="Meta title" />
-
-              <RHFTextField
-                name="metaDescription"
-                label="Meta description"
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton
                 fullWidth
-                multiline
-                rows={3}
-              />
-
-              <RHFAutocomplete
-                name="metaKeywords"
-                label="Meta keywords"
-                multiple
-                freeSolo
-                options={TAGS_OPTION.map((option) => option)}
-                ChipProps={{ size: 'small' }}
-              />
+                type="submit"
+                variant="contained"
+                size="large"
+                loading={isSubmitting}
+              >
+                Post
+              </LoadingButton>
             </Stack>
           </Card>
-
-          <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-            <Button
-              fullWidth
-              color="inherit"
-              variant="outlined"
-              size="large"
-              onClick={handleOpenPreview}
-            >
-              Preview
-            </Button>
-
-            <LoadingButton
-              fullWidth
-              type="submit"
-              variant="contained"
-              size="large"
-              loading={isSubmitting}
-            >
-              Post
-            </LoadingButton>
-          </Stack>
         </Grid>
       </Grid>
-
-      <NotePreview
-        values={values}
-        open={openPreview}
-        isValid={isValid}
-        isSubmitting={isSubmitting}
-        onClose={handleClosePreview}
-        onSubmit={handleSubmit(onSubmit)}
-      />
     </FormProvider>
   );
 }

@@ -18,13 +18,13 @@ export default function NoteNewPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Create a new Kpi"
+          heading="Create a new Note"
           links={[
             {
-              name: 'Kpi',
+              name: 'Note',
               href: PATH_DASHBOARD.kpis.root,
             },
-            { name: 'New Kpi' },
+            { name: 'create' },
           ]}
         />
         <NoteForm />

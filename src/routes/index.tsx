@@ -35,6 +35,10 @@ import {
   Analytics,
   Notifications,
   Offices,
+  NotesList,
+  NoteNew,
+  NoteEdit,
+  NoteDetails,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -173,6 +177,22 @@ export default function Router() {
               <Offices />
             </PermissionGuard>
           ),
+        },
+        {
+          path: 'notes',
+          element: <Outlet />,
+          children: [
+            { path: '', element: <NotesList /> },
+            { path: 'new', element: <NoteNew /> },
+            {
+              path: 'edit/:notetId',
+              element: <NoteEdit />,
+            },
+            {
+              path: 'view/:noteId',
+              element: <NoteDetails />,
+            },
+          ],
         },
       ],
     },

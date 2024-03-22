@@ -10,7 +10,7 @@ import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import { RootState, dispatch, useSelector } from '../../redux/store';
 import { getOnekpi } from '../../redux/slices/kpis/actions';
-import { UserForm } from '../../sections/@dashboard/Kpis/form';
+import { KpiForm } from '../../sections/@dashboard/Kpis/form';
 // sections
 
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@ export default function KpiEditPage() {
             { name: 'Edit Kpi' },
           ]}
         />
-        <UserForm isEdit currentKpi={kpi} />
+        <KpiForm isEdit currentKpi={kpi} />
       </Container>
     </>
   );
