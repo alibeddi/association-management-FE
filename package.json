@@ -76,6 +76,7 @@
     "notistack": "^2.0.8",
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",
+    "quill-mention": "^4.1.0",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
