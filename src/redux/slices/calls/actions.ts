@@ -19,7 +19,6 @@ export const  getMyCalls = createAsyncThunk('/calls/me',async () => {
 export const createCallsToday = createAsyncThunk('/calls/create',async (newCall:ICall) => {
   let data;
   try {
-    console.log("new call",newCall);
     const response = await axios.post('/calls',newCall);
     data = await response.data;
     if(response.status === 200){

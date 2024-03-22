@@ -29,7 +29,6 @@ export default function Dashboard() {
   },[dispatch,callDate])
 
   const callSelected = useSelector((state:RootState)=>state.calls.call)
-console.log(callDate);
   const handleCreateUpdate = async (call: ICall) => {
     if(!callSelected){
       call.date = callDate;
