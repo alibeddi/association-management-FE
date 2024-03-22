@@ -25,7 +25,7 @@ export const useGetEvents = () => {
     start: event.startDate || new Date(),
     end: event.endDate || new Date(),
     textColor: '#378006',
-    title: 'working hour',
+    title: event.title || 'working hour',
   }));
 
   return events;

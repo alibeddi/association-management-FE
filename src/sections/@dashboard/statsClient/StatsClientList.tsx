@@ -76,7 +76,7 @@ export default function StatsClientList() {
   useEffect(() => {
     dispatch(getAllStatsClient({ page, limit: rowsPerPage, orderBy, order, filterName }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
-  const { statsClients,status } = useSelector((state: RootState) => state?.statsClient);
+  const { statsClients, status } = useSelector((state: RootState) => state?.statsClient);
   useEffect(() => {
     setTableData(statsClients?.docs);
   }, [statsClients]);
@@ -210,31 +210,33 @@ export default function StatsClientList() {
 
                 <TableBody>
                   {status === IStatus.LOADING ? (
-                  <LoadingTable
-                    height={denseHeight}
-                    fields={TABLE_HEAD.length}
-                    rowsPerPage={rowsPerPage}
-                  />
-                ) :tableData?.map((row: IStatsClient) => (
-                    <StatsClientRow
-                      key={row._id}
-                      row={row}
-                      selected={selected.includes(row._id)}
-                      onSelectRow={() => onSelectRow(row._id)}
-                      onDeleteRow={() => {
-                        handleDeleteRow(row._id);
-                      }}
-                      onEditRow={() => {
-                        handleEditRow(row);
-                      }}
-                      onViewRow={() => {
-                        handleViewRow(row);
-                      }}
-                      onCreateRowResponse={() => {
-                        handleCreateRowResponse(row);
-                      }}
+                    <LoadingTable
+                      height={denseHeight}
+                      fields={TABLE_HEAD.length}
+                      rowsPerPage={rowsPerPage}
                     />
-                  ))}
+                  ) : (
+                    tableData?.map((row: IStatsClient) => (
+                      <StatsClientRow
+                        key={row._id}
+                        row={row}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => {
+                          handleDeleteRow(row._id);
+                        }}
+                        onEditRow={() => {
+                          handleEditRow(row);
+                        }}
+                        onViewRow={() => {
+                          handleViewRow(row);
+                        }}
+                        onCreateRowResponse={() => {
+                          handleCreateRowResponse(row);
+                        }}
+                      />
+                    ))
+                  )}
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>

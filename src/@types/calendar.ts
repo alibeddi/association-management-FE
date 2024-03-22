@@ -6,6 +6,7 @@ export type ICalendarViewValue = 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay'
 
 export type ICalendarEvent = {
   _id?:string;
+  title?:string;
   startDate: Date | string | null;
   endDate: Date | string | null;
 };

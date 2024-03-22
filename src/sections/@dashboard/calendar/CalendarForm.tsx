@@ -13,13 +13,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // time
 import { addOneHour } from '../../../utils';
 
-
 // @types
 import { ICalendarEvent } from '../../../@types/calendar';
 // components
 import Iconify from '../../../components/iconify';
-import FormProvider, { RHFDateTimePicker } from '../../../components/hook-form';
-
+import FormProvider, { RHFDateTimePicker, RHFTextField } from '../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +31,7 @@ type Props = {
   } | null;
   onCancel: VoidFunction;
   onDeleteEvent: VoidFunction;
-  hasPermissionDelete:Boolean
+  hasPermissionDelete: Boolean;
   onCreateUpdateEvent: (newEvent: ICalendarEvent) => void;
 };
 
@@ -65,14 +63,17 @@ export default function CalendarForm({
   onCreateUpdateEvent,
   onDeleteEvent,
   onCancel,
-  hasPermissionDelete
+  hasPermissionDelete,
 }: Props) {
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
+    title: Yup.string().optional(),
     startDate: Yup.date().required(),
-    endDate: Yup.date().required().when('startDate',(startDate, schema) => startDate && schema.min(startDate))
+    endDate: Yup.date()
+      .required()
+      .when('startDate', (startDate, schema) => startDate && schema.min(startDate)),
   });
-  
+
   const methods = useForm({
     resolver: yupResolver(EventSchema),
     defaultValues: getInitialValues(event, range),
@@ -84,10 +85,10 @@ export default function CalendarForm({
     formState: { isSubmitting },
   } = methods;
 
-
   const onSubmit = async (data: FormValuesProps) => {
     try {
       const newEvent = {
+        title: data.title,
         startDate: data.startDate,
         endDate: data.endDate,
       };
@@ -100,13 +101,13 @@ export default function CalendarForm({
     }
   };
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={3} sx={{ px: 3 }}>
-       <RHFDateTimePicker name='startDate' label="start date" />
+          <RHFTextField name='title'  label="title" />
+          <RHFDateTimePicker name="startDate" label="start date" />
 
-    <RHFDateTimePicker name='endDate' label="end date" />
-
+          <RHFDateTimePicker name="endDate" label="end date" />
         </Stack>
       </LocalizationProvider>
       <DialogActions>
