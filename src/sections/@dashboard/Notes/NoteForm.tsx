@@ -6,21 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Button, Card, Grid, Stack, Typography } from '@mui/material';
+import { Card, Grid, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // @types
 import { Note } from '../../../@types/Note';
 // components
-import FormProvider, {
-  RHFAutocomplete,
-  RHFEditor,
-  RHFSwitch,
-  RHFTextField,
-} from '../../../components/hook-form';
+import FormProvider, { RHFEditor, RHFTextField } from '../../../components/hook-form';
 import { useSnackbar } from '../../../components/snackbar';
 //
-import NotePreview from './NotePreview';
 
 // ----------------------------------------------------------------------
 
@@ -112,15 +106,10 @@ export default function BlogNewPostForm() {
                 <RHFEditor simple name="content" />
               </Stack>
             </Stack>
+
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton
-                fullWidth
-                type="submit"
-                variant="contained"
-                size="large"
-                loading={isSubmitting}
-              >
-                Post
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                Create Note
               </LoadingButton>
             </Stack>
           </Card>

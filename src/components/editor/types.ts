@@ -11,4 +11,5 @@ export interface EditorProps extends ReactQuillProps {
   simple?: boolean;
   helperText?: React.ReactNode;
   sx?: SxProps<Theme>;
+  defaultValue?: string;
 }

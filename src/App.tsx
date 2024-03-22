@@ -9,6 +9,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 
 // editor
 import 'react-quill/dist/quill.snow.css';
+import 'quill-mention/dist/quill.mention.css';
 
 // ----------------------------------------------------------------------
 
