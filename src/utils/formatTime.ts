@@ -28,7 +28,7 @@ export function fToNow(date: InputValue) {
     : '';
 }
 export function CurrentDate(){
-  return startOfDay(new Date());
+  return fDate(new Date(),'yyyy-MM-dd');
 }
 export function addOneHour(date: InputValue){
   return date ?
