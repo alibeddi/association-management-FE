@@ -141,6 +141,12 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: hasAccessToTodoList,
         },
         {
+          title: 'notes',
+          path: PATH_DASHBOARD.notes.root,
+          icon: ICONS.notes,
+          toBeDisplayed: true,
+        },
+        {
           title: 'Stats client Answers',
           path: PATH_DASHBOARD.statClientResponse.root,
           icon: ICONS.statClientResponse,
@@ -163,12 +169,6 @@ export default function navConfig(user: AuthUserType) {
           path: PATH_DASHBOARD.calls,
           icon: ICONS.calls,
           toBeDisplayed: hasAccessToCalls,
-        },
-        {
-          title: 'notes',
-          path: PATH_DASHBOARD.notes.root,
-          icon: ICONS.notes,
-          toBeDisplayed: true,
         },
       ],
     },
