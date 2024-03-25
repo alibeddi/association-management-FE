@@ -35,7 +35,7 @@ export default function RHFEditor({ name, helperText, ...other }: Props) {
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => {
-        console.log(field);
+        console.log({ value: field.value });
         return (
           <Editor
             id={name}

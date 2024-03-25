@@ -7,7 +7,6 @@ import { StyledEditor } from './styles';
 import EditorToolbar, { formats } from './EditorToolbar';
 
 // ----------------------------------------------------------------------
-
 const atValues = [
   { id: 1, value: 'Fredrik Sundqvist' },
   { id: 2, value: 'Patrik Sjölin' },
@@ -44,10 +43,8 @@ const mentionModule = {
       renderList(matches, searchTerm);
     }
   },
-  onSelect(item: any, insertItem: (arg0: { id: number; value: string }) => void) {
-    insertItem({ id: 1, value: 'Fredrik Sundqvist' });
-  },
 };
+
 export default function Editor({
   id = 'minimal-quill',
   error,
