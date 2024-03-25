@@ -12,6 +12,9 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+
 // routes
 import { Provider } from 'react-redux';
 import Router from './routes';
@@ -20,6 +23,9 @@ import ThemeProvider from './theme';
 // locales
 import ThemeLocalization from './locales';
 // components
+
+
+// with date-fns v3.x
 
 
 import { MotionLazyContainer } from './components/animate';
