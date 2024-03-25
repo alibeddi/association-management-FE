@@ -3,10 +3,9 @@ import { Permission } from '../@types/Permission';
 import { PermissionGroup } from '../@types/PermissionGroup';
 
 export function formatDataEditUser(data: IPropsEditUser) {
-  if (!data.permissionGroup || data.permissionGroup.length === 0) {
+  if (!data.permissionGroup) {
     return data;
   }
-
   const subPermissionsGroupPermission = data.permissionGroup
     ?.map((group) => (typeof group !== 'string' ? group.permissions ?? [] : []))
     .flat();

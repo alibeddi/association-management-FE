@@ -12,10 +12,11 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
-// routes
-import { Provider } from 'react-redux';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+
+// routes
+import { Provider } from 'react-redux';
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
@@ -23,6 +24,7 @@ import ThemeProvider from './theme';
 import ThemeLocalization from './locales';
 // components
 
+// with date-fns v3.x
 
 import { MotionLazyContainer } from './components/animate';
 import ScrollToTop from './components/scroll-to-top';
@@ -36,7 +38,6 @@ import { store } from './redux/store';
 
 export default function App() {
   return (
-    
     <Provider store={store}>
       <AuthProvider>
         <HelmetProvider>
@@ -61,6 +62,5 @@ export default function App() {
         </HelmetProvider>
       </AuthProvider>
     </Provider>
-  
   );
 }

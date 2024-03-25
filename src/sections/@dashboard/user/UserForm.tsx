@@ -47,7 +47,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
       office: user?.office || ({} as Office),
       role: user?.role || '',
       permissionGroup: user?.permissionGroup || [],
-      extraPermission: user?.extraPermissions || [],
+      extraPermissions: user?.extraPermissions || [],
     }),
     [user]
   );
@@ -73,10 +73,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
   let combinedPermissions: Permission[] = [];
   const [selectedPermissions, setSelectedPermissions] = useState(combinedPermissions);
 
-  const formattedPermissions =
-    !isObjectEmpty(user) && user?.permissionGroup && user?.permissionGroup[0]
-      ? extractEntitiesAndActions([...permissions.docs])
-      : { entities: [], actions: [] };
+  const formattedPermissions = extractEntitiesAndActions([...permissions.docs]);
 
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
 
@@ -87,12 +84,14 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
 
   useEffect(() => {
     combinedPermissions = [];
-    const extraPermission = user?.extraPermissions || [];
-    const groupPermission = user?.permissionGroup ? user?.permissionGroup[0].permissions : [];
+    const extraPermissions = user?.extraPermissions || [];
+    const groupPermission =
+      user?.permissionGroup && user?.permissionGroup[0]?.permissions
+        ? user?.permissionGroup[0]?.permissions
+        : [];
     if (!!user && user.permissionGroup && user?.extraPermissions)
-      combinedPermissions = [...groupPermission, ...extraPermission];
-    if (user && user?.permissionGroup && user?.permissionGroup.length > 0)
-      setSelectedPermissions(combinedPermissions);
+      combinedPermissions = [...groupPermission, ...extraPermissions];
+    if (user && user?.permissionGroup) setSelectedPermissions(combinedPermissions);
   }, [user]);
 
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root);
