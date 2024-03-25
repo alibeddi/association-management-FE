@@ -28,6 +28,7 @@ export const formats = [
   'table',
   'underline',
   'video',
+  'mention',
 ];
 
 type EditorToolbarProps = {
