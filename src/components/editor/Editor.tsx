@@ -26,22 +26,10 @@ export default function Editor({
   ...other
 }: EditorProps) {
   const modules = {
-    toolbar: {
-      container: `#${id}`,
-    },
-    history: {
-      delay: 500,
-      maxStack: 100,
-      userOnly: true,
-    },
-    syntax: true,
-    clipboard: {
-      matchVisual: false,
-    },
     mention: {
       allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
       mentionDenotationChars: ['@', '#'],
-      source(
+      source: function (
         searchTerm: string,
         renderList: (arg0: { id: number; value: string }[], arg1: any) => void,
         mentionChar: string
@@ -58,14 +46,27 @@ export default function Editor({
           renderList(values, searchTerm);
         } else {
           const matches = [];
-          for (let i = 0; i < values.length; i++) {
-            if (values[i].value.toLowerCase().includes(searchTerm.toLowerCase())) {
+          for (let i = 0; i < values.length; i += 1) {
+            if (values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
               matches.push(values[i]);
             }
           }
+
           renderList(matches, searchTerm);
         }
       },
+    },
+    toolbar: {
+      container: `#${id}`,
+    },
+    history: {
+      delay: 500,
+      maxStack: 100,
+      userOnly: true,
+    },
+    syntax: true,
+    clipboard: {
+      matchVisual: false,
     },
   };
 
