@@ -47,7 +47,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
       office: user?.office || ({} as Office),
       role: user?.role || '',
       permissionGroup: user?.permissionGroup || [],
-      extraPermission: user?.extraPermissions || [],
+      extraPermissions: user?.extraPermissions || [],
     }),
     [user]
   );
@@ -87,10 +87,10 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
 
   useEffect(() => {
     combinedPermissions = [];
-    const extraPermission = user?.extraPermissions || [];
+    const extraPermissions = user?.extraPermissions || [];
     const groupPermission = user?.permissionGroup ? user?.permissionGroup[0].permissions : [];
     if (!!user && user.permissionGroup && user?.extraPermissions)
-      combinedPermissions = [...groupPermission, ...extraPermission];
+      combinedPermissions = [...groupPermission, ...extraPermissions];
     if (user && user?.permissionGroup && user?.permissionGroup.length > 0)
       setSelectedPermissions(combinedPermissions);
   }, [user]);
