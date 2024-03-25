@@ -7,6 +7,7 @@ import { StyledEditor } from './styles';
 import EditorToolbar, { formats } from './EditorToolbar';
 
 // ----------------------------------------------------------------------
+
 const atValues = [
   { id: 1, value: 'Fredrik Sundqvist' },
   { id: 2, value: 'Patrik Sjölin' },
@@ -17,28 +18,20 @@ const hashValues = [
 ];
 const mentionModule = {
   allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-  offsetTop: 32,
-  offsetLeft: 8,
-  spaceAfterInsert: true,
-  showDenotationChar: true,
-  onSelect(item: { value: string; marker: string }, insertItem: (arg0: any) => void) {
-    item.value = `${item.value}}}`;
-    item.marker = `{{${item.value}`;
-    console.log(item);
-    insertItem(item);
-  },
-  mentionDenotationChars: ['@', '#'],
+  mentionDenotationChars: ['@'],
   source(
     searchTerm: string,
     renderList: (arg0: { id: number; value: string }[], arg1: any) => void,
     mentionChar: string
   ) {
     let values;
+
     if (mentionChar === '@') {
       values = atValues;
     } else {
       values = hashValues;
     }
+
     if (searchTerm.length === 0) {
       renderList(values, searchTerm);
     } else {
@@ -50,6 +43,9 @@ const mentionModule = {
       }
       renderList(matches, searchTerm);
     }
+  },
+  onSelect(item: any, insertItem: (arg0: { id: number; value: string }) => void) {
+    insertItem({ id: 1, value: 'Fredrik Sundqvist' });
   },
 };
 export default function Editor({
