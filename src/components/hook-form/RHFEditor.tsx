@@ -34,25 +34,22 @@ export default function RHFEditor({ name, helperText, ...other }: Props) {
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => {
-        console.log(field);
-        return (
-          <Editor
-            id={name}
-            value={field.value}
-            onChange={field.onChange}
-            error={!!error}
-            helperText={
-              (!!error || helperText) && (
-                <FormHelperText error={!!error} sx={{ px: 2 }}>
-                  {error ? error?.message : helperText}
-                </FormHelperText>
-              )
-            }
-            {...other}
-          />
-        );
-      }}
+      render={({ field, fieldState: { error } }) => (
+        <Editor
+          id={name}
+          value={field.value}
+          onChange={field.onChange}
+          error={!!error}
+          helperText={
+            (!!error || helperText) && (
+              <FormHelperText error={!!error} sx={{ px: 2 }}>
+                {error ? error?.message : helperText}
+              </FormHelperText>
+            )
+          }
+          {...other}
+        />
+      )}
     />
   );
 }
