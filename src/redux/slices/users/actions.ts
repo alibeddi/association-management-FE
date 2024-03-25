@@ -49,7 +49,7 @@ export const editUser = createAsyncThunk('users/EDIT', async (payload: IPropsEdi
       office: payload.office?._id,
       role: payload.role,
       permissionGroup: payload.permissionGroup,
-      extraPermissions: payload.extraPermissions,
+      extraPermissions: payload.extraPermissions || [],
     });
     data = await response.data;
     if (response.status === 200) {

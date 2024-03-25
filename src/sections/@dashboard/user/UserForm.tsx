@@ -81,24 +81,20 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
     dispatch(getPermissions());
     dispatch(getAllPermissionGroups());
   }, []);
-
-  useEffect(() => {
-    combinedPermissions = [];
-    const extraPermissions = user?.extraPermissions || [];
+  useEffect(()=>{
+    const extraPermissions = values?.extraPermissions || [];
     const groupPermission =
-      user?.permissionGroup && user?.permissionGroup[0]?.permissions
-        ? user?.permissionGroup[0]?.permissions
+      values?.permissionGroup && values?.permissionGroup[0]?.permissions
+        ? values?.permissionGroup[0]?.permissions
         : [];
-    if (!!user && user.permissionGroup && user?.extraPermissions)
+    if (!!values && values.permissionGroup && values?.extraPermissions)
       combinedPermissions = [...groupPermission, ...extraPermissions];
-    if (user && user?.permissionGroup) setSelectedPermissions(combinedPermissions);
-  }, [user]);
-
+    if (values && values?.permissionGroup) setSelectedPermissions(combinedPermissions);
+  },[values.permissionGroup,values?.extraPermissions])
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root);
   const onSubmit = (data: IPropsEditUser) => {
     data.userId = user?._id;
     data.extraPermissions = selectedPermissions;
-
     dispatch(editUser(data))
       .unwrap()
       .then((res) => {
@@ -111,10 +107,10 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
         })
       );
   };
-
   const handleChangeTabs = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setFilterTab(newValue);
   };
+
   return (
     <FormProvider
       methods={methods}
