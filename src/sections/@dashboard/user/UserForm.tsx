@@ -88,7 +88,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
   useEffect(() => {
     combinedPermissions = [];
     const extraPermissions = user?.extraPermissions || [];
-    const groupPermission = user?.permissionGroup ? user?.permissionGroup[0].permissions : [];
+    const groupPermission = user?.permissionGroup && user?.permissionGroup[0]?.permissions ? user?.permissionGroup[0]?.permissions : [];
     if (!!user && user.permissionGroup && user?.extraPermissions)
       combinedPermissions = [...groupPermission, ...extraPermissions];
     if (user && user?.permissionGroup && user?.permissionGroup.length > 0)
