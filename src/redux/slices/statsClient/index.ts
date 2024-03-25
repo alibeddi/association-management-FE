@@ -13,11 +13,13 @@ import {
 type StatsClientState = {
   statsClients: PaginationModel<IStatsClient>;
   statsClient: IStatsClient;
+  statClientId: string | undefined;
   status: IStatus;
 };
 const initialState: StatsClientState = {
   statsClients: { docs: [], meta: {} as Meta },
   statsClient: {} as IStatsClient,
+  statClientId: undefined,
   status: IStatus.IDLE,
 };
 const slice = createSlice({
@@ -26,6 +28,9 @@ const slice = createSlice({
   reducers: {
     reset: (state) => {
       state.statsClient = {} as IStatsClient;
+    },
+    setCurrentStatClientId: (state, action) => {
+      state.statClientId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -65,7 +70,7 @@ const slice = createSlice({
       })
       .addCase(deleteStatsClient.fulfilled, (state, { payload }) => {
         state.status = IStatus.SUCCEEDED;
-        state.statsClients.docs = state.statsClients.docs.filter(stat=>stat._id!==payload.id)
+        state.statsClients.docs = state.statsClients.docs.filter((stat) => stat._id !== payload.id);
       })
       .addCase(deleteStatsClient.rejected, (state) => {
         state.status = IStatus.FAILED;
@@ -75,12 +80,14 @@ const slice = createSlice({
       })
       .addCase(deleteManyStatsClient.fulfilled, (state, { payload }) => {
         state.status = IStatus.SUCCEEDED;
-        state.statsClients.docs = state.statsClients.docs.filter(stat => !payload.statClientIds.includes(stat._id));
+        state.statsClients.docs = state.statsClients.docs.filter(
+          (stat) => !payload.statClientIds.includes(stat._id)
+        );
       })
       .addCase(deleteManyStatsClient.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },
 });
-export const { actions  } = slice;
+export const { setCurrentStatClientId } = slice.actions;
 export default slice.reducer;

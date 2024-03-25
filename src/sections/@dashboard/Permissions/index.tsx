@@ -6,8 +6,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import { Permission } from '../../../@types/Permission';
+import { MethodCode, ModelCode, Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { RoleCode } from '../../../@types/User';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
@@ -27,7 +28,7 @@ import { extractEntitiesAndActions } from '../../../utils/extractEntitiesAndActi
 import { extractEntitiesAndActionsStrings } from '../../../utils/extractEntitiesAndActionsStrings';
 import GroupButton from './GroupButton';
 import PermissionTable from './PermissionTable';
-import { hasPermission } from './utils';
+import { findPermission } from './utils';
 
 function Permissions() {
   const navigate = useNavigate();
@@ -42,9 +43,24 @@ function Permissions() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
-  const createGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
-  const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+
+  const createGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.DELETE
+    );
+  const editGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.EDIT
+    );
 
   type FormValuesProps = {
     group: string;
@@ -77,16 +93,22 @@ function Permissions() {
 
   const onSubmit = async ({ group }: { group: string }) => {
     if (isEdit) {
-      dispatch(updateGroupPermission({ id: permissionGroup?._id, body: { name: group } })).unwrap().then(res => {
-        reset({ group: '' });
-        setIsEdit(false);
-        enqueueSnackbar(`${translate(res.message)}`);
-      }).catch(err=>enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+      dispatch(updateGroupPermission({ id: permissionGroup?._id, body: { name: group } }))
+        .unwrap()
+        .then((res) => {
+          reset({ group: '' });
+          setIsEdit(false);
+          enqueueSnackbar(`${translate(res.message)}`);
+        })
+        .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
     } else {
-      dispatch(createNewGroupPermission({ name: group })).unwrap().then(res => {
-     enqueueSnackbar(`${translate(res?.message)}`);
+      dispatch(createNewGroupPermission({ name: group }))
+        .unwrap()
+        .then((res) => {
+          enqueueSnackbar(`${translate(res?.message)}`);
           reset();
-      }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+        })
+        .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
     }
   };
 
@@ -216,12 +238,16 @@ function Permissions() {
                     id: permissionGroup?._id,
                     body: { permissions: updatedPermissions },
                   })
-                ).unwrap()
-                .then(res => {
-                   reset({ group: '' });
+                )
+                  .unwrap()
+                  .then((res) => {
+                    reset({ group: '' });
                     setIsEdit(false);
                     enqueueSnackbar(`${translate(res.message)}`);
-                }).catch(err => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }))
+                  })
+                  .catch((err) =>
+                    enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' })
+                  );
               }}
               loading={isSubmitting}
             >

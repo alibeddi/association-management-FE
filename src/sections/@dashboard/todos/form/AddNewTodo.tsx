@@ -14,15 +14,20 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { DisplayTransformFunc, Mention, MentionsInput } from 'react-mentions';
 import * as Yup from 'yup';
+import { Office } from '../../../../@types/offices';
 import { Todo } from '../../../../@types/Todo';
 import { User } from '../../../../@types/User';
 import FormProvider from '../../../../components/hook-form';
 import Iconify from '../../../../components/iconify';
 import { useLocales } from '../../../../locales';
-import { createNewTodo, updateTodo } from '../../../../redux/slices/todos/actions';
-import { getUsers } from '../../../../redux/slices/users/actions';
+import {
+  createNewTodo,
+  getOfficesAndUsers,
+  updateTodo,
+} from '../../../../redux/slices/todos/actions';
 import { dispatch } from '../../../../redux/store';
 import { extractMentions } from '../utils/extractMentions';
+import { isUser } from '../utils/isUser';
 import style from './style';
 
 type FormValues = {
@@ -106,13 +111,14 @@ export default function AddNewTodo({
     search: string,
     callback: (users: Array<{ id: string; display: string }>) => void
   ) => {
-    dispatch(getUsers({ page: 0, limit: 100, search }))
+    dispatch(getOfficesAndUsers({ page: 1, limit: 100, search }))
       .unwrap()
       .then((data) => {
+        const docs = [...data.data.offices, ...data.data.users];
         callback(
-          data.docs.map((user: User) => ({
-            id: user._id,
-            display: user.username || user.email,
+          docs.map((doc: User | Office) => ({
+            id: doc._id,
+            display: isUser(doc) ? doc.username || doc.email : doc.name,
           }))
         );
       })
@@ -171,7 +177,7 @@ export default function AddNewTodo({
             )}
           />
         </Stack>
-        <Stack alignItems="flex-end" sx={{ marginTop: '5px', alignSelf: 'flex-end' }}>
+        <Stack sx={{ marginTop: '5px', alignSelf: 'flex-end' }}>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
             <Iconify icon={isEdit ? 'ic:baseline-edit' : 'ic:sharp-add'} />
             {isEdit ? 'save' : 'add'}

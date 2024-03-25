@@ -15,6 +15,7 @@ import { useSettingsContext } from '../../../components/settings';
 //
 import AccountPopover from './AccountPopover';
 import Searchbar from './Searchbar';
+import NotificationsPopover from './NotificationsPopover';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +55,7 @@ export default function Header({ onOpenNav }: Props) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 1.5 }}
       >
-
+        <NotificationsPopover />
         <AccountPopover />
       </Stack>
     </>

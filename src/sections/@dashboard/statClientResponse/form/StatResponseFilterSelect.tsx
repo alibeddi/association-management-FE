@@ -1,20 +1,24 @@
 import { Button, MenuItem, Select } from '@mui/material'
-import { Box, Stack } from '@mui/system'
-import { nanoid } from '@reduxjs/toolkit'
-import  { Dispatch, SetStateAction, useState } from 'react'
+import { Stack } from '@mui/system'
+import { useForm } from 'react-hook-form'
 import { IFilterStatClientResponse } from '../../../../@types/FilterStatClientResponse'
-import ChoicesSelect from '../../../../components/ChoicesSelect'
+import FormProvider from "../../../../components/hook-form"
 import Iconify from '../../../../components/iconify'
 import { MENU_ITEM_FILTER } from '../../../../constant/menuItemFilter'
 import { handleChangeOptionfilter, removeFilter } from '../../../../redux/slices/statClientResponse'
 import { dispatch } from '../../../../redux/store'
-import RenderSelectFilter from './RenderSelectFilter'
+import FilterSection from '../components/FilterSection'
 
 type IProps = {
   filters:  IFilterStatClientResponse[]
 }
 
-const StatResponseFilterSelect = ({filters}:IProps) => (
+const StatResponseFilterSelect = ({filters}:IProps) => 
+{ 
+  const methods = useForm()
+  const {watch} = methods;
+  const values = watch()
+  return <FormProvider methods={methods} >
     <Stack sx={{
       gap:"1rem",
       display:"flex"
@@ -31,26 +35,21 @@ const StatResponseFilterSelect = ({filters}:IProps) => (
               flexDirection:'row',
               gap:'1rem',
               "& .css-b62m3t-container":{
-                maxWidth:"50%"
+                height:"100%"
               }
             }} 
             
             >
             <Stack 
-            sx={{display:"flex",flexDirection:'row',
-            "& *":{flexBasis:'100%'},gap:"1rem",
-            flex:1,
-            "& .css-12a83d4-MultiValueRemove":{
-              flexBasis:'initial'
-            },
-          }}
+            sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '10px',flexBasis:"100%"}}
             >
-            <Select sx={{alignSelf:"flex-start"}} name={elt.id} defaultValue={elt.type} onChange={(e)=> dispatch(handleChangeOptionfilter({name:e.target.name,value:e.target.value})) } >
+            <Select sx={{gridRow: '1 / 2', gridColumn: '1 / 2',width:'100%' }} name={elt.id} defaultValue={elt.type} onChange={(e)=> dispatch(handleChangeOptionfilter({name:e.target.name,value:e.target.value})) } >
               {
                 MENU_ITEM_FILTER.map(({label,value})=><MenuItem value={value}>{label}</MenuItem>)
               }
             </Select>
-            <RenderSelectFilter filter={elt}/>
+            <FilterSection filter={elt} />
+            
             </Stack>
           <Button  color="error" startIcon={<Iconify icon="material-symbols:delete" 
            />} sx={{
@@ -65,7 +64,7 @@ const StatResponseFilterSelect = ({filters}:IProps) => (
             }} onClick={()=>dispatch(removeFilter({id:elt.id}))}/>
             </Stack>
               
-            {elt.type==="kpis" && elt.value !=="" ? <ChoicesSelect key={elt.id} value={elt}  /> : null}
+
           </Stack>: null
           
           
@@ -73,7 +72,8 @@ const StatResponseFilterSelect = ({filters}:IProps) => (
       }
      
     </Stack>
-  )
+    </FormProvider>
+  }
 
 
 export default StatResponseFilterSelect

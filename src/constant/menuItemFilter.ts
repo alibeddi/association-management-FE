@@ -4,31 +4,35 @@ export enum MENU_ITEM_VALUE  {
   clientContact = 'clientContact',
   clientName = "clientName",
   statClient = 'statClient',
-  range = "range"
+  range = "range",
+  office = "office"
 }
 export const MENU_ITEM_FILTER:{label:string,value:string}[] = [
   {
-    label:"kpis",
+    label:"Kpis",
     value: MENU_ITEM_VALUE.kpis
   },
   {
-    label:"admin",
+    label:"Admin",
     value:MENU_ITEM_VALUE.admin
   },
   {
-    label:"client contact",
+    label:"Client Contact",
     value:MENU_ITEM_VALUE.clientContact
   },
   {
-    label:"client name",
+    label:"Client Name",
     value:MENU_ITEM_VALUE.clientName
   },
   {
-    label:"stat client",
+    label:"Stat Client",
     value:MENU_ITEM_VALUE.statClient
+  },{
+    label: "Offices",
+    value:MENU_ITEM_VALUE.office
   },
   {
-    label:"date range",
+    label:"Date Range",
     value:MENU_ITEM_VALUE.range
   }
 ]

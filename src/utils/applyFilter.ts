@@ -14,6 +14,7 @@ export default function applyFilter({
   filterEndDate: Date | null;
   isError: boolean;
 }) {
+  
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
   inputData = stabilizedThis.map((el) => el[0]);

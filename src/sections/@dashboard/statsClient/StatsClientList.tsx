@@ -1,7 +1,6 @@
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import {
   Button,
@@ -16,8 +15,10 @@ import {
 // routes
 
 // sections
+import { MethodCode, ModelCode } from '../../../@types/Permission';
+import { IStatsClient } from '../../../@types/statsClient';
+import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import {
@@ -28,20 +29,20 @@ import {
   useTable,
 } from '../../../components/table';
 import { useLocales } from '../../../locales';
-import { RootState, useDispatch, useSelector } from '../../../redux/store';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import StatsClientRow from './StatsClientRow';
-import StatsClientTableToolbar from './StatsClientToolbar';
-import { useAuthContext } from '../../../auth/useAuthContext';
-import { hasPermission } from '../Permissions/utils';
-import { MethodCode, ModelCode } from '../../../@types/Permission';
-import { deleteManykpis, deleteOnekpi, getKpis } from '../../../redux/slices/kpis/actions';
+import { getKpis } from '../../../redux/slices/kpis/actions';
 import {
   deleteManyStatsClient,
   deleteStatsClient,
   getAllStatsClient,
 } from '../../../redux/slices/statsClient/action';
-import { IStatsClient } from '../../../@types/statsClient';
+import { RootState, useDispatch, useSelector } from '../../../redux/store';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import { findPermission } from '../Permissions/utils';
+import StatsClientRow from './StatsClientRow';
+import StatsClientTableToolbar from './StatsClientToolbar';
+import { RoleCode } from '../../../@types/User';
+import { IStatus } from '../../../@types/status';
+import LoadingTable from '../../../components/loadingTable/LoadingTable';
 
 export default function StatsClientList() {
   const {
@@ -75,7 +76,7 @@ export default function StatsClientList() {
   useEffect(() => {
     dispatch(getAllStatsClient({ page, limit: rowsPerPage, orderBy, order, filterName }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
-  const { statsClients } = useSelector((state: RootState) => state?.statsClient);
+  const { statsClients, status } = useSelector((state: RootState) => state?.statsClient);
   useEffect(() => {
     setTableData(statsClients?.docs);
   }, [statsClients]);
@@ -84,7 +85,7 @@ export default function StatsClientList() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const isFiltered = filterName !== '';
   const isNotFound = (!tableData.length && !!filterName) || !tableData.length;
-
+  const denseHeight = dense ? 52 : 72;
   const handleViewRow = (row: IStatsClient) => {
     navigate(`${PATH_DASHBOARD.statsClient.view}/${row._id}`, { state: { statsClient: row } });
   };
@@ -134,19 +135,27 @@ export default function StatsClientList() {
   };
 
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   // check current user permissions
-  const isAllowedToEditStatClient = hasPermission(
-    userPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.EDIT
-  );
-  const isAllowedToDeleteStatClient = hasPermission(
-    userPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.DELETE
-  );
+  const isAllowedToEditStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.EDIT
+    );
+
+  const isAllowedToDeleteStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.DELETE
+    );
+
   if (isAllowedToDeleteStatClient && isAllowedToEditStatClient) {
     TABLE_HEAD.push({ label: 'edit', align: 'center' }, { label: 'delete', align: 'center' });
   }
@@ -200,26 +209,34 @@ export default function StatsClientList() {
                 />
 
                 <TableBody>
-                  {tableData?.map((row: IStatsClient) => (
-                    <StatsClientRow
-                      key={row._id}
-                      row={row}
-                      selected={selected.includes(row._id)}
-                      onSelectRow={() => onSelectRow(row._id)}
-                      onDeleteRow={() => {
-                        handleDeleteRow(row._id);
-                      }}
-                      onEditRow={() => {
-                        handleEditRow(row);
-                      }}
-                      onViewRow={() => {
-                        handleViewRow(row);
-                      }}
-                      onCreateRowResponse={() => {
-                        handleCreateRowResponse(row);
-                      }}
+                  {status === IStatus.LOADING ? (
+                    <LoadingTable
+                      height={denseHeight}
+                      fields={TABLE_HEAD.length}
+                      rowsPerPage={rowsPerPage}
                     />
-                  ))}
+                  ) : (
+                    tableData?.map((row: IStatsClient) => (
+                      <StatsClientRow
+                        key={row._id}
+                        row={row}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => {
+                          handleDeleteRow(row._id);
+                        }}
+                        onEditRow={() => {
+                          handleEditRow(row);
+                        }}
+                        onViewRow={() => {
+                          handleViewRow(row);
+                        }}
+                        onCreateRowResponse={() => {
+                          handleCreateRowResponse(row);
+                        }}
+                      />
+                    ))
+                  )}
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>

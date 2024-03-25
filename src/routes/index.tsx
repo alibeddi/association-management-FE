@@ -19,7 +19,7 @@ import {
   KpiView,
   LoginPage,
   MyTodoList,
-  OperatorList,
+  UserList,
   Page404,
   PermissionGroup,
   StatClientResponseEdit,
@@ -30,7 +30,11 @@ import {
   StatsClientEdit,
   StatsClientNew,
   StatsClientShow,
+  UserEdit,
+  UserView,
   Analytics,
+  Notifications,
+  Offices,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -67,7 +71,17 @@ export default function Router() {
               <Outlet />
             </PermissionGuard>
           ),
-          children: [{ path: '', element: <OperatorList /> }],
+          children: [
+            { path: '', element: <UserList /> },
+            {
+              path: 'view/:id',
+              element: <UserView />,
+            },
+            {
+              path: 'edit/:id',
+              element: <UserEdit />,
+            },
+          ],
         },
         {
           path: 'kpis',
@@ -141,6 +155,22 @@ export default function Router() {
           element: (
             <PermissionGuard model={ModelCode.ANALYTICS} method={MethodCode.LIST}>
               <Analytics />
+            </PermissionGuard>
+          ),
+        },
+        {
+          path: 'notifications',
+          element: (
+            <PermissionGuard model={ModelCode.NOTIFICATION} method={MethodCode.LIST}>
+              <Notifications />
+            </PermissionGuard>
+          ),
+        },
+        {
+          path: 'offices',
+          element: (
+            <PermissionGuard model={ModelCode.OFFICE} method={MethodCode.LIST}>
+              <Offices />
             </PermissionGuard>
           ),
         },

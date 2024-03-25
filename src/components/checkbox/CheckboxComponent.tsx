@@ -46,7 +46,7 @@ export default function CheckboxComponent({
     );
     setChecking(!checking);
     if (foundPermission) {
-      if (selectedPermissions.includes(foundPermission)) {
+      if (selectedPermissions.some((item) => item._id === foundPermission._id)) {
         const newPermissions = selectedPermissions.filter(
           (item) => item._id !== foundPermission._id
         );

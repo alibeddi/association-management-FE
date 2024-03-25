@@ -21,7 +21,7 @@ const initialState: AnalyticsState = {
   nbStatClientResponsesByOffice: [
     {
       nbStatClientResponses: 0,
-      office: { _id: '', name: '', address: '', createdAt: null },
+      office: { _id: '', name: '', address: '', createdAt: undefined },
     },
   ],
   status: IStatus.IDLE,
@@ -57,6 +57,4 @@ const slice = createSlice({
   },
 });
 
-// eslint-disable-next-line no-empty-pattern
-export const {} = slice.actions;
 export default slice.reducer;

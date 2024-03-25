@@ -3,8 +3,9 @@ import { useSnackbar } from 'notistack';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Permission } from '../../../@types/Permission';
+import { MethodCode, ModelCode, Permission } from '../../../@types/Permission';
 import { PermissionGroup } from '../../../@types/PermissionGroup';
+import { RoleCode } from '../../../@types/User';
 import { useAuthContext } from '../../../auth/useAuthContext';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import Iconify from '../../../components/iconify';
@@ -16,7 +17,7 @@ import {
 } from '../../../redux/slices/groupPermissions/actions';
 import { dispatch, RootState, useSelector } from '../../../redux/store';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import { hasPermission } from './utils';
+import { findPermission } from './utils';
 
 type Props = {
   group: PermissionGroup;
@@ -45,10 +46,25 @@ const GroupButton = ({
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { permissionGroup } = useSelector((state: RootState) => state.permissions_groups);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
-  const deleteGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'DELETE');
-  const editGroupPermission = hasPermission(userPermissions, 'PERMISSION_GROUP', 'EDIT');
+  const deleteGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.DELETE
+    );
+
+  const editGroupPermission =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.EDIT
+    );
 
   const isRowMenu = deleteGroupPermission || editGroupPermission;
   const handleOpenConfirm = () => {

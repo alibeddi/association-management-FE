@@ -11,4 +11,5 @@ export * from './RHFSelect';
 export { default as RHFSlider } from './RHFSlider';
 export { default as RHFSwitch } from './RHFSwitch';
 export { default as RHFTextField } from './RHFTextField';
+export {default as RHFAsyncSelect } from "./RHFAsyncSelect"
 export * from './RHFUpload';

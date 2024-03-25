@@ -8,16 +8,18 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { MethodCode, ModelCode } from '../../../../@types/Permission';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
+import { RoleCode } from '../../../../@types/User';
 import { useAuthContext } from '../../../../auth/useAuthContext';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { RootState, useSelector } from '../../../../redux/store';
 import { fDate } from '../../../../utils/formatTime';
-import { hasPermission } from '../../Permissions/utils';
+import { findPermission } from '../../Permissions/utils';
+import { generateKpiTableArray } from './utils/generateKpiTableArray';
+import RenderTableCell from './utils/renderTableCellContent';
 
 type Props = {
   row: StatClientResponse;
@@ -26,6 +28,7 @@ type Props = {
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewRow: VoidFunction;
+  filterStatClient: string | undefined;
 };
 
 export default function StatClientResponseTableRow({
@@ -35,20 +38,33 @@ export default function StatClientResponseTableRow({
   onSelectRow,
   onDeleteRow,
   onViewRow,
+  filterStatClient,
 }: Props) {
-  const { admin, clientName, clientContact, statClient, createdAt, _id } = row;
+  const { statsClients } = useSelector((state: RootState) => state.statsClient);
+  const currentStatClient = statsClients.docs.find(
+    (statClient) => statClient._id === filterStatClient
+  );
+
+  const { admin, clientName, clientContact, statClient, createdAt, kpis } = row;
+
+  const generatedKpiResponseRow = generateKpiTableArray(currentStatClient?.kpis, kpis);
 
   const [openConfirm, setOpenConfirm] = useState(false);
-  const navigate = useNavigate();
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
-  const userPermissions = user?.permissionGroup[0].permissions;
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   // check current user permissions
-  const isAllowedToDeleteKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.DELETE);
-  const isAllowedToEditKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.EDIT);
-  const isAllowedToViewKpi = hasPermission(userPermissions, ModelCode.KPI, MethodCode.VIEW);
+  const isAllowedToDeleteKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.DELETE);
+  const isAllowedToEditKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.EDIT);
+  const isAllowedToViewKpi =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.VIEW);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -74,7 +90,7 @@ export default function StatClientResponseTableRow({
         </TableCell>
         <TableCell align="left">
           <Typography variant="subtitle2" noWrap>
-            {admin.name}
+            {admin?.name || '_______'}
           </Typography>
         </TableCell>
         <TableCell>
@@ -89,18 +105,12 @@ export default function StatClientResponseTableRow({
         </TableCell>
         <TableCell>
           <Typography variant="subtitle2" noWrap>
-            {statClient}
+            {statClient?.name}
           </Typography>
         </TableCell>
-        <TableCell
-          onClick={() => navigate(`${PATH_DASHBOARD.statClientResponse.view}/${_id}`)}
-          align="left"
-          sx={{ textTransform: 'capitalize', cursor: 'pointer' }}
-        >
-          <Typography variant="subtitle2" noWrap>
-            click here to see the answers
-          </Typography>
-        </TableCell>
+
+        {generatedKpiResponseRow.map((kpi) => RenderTableCell(kpi))}
+
         <TableCell align="left">
           <Typography variant="subtitle2" noWrap>
             {fDate(createdAt)}

@@ -1,4 +1,4 @@
-import { Office } from './Office';
+import { Office } from './offices';
 import { Permission } from './Permission';
 import { PermissionGroup } from './PermissionGroup';
 
@@ -8,11 +8,11 @@ export interface User {
   name: string;
   email: string;
   avatar: string;
-  office: Office;
+  office: Office | null;
   role: RoleCode;
   OAuthToken?: string;
-  permissionGroup?: PermissionGroup[];
-  extraPermission?: Permission[];
+  permissionGroup: PermissionGroup[];
+  extraPermissions?: Permission[];
   deletedAt: Date | null;
   createdAt: Date;
 }

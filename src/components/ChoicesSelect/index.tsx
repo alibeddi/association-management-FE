@@ -14,27 +14,20 @@ import { handleChoiceFilters } from '../../redux/slices/statClientResponse';
 
 const ChoicesSelect = ({ value }: { value: IFilterStatClientResponse
 }) => {
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    if(typeof value.value === "string")
-   { 
-    dispatch(getOnekpi({ kpiId: value.value }));
-  }
-  }, [dispatch, value]);
+const kpi = value.value;
+let initialSelectedChoices: IResponseFilter = {};
 
-  const { kpi } = useSelector((store: RootState) => store.kpis);
-  const [selectedChoices, setSelectedChoices] = useState<IResponseFilter>({});
+if (typeof kpi ==="object" && 'choices' in kpi && kpi?.choices) {
+ initialSelectedChoices = kpi.choices.reduce((accumulator, currentValue) => {
+    accumulator[currentValue] = false;
+    return accumulator;
+ }, {} as IResponseFilter);
+}
 
-  useEffect(() => {
-    const initialSelectedChoices = {} as IResponseFilter;
-    if (kpi?.choices) {
-      kpi.choices.forEach((choice: string) => {
-        initialSelectedChoices[choice] = false;
-      });
-      setSelectedChoices(initialSelectedChoices);
-    }
-  }, [kpi]);
-  if (kpi && ![FrontType.SELECT,FrontType.CHECKBOX,FrontType.RADIO,FrontType.SWITCH].includes(kpi?.frontType)) {
+const [selectedChoices, setSelectedChoices] = useState<IResponseFilter>(initialSelectedChoices || {});
+  if (kpi && typeof kpi ==="object" && "frontType" in kpi && ![FrontType.SELECT,FrontType.CHECKBOX,FrontType.RADIO,FrontType.SWITCH].includes(kpi?.frontType)) {
     return (
       <Box sx={{
         fontSize: '.8rem',
@@ -44,20 +37,25 @@ const ChoicesSelect = ({ value }: { value: IFilterStatClientResponse
       </Box>
     );
   }
+
   const handleChangeFilters = (choices:IResponseFilter) => {
     dispatch(handleChoiceFilters({
-      id: kpi?._id,
+      id: value.id,
       choices
     }))
   };
-    const handleCheckboxChange = (choice: string) => {
-    const updatedChoices = {
-      ...selectedChoices,
-      [choice]: !selectedChoices[choice]
-    };
-    setSelectedChoices(updatedChoices);
-    handleChangeFilters(updatedChoices)
-  };
+  const handleCheckboxChange = (choice: string) => {
+   
+    setSelectedChoices(prevSelectedChoices => {
+       const updatedChoices = {
+         ...prevSelectedChoices,
+         [choice]: !prevSelectedChoices[choice]
+       };
+       handleChangeFilters(updatedChoices);
+       return updatedChoices;
+    });
+   };
+   
 
   return (
     <Stack sx={{
@@ -66,12 +64,11 @@ const ChoicesSelect = ({ value }: { value: IFilterStatClientResponse
       flexWrap: 'wrap'
     }}>
       {
-      
-      
-      ( kpi?.frontType===FrontType.SWITCH ? ['true','false'] :kpi?.choices  )?.map((choice: string) => (
+        // eslint-disable-next-line
+      (typeof kpi === "object"  && "frontType" in kpi && kpi?.frontType===FrontType.SWITCH ? ['true','false'] :( typeof kpi === "object"  && "choices" in kpi ) ?   kpi?.choices : [] )?.map((choice: string) => (
   <FormControlLabel
           key={choice}
-          control={<Checkbox checked={selectedChoices[choice]} onChange={(e) => {handleCheckboxChange(choice);}} />}
+          control={<Checkbox checked={selectedChoices[choice]}  onChange={(e) => {handleCheckboxChange(choice);}} />}
           label={choice}
 
         />

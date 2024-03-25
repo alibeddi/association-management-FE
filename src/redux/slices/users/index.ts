@@ -2,15 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
 import { User } from '../../../@types/User';
-import { getUsers } from './actions';
+import { getUser, getUsers } from './actions';
 
 type UserState = {
   users: PaginationModel<User>;
+  user: User
   status: IStatus;
 };
 
 const initialState: UserState = {
   users: { docs: [], meta: {} as Meta },
+  user: {} as User,
   status: IStatus.IDLE,
 };
 
@@ -29,10 +31,18 @@ const slice = createSlice({
       })
       .addCase(getUsers.rejected, (state) => {
         state.status = IStatus.FAILED;
+      })
+      .addCase(getUser.pending, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.user = action.payload;
+      })
+      .addCase(getUser.rejected, (state) => {
+        state.status = IStatus.FAILED;
       });
   },
 });
 
-// eslint-disable-next-line no-empty-pattern
-export const {} = slice.actions;
 export default slice.reducer;

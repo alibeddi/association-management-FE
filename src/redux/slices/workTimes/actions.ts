@@ -41,8 +41,8 @@ export const createCalendarWorkTime = createAsyncThunk(
     let data;
     
     try {
-      const { startDate, endDate } = payload;
-      const splitHours = splitIntervalIntoHours({ startDate, endDate });
+      const { startDate, endDate,title } = payload;
+      const splitHours = splitIntervalIntoHours({ startDate, endDate,title });
       const response = await axios.post('/worktimes', {
         data: splitHours,
       });

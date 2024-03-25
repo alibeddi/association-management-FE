@@ -2,7 +2,7 @@ import { MethodCode, ModelCode } from '../../../@types/Permission';
 import { AuthUserType } from '../../../auth/types';
 import SvgColor from '../../../components/svg-color';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import { hasPermission } from '../../../sections/@dashboard/Permissions/utils';
+import { findPermission } from '../../../sections/@dashboard/Permissions/utils';
 import {
   ic_operators,
   ic_settings,
@@ -13,7 +13,9 @@ import {
   ic_stats_client,
   ic_analytics,
   ic_todolist,
+  ic_offices,
 } from '../../../assets/icons/navbar';
+import { RoleCode } from '../../../@types/User';
 
 const icon = (iconSrc: string) => <SvgColor src={iconSrc} sx={{ width: 1, height: 1 }} />;
 
@@ -27,49 +29,93 @@ const ICONS = {
   statClientResponse: icon(ic_stat_client_response),
   analytics: icon(ic_analytics),
   todoList: icon(ic_todolist),
+  offices: icon(ic_offices),
 };
 
 export default function navConfig(user: AuthUserType) {
-  const userPermissions = user?.permissionGroup[0].permissions;
-  const hasAccessToKpis = hasPermission(userPermissions, ModelCode.KPI, MethodCode.LIST);
-  const hasAccessToUsers = hasPermission(userPermissions, ModelCode.USER, MethodCode.LIST);
-  const hasAccessToGroupPermissions = hasPermission(
-    userPermissions,
-    ModelCode.PERMISSION_GROUP,
-    MethodCode.LIST
-  );
-  const hasAccessToCalendar = hasPermission(
-    userPermissions,
-    ModelCode.MY_WORKTIME,
-    MethodCode.LIST
-  );
-  const hasAccessToCalls = hasPermission(userPermissions, ModelCode.CALLS, MethodCode.LIST);
-  const hasAccessToAnalytics = hasPermission(userPermissions, ModelCode.ANALYTICS, MethodCode.LIST);
-  const hasAccessToStatClient = hasPermission(
-    userPermissions,
-    ModelCode.STAT_CLIENT,
-    MethodCode.LIST
-  );
-  const hasAccessToStatClientAnswers = hasPermission(
-    userPermissions,
-    ModelCode.STAT_CLIENT_RESPONSE,
-    MethodCode.LIST
-  );
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+  const hasAccessToKpis =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.LIST);
+  const hasAccessToUsers =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.USER, MethodCode.LIST);
+  const hasAccessToGroupPermissions =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.PERMISSION_GROUP,
+      MethodCode.LIST
+    );
+  const hasAccessToCalendar =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.MY_WORKTIME,
+      MethodCode.LIST
+    );
+  const hasAccessToCalls =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.CALLS, MethodCode.LIST);
+  const hasAccessToAnalytics =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.ANALYTICS,
+      MethodCode.LIST
+    );
+  const hasAccessToStatClient =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT,
+      MethodCode.LIST
+    );
+  const hasAccessToStatClientAnswers =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT_RESPONSE,
+      MethodCode.LIST
+    );
+  const hasAccessToTodoList =
+    isSuperAdmin ||
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.TODO, MethodCode.LIST);
+  const hasAccessToOffices =
+    isSuperAdmin ||
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.OFFICE,
+      MethodCode.LIST
+    );
+
   const config = [
     {
       subheader: '',
       items: [
         {
-          title: 'operators',
-          path: PATH_DASHBOARD.operators,
-          icon: ICONS.operators,
-          toBeDisplayed: hasAccessToUsers,
+          title: 'Analytics',
+          path: PATH_DASHBOARD.analytics,
+          icon: ICONS.analytics,
+          toBeDisplayed: hasAccessToAnalytics,
         },
         {
-          title: 'kpis',
-          path: PATH_DASHBOARD.kpis.root,
-          icon: ICONS.settings,
-          toBeDisplayed: hasAccessToKpis,
+          title: 'offices',
+          path: PATH_DASHBOARD.offices,
+          icon: ICONS.offices,
+          toBeDisplayed: hasAccessToOffices,
+        },
+        {
+          title: 'operators',
+          path: PATH_DASHBOARD.operators.root,
+          icon: ICONS.operators,
+          toBeDisplayed: hasAccessToUsers,
         },
         {
           title: 'group permissions',
@@ -85,21 +131,9 @@ export default function navConfig(user: AuthUserType) {
         },
         {
           title: 'Todo List',
-          path: PATH_DASHBOARD.todoList.root,
+          path: PATH_DASHBOARD.todoList,
           icon: ICONS.todoList,
-          toBeDisplayed: true,
-        },
-        {
-          title: 'calls',
-          path: PATH_DASHBOARD.calls,
-          icon: ICONS.calls,
-          toBeDisplayed: hasAccessToCalls,
-        },
-        {
-          title: 'stats client',
-          path: PATH_DASHBOARD.statsClient.root,
-          icon: ICONS.statsClient,
-          toBeDisplayed: hasAccessToStatClient,
+          toBeDisplayed: hasAccessToTodoList,
         },
         {
           title: 'Stats client Answers',
@@ -108,10 +142,22 @@ export default function navConfig(user: AuthUserType) {
           toBeDisplayed: hasAccessToStatClientAnswers,
         },
         {
-          title: 'Analytics',
-          path: PATH_DASHBOARD.analytics,
-          icon: ICONS.analytics,
-          toBeDisplayed: hasAccessToAnalytics,
+          title: 'stats client',
+          path: PATH_DASHBOARD.statsClient.root,
+          icon: ICONS.statsClient,
+          toBeDisplayed: hasAccessToStatClient,
+        },
+        {
+          title: 'KPIS',
+          path: PATH_DASHBOARD.kpis.root,
+          icon: ICONS.settings,
+          toBeDisplayed: hasAccessToKpis,
+        },
+        {
+          title: 'calls',
+          path: PATH_DASHBOARD.calls,
+          icon: ICONS.calls,
+          toBeDisplayed: hasAccessToCalls,
         },
       ],
     },

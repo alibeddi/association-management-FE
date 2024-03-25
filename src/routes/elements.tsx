@@ -15,7 +15,11 @@ const Loadable = (Component: ElementType) => (props: any) =>
 
 export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
 export const PermissionGroup = Loadable(lazy(() => import('../pages/PermissionGroup')));
-export const OperatorList = Loadable(lazy(() => import('../pages/User')));
+///
+export const UserList = Loadable(lazy(() => import('../pages/User/UserList')));
+export const UserView = Loadable(lazy(() => import('../pages/User/UserView')));
+export const UserEdit = Loadable(lazy(() => import('../pages/User/UserEdit')));
+
 export const Calendar = Loadable(lazy(() => import('../pages/Calendar')));
 export const Analytics = Loadable(lazy(() => import('../pages/Analytics')));
 // kpis
@@ -41,7 +45,14 @@ export const StatsClient = Loadable(lazy(() => import('../pages/statsClient')));
 export const StatsClientNew = Loadable(lazy(() => import('../pages/statsClient/statsClientNew')));
 export const StatsClientEdit = Loadable(lazy(() => import('../pages/statsClient/statsClientEdit')));
 export const StatsClientShow = Loadable(lazy(() => import('../pages/statsClient/statsClientShow')));
+
 // todo list
 export const MyTodoList = Loadable(lazy(() => import('../pages/Todos/TodoListPage')));
+
+// Notification
+export const Notifications = Loadable(lazy(() => import('../pages/Notifications')));
+
+// Offices
+export const Offices = Loadable(lazy(() => import('../pages/Offices')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
