@@ -17,21 +17,28 @@ const hashValues = [
 ];
 const mentionModule = {
   allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+  offsetTop: 32,
+  offsetLeft: 8,
+  spaceAfterInsert: true,
+  showDenotationChar: true,
+  onSelect(item: { value: string; marker: string }, insertItem: (arg0: any) => void) {
+    item.value = `${item.value}}}`;
+    item.marker = `{{${item.value}`;
+    console.log(item);
+    insertItem(item);
+  },
   mentionDenotationChars: ['@', '#'],
   source(
     searchTerm: string,
     renderList: (arg0: { id: number; value: string }[], arg1: any) => void,
     mentionChar: string
   ) {
-    console.log(renderList, mentionChar);
     let values;
-
     if (mentionChar === '@') {
       values = atValues;
     } else {
       values = hashValues;
     }
-
     if (searchTerm.length === 0) {
       renderList(values, searchTerm);
     } else {
@@ -41,7 +48,6 @@ const mentionModule = {
           matches.push(values[i]);
         }
       }
-
       renderList(matches, searchTerm);
     }
   },
