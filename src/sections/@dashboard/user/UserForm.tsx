@@ -73,10 +73,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
   let combinedPermissions: Permission[] = [];
   const [selectedPermissions, setSelectedPermissions] = useState(combinedPermissions);
 
-  const formattedPermissions =
-    !isObjectEmpty(user) && user?.permissionGroup && user?.permissionGroup[0]
-      ? extractEntitiesAndActions([...permissions.docs])
-      : { entities: [], actions: [] };
+  const formattedPermissions = extractEntitiesAndActions([...permissions.docs])
 
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
 
@@ -91,7 +88,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
     const groupPermission = user?.permissionGroup && user?.permissionGroup[0]?.permissions ? user?.permissionGroup[0]?.permissions : [];
     if (!!user && user.permissionGroup && user?.extraPermissions)
       combinedPermissions = [...groupPermission, ...extraPermissions];
-    if (user && user?.permissionGroup && user?.permissionGroup.length > 0)
+    if (user && user?.permissionGroup )
       setSelectedPermissions(combinedPermissions);
   }, [user]);
 
