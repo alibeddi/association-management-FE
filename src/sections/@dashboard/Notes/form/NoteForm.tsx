@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 // form
@@ -8,29 +8,25 @@ import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { Card, Grid, Stack, Typography } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // @types
-import { Note } from '../../../@types/Note';
+import { Note } from '../../../../@types/Note';
 // components
-import FormProvider, { RHFEditor, RHFTextField } from '../../../components/hook-form';
-import { useSnackbar } from '../../../components/snackbar';
-import { dispatch } from '../../../redux/store';
-import { createNote, editNote } from '../../../redux/slices/notes/actions';
-import { useLocales } from '../../../locales';
+import FormProvider, { RHFEditor, RHFTextField } from '../../../../components/hook-form';
+import { useSnackbar } from '../../../../components/snackbar';
+import { useLocales } from '../../../../locales';
+import { createNote, editNote } from '../../../../redux/slices/notes/actions';
+import { dispatch } from '../../../../redux/store';
 
 // ----------------------------------------------------------------------
 
 export type FormValuesProps = Note;
 type Props = {
   isEdit?: boolean;
-  noteDetails?: boolean;
   currentNote?: Note | null;
 };
-export default function BlogNewPostForm({
-  isEdit = false,
-  noteDetails = false,
-  currentNote,
-}: Props) {
+
+export default function BlogNewPostForm({ isEdit = false, currentNote }: Props) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -41,10 +37,14 @@ export default function BlogNewPostForm({
     content: Yup.string().required('Content is required'),
   });
 
-  const defaultValues = {
-    title: '',
-    content: '',
-  };
+  const defaultValues = useMemo(
+    () => ({
+      title: currentNote?.title || '',
+      content: currentNote?.content || '',
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentNote]
+  );
 
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(NewBlogSchema),
@@ -56,6 +56,16 @@ export default function BlogNewPostForm({
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    if (isEdit && currentNote) {
+      reset(defaultValues);
+    }
+    if (!isEdit) {
+      reset(defaultValues);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit, currentNote]);
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
@@ -72,7 +82,7 @@ export default function BlogNewPostForm({
           })
           .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
       } else {
-        dispatch(createNote({ ...data, mentions }))
+        dispatch(createNote({ ...data }))
           .unwrap()
           .then((res) => {
             enqueueSnackbar(`${translate(res.message)}`);
@@ -85,7 +95,7 @@ export default function BlogNewPostForm({
       console.error(error);
     }
   };
-
+  
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -102,7 +112,7 @@ export default function BlogNewPostForm({
             </Stack>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Create Note
+                {isEdit ? 'save changes' : 'Create Note'}
               </LoadingButton>
             </Stack>
           </Card>

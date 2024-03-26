@@ -7,7 +7,7 @@ import { useSettingsContext } from '../../components/settings';
 import { getOneNote } from '../../redux/slices/notes/actions';
 import { dispatch, RootState, useSelector } from '../../redux/store';
 import { PATH_DASHBOARD } from '../../routes/paths';
-import { NoteForm } from '../../sections/@dashboard/Notes';
+import { NoteForm } from '../../sections/@dashboard/Notes/form';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ export default function NoteEditPage() {
   return (
     <>
       <Helmet>
-        <title> Kpi: Edit </title>
+        <title> Note: Edit </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

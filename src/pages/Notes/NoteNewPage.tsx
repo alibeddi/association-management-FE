@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 import { PATH_DASHBOARD } from '../../routes/paths';
-import { NoteForm } from '../../sections/@dashboard/Notes';
+import { NoteForm } from '../../sections/@dashboard/Notes/form';
 
 // ----------------------------------------------------------------------
 
