@@ -15,14 +15,22 @@ import { Note } from '../../../@types/Note';
 import FormProvider, { RHFEditor, RHFTextField } from '../../../components/hook-form';
 import { useSnackbar } from '../../../components/snackbar';
 import { dispatch } from '../../../redux/store';
-import { createNote } from '../../../redux/slices/notes/actions';
+import { createNote, editNote } from '../../../redux/slices/notes/actions';
 import { useLocales } from '../../../locales';
 
 // ----------------------------------------------------------------------
 
 export type FormValuesProps = Note;
-
-export default function BlogNewPostForm() {
+type Props = {
+  isEdit?: boolean;
+  noteDetails?: boolean;
+  currentNote?: Note | null;
+};
+export default function BlogNewPostForm({
+  isEdit = false,
+  noteDetails = false,
+  currentNote,
+}: Props) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -54,15 +62,25 @@ export default function BlogNewPostForm() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const pattern = /data-id="([^"]*)"/g;
       const mentions = Array.from(data.content.matchAll(pattern), (m) => m[1]);
-      console.log(mentions);
-      dispatch(createNote({ ...data, mentions }))
-        .unwrap()
-        .then((res) => {
-          enqueueSnackbar(`${translate(res.message)}`);
-          reset();
-          navigate(PATH_DASHBOARD.notes.root);
-        })
-        .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
+      if (isEdit && currentNote) {
+        dispatch(editNote({ noteId: currentNote?._id, note: { ...data, mentions } }))
+          .unwrap()
+          .then((res) => {
+            enqueueSnackbar(`${translate(res.message)}`);
+            reset();
+            navigate(PATH_DASHBOARD.notes.root);
+          })
+          .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
+      } else {
+        dispatch(createNote({ ...data, mentions }))
+          .unwrap()
+          .then((res) => {
+            enqueueSnackbar(`${translate(res.message)}`);
+            reset();
+            navigate(PATH_DASHBOARD.notes.root);
+          })
+          .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
+      }
     } catch (error) {
       console.error(error);
     }

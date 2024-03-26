@@ -22,7 +22,7 @@ export default function NoteNewPage() {
           links={[
             {
               name: 'Note',
-              href: PATH_DASHBOARD.kpis.root,
+              href: PATH_DASHBOARD.notes.root,
             },
             { name: 'create' },
           ]}
