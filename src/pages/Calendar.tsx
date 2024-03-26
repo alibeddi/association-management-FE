@@ -1,4 +1,3 @@
-import FullCalendar from '@fullcalendar/react'; // => request placed at the top
 import { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -35,20 +34,27 @@ import { findPermission } from '../sections/@dashboard/Permissions/utils';
 import { MethodCode, ModelCode } from '../@types/Permission';
 import { RoleCode } from '../@types/User';
 import usePermission from '../hooks/usePermission';
+import { useCalendar } from '../hooks/useCallendar';
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const { isSuperAdmin, hasPCreateCalendar, hasPEditUserCalendar, hasPDeleteUserCalendar } =
     usePermission();
-
+    const {
+      FullCalendar,
+      calendarRef,
+      handleClickToday,
+      handleClickDatePrev,
+      handleClickDateNext,
+      date
+    } = useCalendar();
   const { themeStretch } = useSettingsContext();
 
   const dispatch = useDispatch();
 
   const isDesktop = useResponsive('up', 'sm');
 
-  const calendarRef = useRef<FullCalendar>(null);
 
   const events = useGetEvents();
 
@@ -69,7 +75,6 @@ export default function CalendarPage() {
   });
   const picker = useDateRangePicker(null, null);
 
-  const [date, setDate] = useState(new Date());
 
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -96,34 +101,8 @@ export default function CalendarPage() {
     setSelectedEventId(null);
   };
 
-  const handleClickToday = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
 
-      calendarApi.today();
-      setDate(calendarApi.getDate());
-    }
-  };
-  const handleClickDatePrev = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
 
-      calendarApi.prev();
-      setDate(calendarApi.getDate());
-    }
-  };
-
-  const handleClickDateNext = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.next();
-      setDate(calendarApi.getDate());
-    }
-  };
 
   const handleSelectRange = (arg: DateSelectArg) => {
     const calendarEl = calendarRef.current;

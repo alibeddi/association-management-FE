@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
 import { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Dialog, DialogTitle } from '@mui/material';
@@ -18,6 +17,7 @@ import {
   updateUserWorktime,
 } from '../../../../redux/slices/workTimes/actions';
 import { useDispatch, useSelector } from '../../../../redux/store';
+import { useCalendar } from '../../../../hooks/useCallendar';
 
 type IProps = {
   isEdit: boolean;
@@ -28,8 +28,15 @@ type IProps = {
 
 const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
   const dispatch = useDispatch();
-  const calendarRef = useRef<FullCalendar>(null);
-  const [date, setDate] = useState(new Date());
+  const {
+    FullCalendar,
+    calendarRef,
+    handleClickToday,
+    handleClickDatePrev,
+    handleClickDateNext,
+    date,
+  } = useCalendar();
+
   const { enqueueSnackbar } = useSnackbar();
   const [view, setView] = useState<ICalendarViewValue>('timeGridWeek');
   const [openFilter, setOpenFilter] = useState(false);
@@ -154,34 +161,6 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
   };
   const isDesktop = useResponsive('up', 'sm');
 
-  const handleClickDatePrev = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.prev();
-      setDate(calendarApi.getDate());
-    }
-  };
-
-  const handleClickDateNext = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.next();
-      setDate(calendarApi.getDate());
-    }
-  };
-  const handleClickToday = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.today();
-      setDate(calendarApi.getDate());
-    }
-  };
   return (
     <>
       <StyledCalendar>

@@ -18,7 +18,7 @@ export const useGetUserEvent = ({ userId }: { userId: string }) => {
   }, [dispatch]);
   useEffect(() => {
     getAllEvents();
-  }, [getAllEvents]);
+  }, []);
   const events: EventInput[] = data.map((event) => ({
     id: event._id,
     start: event.startDate || new Date(),
