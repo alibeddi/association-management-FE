@@ -68,7 +68,6 @@ export const updateCalendarWorkTime = createAsyncThunk(
       }
       throw new Error(data);
     } catch (err) {
-      console.error('error : ', err);
       return Promise.reject(err.message ? err : data?.message);
     }
   }
@@ -146,7 +145,6 @@ export const updateUserWorktime = createAsyncThunk(
       }
       throw new Error(data);
     } catch (err) {
-      console.error('error : ', err);
       return Promise.reject(err.message ? err : data?.message);
     }
   }
