@@ -1,10 +1,8 @@
-import { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
+import {  EventDropArg } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import frLocale from '@fullcalendar/core/locales/fr';
 
-//
-import { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Card, Container, DialogTitle, Dialog } from '@mui/material';
 // actions
@@ -17,22 +15,15 @@ import {
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 
-// hooks
-import useResponsive from '../hooks/useResponsive';
 // @types
-import { ICalendarEvent, ICalendarViewValue } from '../@types/calendar';
+import { ICalendarEvent } from '../@types/calendar';
 
 import { useSnackbar } from '../components/snackbar';
 import { useSettingsContext } from '../components/settings';
-import { useDateRangePicker } from '../components/date-range-picker';
 // sections
 import { CalendarForm, StyledCalendar, CalendarToolbar } from '../sections/@dashboard/calendar';
 import { applyFilter } from '../utils';
 import { useGetEvents } from '../hooks/useGetEvents';
-import { useAuthContext } from '../auth/useAuthContext';
-import { findPermission } from '../sections/@dashboard/Permissions/utils';
-import { MethodCode, ModelCode } from '../@types/Permission';
-import { RoleCode } from '../@types/User';
 import usePermission from '../hooks/usePermission';
 import { useCalendar } from '../hooks/useCallendar';
 
@@ -49,9 +40,7 @@ export default function CalendarPage() {
     date,
     openForm,
     selectedEventId,
-    setSelectedEventId,
     selectedRange,
-    setSelectedRange,
     handleOpenModal,
     handleCloseModal,
     isDesktop,

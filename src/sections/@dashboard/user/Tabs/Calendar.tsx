@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
+import {  useState } from 'react';
+import {  EventDropArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Dialog, DialogTitle } from '@mui/material';
 
@@ -7,8 +7,7 @@ import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction
 import frLocale from '@fullcalendar/core/locales/fr';
 import { useSnackbar } from 'notistack';
 
-import { ICalendarEvent, ICalendarViewValue } from '../../../../@types/calendar';
-import useResponsive from '../../../../hooks/useResponsive';
+import { ICalendarEvent } from '../../../../@types/calendar';
 import { useGetUserEvent } from '../../../../hooks/useGetUserEvent';
 import { CalendarForm, CalendarToolbar, StyledCalendar } from '../../calendar';
 import {
@@ -19,7 +18,6 @@ import {
 import { useDispatch, useSelector } from '../../../../redux/store';
 import { useCalendar } from '../../../../hooks/useCallendar';
 import { applyFilter } from '../../../../utils';
-import { useDateRangePicker } from '../../../../components/date-range-picker';
 
 type IProps = {
   isEdit: boolean;
@@ -39,9 +37,7 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
     date,
     openForm,
     selectedEventId,
-    setSelectedEventId,
     selectedRange,
-    setSelectedRange,
     handleOpenModal,
     handleCloseModal,
     isDesktop,
