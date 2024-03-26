@@ -56,9 +56,11 @@ export default function CalendarPage() {
     handleCloseModal,
     isDesktop,
     view,
-    openFilter, 
+    openFilter,
     setOpenFilter,
-    picker
+    picker,
+    handleSelectRange,
+    handleSelectEvent,
   } = useCalendar();
   const { themeStretch } = useSettingsContext();
 
@@ -70,32 +72,6 @@ export default function CalendarPage() {
     }
     return null;
   });
-
-
-  const handleSelectRange = (arg: DateSelectArg) => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.unselect();
-    }
-    handleOpenModal();
-    setSelectedRange({
-      startDate: arg.start,
-      endDate: arg.end,
-    });
-  };
-
-  const handleSelectEvent = (arg: EventClickArg) => {
-    handleOpenModal();
-    setSelectedEventId(arg.event.id);
-    if (arg?.event?.start && arg?.event?.end) {
-      setSelectedRange({
-        startDate: arg.event.start,
-        endDate: arg.event.end,
-      });
-    }
-  };
 
   const handleResizeEvent = async ({ event }: EventResizeDoneArg) => {
     if (!hasPEditUserCalendar) return;

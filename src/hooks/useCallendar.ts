@@ -1,10 +1,11 @@
+import { DateSelectArg, EventClickArg } from '@fullcalendar/core';
 import FullCalendar from '@fullcalendar/react';
 import { useRef, useState } from 'react';
 import { ICalendarViewValue } from '../@types/calendar';
 import { useDateRangePicker } from '../components/date-range-picker';
 import useResponsive from './useResponsive';
 
-export const useCalendar = () =>{
+export const useCalendar = () => {
   const calendarRef = useRef<FullCalendar>(null);
   const [date, setDate] = useState(new Date());
   const [openForm, setOpenForm] = useState(false);
@@ -55,12 +56,36 @@ export const useCalendar = () =>{
     setSelectedRange(null);
     setSelectedEventId(null);
   };
+  const handleSelectRange = (arg: DateSelectArg) => {
+    const calendarEl = calendarRef.current;
+    if (calendarEl) {
+      const calendarApi = calendarEl.getApi();
+
+      calendarApi.unselect();
+    }
+    handleOpenModal();
+    setSelectedRange({
+      startDate: arg.start,
+      endDate: arg.end,
+    });
+  };
+
+  const handleSelectEvent = (arg: EventClickArg) => {
+    handleOpenModal();
+    setSelectedEventId(arg.event.id);
+    if (arg?.event?.start && arg?.event?.end) {
+      setSelectedRange({
+        startDate: arg.event.start,
+        endDate: arg.event.end,
+      });
+    }
+  };
   return {
     FullCalendar,
     calendarRef,
 
     // date
-    date, 
+    date,
     setDate,
 
     // event calendar
@@ -68,24 +93,26 @@ export const useCalendar = () =>{
     handleClickDatePrev,
     handleClickDateNext,
     // MODAL
-    openForm, 
+    openForm,
     setOpenForm,
     handleOpenModal,
     handleCloseModal,
     // SELECTED EVENT ID
-    selectedEventId, 
+    selectedEventId,
     setSelectedEventId,
     //  SELECT RANGE
-    selectedRange, 
+    selectedRange,
     setSelectedRange,
     // Responsive
     isDesktop,
     view,
     setView,
     // FILTER
-    openFilter, 
+    openFilter,
     setOpenFilter,
     // PICKER
-    picker
-  }
-}
+    picker,
+    handleSelectRange,
+    handleSelectEvent,
+  };
+};
