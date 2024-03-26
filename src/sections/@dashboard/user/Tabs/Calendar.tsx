@@ -4,15 +4,22 @@ import { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Container } from '@mui/system';
 import { Dialog, DialogTitle } from '@mui/material';
-import { useSelector } from 'react-redux';
+
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
+import { useSnackbar } from 'notistack';
 
 import usePermission from '../../../../hooks/usePermission';
 import { ICalendarEvent, ICalendarViewValue } from '../../../../@types/calendar';
 import useResponsive from '../../../../hooks/useResponsive';
 import { useGetUserEvent } from '../../../../hooks/useGetUserEvent';
 import { CalendarForm, CalendarToolbar, StyledCalendar } from '../../calendar';
+import {
+  createUserWortime,
+  deleteUserWorktime,
+  updateUserWorktime,
+} from '../../../../redux/slices/workTimes/actions';
+import { useDispatch, useSelector } from '../../../../redux/store';
 
 type IProps = {
   isEdit: boolean;
@@ -22,8 +29,10 @@ type IProps = {
 };
 
 const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
+  const dispatch = useDispatch();
   const calendarRef = useRef<FullCalendar>(null);
   const [date, setDate] = useState(new Date());
+  const { enqueueSnackbar } = useSnackbar();
   const [view, setView] = useState<ICalendarViewValue>('timeGridWeek');
   const [openFilter, setOpenFilter] = useState(false);
   const [openForm, setOpenForm] = useState(false);
@@ -32,6 +41,7 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
     startDate: Date;
     endDate: Date;
   } | null>(null);
+  const events = useGetUserEvent({ userId });
   const selectedEvent = useSelector(() => {
     if (selectedEventId) {
       return events.find((event) => event.id === selectedEventId);
@@ -47,34 +57,105 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
     setSelectedEventId(null);
   };
   const handleSelectRange = (arg: DateSelectArg) => {
-    console.log('select range');
+    const calendarEl = calendarRef.current;
+    if (calendarEl) {
+      const calendarApi = calendarEl.getApi();
+
+      calendarApi.unselect();
+    }
+    handleOpenModal();
+    setSelectedRange({
+      startDate: arg.start,
+      endDate: arg.end,
+    });
   };
 
   const handleSelectEvent = (arg: EventClickArg) => {
-    console.log('select event');
+    handleOpenModal();
+    setSelectedEventId(arg.event.id);
+    if (arg?.event?.start && arg?.event?.end) {
+      setSelectedRange({
+        startDate: arg.event.start,
+        endDate: arg.event.end,
+      });
+    }
   };
 
   const handleResizeEvent = async ({ event }: EventResizeDoneArg) => {
-    console.log('resize');
+    if (!isEdit) return;
+    await dispatch(
+      updateUserWorktime({
+        id: event.id,
+        userId,
+        body: {
+          startDate: event.start,
+          endDate: event.end,
+        },
+      })
+    )
+      .unwrap()
+      .then((res) => enqueueSnackbar(res.message))
+      .catch((err) =>
+        enqueueSnackbar(err.message, {
+          variant: 'error',
+        })
+      );
   };
 
   const handleDropEvent = async (eventDropInfo: EventDropArg) => {
-    console.log('drop');
+    if (!isEdit) {
+      eventDropInfo.revert();
+      return;
+    }
+    await dispatch(
+      updateUserWorktime({
+        id: eventDropInfo.event.id,
+        userId,
+        body: {
+          startDate: eventDropInfo.event.start,
+          endDate: eventDropInfo.event.end,
+        },
+      })
+    )
+      .unwrap()
+      .then((res) => enqueueSnackbar('updated with success'))
+      .catch((err) => {
+        enqueueSnackbar(err.message, {
+          variant: 'error',
+        });
+        eventDropInfo.revert();
+      });
   };
 
   const handleCreateUpdateEvent = async (newEvent: ICalendarEvent) => {
-    console.log(newEvent);
+    if (selectedEventId && isEdit) {
+      await dispatch(updateUserWorktime({ id: selectedEventId, userId, body: newEvent }))
+        .unwrap()
+        .then(() => enqueueSnackbar('updated with success'))
+        .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
+    } else if (isCreate) {
+      await dispatch(createUserWortime({ userId, body: newEvent }))
+        .unwrap()
+        .then((res) => enqueueSnackbar('Create with success!'))
+        .catch((err) => {
+          enqueueSnackbar(err.message, { variant: 'error' });
+        });
+    }
   };
 
   const handleDeleteEvent = () => {
     try {
-      console.log('delete');
+      if (isDelete) {
+        handleCloseModal();
+        if (selectedEventId) dispatch(deleteUserWorktime({ id: selectedEventId, userId }));
+        enqueueSnackbar('Delete success!');
+      }
     } catch (error) {
       console.error(error);
     }
   };
   const isDesktop = useResponsive('up', 'sm');
-  const events = useGetUserEvent({ userId });
+
   const handleClickDatePrev = () => {
     const calendarEl = calendarRef.current;
     if (calendarEl) {

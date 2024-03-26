@@ -10,6 +10,7 @@ import {
   getUserWorktime,
   updateUserWorktime,
   deleteUserWorktime,
+  createUserWortime,
 } from './actions';
 
 type WorkTimeState = {
@@ -115,6 +116,17 @@ const slice = createSlice({
         state.workTimes.docs = state.workTimes.docs.filter((item) => item._id !== id);
       })
       .addCase(deleteUserWorktime.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      })
+      .addCase(createUserWortime.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(createUserWortime.fulfilled, (state, { payload }) => {
+        state.status = IStatus.SUCCEEDED;
+        const { data } = payload;
+        state.workTimes.docs = [...state.workTimes.docs, ...data];
+      })
+      .addCase(createUserWortime.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

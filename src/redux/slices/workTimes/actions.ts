@@ -111,6 +111,29 @@ export const getUserWorktime = createAsyncThunk(
     }
   }
 );
+export const createUserWortime = createAsyncThunk(
+  '/user-wortimes-create',
+  async ({ userId, body }: { userId: string; body: ICalendarEvent }) => {
+    let data;
+
+    try {
+      const { startDate, endDate, title } = body;
+      const splitHours = splitIntervalIntoHours({ startDate, endDate, title });
+      const response = await axios.post(`/worktimes/employees/${userId}`, {
+        data: splitHours,
+      });
+      data = await response?.data;
+
+      if (response.status === 200) {
+        return data;
+      }
+
+      throw new Error(data);
+    } catch (err) {
+      return Promise.reject(err.message ? err.message : data?.message);
+    }
+  }
+);
 export const updateUserWorktime = createAsyncThunk(
   '/user-worktimes-update',
   async ({ userId, id, body }: { userId: string; id: string; body: ICalendarEvent }) => {
