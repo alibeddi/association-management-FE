@@ -38,70 +38,38 @@ import { useCalendar } from '../hooks/useCallendar';
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuthContext();
   const { isSuperAdmin, hasPCreateCalendar, hasPEditUserCalendar, hasPDeleteUserCalendar } =
     usePermission();
-    const {
-      FullCalendar,
-      calendarRef,
-      handleClickToday,
-      handleClickDatePrev,
-      handleClickDateNext,
-      date
-    } = useCalendar();
+  const {
+    FullCalendar,
+    calendarRef,
+    handleClickToday,
+    handleClickDatePrev,
+    handleClickDateNext,
+    date,
+    openForm,
+    selectedEventId,
+    setSelectedEventId,
+    selectedRange,
+    setSelectedRange,
+    handleOpenModal,
+    handleCloseModal,
+    isDesktop,
+    view,
+    openFilter, 
+    setOpenFilter,
+    picker
+  } = useCalendar();
   const { themeStretch } = useSettingsContext();
 
   const dispatch = useDispatch();
-
-  const isDesktop = useResponsive('up', 'sm');
-
-
   const events = useGetEvents();
-
-  const [openForm, setOpenForm] = useState(false);
-
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-
-  const [selectedRange, setSelectedRange] = useState<{
-    startDate: Date;
-    endDate: Date;
-  } | null>(null);
-
   const selectedEvent = useSelector(() => {
     if (selectedEventId) {
       return events.find((event) => event.id === selectedEventId);
     }
     return null;
   });
-  const picker = useDateRangePicker(null, null);
-
-
-  const [openFilter, setOpenFilter] = useState(false);
-
-  const [view, setView] = useState<ICalendarViewValue>('timeGridWeek');
-
-  useEffect(() => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      const newView = 'timeGridWeek';
-      calendarApi.changeView(newView);
-      setView(newView);
-    }
-  }, [isDesktop]);
-
-  const handleOpenModal = () => {
-    setOpenForm(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenForm(false);
-    setSelectedRange(null);
-    setSelectedEventId(null);
-  };
-
-
 
 
   const handleSelectRange = (arg: DateSelectArg) => {

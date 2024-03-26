@@ -18,6 +18,8 @@ import {
 } from '../../../../redux/slices/workTimes/actions';
 import { useDispatch, useSelector } from '../../../../redux/store';
 import { useCalendar } from '../../../../hooks/useCallendar';
+import { applyFilter } from '../../../../utils';
+import { useDateRangePicker } from '../../../../components/date-range-picker';
 
 type IProps = {
   isEdit: boolean;
@@ -35,17 +37,20 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
     handleClickDatePrev,
     handleClickDateNext,
     date,
+    openForm,
+    selectedEventId,
+    setSelectedEventId,
+    selectedRange,
+    setSelectedRange,
+    handleOpenModal,
+    handleCloseModal,
+    isDesktop,
+    view,
+    picker
   } = useCalendar();
 
   const { enqueueSnackbar } = useSnackbar();
-  const [view, setView] = useState<ICalendarViewValue>('timeGridWeek');
   const [openFilter, setOpenFilter] = useState(false);
-  const [openForm, setOpenForm] = useState(false);
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [selectedRange, setSelectedRange] = useState<{
-    startDate: Date;
-    endDate: Date;
-  } | null>(null);
   const events = useGetUserEvent({ userId });
   const selectedEvent = useSelector(() => {
     if (selectedEventId) {
@@ -53,14 +58,7 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
     }
     return null;
   });
-  const handleOpenModal = () => {
-    setOpenForm(true);
-  };
-  const handleCloseModal = () => {
-    setOpenForm(false);
-    setSelectedRange(null);
-    setSelectedEventId(null);
-  };
+ 
   const handleSelectRange = (arg: DateSelectArg) => {
     const calendarEl = calendarRef.current;
     if (calendarEl) {
@@ -159,8 +157,14 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
       console.error(error);
     }
   };
-  const isDesktop = useResponsive('up', 'sm');
+  
 
+  const dataFiltered = applyFilter({
+    inputData: events,
+    filterStartDate: picker.startDate,
+    filterEndDate: picker.endDate,
+    isError: !!picker.isError,
+  });
   return (
     <>
       <StyledCalendar>
@@ -186,9 +190,9 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
           initialView={view}
           dayMaxEventRows={3}
           eventDisplay="block"
-          events={events}
+          events={dataFiltered}
           headerToolbar={false}
-          initialEvents={[]}
+          initialEvents={events}
           select={handleSelectRange}
           eventDrop={handleDropEvent}
           eventClick={handleSelectEvent}
