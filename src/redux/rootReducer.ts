@@ -12,6 +12,7 @@ import analyticsReducer from './slices/analytics';
 import todoReducer from './slices/todos';
 import notificationReducer from './slices/notifications';
 import officesReducer from './slices/offices';
+import notesReducer from './slices/notes';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,7 @@ const combinedReducer = combineReducers({
   analytics: analyticsReducer,
   notifications: notificationReducer,
   offices: officesReducer,
+  notes: notesReducer,
 });
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'LOGOUT') {

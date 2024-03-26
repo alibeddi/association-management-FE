@@ -12,14 +12,7 @@ import { User } from '../../@types/User';
 import { isUser } from '../../sections/@dashboard/todos/utils/isUser';
 
 // ----------------------------------------------------------------------
-const atValues = [
-  { id: 1, value: 'Fredrik Sundqvist' },
-  { id: 2, value: 'Patrik Sjölin' },
-];
-const hashValues = [
-  { id: 3, value: 'Fredrik Sundqvist 2' },
-  { id: 4, value: 'Patrik Sjölin 2' },
-];
+
 const mentionModule = {
   allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
   mentionDenotationChars: ['@'],
@@ -37,7 +30,6 @@ const mentionModule = {
         );
       })
       .catch((err) => console.log(err));
-    renderList(atValues);
   },
 };
 
@@ -66,7 +58,7 @@ export default function Editor({
       matchVisual: false,
     },
   };
-  
+
   return (
     <>
       <StyledEditor
