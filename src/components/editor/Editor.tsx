@@ -5,6 +5,11 @@ import 'quill-mention';
 import { EditorProps } from './types';
 import { StyledEditor } from './styles';
 import EditorToolbar, { formats } from './EditorToolbar';
+import { dispatch } from '../../redux/store';
+import { getOfficesAndUsers } from '../../redux/slices/todos/actions';
+import { Office } from '../../@types/offices';
+import { User } from '../../@types/User';
+import { isUser } from '../../sections/@dashboard/todos/utils/isUser';
 
 // ----------------------------------------------------------------------
 const atValues = [
@@ -18,30 +23,21 @@ const hashValues = [
 const mentionModule = {
   allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
   mentionDenotationChars: ['@'],
-  source(
-    searchTerm: string,
-    renderList: (arg0: { id: number; value: string }[], arg1: any) => void,
-    mentionChar: string
-  ) {
-    let values;
-
-    if (mentionChar === '@') {
-      values = atValues;
-    } else {
-      values = hashValues;
-    }
-
-    if (searchTerm.length === 0) {
-      renderList(values, searchTerm);
-    } else {
-      const matches = [];
-      for (let i = 0; i < values.length; i += 1) {
-        if (values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
-          matches.push(values[i]);
-        }
-      }
-      renderList(matches, searchTerm);
-    }
+  source(searchTerm: string, renderList: (arg0: any) => void) {
+    dispatch(getOfficesAndUsers({ page: 1, limit: 10, search: searchTerm }))
+      .unwrap()
+      .then((res) => {
+        const data = res.data;
+        const docs = [...data.offices, ...data.users];
+        renderList(
+          docs.map((doc: User | Office) => ({
+            id: doc._id,
+            value: isUser(doc) ? doc.username || doc.email : doc.name,
+          }))
+        );
+      })
+      .catch((err) => console.log(err));
+    renderList(atValues);
   },
 };
 
@@ -70,7 +66,7 @@ export default function Editor({
       matchVisual: false,
     },
   };
-
+  
   return (
     <>
       <StyledEditor
