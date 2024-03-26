@@ -2,14 +2,12 @@ import React, { useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Container } from '@mui/system';
 import { Dialog, DialogTitle } from '@mui/material';
 
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 import { useSnackbar } from 'notistack';
 
-import usePermission from '../../../../hooks/usePermission';
 import { ICalendarEvent, ICalendarViewValue } from '../../../../@types/calendar';
 import useResponsive from '../../../../hooks/useResponsive';
 import { useGetUserEvent } from '../../../../hooks/useGetUserEvent';
@@ -148,7 +146,7 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
       if (isDelete) {
         handleCloseModal();
         if (selectedEventId) dispatch(deleteUserWorktime({ id: selectedEventId, userId }));
-        enqueueSnackbar('Delete success!');
+        enqueueSnackbar('Delete with success!');
       }
     } catch (error) {
       console.error(error);
