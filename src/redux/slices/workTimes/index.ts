@@ -116,7 +116,7 @@ const slice = createSlice({
       })
       .addCase(deleteUserWorktime.rejected, (state) => {
         state.status = IStatus.FAILED;
-      })
+      });
   },
 });
 

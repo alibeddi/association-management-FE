@@ -130,8 +130,8 @@ export const updateUserWorktime = createAsyncThunk(
 );
 export const deleteUserWorktime = createAsyncThunk(
   '/user-worktimes-delete',
-  async (payload: { id: string,userId:string }) => {
-    const { id,userId } = payload;
+  async (payload: { id: string; userId: string }) => {
+    const { id, userId } = payload;
     let data;
     try {
       const response = await axios.delete(`/worktimes/employees/${userId}`, {
