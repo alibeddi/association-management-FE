@@ -17,6 +17,7 @@ import FormProvider, {
   RHFSelect,
   RHFTextField,
 } from '../../../components/hook-form';
+import usePermission from '../../../hooks/usePermission';
 import { getAllPermissionGroups } from '../../../redux/slices/groupPermissions/actions';
 import { getPermissions } from '../../../redux/slices/permissions/actions';
 import { editUser } from '../../../redux/slices/users/actions';
@@ -28,16 +29,22 @@ import { extractEntitiesAndActions } from '../../../utils/extractEntitiesAndActi
 import { extractEntitiesAndActionsStrings } from '../../../utils/extractEntitiesAndActionsStrings';
 import { setQuery } from '../../../utils/setParams';
 import PermissionTable from '../Permissions/PermissionTable';
+import { CalendarTab } from './Tabs';
 
 type IProps = {
   user: User;
   isEdit?: boolean;
 };
-const USER_FILTER = ['user details', 'extra permission'];
+const USER_FILTER = ['user details', 'extra permission', 'calendar'];
 const UserForm = ({ user, isEdit = false }: IProps) => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-
+  const {
+    hasPermissionViewUserCalendar,
+    hasPermissionEditUserCalendar,
+    hasPermissionDeleteUserCalendar,
+    isSuperAdmin,
+  } = usePermission();
   const [filterTab, setFilterTab] = useState('user details');
   const { permissions } = useSelector((state: RootState) => state.permissions);
   const defaultValues = useMemo(
@@ -81,7 +88,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
     dispatch(getPermissions());
     dispatch(getAllPermissionGroups());
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     const extraPermissions = values?.extraPermissions || [];
     const groupPermission =
       values?.permissionGroup && values?.permissionGroup[0]?.permissions
@@ -90,7 +97,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
     if (!!values && values.permissionGroup && values?.extraPermissions)
       combinedPermissions = [...groupPermission, ...extraPermissions];
     if (values && values?.permissionGroup) setSelectedPermissions(combinedPermissions);
-  },[values.permissionGroup,values?.extraPermissions])
+  }, [values.permissionGroup, values?.extraPermissions]);
   const onCancel = () => navigate(PATH_DASHBOARD.operators.root);
   const onSubmit = (data: IPropsEditUser) => {
     data.userId = user?._id;
@@ -98,7 +105,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
     dispatch(editUser(data))
       .unwrap()
       .then((res) => {
-        enqueueSnackbar('User updated successfully');
+        enqueueSnackbar('User updated successfully ');
         onCancel();
       })
       .catch((err) =>
@@ -112,25 +119,25 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
   };
 
   return (
-    <FormProvider
-      methods={methods}
-      onSubmit={handleSubmit(onSubmit)}
-      style={{
-        overflow: 'initial',
-      }}
-    >
-      <TabContext value={filterTab}>
-        <TabList
-          onChange={handleChangeTabs}
-          sx={{
-            px: 2,
-            bgcolor: 'background.neutral',
-          }}
-        >
-          {USER_FILTER.map((tab) => (
-            <Tab key={tab} label={tab} value={tab} />
-          ))}
-        </TabList>
+    <TabContext value={filterTab}>
+      <TabList
+        onChange={handleChangeTabs}
+        sx={{
+          px: 2,
+          bgcolor: 'background.neutral',
+        }}
+      >
+        {USER_FILTER.map((tab) => (
+          <Tab key={tab} label={tab} value={tab} />
+        ))}
+      </TabList>
+      <FormProvider
+        methods={methods}
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          overflow: 'initial',
+        }}
+      >
         <Stack
           alignItems="flex-end"
           sx={{
@@ -208,21 +215,30 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
             </Grid>
           </Grid>
         </TabPanel>
-
-        <TabPanel value={USER_FILTER[1]}>
-          <Card sx={{ p: 3 }}>
-            <PermissionTable
-              actions={formattedPermissions.actions}
-              entities={formattedPermissions.entities}
-              defaultPermissionsAsString={defaultPermissionsAsString}
-              setSelectedPermissions={setSelectedPermissions}
-              selectedPermissions={selectedPermissions}
-              viewMode={!isEdit}
-            />
-          </Card>
+      </FormProvider>
+      <TabPanel value={USER_FILTER[1]}>
+        <Card sx={{ p: 3 }}>
+          <PermissionTable
+            actions={formattedPermissions.actions}
+            entities={formattedPermissions.entities}
+            defaultPermissionsAsString={defaultPermissionsAsString}
+            setSelectedPermissions={setSelectedPermissions}
+            selectedPermissions={selectedPermissions}
+            viewMode={!isEdit}
+          />
+        </Card>
+      </TabPanel>
+      {(isSuperAdmin || hasPermissionViewUserCalendar) && (
+        <TabPanel value={USER_FILTER[2]}>
+          <CalendarTab
+            isEdit={hasPermissionEditUserCalendar || isSuperAdmin}
+            isDelete={hasPermissionDeleteUserCalendar || isSuperAdmin}
+            isCreate
+            userId={user?._id}
+          />
         </TabPanel>
-      </TabContext>
-    </FormProvider>
+      )}
+    </TabContext>
   );
 };
 

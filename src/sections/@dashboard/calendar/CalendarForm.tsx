@@ -54,9 +54,6 @@ const getInitialValues = (
   return initialEvent;
 };
 
-// ----------------------------------------------------------------------
-
-///
 export default function CalendarForm({
   event,
   range,
@@ -104,7 +101,7 @@ export default function CalendarForm({
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={3} sx={{ px: 3 }}>
-          <RHFTextField name='title'  label="title" />
+          <RHFTextField name="title" label="title" />
           <RHFDateTimePicker name="startDate" label="start date" />
 
           <RHFDateTimePicker name="endDate" label="end date" />

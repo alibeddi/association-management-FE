@@ -1,11 +1,8 @@
-import FullCalendar from '@fullcalendar/react'; // => request placed at the top
-import { DateSelectArg, EventClickArg, EventDropArg } from '@fullcalendar/core';
+import { EventDropArg } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import frLocale from '@fullcalendar/core/locales/fr';
 
-//
-import { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Card, Container, DialogTitle, Dialog } from '@mui/material';
 // actions
@@ -14,166 +11,63 @@ import {
   createCalendarWorkTime,
   deleteCalendarWorkTime,
 } from '../redux/slices/workTimes/actions';
-// @mui
 
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 
-// hooks
-import useResponsive from '../hooks/useResponsive';
 // @types
-import { ICalendarEvent, ICalendarViewValue } from '../@types/calendar';
+import { ICalendarEvent } from '../@types/calendar';
 
 import { useSnackbar } from '../components/snackbar';
 import { useSettingsContext } from '../components/settings';
-import { useDateRangePicker } from '../components/date-range-picker';
 // sections
 import { CalendarForm, StyledCalendar, CalendarToolbar } from '../sections/@dashboard/calendar';
 import { applyFilter } from '../utils';
 import { useGetEvents } from '../hooks/useGetEvents';
-import { useAuthContext } from '../auth/useAuthContext';
-import { findPermission } from '../sections/@dashboard/Permissions/utils';
-import { MethodCode, ModelCode } from '../@types/Permission';
-import { RoleCode } from '../@types/User';
+import usePermission from '../hooks/usePermission';
+import { useCalendar } from '../hooks/useCallendar';
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuthContext();
-  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
-  const hasPermissionCreate =
-    isSuperAdmin ||
-    findPermission(
-      user?.permissionGroup,
-      user?.extraPermissions,
-      ModelCode.MY_WORKTIME,
-      MethodCode.CREATE
-    );
-  const hasPermissionUpdate =
-    isSuperAdmin ||
-    findPermission(
-      user?.permissionGroup,
-      user?.extraPermissions,
-      ModelCode.MY_WORKTIME,
-      MethodCode.EDIT
-    );
-  const hasPermissionDelete =
-    isSuperAdmin ||
-    findPermission(
-      user?.permissionGroup,
-      user?.extraPermissions,
-      ModelCode.MY_WORKTIME,
-      MethodCode.DELETE
-    );
+  const {
+    isSuperAdmin,
+    hasPermissionCreateCalendar,
+    hasPermissionEditUserCalendar,
+    hasPermissionDeleteUserCalendar,
+  } = usePermission();
+  const {
+    FullCalendar,
+    calendarRef,
+    handleClickToday,
+    handleClickDatePrev,
+    handleClickDateNext,
+    date,
+    openForm,
+    selectedEventId,
+    selectedRange,
+    handleOpenModal,
+    handleCloseModal,
+    isDesktop,
+    view,
+    openFilter,
+    setOpenFilter,
+    picker,
+    handleSelectRange,
+    handleSelectEvent,
+  } = useCalendar();
   const { themeStretch } = useSettingsContext();
 
   const dispatch = useDispatch();
-
-  const isDesktop = useResponsive('up', 'sm');
-
-  const calendarRef = useRef<FullCalendar>(null);
-
   const events = useGetEvents();
-
-  const [openForm, setOpenForm] = useState(false);
-
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-
-  const [selectedRange, setSelectedRange] = useState<{
-    startDate: Date;
-    endDate: Date;
-  } | null>(null);
-
   const selectedEvent = useSelector(() => {
     if (selectedEventId) {
       return events.find((event) => event.id === selectedEventId);
     }
     return null;
   });
-  const picker = useDateRangePicker(null, null);
-
-  const [date, setDate] = useState(new Date());
-
-  const [openFilter, setOpenFilter] = useState(false);
-
-  const [view, setView] = useState<ICalendarViewValue>('timeGridWeek');
-
-  useEffect(() => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      const newView = 'timeGridWeek';
-      calendarApi.changeView(newView);
-      setView(newView);
-    }
-  }, [isDesktop]);
-
-  const handleOpenModal = () => {
-    setOpenForm(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenForm(false);
-    setSelectedRange(null);
-    setSelectedEventId(null);
-  };
-
-  const handleClickToday = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.today();
-      setDate(calendarApi.getDate());
-    }
-  };
-  const handleClickDatePrev = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.prev();
-      setDate(calendarApi.getDate());
-    }
-  };
-
-  const handleClickDateNext = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.next();
-      setDate(calendarApi.getDate());
-    }
-  };
-
-  const handleSelectRange = (arg: DateSelectArg) => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.unselect();
-    }
-    handleOpenModal();
-    setSelectedRange({
-      startDate: arg.start,
-      endDate: arg.end,
-    });
-  };
-
-  const handleSelectEvent = (arg: EventClickArg) => {
-    handleOpenModal();
-    setSelectedEventId(arg.event.id);
-    if (arg?.event?.start && arg?.event?.end) {
-      setSelectedRange({
-        startDate: arg.event.start,
-        endDate: arg.event.end,
-      });
-    }
-  };
 
   const handleResizeEvent = async ({ event }: EventResizeDoneArg) => {
-    if (!hasPermissionUpdate) return;
+    if (!hasPermissionEditUserCalendar) return;
     await dispatch(
       updateCalendarWorkTime({
         id: event.id,
@@ -193,7 +87,7 @@ export default function CalendarPage() {
   };
 
   const handleDropEvent = async (eventDropInfo: EventDropArg) => {
-    if (!hasPermissionUpdate) {
+    if (!hasPermissionEditUserCalendar) {
       eventDropInfo.revert();
       return;
     }
@@ -217,12 +111,12 @@ export default function CalendarPage() {
   };
 
   const handleCreateUpdateEvent = async (newEvent: ICalendarEvent) => {
-    if (selectedEventId && hasPermissionUpdate) {
+    if (selectedEventId && hasPermissionEditUserCalendar) {
       await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }))
         .unwrap()
         .then(() => enqueueSnackbar('Update success!'))
         .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
-    } else if (hasPermissionCreate) {
+    } else if (isSuperAdmin || hasPermissionCreateCalendar) {
       await dispatch(createCalendarWorkTime(newEvent))
         .unwrap()
         .then((res) => enqueueSnackbar('Create success!'))
@@ -234,9 +128,9 @@ export default function CalendarPage() {
 
   const handleDeleteEvent = () => {
     try {
-      if (selectedEventId && hasPermissionDelete) {
+      if ((selectedEventId && hasPermissionDeleteUserCalendar) || isSuperAdmin) {
         handleCloseModal();
-        dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
+        if (selectedEventId) dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
         enqueueSnackbar('Delete success!');
       }
     } catch (error) {
@@ -265,7 +159,7 @@ export default function CalendarPage() {
               onToday={handleClickToday}
               onOpenFilter={() => setOpenFilter(!openFilter)}
               addEvent={handleOpenModal}
-              hasPermissionCreate={hasPermissionCreate}
+              hasPermissionCreate={isSuperAdmin || hasPermissionCreateCalendar}
             />
 
             <FullCalendar
@@ -300,7 +194,10 @@ export default function CalendarPage() {
         </Card>
       </Container>
 
-      {(hasPermissionCreate || hasPermissionDelete || hasPermissionUpdate) && (
+      {(isSuperAdmin ||
+        hasPermissionCreateCalendar ||
+        hasPermissionDeleteUserCalendar ||
+        hasPermissionEditUserCalendar) && (
         <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
           <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
           <CalendarForm
@@ -309,14 +206,10 @@ export default function CalendarPage() {
             onCancel={handleCloseModal}
             onCreateUpdateEvent={handleCreateUpdateEvent}
             onDeleteEvent={handleDeleteEvent}
-            hasPermissionDelete={hasPermissionDelete}
+            hasPermissionDelete={isSuperAdmin || hasPermissionDeleteUserCalendar}
           />
         </Dialog>
       )}
     </>
   );
 }
-
-// ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
