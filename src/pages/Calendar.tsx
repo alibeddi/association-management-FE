@@ -14,7 +14,6 @@ import {
   createCalendarWorkTime,
   deleteCalendarWorkTime,
 } from '../redux/slices/workTimes/actions';
-// @mui
 
 // redux
 import { useDispatch, useSelector } from '../redux/store';
@@ -35,35 +34,14 @@ import { useAuthContext } from '../auth/useAuthContext';
 import { findPermission } from '../sections/@dashboard/Permissions/utils';
 import { MethodCode, ModelCode } from '../@types/Permission';
 import { RoleCode } from '../@types/User';
+import usePermission from '../hooks/usePermission';
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
-  const hasPermissionCreate =
-    isSuperAdmin ||
-    findPermission(
-      user?.permissionGroup,
-      user?.extraPermissions,
-      ModelCode.MY_WORKTIME,
-      MethodCode.CREATE
-    );
-  const hasPermissionUpdate =
-    isSuperAdmin ||
-    findPermission(
-      user?.permissionGroup,
-      user?.extraPermissions,
-      ModelCode.MY_WORKTIME,
-      MethodCode.EDIT
-    );
-  const hasPermissionDelete =
-    isSuperAdmin ||
-    findPermission(
-      user?.permissionGroup,
-      user?.extraPermissions,
-      ModelCode.MY_WORKTIME,
-      MethodCode.DELETE
-    );
+  const { isSuperAdmin, hasPCreateCalendar, hasPEditUserCalendar, hasPDeleteUserCalendar } =
+    usePermission();
+
   const { themeStretch } = useSettingsContext();
 
   const dispatch = useDispatch();
@@ -173,7 +151,7 @@ export default function CalendarPage() {
   };
 
   const handleResizeEvent = async ({ event }: EventResizeDoneArg) => {
-    if (!hasPermissionUpdate) return;
+    if (!hasPEditUserCalendar) return;
     await dispatch(
       updateCalendarWorkTime({
         id: event.id,
@@ -193,7 +171,7 @@ export default function CalendarPage() {
   };
 
   const handleDropEvent = async (eventDropInfo: EventDropArg) => {
-    if (!hasPermissionUpdate) {
+    if (!hasPEditUserCalendar) {
       eventDropInfo.revert();
       return;
     }
@@ -217,12 +195,12 @@ export default function CalendarPage() {
   };
 
   const handleCreateUpdateEvent = async (newEvent: ICalendarEvent) => {
-    if (selectedEventId && hasPermissionUpdate) {
+    if (selectedEventId && hasPEditUserCalendar) {
       await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }))
         .unwrap()
         .then(() => enqueueSnackbar('Update success!'))
         .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
-    } else if (hasPermissionCreate) {
+    } else if (isSuperAdmin || hasPCreateCalendar) {
       await dispatch(createCalendarWorkTime(newEvent))
         .unwrap()
         .then((res) => enqueueSnackbar('Create success!'))
@@ -234,9 +212,9 @@ export default function CalendarPage() {
 
   const handleDeleteEvent = () => {
     try {
-      if (selectedEventId && hasPermissionDelete) {
+      if ((selectedEventId && hasPDeleteUserCalendar) || isSuperAdmin) {
         handleCloseModal();
-        dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
+        if (selectedEventId) dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
         enqueueSnackbar('Delete success!');
       }
     } catch (error) {
@@ -265,7 +243,7 @@ export default function CalendarPage() {
               onToday={handleClickToday}
               onOpenFilter={() => setOpenFilter(!openFilter)}
               addEvent={handleOpenModal}
-              hasPermissionCreate={hasPermissionCreate}
+              hasPermissionCreate={isSuperAdmin || hasPCreateCalendar}
             />
 
             <FullCalendar
@@ -300,7 +278,7 @@ export default function CalendarPage() {
         </Card>
       </Container>
 
-      {(hasPermissionCreate || hasPermissionDelete || hasPermissionUpdate) && (
+      {(isSuperAdmin || hasPCreateCalendar || hasPDeleteUserCalendar || hasPEditUserCalendar) && (
         <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
           <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
           <CalendarForm
@@ -309,7 +287,7 @@ export default function CalendarPage() {
             onCancel={handleCloseModal}
             onCreateUpdateEvent={handleCreateUpdateEvent}
             onDeleteEvent={handleDeleteEvent}
-            hasPermissionDelete={hasPermissionDelete}
+            hasPermissionDelete={isSuperAdmin || hasPDeleteUserCalendar}
           />
         </Dialog>
       )}
@@ -317,6 +295,3 @@ export default function CalendarPage() {
   );
 }
 
-// ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
