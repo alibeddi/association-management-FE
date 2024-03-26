@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Note } from '../../../@types/Note';
 import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
-import { createNote, editNote, getOneNote } from './actions';
+import { createNote, deleteOneNote, editNote, getAllNotes, getOneNote } from './actions';
 
 type InitialState = {
   notes: PaginationModel<Note>;
@@ -55,6 +55,32 @@ const slice = createSlice({
         state.note = action.payload.data;
       })
       .addCase(getOneNote.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+
+    // GET ALL
+    builder
+      .addCase(getAllNotes.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(getAllNotes.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.notes = action.payload;
+      })
+      .addCase(getAllNotes.rejected, (state) => {
+        state.status = IStatus.FAILED;
+      });
+
+    // DELETE ONE
+    builder
+      .addCase(deleteOneNote.pending, (state) => {
+        state.status = IStatus.LOADING;
+      })
+      .addCase(deleteOneNote.fulfilled, (state, action) => {
+        state.status = IStatus.SUCCEEDED;
+        state.notes.docs = state.notes.docs.filter((note) => note._id !== action.meta.arg.noteId);
+      })
+      .addCase(deleteOneNote.rejected, (state) => {
         state.status = IStatus.FAILED;
       });
   },

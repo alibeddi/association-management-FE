@@ -5,4 +5,6 @@ export interface Note {
   title: string;
   tags: User[];
   content: string;
+  createdAt: Date;
+  author: User;
 }

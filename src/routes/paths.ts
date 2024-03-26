@@ -46,8 +46,8 @@ export const PATH_DASHBOARD = {
   offices: path(ROOTS_DASHBOARD, '/offices'),
   notes: {
     root: path(ROOTS_DASHBOARD, '/notes'),
-    edit: path(ROOTS_DASHBOARD, '/notes/edit'),
-    view: path(ROOTS_DASHBOARD, '/notes/view'),
+    edit: (id: string) => path(ROOTS_DASHBOARD, `/notes/edit/${id}`),
+    view: (id: string) => path(ROOTS_DASHBOARD, `/notes/view/${id}`),
     new: path(ROOTS_DASHBOARD, '/notes/new'),
   },
 };

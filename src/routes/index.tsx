@@ -185,11 +185,11 @@ export default function Router() {
             { path: '', element: <NotesList /> },
             { path: 'new', element: <NoteNew /> },
             {
-              path: 'edit/:notetId',
+              path: 'edit/:id',
               element: <NoteEdit />,
             },
             {
-              path: 'view/:noteId',
+              path: 'view/:id',
               element: <NoteDetails />,
             },
           ],

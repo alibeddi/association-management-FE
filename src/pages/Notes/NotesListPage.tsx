@@ -9,7 +9,7 @@ import Iconify from '../../components/iconify';
 import { useSettingsContext } from '../../components/settings';
 import { useLocales } from '../../locales';
 import { PATH_DASHBOARD } from '../../routes/paths';
-import { NoteForm } from '../../sections/@dashboard/Notes';
+import { NotesList } from '../../sections/@dashboard/Notes/list';
 import { findPermission } from '../../sections/@dashboard/Permissions/utils';
 
 export default function NotesListPage() {
@@ -44,6 +44,7 @@ export default function NotesListPage() {
             )
           }
         />
+        <NotesList />
       </Container>
     </>
   );
