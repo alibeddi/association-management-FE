@@ -1,4 +1,4 @@
-import {  EventDropArg } from '@fullcalendar/core';
+import { EventDropArg } from '@fullcalendar/core';
 import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import frLocale from '@fullcalendar/core/locales/fr';
@@ -29,8 +29,12 @@ import { useCalendar } from '../hooks/useCallendar';
 
 export default function CalendarPage() {
   const { enqueueSnackbar } = useSnackbar();
-  const { isSuperAdmin, hasPCreateCalendar, hasPEditUserCalendar, hasPDeleteUserCalendar } =
-    usePermission();
+  const {
+    isSuperAdmin,
+    hasPermissionCreateCalendar,
+    hasPermissionEditUserCalendar,
+    hasPermissionDeleteUserCalendar,
+  } = usePermission();
   const {
     FullCalendar,
     calendarRef,
@@ -63,7 +67,7 @@ export default function CalendarPage() {
   });
 
   const handleResizeEvent = async ({ event }: EventResizeDoneArg) => {
-    if (!hasPEditUserCalendar) return;
+    if (!hasPermissionEditUserCalendar) return;
     await dispatch(
       updateCalendarWorkTime({
         id: event.id,
@@ -83,7 +87,7 @@ export default function CalendarPage() {
   };
 
   const handleDropEvent = async (eventDropInfo: EventDropArg) => {
-    if (!hasPEditUserCalendar) {
+    if (!hasPermissionEditUserCalendar) {
       eventDropInfo.revert();
       return;
     }
@@ -107,12 +111,12 @@ export default function CalendarPage() {
   };
 
   const handleCreateUpdateEvent = async (newEvent: ICalendarEvent) => {
-    if (selectedEventId && hasPEditUserCalendar) {
+    if (selectedEventId && hasPermissionEditUserCalendar) {
       await dispatch(updateCalendarWorkTime({ id: selectedEventId, body: newEvent }))
         .unwrap()
         .then(() => enqueueSnackbar('Update success!'))
         .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
-    } else if (isSuperAdmin || hasPCreateCalendar) {
+    } else if (isSuperAdmin || hasPermissionCreateCalendar) {
       await dispatch(createCalendarWorkTime(newEvent))
         .unwrap()
         .then((res) => enqueueSnackbar('Create success!'))
@@ -124,7 +128,7 @@ export default function CalendarPage() {
 
   const handleDeleteEvent = () => {
     try {
-      if ((selectedEventId && hasPDeleteUserCalendar) || isSuperAdmin) {
+      if ((selectedEventId && hasPermissionDeleteUserCalendar) || isSuperAdmin) {
         handleCloseModal();
         if (selectedEventId) dispatch(deleteCalendarWorkTime({ id: selectedEventId }));
         enqueueSnackbar('Delete success!');
@@ -155,7 +159,7 @@ export default function CalendarPage() {
               onToday={handleClickToday}
               onOpenFilter={() => setOpenFilter(!openFilter)}
               addEvent={handleOpenModal}
-              hasPermissionCreate={isSuperAdmin || hasPCreateCalendar}
+              hasPermissionCreate={isSuperAdmin || hasPermissionCreateCalendar}
             />
 
             <FullCalendar
@@ -190,7 +194,10 @@ export default function CalendarPage() {
         </Card>
       </Container>
 
-      {(isSuperAdmin || hasPCreateCalendar || hasPDeleteUserCalendar || hasPEditUserCalendar) && (
+      {(isSuperAdmin ||
+        hasPermissionCreateCalendar ||
+        hasPermissionDeleteUserCalendar ||
+        hasPermissionEditUserCalendar) && (
         <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
           <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
           <CalendarForm
@@ -199,7 +206,7 @@ export default function CalendarPage() {
             onCancel={handleCloseModal}
             onCreateUpdateEvent={handleCreateUpdateEvent}
             onDeleteEvent={handleDeleteEvent}
-            hasPermissionDelete={isSuperAdmin || hasPDeleteUserCalendar}
+            hasPermissionDelete={isSuperAdmin || hasPermissionDeleteUserCalendar}
           />
         </Dialog>
       )}

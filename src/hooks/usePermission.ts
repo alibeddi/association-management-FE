@@ -8,19 +8,19 @@ const usePermission = () => {
   const { user } = useAuthContext();
   const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
   // calendar
-  const hasPCreateCalendar = findPermission(
+  const hasPermissionCreateCalendar = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
     ModelCode.MY_WORKTIME,
     MethodCode.CREATE
   );
-  const hasPUpdateCalendar = findPermission(
+  const hasPermissionUpdateCalendar = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
     ModelCode.MY_WORKTIME,
     MethodCode.EDIT
   );
-  const hasPDeleteCalendar = findPermission(
+  const hasPermissionDeleteCalendar = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
     ModelCode.MY_WORKTIME,
@@ -28,19 +28,19 @@ const usePermission = () => {
   );
 
   // PERMISSION FOR USER CALENDAR
-  const hasPEditUserCalendar = findPermission(
+  const hasPermissionEditUserCalendar = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
     ModelCode.WORKTIME,
     MethodCode.EDIT
   );
-  const hasPViewUserCalendar = findPermission(
+  const hasPermissionViewUserCalendar = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
     ModelCode.WORKTIME,
     MethodCode.VIEW
   );
-  const hasPDeleteUserCalendar = findPermission(
+  const hasPermissionDeleteUserCalendar = findPermission(
     user?.permissionGroup,
     user?.extraPermissions,
     ModelCode.WORKTIME,
@@ -50,13 +50,13 @@ const usePermission = () => {
     // ROLE SUPER ADMIN
     isSuperAdmin,
     // CALENDAR
-    hasPCreateCalendar,
-    hasPUpdateCalendar,
-    hasPDeleteCalendar,
+    hasPermissionCreateCalendar,
+    hasPermissionUpdateCalendar,
+    hasPermissionDeleteCalendar,
     // USER CALENDAR
-    hasPEditUserCalendar,
-    hasPViewUserCalendar,
-    hasPDeleteUserCalendar
+    hasPermissionEditUserCalendar,
+    hasPermissionViewUserCalendar,
+    hasPermissionDeleteUserCalendar,
   };
 };
 

@@ -39,8 +39,12 @@ const USER_FILTER = ['user details', 'extra permission', 'calendar'];
 const UserForm = ({ user, isEdit = false }: IProps) => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { hasPViewUserCalendar, hasPEditUserCalendar, hasPDeleteUserCalendar, isSuperAdmin } =
-    usePermission();
+  const {
+    hasPermissionViewUserCalendar,
+    hasPermissionEditUserCalendar,
+    hasPermissionDeleteUserCalendar,
+    isSuperAdmin,
+  } = usePermission();
   const [filterTab, setFilterTab] = useState('user details');
   const { permissions } = useSelector((state: RootState) => state.permissions);
   const defaultValues = useMemo(
@@ -224,11 +228,11 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
           />
         </Card>
       </TabPanel>
-      {(isSuperAdmin || hasPViewUserCalendar) && (
+      {(isSuperAdmin || hasPermissionViewUserCalendar) && (
         <TabPanel value={USER_FILTER[2]}>
           <CalendarTab
-            isEdit={hasPEditUserCalendar || isSuperAdmin}
-            isDelete={hasPDeleteUserCalendar || isSuperAdmin}
+            isEdit={hasPermissionEditUserCalendar || isSuperAdmin}
+            isDelete={hasPermissionDeleteUserCalendar || isSuperAdmin}
             isCreate
             userId={user?._id}
           />
