@@ -4,13 +4,13 @@ import { Meta, PaginationModel } from '../../../@types/Pagination';
 import { IStatus } from '../../../@types/status';
 import { createkpi, deleteManykpis, deleteOnekpi, getKpis, getOnekpi, updatekpi } from './actions';
 
-type PermissionState = {
+type InitialState = {
   kpis: PaginationModel<IKpi>;
   kpi: IKpi | null;
   status: IStatus;
 };
 
-const initialState: PermissionState = {
+const initialState: InitialState = {
   kpis: { docs: [], meta: {} as Meta },
   kpi: null,
   status: IStatus.IDLE,
