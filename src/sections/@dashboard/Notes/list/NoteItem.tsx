@@ -33,7 +33,7 @@ function NoteItemHorizontal({ note }: Props) {
   const { user } = useAuthContext();
   const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
-  const { _id, title, author, createdAt, content } = note;
+  const { _id, title, createdBy, createdAt, content } = note;
 
   const handleDeleteNote = (id: string) => {
     dispatch(deleteOneNote({ noteId: id }))
@@ -61,7 +61,7 @@ function NoteItemHorizontal({ note }: Props) {
             </Stack>
             <Stack direction="row" alignItems="center">
               <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-                Created by {author?.username || 'Anonymous Admin'}
+                Created by {createdBy?.username || 'Anonymous Admin'}
               </Box>
             </Stack>
           </Stack>

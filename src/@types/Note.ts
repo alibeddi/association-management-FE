@@ -6,5 +6,5 @@ export interface Note {
   tags: User[];
   content: string;
   createdAt: Date;
-  author: User;
+  createdBy: User;
 }
