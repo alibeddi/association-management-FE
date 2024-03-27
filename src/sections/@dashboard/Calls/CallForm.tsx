@@ -22,8 +22,8 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
   });
   const { call } = useSelector((state: RootState) => state.calls);
   const callReceived = call?.calls?.received || 0;
-  const callMaked = call?.calls?.maked || 0;
-  const numberCalls = callReceived + callMaked;
+  const madeCalls = call?.calls?.maked || 0;
+  const numberCalls = callReceived + madeCalls;
   const methods = useForm<ICall>({
     resolver: yupResolver(CallSchema),
   });
@@ -72,7 +72,7 @@ const CallForm = ({ handleCreateUpdate, callSelected }: IProp<ICall>) => {
               }}
             >
               {' '}
-              <RHFTextField name="calls.maked" label={`${callMaked} calls emis `} />
+              <RHFTextField name="calls.maked" label={`${madeCalls} calls emis `} />
               <RHFTextField name="calls.received" label={`${callReceived} calls  recieved `} />
             </Box>
 
