@@ -1,5 +1,5 @@
-import {  useState } from 'react';
-import {  EventDropArg } from '@fullcalendar/core';
+import { useState } from 'react';
+import { EventDropArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Dialog, DialogTitle } from '@mui/material';
 
@@ -130,7 +130,7 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
       console.error(error);
     }
   };
-
+  const showModal = isEdit || isCreate || isDelete;
   const dataFiltered = applyFilter({
     inputData: events,
     filterStartDate: picker.startDate,
@@ -178,17 +178,19 @@ const Calendar = ({ isDelete, isEdit, userId, isCreate }: IProps) => {
           locale={frLocale}
         />
       </StyledCalendar>
-      <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
-        <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
-        <CalendarForm
-          event={selectedEvent}
-          range={selectedRange}
-          onCancel={handleCloseModal}
-          onCreateUpdateEvent={handleCreateUpdateEvent}
-          onDeleteEvent={handleDeleteEvent}
-          hasPermissionDelete={isDelete}
-        />
-      </Dialog>
+      {showModal && (
+        <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
+          <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
+          <CalendarForm
+            event={selectedEvent}
+            range={selectedRange}
+            onCancel={handleCloseModal}
+            onCreateUpdateEvent={handleCreateUpdateEvent}
+            onDeleteEvent={handleDeleteEvent}
+            hasPermissionDelete={isDelete}
+          />
+        </Dialog>
+      )}
     </>
   );
 };

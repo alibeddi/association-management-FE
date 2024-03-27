@@ -46,6 +46,12 @@ const usePermission = () => {
     ModelCode.WORKTIME,
     MethodCode.DELETE
   );
+  const hasPermissionCreateUserCalendar = findPermission(
+    user?.permissionGroup,
+    user?.extraPermissions,
+    ModelCode.WORKTIME,
+    MethodCode.CREATE
+  );
   return {
     // ROLE SUPER ADMIN
     isSuperAdmin,
@@ -57,6 +63,7 @@ const usePermission = () => {
     hasPermissionEditUserCalendar,
     hasPermissionViewUserCalendar,
     hasPermissionDeleteUserCalendar,
+    hasPermissionCreateUserCalendar,
   };
 };
 
