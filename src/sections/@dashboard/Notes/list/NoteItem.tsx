@@ -1,4 +1,3 @@
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
@@ -6,12 +5,10 @@ import Link from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import { useSnackbar } from 'notistack';
-
 import { Note } from '../../../../@types/Note';
 import CustomPopover, { usePopover } from '../../../../components/custom-popover';
 import Iconify from '../../../../components/iconify';
 import TextMaxLine from '../../../../components/text-max-line';
-import useResponsive from '../../../../hooks/useResponsive';
 import { useLocales } from '../../../../locales';
 import { deleteOneNote } from '../../../../redux/slices/notes/actions';
 import { dispatch } from '../../../../redux/store';
