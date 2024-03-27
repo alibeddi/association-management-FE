@@ -9,11 +9,11 @@ export const generateKpiTableArray = (
 
   const responseMap = new Map();
   statClientResponses.forEach(({ kpi, response }) => {
-    responseMap.set(kpi._id, response);
+    responseMap.set(kpi?._id, response);
   });
 
   statClientKpis?.forEach((kpi) => {
-    const response = responseMap.get(kpi._id) || [];
+    const response = responseMap.get(kpi?._id) || [];
     kpiTableArray.push({ kpi, response });
   });
 
