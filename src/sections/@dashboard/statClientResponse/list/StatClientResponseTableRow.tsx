@@ -90,6 +90,7 @@ export default function StatClientResponseTableRow({
     setOpenConfirm(false);
   };
 
+  
   const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
     setOpenPopover(event.currentTarget);
   };
