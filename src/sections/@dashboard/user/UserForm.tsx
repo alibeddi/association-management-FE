@@ -43,6 +43,7 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
     hasPermissionViewUserCalendar,
     hasPermissionEditUserCalendar,
     hasPermissionDeleteUserCalendar,
+    hasPermissionCreateUserCalendar,
     isSuperAdmin,
   } = usePermission();
   const [filterTab, setFilterTab] = useState('user details');
@@ -231,9 +232,9 @@ const UserForm = ({ user, isEdit = false }: IProps) => {
       {(isSuperAdmin || hasPermissionViewUserCalendar) && (
         <TabPanel value={USER_FILTER[2]}>
           <CalendarTab
-            isEdit={hasPermissionEditUserCalendar || isSuperAdmin}
-            isDelete={hasPermissionDeleteUserCalendar || isSuperAdmin}
-            isCreate
+            isEdit={(hasPermissionEditUserCalendar || isSuperAdmin) && isEdit}
+            isDelete={(hasPermissionDeleteUserCalendar || isSuperAdmin) && isEdit}
+            isCreate={(hasPermissionCreateUserCalendar || isSuperAdmin) && isEdit}
             userId={user?._id}
           />
         </TabPanel>
