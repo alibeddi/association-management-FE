@@ -73,7 +73,7 @@ function NoteItemHorizontal({ note }: Props) {
               </TextMaxLine>
             </Link>
             <TextMaxLine variant="body2" sx={{ color: 'text.secondary' }}>
-              {content}
+              <span dangerouslySetInnerHTML={{ __html: content }} />
             </TextMaxLine>
           </Stack>
 

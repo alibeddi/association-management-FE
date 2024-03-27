@@ -16,7 +16,7 @@ export default function NoteNewPage() {
         <title> Note: Create a new Note </title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Create a new Note"
           links={[

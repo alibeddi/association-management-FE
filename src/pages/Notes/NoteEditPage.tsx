@@ -25,7 +25,7 @@ export default function NoteEditPage() {
         <title> Note: Edit </title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Edit a Note"
           links={[

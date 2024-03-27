@@ -27,7 +27,7 @@ export default function NotesListPage() {
       <Helmet>
         <title>{`${translate('Notes')}`}</title>
       </Helmet>
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Notes"
           links={[{ name: 'Notes' }]}
