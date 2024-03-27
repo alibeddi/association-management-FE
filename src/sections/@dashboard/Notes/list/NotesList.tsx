@@ -58,7 +58,22 @@ export default function NotesListPage() {
         <NotesSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
       </Stack>
 
-      {status === IStatus.SUCCEEDED && notes.length > 0 ? (
+      {status === IStatus.SUCCEEDED && notes.length === 0 && (
+        <EmptyContent
+          title="No Notes Yet..."
+          sx={{
+            '& span.MuiBox-root': { height: 160 },
+          }}
+        />
+      )}
+
+      {status === IStatus.LOADING ? (
+        <Grid container spacing={3}>
+          {[...Array(12)].map((_, index) => (
+            <SkeletonPostItem key={index} />
+          ))}
+        </Grid>
+      ) : (
         <Box
           gap={3}
           display="grid"
@@ -73,19 +88,8 @@ export default function NotesListPage() {
             </Grid>
           ))}
         </Box>
-      ) : (
-        <EmptyContent
-          title="No Notes Yet..."
-          sx={{
-            '& span.MuiBox-root': { height: 160 },
-          }}
-        />
       )}
 
-      <Grid container spacing={3}>
-        {status === IStatus.LOADING &&
-          [...Array(12)].map((_, index) => <SkeletonPostItem key={index} />)}
-      </Grid>
       {paginatedNotes.meta?.totalDocs > limit && (
         <Pagination
           page={page}

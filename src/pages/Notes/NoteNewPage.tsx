@@ -29,6 +29,6 @@ export default function NoteNewPage() {
         />
         <NoteForm />
       </Container>
-    </>
+    </> 
   );
 }
