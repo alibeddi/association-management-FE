@@ -44,9 +44,6 @@ const CallList = () => {
   const [filterName, setFilterName] = useState('');
   const { translate } = useLocales();
   const denseHeight = dense ? 52 : 72;
-  const handleOpenConfirm = () => {};
-  const handleEditRow = (id: string) => {};
-  const openConfirm = false;
   useEffect(() => {
     dispatch(getAllCall({ page, limit: rowsPerPage, orderBy, order, filterName }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
@@ -71,13 +68,7 @@ const CallList = () => {
                   tableData?.map((row) => row._id || nanoid())
                 )
               }
-              action={
-                <Tooltip title={`${translate('Delete')}`}>
-                  <IconButton color="primary" onClick={() => handleOpenConfirm()}>
-                    <Iconify icon="material-symbols:delete" />
-                  </IconButton>
-                </Tooltip>
-              }
+  
             />
 
             <Scrollbar>
@@ -105,7 +96,6 @@ const CallList = () => {
                       return (
                         <CallRow
                           key={rowId}
-                          onEditRow={() => handleEditRow(rowId)}
                           row={row}
                           onSelectRow={() => onSelectRow(rowId)}
                           selected={selected.includes(rowId)}

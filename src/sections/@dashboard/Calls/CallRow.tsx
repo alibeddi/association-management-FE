@@ -21,14 +21,12 @@ import Iconify from '../../../components/iconify';
 type Props = {
   row: ICall;
   selected: boolean;
-  onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
 };
 
 export default function CallRow({
   row,
   selected,
-  onEditRow,
   onSelectRow,
 }: Props) {
   const [openConfirm, setOpenConfirm] = useState(false);
