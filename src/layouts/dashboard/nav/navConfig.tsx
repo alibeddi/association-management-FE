@@ -98,8 +98,7 @@ export default function navConfig(user: AuthUserType) {
     );
   const hasAccessToNotes =
     isSuperAdmin ||
-    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.NOTES, MethodCode.LIST);
-
+    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.NOTE, MethodCode.LIST);
   const config = [
     {
       subheader: '',
