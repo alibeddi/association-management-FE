@@ -53,18 +53,34 @@ export default function StatClientResponseTableRow({
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
   const { user } = useAuthContext();
+
   const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   // check current user permissions
-  const isAllowedToDeleteKpi =
+  const isAllowedToDeleteStatClientRes =
     isSuperAdmin ||
-    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.DELETE);
-  const isAllowedToEditKpi =
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT_RESPONSE,
+      MethodCode.DELETE
+    );
+  const isAllowedToEditStatClientRes =
     isSuperAdmin ||
-    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.EDIT);
-  const isAllowedToViewKpi =
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT_RESPONSE,
+      MethodCode.EDIT
+    );
+  const isAllowedToViewStatClientRes =
     isSuperAdmin ||
-    findPermission(user?.permissionGroup, user?.extraPermissions, ModelCode.KPI, MethodCode.VIEW);
+    findPermission(
+      user?.permissionGroup,
+      user?.extraPermissions,
+      ModelCode.STAT_CLIENT_RESPONSE,
+      MethodCode.VIEW
+    );
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -128,7 +144,7 @@ export default function StatClientResponseTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {isAllowedToDeleteKpi && (
+        {isAllowedToDeleteStatClientRes && (
           <MenuItem
             onClick={() => {
               handleOpenConfirm();
@@ -140,7 +156,7 @@ export default function StatClientResponseTableRow({
             Delete
           </MenuItem>
         )}
-        {isAllowedToEditKpi && (
+        {isAllowedToEditStatClientRes && (
           <MenuItem
             onClick={() => {
               onEditRow();
@@ -151,7 +167,7 @@ export default function StatClientResponseTableRow({
             Edit
           </MenuItem>
         )}
-        {isAllowedToViewKpi && (
+        {isAllowedToViewStatClientRes && (
           <MenuItem
             onClick={() => {
               onViewRow();
