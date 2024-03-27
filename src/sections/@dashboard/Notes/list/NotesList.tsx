@@ -21,9 +21,9 @@ const SORT_OPTIONS = [
 
 export default function NotesListPage() {
   const [notes, setNotes] = useState<Note[]>([]);
-
   const [sortBy, setSortBy] = useState('latest');
   const [page, setPage] = useState(1);
+  // limit of items per page
   const limit = 8;
 
   const { notes: paginatedNotes, status } = useSelector((state: RootState) => state.notes);

@@ -118,7 +118,7 @@ export default function AddNewTodo({
         callback(
           docs.map((doc: User | Office) => ({
             id: doc._id,
-            display: isUser(doc) ? doc.username || doc.email : doc.name,
+            display: isUser(doc) ? doc?.username || doc?.email : doc?.name,
           }))
         );
       })
