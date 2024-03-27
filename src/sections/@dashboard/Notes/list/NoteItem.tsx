@@ -6,6 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import { useSnackbar } from 'notistack';
 import { Note } from '../../../../@types/Note';
+import { RoleCode } from '../../../../@types/User';
+import { useAuthContext } from '../../../../auth/useAuthContext';
 import CustomPopover, { usePopover } from '../../../../components/custom-popover';
 import Iconify from '../../../../components/iconify';
 import TextMaxLine from '../../../../components/text-max-line';
@@ -25,11 +27,11 @@ type Props = {
 
 function NoteItemHorizontal({ note }: Props) {
   const popover = usePopover();
-
   const router = useRouter();
-
-  const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuthContext();
+  const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
 
   const { _id, title, author, createdAt, content } = note;
 
@@ -99,26 +101,30 @@ function NoteItemHorizontal({ note }: Props) {
           View
         </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            router.push(PATH_DASHBOARD.notes.edit(_id));
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem>
+        {isSuperAdmin && (
+          <MenuItem
+            onClick={() => {
+              popover.onClose();
+              router.push(PATH_DASHBOARD.notes.edit(_id));
+            }}
+          >
+            <Iconify icon="solar:pen-bold" />
+            Edit
+          </MenuItem>
+        )}
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            handleDeleteNote(_id);
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
+        {isSuperAdmin && (
+          <MenuItem
+            onClick={() => {
+              popover.onClose();
+              handleDeleteNote(_id);
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:trash-bin-trash-bold" />
+            Delete
+          </MenuItem>
+        )}
       </CustomPopover>
     </>
   );

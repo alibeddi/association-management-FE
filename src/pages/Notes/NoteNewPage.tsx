@@ -21,7 +21,7 @@ export default function NoteNewPage() {
           heading="Create a new Note"
           links={[
             {
-              name: 'Note',
+              name: 'Notes',
               href: PATH_DASHBOARD.notes.root,
             },
             { name: 'create' },

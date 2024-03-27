@@ -30,7 +30,7 @@ export default function NoteDetailsPage() {
           heading="Edit a Note"
           links={[
             {
-              name: 'Note',
+              name: 'Notes',
               href: PATH_DASHBOARD.notes.root,
             },
             { name: 'Edit Note' },
