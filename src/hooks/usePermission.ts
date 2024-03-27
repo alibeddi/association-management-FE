@@ -3,10 +3,12 @@ import { MethodCode, ModelCode } from '../@types/Permission';
 import { RoleCode } from '../@types/User';
 import { useAuthContext } from '../auth/useAuthContext';
 import { findPermission } from '../sections/@dashboard/Permissions/utils';
+import CallPermissions from "./Permission/calls"
 
 const usePermission = () => {
   const { user } = useAuthContext();
   const isSuperAdmin = user?.role === RoleCode.SUPER_ADMIN;
+  const callPermissions = CallPermissions(); 
   // calendar
   const hasPermissionCreateCalendar = findPermission(
     user?.permissionGroup,
@@ -64,6 +66,8 @@ const usePermission = () => {
     hasPermissionViewUserCalendar,
     hasPermissionDeleteUserCalendar,
     hasPermissionCreateUserCalendar,
+    // Calls
+    ...callPermissions
   };
 };
 

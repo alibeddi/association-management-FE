@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { GetAllProps, IGetAll } from "../../../@types/api";
 import { ICall } from "../../../@types/Call";
 import { fDate } from "../../../utils";
 import axios from "../../../utils/axios";
@@ -70,5 +71,25 @@ export const getCallById = createAsyncThunk('/calls/id',async({id}:{id:string})=
     throw new Error(response.statusText);
   } catch (error) {
     return Promise.reject(error.message ? error.message : data.message)
+  }
+})
+export const getAllCall = createAsyncThunk('/calls/all',async (payload:GetAllProps) =>{
+  let data;
+  const { page, order = 'desc', orderBy = 'createdAt', filterName, limit } = payload;
+  const params = {
+    page: page + 1,
+    limit,
+    sort: order === 'desc' ? `-${orderBy}` : `+${orderBy}`,
+    ...(filterName ? { name: filterName } : {}),
+  };
+  try {
+    const response = await axios.get('/calls',{params});
+    data = await response.data;
+    if(response.status === 200 ){
+      return data.data;
+    }
+    throw new Error(response.statusText);
+  } catch (error) {
+    return Promise.reject(error.message ? error.message: data?.message);
   }
 })

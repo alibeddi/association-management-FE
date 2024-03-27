@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ICall } from "../../../@types/Call"
 import { Meta, PaginationModel } from "../../../@types/Pagination"
 import { IStatus } from "../../../@types/status";
-import { createCallsToday, getCallByDate, getMyCalls,updateCall,getCallById } from "./actions";
+import { createCallsToday, getCallByDate, getMyCalls,updateCall,getCallById, getAllCall } from "./actions";
 
 type CallsState = {
-  calls: PaginationModel<ICall>;
+  calls: PaginationModel<ICall> ;
   call: ICall;
   status: IStatus;
 }
@@ -71,6 +71,16 @@ const slice = createSlice({
       state.call = {...payload.data}
     })
     .addCase(getCallById.rejected,(state)=>{
+      state.status = IStatus.FAILED;
+    })
+    .addCase(getAllCall.pending,(state)=>{
+      state.status = IStatus.LOADING;
+    })
+    .addCase(getAllCall.fulfilled, (state, { payload }) => {
+      state.status = IStatus.SUCCEEDED;
+      state.calls = payload;
+    })
+    .addCase(getAllCall.rejected,(state)=>{
       state.status = IStatus.FAILED;
     })
   }
