@@ -71,9 +71,9 @@ export default function BlogNewPostForm({ isEdit = false, currentNote }: Props) 
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const pattern = /data-id="([^"]*)"/g;
-      const mentions = Array.from(data.content.matchAll(pattern), (m) => m[1]);
+      const tags = Array.from(data.content.matchAll(pattern), (m) => m[1]);
       if (isEdit && currentNote) {
-        dispatch(editNote({ noteId: currentNote?._id, note: { ...data, mentions } }))
+        dispatch(editNote({ noteId: currentNote?._id, note: { ...data, tags } }))
           .unwrap()
           .then((res) => {
             enqueueSnackbar(`${translate(res.message)}`);
@@ -82,7 +82,7 @@ export default function BlogNewPostForm({ isEdit = false, currentNote }: Props) 
           })
           .catch((err) => enqueueSnackbar(`${translate(err.message)}`, { variant: 'error' }));
       } else {
-        dispatch(createNote({ ...data }))
+        dispatch(createNote({ ...data, tags }))
           .unwrap()
           .then((res) => {
             enqueueSnackbar(`${translate(res.message)}`);
@@ -95,7 +95,7 @@ export default function BlogNewPostForm({ isEdit = false, currentNote }: Props) 
       console.error(error);
     }
   };
-  
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>

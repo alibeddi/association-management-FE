@@ -64,7 +64,7 @@ export const getAllNotes = createAsyncThunk(
     let data;
     const { page, order = 'desc', orderBy = 'createdAt', search, limit = 10 } = payload;
     const params = {
-      page: page + 1,
+      page,
       limit,
       sort: order === 'desc' ? `-${orderBy}` : `+${orderBy}`,
       ...(search ? { search } : {}),

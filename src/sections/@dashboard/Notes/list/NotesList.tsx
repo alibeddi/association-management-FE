@@ -1,7 +1,8 @@
-import { Grid, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Box, Grid, Pagination, paginationClasses, Stack } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Note } from '../../../../@types/Note';
 import { IStatus } from '../../../../@types/status';
+import EmptyContent from '../../../../components/empty-content';
 import { SkeletonPostItem } from '../../../../components/skeleton';
 import { getAllNotes } from '../../../../redux/slices/notes/actions';
 import { dispatch, RootState, useSelector } from '../../../../redux/store';
@@ -22,23 +23,29 @@ export default function NotesListPage() {
   const [notes, setNotes] = useState<Note[]>([]);
 
   const [sortBy, setSortBy] = useState('latest');
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
   const { notes: paginatedNotes, status } = useSelector((state: RootState) => state.notes);
 
   useEffect(() => {
     dispatch(
       getAllNotes({
-        page: 1,
-        limit: 10,
+        page,
+        limit,
         order: sortBy === 'latest' ? 'desc' : 'asc',
         orderBy: 'createdAt',
       })
     );
-  }, [sortBy]);
+  }, [sortBy, page]);
 
   useEffect(() => {
     setNotes(paginatedNotes.docs);
   }, [paginatedNotes]);
+
+  const handleChangePage = (event: ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage);
+  };
 
   const handleChangeSortBy = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSortBy(event.target.value);
@@ -51,19 +58,47 @@ export default function NotesListPage() {
         <NotesSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
       </Stack>
 
-      <Grid container spacing={3}>
-        {status === IStatus.LOADING &&
-          [...Array(12)].map((_, index) => <SkeletonPostItem key={index} />)}
-        {status === IStatus.SUCCEEDED && notes.length > 0 ? (
-          notes.map((note, index) => (
+      {status === IStatus.SUCCEEDED && notes.length > 0 ? (
+        <Box
+          gap={3}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+          }}
+        >
+          {notes.map((note, index) => (
             <Grid key={note._id} item xs={12} sm={6} md={(index === 0 && 6) || 3}>
               <NoteItemHorizontal note={note} />
             </Grid>
-          ))
-        ) : (
-          <>not found</>
-        )}
+          ))}
+        </Box>
+      ) : (
+        <EmptyContent
+          title="No Notes Yet..."
+          sx={{
+            '& span.MuiBox-root': { height: 160 },
+          }}
+        />
+      )}
+
+      <Grid container spacing={3}>
+        {status === IStatus.LOADING &&
+          [...Array(12)].map((_, index) => <SkeletonPostItem key={index} />)}
       </Grid>
+      {paginatedNotes.meta?.totalDocs > limit && (
+        <Pagination
+          page={page}
+          count={paginatedNotes.meta?.totalPages}
+          onChange={handleChangePage}
+          sx={{
+            mt: 8,
+            [`& .${paginationClasses.ul}`]: {
+              justifyContent: 'center',
+            },
+          }}
+        />
+      )}
     </>
   );
 }
