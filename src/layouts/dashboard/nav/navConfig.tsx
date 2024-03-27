@@ -144,7 +144,7 @@ export default function navConfig(user: AuthUserType) {
           title: 'notes',
           path: PATH_DASHBOARD.notes.root,
           icon: ICONS.notes,
-          toBeDisplayed: true,
+          toBeDisplayed: hasAccessToNotes,
         },
         {
           title: 'Stats client Answers',
