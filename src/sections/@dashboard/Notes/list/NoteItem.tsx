@@ -51,6 +51,7 @@ function NoteItemHorizontal({ note }: Props) {
         <Stack
           sx={{
             p: (theme) => theme.spacing(3, 3, 2, 3),
+            flexGrow: 1,
           }}
         >
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>

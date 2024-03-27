@@ -100,14 +100,14 @@ export default function BlogNewPostForm({ isEdit = false, currentNote }: Props) 
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
+          <Card sx={{ p: 3, overflow: 'visible' }}>
             <Stack spacing={3}>
               <RHFTextField name="title" label="Post Title" />
               <Stack spacing={1}>
                 <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                   Content
                 </Typography>
-                <RHFEditor simple name="content" />
+                <RHFEditor simple name="content" sx={{ overflow: 'visible' }} />
               </Stack>
             </Stack>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
