@@ -23,8 +23,6 @@ type Props = {
   selected: boolean;
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
-  onDeleteRow: VoidFunction;
-  onViewRow: VoidFunction;
 };
 
 export default function CallRow({
@@ -32,8 +30,6 @@ export default function CallRow({
   selected,
   onEditRow,
   onSelectRow,
-  onDeleteRow,
-  onViewRow,
 }: Props) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const {
@@ -64,9 +60,6 @@ export default function CallRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
 
         <TableCell>
           <Typography variant="subtitle2" noWrap>
@@ -78,25 +71,6 @@ export default function CallRow({
         <TableCell align="left">{maked}</TableCell>
         <TableCell align="left">{received}</TableCell>
       </TableRow>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              onDeleteRow();
-              handleCloseConfirm();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
     </>
   );
 }

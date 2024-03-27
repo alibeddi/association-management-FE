@@ -45,11 +45,8 @@ const CallList = () => {
   const { translate } = useLocales();
   const denseHeight = dense ? 52 : 72;
   const handleOpenConfirm = () => {};
-  const handleDeleteRow = (id: string) => {};
   const handleEditRow = (id: string) => {};
   const openConfirm = false;
-  const handleDeleteRows = (data: any) => console.log(data);
-  const handleCloseConfirm = () => {};
   useEffect(() => {
     dispatch(getAllCall({ page, limit: rowsPerPage, orderBy, order, filterName }));
   }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
@@ -92,12 +89,7 @@ const CallList = () => {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked: boolean) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData?.map((row) => row._id || nanoid())
-                    )
-                  }
+             
                 />
 
                 <TableBody>
@@ -114,11 +106,9 @@ const CallList = () => {
                         <CallRow
                           key={rowId}
                           onEditRow={() => handleEditRow(rowId)}
-                          onDeleteRow={() => handleDeleteRow(rowId)}
                           row={row}
                           onSelectRow={() => onSelectRow(rowId)}
                           selected={selected.includes(rowId)}
-                          onViewRow={() => console.log(row)}
                         />
                       );
                     })
@@ -142,28 +132,7 @@ const CallList = () => {
         </Card>
       </Container>
 
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selected?.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
+
     </>
   );
 };

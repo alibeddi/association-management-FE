@@ -31,7 +31,6 @@ export default function Dashboard() {
       })
     );
   }, [dispatch, callDate]);
-
   const { call } = useSelector((state: RootState) => state.calls);
   const handleCreateUpdate = async (callData: ICall) => {
     if (!call) {
@@ -84,7 +83,7 @@ export default function Dashboard() {
           ]}
         />
         <CallForm handleCreateUpdate={handleCreateUpdate} callSelected={call} />
-        <CallList />
+      { (hasPermissionListCall||isSuperAdmin)  && <CallList />}
       </Container>
     </>
   );
