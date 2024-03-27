@@ -9,12 +9,3 @@ export type ICall = {
   user?: User;
   _id?: string;
 }
-// export type ICallTable = {
-//   calls: {
-//     maked:number,
-//     received: number
-//   };
-//   date: Date | string | undefined;
-//   user:User;
-//   _id: string;
-// }

@@ -1,16 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { GetAllProps } from '../../../@types/api';
 import axios from '../../../utils/axios';
 
-type getAllProps = {
-  page: number;
-  limit: number;
-  orderBy?: string;
-  order?: string;
-  name?: string;
-  search?: string;
-};
 
-export const getAllOffices = createAsyncThunk('/offices/all', async (payload: getAllProps) => {
+export const getAllOffices = createAsyncThunk('/offices/all', async (payload: GetAllProps) => {
   let data;
   const { page, order = 'desc', orderBy = 'createdAt', limit = 10, name, search } = payload;
   const params = {

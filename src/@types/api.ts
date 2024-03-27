@@ -6,8 +6,6 @@ export type IGetAll = {
 }
 export interface GetAllProps extends IGetAll {
   filterName?: string;
-  page: number;
-  limit: number;
-  orderBy?: string;
-  order?: string;
+  name?: string;
+  search?: string;
 }
