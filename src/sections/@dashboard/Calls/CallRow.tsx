@@ -1,6 +1,14 @@
 import { useState } from 'react';
 // @mui
-import { Button, Checkbox, TableCell, TableRow, Typography, MenuItem, IconButton } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  TableCell,
+  TableRow,
+  Typography,
+  MenuItem,
+  IconButton,
+} from '@mui/material';
 
 import MenuPopover from '../../../components/menu-popover';
 import { useAuthContext } from '../../../auth/useAuthContext';
@@ -53,7 +61,6 @@ export default function CallRow({
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
-  const handleEditCall = () => console.log('edit call');
   return (
     <>
       <TableRow hover selected={selected}>
@@ -70,55 +77,8 @@ export default function CallRow({
         <TableCell align="left">{fDate(date)}</TableCell>
         <TableCell align="left">{maked}</TableCell>
         <TableCell align="left">{received}</TableCell>
-        <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
       </TableRow>
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        {(hasPermissionViewCall || isSuperAdmin) && (
-          <MenuItem
-            onClick={() => {
-              console.log('true');
-            }}
-            sx={{ color: 'principal.main' }}
-          >
-            <Iconify icon="carbon:view-filled" />
-            View
-          </MenuItem>
-        )}
 
-        {(hasPermissionUpdateCall || isSuperAdmin) && (
-          <MenuItem
-            onClick={() => {
-              handleEditCall();
-            }}
-            sx={{ color: 'principal.main' }}
-          >
-            <Iconify icon="eva:edit-fill" />
-            Edit
-          </MenuItem>
-        )}
-
-        {(hasPermissionDeleteCall || isSuperAdmin) && (
-          <MenuItem
-            onClick={() => {
-              handleOpenConfirm();
-              handleClosePopover();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="eva:trash-2-outline" />
-            Delete
-          </MenuItem>
-        )}
-      </MenuPopover>
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}

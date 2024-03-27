@@ -4,6 +4,5 @@ export const TABLE_HEAD = {
     { id: 'date', label: 'date', align: 'left' },
     { id: 'calls.received', label: 'received', align: 'left' },
     { id: 'calls.maked', label: 'maked', align: 'left' },
-    { label:"actions",align:'center' }
   ]
 }
