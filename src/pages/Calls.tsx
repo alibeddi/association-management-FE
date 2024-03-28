@@ -23,7 +23,7 @@ export default function Dashboard() {
   const { themeStretch } = useSettingsContext();
   const currentDate = CurrentDate();
   const [callDate, setCallDate] = useState<Date | string>(currentDate);
-  const {hasPermissionListCall,isSuperAdmin} = usePermission()
+  const { hasPermissionListCall, isSuperAdmin } = usePermission();
   useEffect(() => {
     dispatch(
       getCallByDate({
@@ -65,11 +65,14 @@ export default function Dashboard() {
         <title> CAll</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'xl'} sx={{
-        display:"flex",
-        flexDirection:"column",
-        gap:"2rem"
-      }}>
+      <Container
+        maxWidth={themeStretch ? false : 'xl'}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2rem',
+        }}
+      >
         <CustomBreadcrumbs
           heading="Calls"
           links={[
@@ -83,7 +86,7 @@ export default function Dashboard() {
           ]}
         />
         <CallForm handleCreateUpdate={handleCreateUpdate} callSelected={call} />
-      { (hasPermissionListCall||isSuperAdmin)  && <CallList />}
+        {(hasPermissionListCall || isSuperAdmin) && <CallList />}
       </Container>
     </>
   );

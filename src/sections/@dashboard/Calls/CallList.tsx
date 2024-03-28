@@ -27,6 +27,7 @@ const CallList = () => {
     order,
     orderBy,
     rowsPerPage,
+    setPage,
     selected,
     onSelectAllRows,
     onSort,
@@ -37,6 +38,8 @@ const CallList = () => {
   const {
     startDate,
     endDate,
+    setStartDate,
+    setEndDate,
     onChangeStartDate,
     onChangeEndDate,
     open: openPicker,
@@ -57,6 +60,13 @@ const CallList = () => {
   const { calls, status } = useSelector((store) => store.calls);
   const [tableData, setTableData] = useState<ICall[]>(calls?.docs);
   const isNotFound = tableData.length === 0;
+  const handleResetFilter = () => {
+    setPage(0);
+    if (setStartDate && setEndDate) {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
   useEffect(() => {
     setTableData(calls.docs);
   }, [calls]);
@@ -76,6 +86,7 @@ const CallList = () => {
             isSelected={isSelectedValuePicker}
             isError={isError}
             shortLabel={shortLabel}
+            resetFilter={handleResetFilter}
           />
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
