@@ -22,4 +22,5 @@ export type DateRangePickerProps = {
   //
   setStartDate?: React.Dispatch<React.SetStateAction<Date | null>>;
   setEndDate?: React.Dispatch<React.SetStateAction<Date | null>>;
+  
 };
