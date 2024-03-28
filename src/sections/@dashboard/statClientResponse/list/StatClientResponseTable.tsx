@@ -3,7 +3,6 @@ import {
   Card,
   Divider,
   IconButton,
-  Skeleton,
   Tab,
   Table,
   TableBody,
@@ -22,6 +21,7 @@ import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
 import LoadingTable from '../../../../components/loadingTable/LoadingTable';
 import Scrollbar from '../../../../components/scrollbar';
+import { TabSkeleton } from '../../../../components/skeleton';
 import {
   emptyRows,
   TableEmptyRows,
@@ -382,8 +382,4 @@ export default function StatClientResponsesTable() {
       />
     </>
   );
-}
-
-function TabSkeleton() {
-  return <Skeleton animation="wave" width={75} height={25} sx={{ bgcolor: 'white' }} />;
 }
