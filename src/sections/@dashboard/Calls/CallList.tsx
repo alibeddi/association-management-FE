@@ -1,10 +1,8 @@
-import { Translate } from '@mui/icons-material';
-import { Card, IconButton, TableBody, Table, TableContainer, Tooltip, Button } from '@mui/material';
+import { Card, TableBody, Table, TableContainer } from '@mui/material';
 import { Container } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
 import { IStatus } from '../../../@types/status';
-import Iconify from '../../../components/iconify';
 import {
   TableHeadCustom,
   TableNoData,
@@ -13,14 +11,14 @@ import {
   useTable,
 } from '../../../components/table';
 import { TABLE_HEAD } from '../../../constant/table_head';
-import { useLocales } from '../../../locales';
 import Scrollbar from '../../../components/scrollbar';
 import LoadingTable from '../../../components/loadingTable/LoadingTable';
 import { ICall } from '../../../@types/Call';
-import ConfirmDialog from '../../../components/confirm-dialog';
 import { dispatch, useSelector } from '../../../redux/store';
 import { getAllCall } from '../../../redux/slices/calls/actions';
 import CallRow from './CallRow';
+import CallToolbar from './CallToolbar';
+import { useDateRangePicker } from '../../../components/date-range-picker';
 
 const CallList = () => {
   const {
@@ -29,24 +27,33 @@ const CallList = () => {
     order,
     orderBy,
     rowsPerPage,
-    setPage,
-    //
     selected,
-    setSelected,
-    onSelectRow,
     onSelectAllRows,
-    //
     onSort,
     onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
   } = useTable({ defaultOrderBy: 'createdAt', defaultOrder: 'desc' });
+  const {
+    startDate,
+    endDate,
+    onChangeStartDate,
+    onChangeEndDate,
+    open: openPicker,
+    onOpen: onOpenPicker,
+    onClose: onClosePicker,
+    onReset: onResetPicker,
+    isSelected: isSelectedValuePicker,
+    isError,
+    shortLabel,
+  } = useDateRangePicker(null, null);
   const [filterName, setFilterName] = useState('');
-  const { translate } = useLocales();
   const denseHeight = dense ? 52 : 72;
   useEffect(() => {
-    dispatch(getAllCall({ page, limit: rowsPerPage, orderBy, order, filterName }));
-  }, [dispatch, page, rowsPerPage, orderBy, order, filterName]);
+    dispatch(
+      getAllCall({ page, limit: rowsPerPage, orderBy, order, filterName, startDate, endDate })
+    );
+  }, [dispatch, page, rowsPerPage, orderBy, order, filterName, startDate, endDate]);
   const { calls, status } = useSelector((store) => store.calls);
   const [tableData, setTableData] = useState<ICall[]>(calls?.docs);
   const isNotFound = tableData.length === 0;
@@ -57,6 +64,19 @@ const CallList = () => {
     <>
       <Container maxWidth={false}>
         <Card>
+          <CallToolbar
+            startDate={startDate}
+            endDate={endDate}
+            onChangeStartDate={onChangeStartDate}
+            onChangeEndDate={onChangeEndDate}
+            open={openPicker}
+            onOpen={onOpenPicker}
+            onClose={onClosePicker}
+            onReset={onResetPicker}
+            isSelected={isSelectedValuePicker}
+            isError={isError}
+            shortLabel={shortLabel}
+          />
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
               dense={dense}
@@ -68,7 +88,6 @@ const CallList = () => {
                   tableData?.map((row) => row._id || nanoid())
                 )
               }
-  
             />
 
             <Scrollbar>
@@ -80,7 +99,6 @@ const CallList = () => {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-             
                 />
 
                 <TableBody>
@@ -93,14 +111,7 @@ const CallList = () => {
                   ) : (
                     tableData?.map((row: ICall) => {
                       const rowId = row._id || nanoid();
-                      return (
-                        <CallRow
-                          key={rowId}
-                          row={row}
-                          onSelectRow={() => onSelectRow(rowId)}
-                          selected={selected.includes(rowId)}
-                        />
-                      );
+                      return <CallRow key={rowId} row={row} selected={selected.includes(rowId)} />;
                     })
                   )}
 
@@ -121,8 +132,6 @@ const CallList = () => {
           />
         </Card>
       </Container>
-
-
     </>
   );
 };

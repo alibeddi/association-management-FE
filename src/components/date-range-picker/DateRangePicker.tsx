@@ -10,7 +10,7 @@ import {
   DialogContent,
   FormHelperText,
 } from '@mui/material';
-import { DatePicker,CalendarPicker } from '@mui/x-date-pickers';
+import { DatePicker, CalendarPicker } from '@mui/x-date-pickers';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 import { DateRangePickerProps } from './types';
