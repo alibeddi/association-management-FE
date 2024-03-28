@@ -76,7 +76,7 @@ export default function AddNewTodo({
     if (!isEdit) {
       reset(defaultValues);
     }
-  }, [isEdit, currentTodo]);
+  }, [isEdit, currentTodo, defaultValues, reset]);
 
   const onSubmit = async (data: FormValues) => {
     try {

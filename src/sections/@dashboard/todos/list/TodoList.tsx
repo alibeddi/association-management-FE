@@ -2,6 +2,7 @@ import { Card, CardHeader, Divider, Grid, Tab, Tabs } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import { IStatus } from '../../../../@types/status';
 import { Todo } from '../../../../@types/Todo';
 import EmptyContent from '../../../../components/empty-content';
 import { TablePaginationCustom, useTable } from '../../../../components/table';
@@ -10,9 +11,10 @@ import {
   getTodosAssignedToMe,
   getTodosCreatedbyMe,
 } from '../../../../redux/slices/todos/actions';
-import { RootState, dispatch, useSelector } from '../../../../redux/store';
+import { dispatch, RootState, useSelector } from '../../../../redux/store';
 import { AddNewTodo } from '../form';
 import { TaskItem } from './TodoItem';
+import TodoSkeleton from './TodoSkeleton';
 import TodosToolbar from './TodosToolbar';
 
 const TODO_STATUS_OPTIONS = ['all', 'todo', 'completed'];
@@ -35,7 +37,7 @@ export default function TodoList() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { todos: data } = useSelector((state: RootState) => state.todos);
+  const { todos: data, status } = useSelector((state: RootState) => state.todos);
 
   const [filterTodos, setFilterTodos] = useState('Created By me');
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -186,18 +188,26 @@ export default function TodoList() {
         />
         <Grid item xs={12} md={6} lg={8}>
           <CardHeader title="Tasks" />
-          {todos.map((task) => (
-            <TaskItem
-              highlighted={highlightedTodoId}
-              key={task._id}
-              task={task}
-              onDeleteTodo={handleDeleteTodo}
-              onEditTodo={handleEditTodo}
-              canDelete={filterTodos === 'Created By me'}
-            />
-          ))}
+          {status === IStatus.LOADING ? (
+            <>
+              {[...Array(rowsPerPage)].map((_, index) => (
+                <TodoSkeleton key={index} />
+              ))}
+            </>
+          ) : (
+            todos.map((task) => (
+              <TaskItem
+                highlighted={highlightedTodoId}
+                key={task._id}
+                task={task}
+                onDeleteTodo={handleDeleteTodo}
+                onEditTodo={handleEditTodo}
+                canDelete={filterTodos === 'Created By me'}
+              />
+            ))
+          )}
 
-          {isNotFound && (
+          {status === IStatus.SUCCEEDED && isNotFound && (
             <EmptyContent
               title="No Data"
               sx={{

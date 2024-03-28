@@ -20,8 +20,8 @@ const mentionModule = {
     dispatch(getOfficesAndUsers({ page: 1, limit: 10, search: searchTerm }))
       .unwrap()
       .then((res) => {
-        const data = res.data;
-        const docs = [...data.offices, ...data.users];
+        const { offices, users } = res.data;
+        const docs = [...offices, ...users];
         renderList(
           docs.map((doc: User | Office) => ({
             id: doc._id,
