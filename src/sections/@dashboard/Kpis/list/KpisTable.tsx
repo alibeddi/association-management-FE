@@ -3,10 +3,14 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IKpi } from '../../../../@types/Kpi';
+import { IStatus } from '../../../../@types/status';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import Iconify from '../../../../components/iconify';
+import LoadingTable from '../../../../components/loadingTable/LoadingTable';
 import Scrollbar from '../../../../components/scrollbar';
 import {
+  emptyRows,
+  TableEmptyRows,
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
@@ -67,7 +71,9 @@ export default function KpisTable() {
   const [filterFrontType, setFilterFrontType] = useState('all');
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const { kpis } = useSelector((state: RootState) => state?.kpis);
+  const denseHeight = dense ? 52 : 72;
+
+  const { kpis, status } = useSelector((state: RootState) => state?.kpis);
 
   useEffect(() => {
     dispatch(
@@ -82,7 +88,7 @@ export default function KpisTable() {
   const isFiltered = search !== '' || filterFrontType !== 'all';
 
   const isNotFound =
-    (!tableData.length && !!search) ||
+    (status === IStatus.SUCCEEDED && !tableData.length && !!search) ||
     (!tableData.length && !!filterFrontType) ||
     !tableData.length;
 
@@ -214,25 +220,40 @@ export default function KpisTable() {
               />
 
               <TableBody>
-                {tableData?.map((row: IKpi) => (
-                  <KpiTableRow
-                    key={row._id}
-                    row={row}
-                    selected={selected.includes(row._id)}
-                    onSelectRow={() => onSelectRow(row._id)}
-                    onDeleteRow={() => {
-                      handleDeleteRow(row._id);
-                    }}
-                    onEditRow={() => {
-                      handleEditRow(row);
-                    }}
-                    onViewRow={() => {
-                      handleViewRow(row);
-                    }}
+                {status === IStatus.LOADING ? (
+                  <LoadingTable
+                    height={denseHeight}
+                    fields={TABLE_HEAD.length}
+                    rowsPerPage={rowsPerPage}
                   />
-                ))}
-
-                <TableNoData isNotFound={isNotFound} />
+                ) : (
+                  <>
+                    {tableData?.map((row: IKpi) => (
+                      <KpiTableRow
+                        key={row._id}
+                        row={row}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => {
+                          handleDeleteRow(row._id);
+                        }}
+                        onEditRow={() => {
+                          handleEditRow(row);
+                        }}
+                        onViewRow={() => {
+                          handleViewRow(row);
+                        }}
+                      />
+                    ))}
+                    <TableEmptyRows
+                      height={denseHeight}
+                      emptyRows={emptyRows(page, rowsPerPage, kpis.meta.totalDocs || 0)}
+                    />
+                  </>
+                )}
+                {status === IStatus.SUCCEEDED && tableData.length === 0 && (
+                  <TableNoData isNotFound={isNotFound} />
+                )}
               </TableBody>
             </Table>
           </Scrollbar>
