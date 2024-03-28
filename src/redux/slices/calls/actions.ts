@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { endOfDay, startOfDay } from 'date-fns';
 import { GetAllProps, IGetAll } from '../../../@types/api';
 import { ICall } from '../../../@types/Call';
 import { fDate } from '../../../utils';
@@ -103,8 +104,8 @@ export const getAllCall = createAsyncThunk('/calls/all', async (payload: GetAll)
     endDate,
   };
   if (startDate && endDate) {
-    params.startDate = new Date(startDate).toISOString();
-    params.endDate = new Date(endDate).toISOString();
+    params.startDate = startOfDay(new Date(startDate));
+    params.endDate = endOfDay(new Date(endDate));
   }
   try {
     const response = await axios.get('/calls', { params });
