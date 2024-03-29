@@ -35,7 +35,7 @@ const slice = createSlice({
     // create
     builder
       .addCase(createNewTodo.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(createNewTodo.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -47,7 +47,7 @@ const slice = createSlice({
     // get Created By me
     builder
       .addCase(getTodosCreatedbyMe.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(getTodosCreatedbyMe.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -59,7 +59,7 @@ const slice = createSlice({
     // get Assigned To me
     builder
       .addCase(getTodosAssignedToMe.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(getTodosAssignedToMe.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;
@@ -71,7 +71,7 @@ const slice = createSlice({
     // Delete one
     builder
       .addCase(deleteOneTodo.pending, (state) => {
-        state.status = IStatus.FAILED;
+        state.status = IStatus.LOADING;
       })
       .addCase(deleteOneTodo.fulfilled, (state, action) => {
         state.status = IStatus.SUCCEEDED;

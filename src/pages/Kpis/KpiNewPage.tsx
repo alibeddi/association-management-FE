@@ -3,7 +3,7 @@ import { Container } from '@mui/material';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
-import { UserForm } from '../../sections/@dashboard/Kpis/form';
+import { KpiForm } from '../../sections/@dashboard/Kpis/form';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ export default function KpiNewPage() {
             { name: 'New Kpi' },
           ]}
         />
-        <UserForm />
+        <KpiForm />
       </Container>
     </>
   );

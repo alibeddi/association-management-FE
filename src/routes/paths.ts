@@ -44,4 +44,10 @@ export const PATH_DASHBOARD = {
   analytics: path(ROOTS_DASHBOARD, '/analytics'),
   Notifications: path(ROOTS_DASHBOARD, '/notifications'),
   offices: path(ROOTS_DASHBOARD, '/offices'),
+  notes: {
+    root: path(ROOTS_DASHBOARD, '/notes'),
+    edit: (id: string) => path(ROOTS_DASHBOARD, `/notes/edit/${id}`),
+    view: (id: string) => path(ROOTS_DASHBOARD, `/notes/view/${id}`),
+    new: path(ROOTS_DASHBOARD, '/notes/new'),
+  },
 };

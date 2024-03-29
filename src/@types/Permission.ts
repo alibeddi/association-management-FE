@@ -12,6 +12,7 @@ export enum ModelCode {
   TODO = 'TODO',
   NOTIFICATION = 'NOTIFICATION',
   OFFICE = 'OFFICE',
+  NOTE = 'NOTE',
 }
 
 export enum MethodCode {

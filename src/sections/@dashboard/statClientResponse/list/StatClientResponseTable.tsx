@@ -16,10 +16,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { StatClientResponse } from '../../../../@types/StatClientResponse';
 import { IStatus } from '../../../../@types/status';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import EmptyContent from '../../../../components/empty-content';
 import FilterModal from '../../../../components/FilterModal';
 import Iconify from '../../../../components/iconify';
 import LoadingTable from '../../../../components/loadingTable/LoadingTable';
 import Scrollbar from '../../../../components/scrollbar';
+import { TabSkeleton } from '../../../../components/skeleton';
 import {
   emptyRows,
   TableEmptyRows,
@@ -89,7 +91,9 @@ export default function StatClientResponsesTable() {
     (state: RootState) => state.statClientResponses
   );
 
-  const { statsClients } = useSelector((state: RootState) => state.statsClient);
+  const { statsClients, status: statsClientsStatus } = useSelector(
+    (state: RootState) => state.statsClient
+  );
   const { filters, isFiltered } = useSelector((state: RootState) => state.statClientResponses);
 
   const { docs: statsClientsDocs } = statsClients;
@@ -216,112 +220,142 @@ export default function StatClientResponsesTable() {
     <>
       <Card>
         <StatClientResponseTableToolbar handleResetFilter={handleResetFilter} />
-        <Tabs
-          value={filterStatClient}
-          onChange={handleChangeTabs}
-          sx={{
-            px: 2,
-            bgcolor: 'background.neutral',
-          }}
-          variant="scrollable"
-          scrollButtons
-          aria-label="scrollable auto tabs example"
-        >
-          {statsClientsDocs.map((tab) => (
-            <Tab key={tab._id} label={tab.name} value={tab?._id} />
-          ))}
-        </Tabs>
-        <Divider />
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
-            dense={dense}
-            numSelected={selected.length}
-            rowCount={tableData.length}
-            onSelectAllRows={(checked) =>
-              onSelectAllRows(
-                checked,
-                tableData.map((row) => row?._id)
-              )
-            }
-            action={
-              <Tooltip title={`${translate('Delete')}`}>
-                <IconButton color="primary" onClick={() => handleOpenConfirm()}>
-                  <Iconify icon="material-symbols:delete" />
-                </IconButton>
-              </Tooltip>
-            }
+        {statsClientsStatus === IStatus.SUCCEEDED && statsClientsDocs.length === 0 && (
+          <EmptyContent
+            title="No Stat-Clients Yet..."
+            sx={{
+              '& span.MuiBox-root': { height: 160 },
+            }}
           />
+        )}
+        {statsClientsStatus === IStatus.LOADING ? (
+          <Tabs
+            value={filterStatClient}
+            onChange={handleChangeTabs}
+            sx={{
+              px: 2,
+              bgcolor: 'background.neutral',
+            }}
+            variant="scrollable"
+            scrollButtons
+            aria-label="scrollable auto tabs example"
+          >
+            {[...Array(10)].map((_, index) => (
+              <Tab key={index} label={<TabSkeleton />} />
+            ))}
+          </Tabs>
+        ) : (
+          <Tabs
+            value={filterStatClient}
+            onChange={handleChangeTabs}
+            sx={{
+              px: 2,
+              bgcolor: 'background.neutral',
+            }}
+            variant="scrollable"
+            scrollButtons
+            aria-label="scrollable auto tabs example"
+          >
+            {statsClientsDocs.map((tab) => (
+              <Tab key={tab._id} label={tab.name} value={tab?._id} />
+            ))}
+          </Tabs>
+        )}
 
-          <Scrollbar>
-            <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={order}
-                orderBy={orderBy}
-                headLabel={tableHead}
-                rowCount={tableData.length}
-                numSelected={selected.length}
-                onSort={onSort}
-                onSelectAllRows={(checked: boolean) =>
-                  onSelectAllRows(
-                    checked,
-                    tableData.map((row) => row._id)
-                  )
-                }
-              />
+        <Divider />
+        {statsClientsStatus === IStatus.SUCCEEDED && statsClientsDocs.length > 0 && (
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              dense={dense}
+              numSelected={selected.length}
+              rowCount={tableData.length}
+              onSelectAllRows={(checked) =>
+                onSelectAllRows(
+                  checked,
+                  tableData.map((row) => row?._id)
+                )
+              }
+              action={
+                <Tooltip title={`${translate('Delete')}`}>
+                  <IconButton color="primary" onClick={() => handleOpenConfirm()}>
+                    <Iconify icon="material-symbols:delete" />
+                  </IconButton>
+                </Tooltip>
+              }
+            />
 
-              <TableBody>
-                {status === IStatus.LOADING ? (
-                  <LoadingTable
-                    height={denseHeight}
-                    fields={tableHead.length}
-                    rowsPerPage={rowsPerPage}
-                  />
-                ) : (
-                  <>
-                    {tableData?.map((row: StatClientResponse) => (
-                      <StatClientResponseTableRow
-                        filterStatClient={filterStatClient}
-                        key={row._id}
-                        row={row}
-                        selected={selected.includes(row._id)}
-                        onSelectRow={() => onSelectRow(row._id)}
-                        onDeleteRow={() => {
-                          handleDeleteRow(row._id);
-                        }}
-                        onEditRow={() => {
-                          handleEditRow(row);
-                        }}
-                        onViewRow={() => {
-                          handleViewRow(row);
-                        }}
-                      />
-                    ))}
-                    <TableEmptyRows
+            <Scrollbar>
+              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={tableHead}
+                  rowCount={tableData.length}
+                  numSelected={selected.length}
+                  onSort={onSort}
+                  onSelectAllRows={(checked: boolean) =>
+                    onSelectAllRows(
+                      checked,
+                      tableData.map((row) => row._id)
+                    )
+                  }
+                />
+
+                <TableBody>
+                  {status === IStatus.LOADING ? (
+                    <LoadingTable
                       height={denseHeight}
-                      emptyRows={emptyRows(
-                        page,
-                        rowsPerPage,
-                        statClientResponses.meta.totalDocs || 0
-                      )}
+                      fields={tableHead.length}
+                      rowsPerPage={rowsPerPage}
                     />
-                  </>
-                )}
+                  ) : (
+                    <>
+                      {tableData?.map((row: StatClientResponse) => (
+                        <StatClientResponseTableRow
+                          filterStatClient={filterStatClient}
+                          key={row._id}
+                          row={row}
+                          selected={selected.includes(row._id)}
+                          onSelectRow={() => onSelectRow(row._id)}
+                          onDeleteRow={() => {
+                            handleDeleteRow(row._id);
+                          }}
+                          onEditRow={() => {
+                            handleEditRow(row);
+                          }}
+                          onViewRow={() => {
+                            handleViewRow(row);
+                          }}
+                        />
+                      ))}
+                      <TableEmptyRows
+                        height={denseHeight}
+                        emptyRows={emptyRows(
+                          page,
+                          rowsPerPage,
+                          statClientResponses.meta.totalDocs || 0
+                        )}
+                      />
+                    </>
+                  )}
 
-                <TableNoData isNotFound={isNotFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-
-        <TablePaginationCustom
-          count={statClientResponses.meta.totalDocs || 0}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          onPageChange={onChangePage}
-          onRowsPerPageChange={onChangeRowsPerPage}
-          dense={dense}
-          onChangeDense={onChangeDense}
-        />
+                  <TableNoData isNotFound={isNotFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
+        {statsClientsStatus === IStatus.SUCCEEDED && statsClientsDocs.length > 0 && (
+          <TablePaginationCustom
+            count={statClientResponses.meta.totalDocs || 0}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={onChangePage}
+            onRowsPerPageChange={onChangeRowsPerPage}
+            dense={dense}
+            onChangeDense={onChangeDense}
+          />
+        )}
       </Card>
       <FilterModal open={openFilter} onClose={handleClosefFilter} />
       <ConfirmDialog

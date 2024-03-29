@@ -1,1 +1,1 @@
-export { default as UserForm } from './kpiForm';
+export { default as KpiForm } from './kpiForm';

@@ -76,7 +76,7 @@ export default function AddNewTodo({
     if (!isEdit) {
       reset(defaultValues);
     }
-  }, [isEdit, currentTodo]);
+  }, [isEdit, currentTodo, defaultValues, reset]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -118,7 +118,7 @@ export default function AddNewTodo({
         callback(
           docs.map((doc: User | Office) => ({
             id: doc._id,
-            display: isUser(doc) ? doc.username || doc.email : doc.name,
+            display: isUser(doc) ? doc?.username || doc?.email : doc?.name,
           }))
         );
       })
@@ -139,7 +139,7 @@ export default function AddNewTodo({
           margin: '15px',
         }}
       >
-        <Stack className="mention-input" sx={{ flexGrow: 1 }}>
+        <Stack sx={{ flexGrow: 1 }}>
           <Controller
             control={control}
             name="todo"
@@ -162,7 +162,7 @@ export default function AddNewTodo({
                       }}
                       markup="@[__display__](__id__)" // To highlight tagged users
                       renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                        <MenuItem sx={{ zIndex: 99999 }}>
+                        <MenuItem>
                           <ListItemAvatar>
                             <Avatar src={suggestion.display} alt={suggestion.display} />
                           </ListItemAvatar>

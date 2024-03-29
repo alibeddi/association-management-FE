@@ -8,6 +8,7 @@ import ic_stat_client_response from './ic_stat_client_response.svg';
 import ic_analytics from './ic_analytics.svg';
 import ic_todolist from './ic_todolist.svg';
 import ic_offices from './ic_offices.svg';
+import ic_notes from './ic_notes.svg';
 
 export {
   ic_calendar,
@@ -20,4 +21,5 @@ export {
   ic_todolist,
   ic_analytics,
   ic_offices,
+  ic_notes,
 };
