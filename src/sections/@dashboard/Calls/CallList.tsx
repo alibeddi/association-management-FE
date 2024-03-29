@@ -17,7 +17,7 @@ import { ICall } from '../../../@types/Call';
 import { dispatch, useSelector } from '../../../redux/store';
 import { getAllCall } from '../../../redux/slices/calls/actions';
 import CallRow from './CallRow';
-import CallToolbar from './CallToolbar';
+// import CallToolbar from './CallToolbar';
 import { useDateRangePicker } from '../../../components/date-range-picker';
 
 const CallList = () => {
@@ -74,7 +74,7 @@ const CallList = () => {
     <>
       <Container maxWidth={false}>
         <Card>
-          <CallToolbar
+          {/* <CallToolbar
             startDate={startDate}
             endDate={endDate}
             onChangeStartDate={onChangeStartDate}
@@ -87,7 +87,7 @@ const CallList = () => {
             isError={isError}
             shortLabel={shortLabel}
             resetFilter={handleResetFilter}
-          />
+          /> */}
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
               dense={dense}
