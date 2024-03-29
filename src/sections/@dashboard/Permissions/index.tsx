@@ -116,25 +116,9 @@ function Permissions() {
     dispatch(getPermissions());
     dispatch(getAllPermissionGroups());
   }, []);
-  function generateUniqueActionsAndEntities(array: Permission[]) {
-    const actions: string[] = [];
-    const entities: string[] = [];
-
-    array.forEach((item) => {
-      if (!actions.includes(item.method)) {
-        actions.push(item.method);
-      }
-
-      if (!entities.includes(item.model)) {
-        entities.push(item.model);
-      }
-    });
-
-    return { actions, entities };
-  }
 
   const defaultPermissionsAsString = extractEntitiesAndActionsStrings(permissions.docs);
-  const destructuredPermissions = generateUniqueActionsAndEntities(permissions.docs);
+  const destructuredPermissions = extractEntitiesAndActions(permissions.docs);
   const entities = destructuredPermissions.entities;
   const actions = destructuredPermissions.actions;
 
