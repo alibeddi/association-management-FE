@@ -60,9 +60,9 @@ function NoteItemHorizontal({ note }: Props) {
               </Box>
             </Stack>
             <Stack direction="row" alignItems="center">
-              <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-                Created by {createdBy?.username || 'Anonymous Admin'}
-              </Box>
+              <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+                <Iconify icon="eva:more-horizontal-fill" />
+              </IconButton>
             </Stack>
           </Stack>
 
@@ -77,10 +77,10 @@ function NoteItemHorizontal({ note }: Props) {
             </TextMaxLine>
           </Stack>
 
-          <Stack direction="row" alignItems="center" justifyContent="end">
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-horizontal-fill" />
-            </IconButton>
+          <Stack direction="row" alignItems="center" justifyContent="end" sx={{ mt: 2 }}>
+            <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
+              Created by {createdBy?.name || 'Anonymous Admin'}
+            </Box>
           </Stack>
         </Stack>
       </Stack>

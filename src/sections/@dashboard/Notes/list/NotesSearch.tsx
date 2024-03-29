@@ -18,7 +18,7 @@ export default function NotesSearch() {
 
   const [searchNotes, setSearchNotes] = useState('');
 
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<Note[]>([]);
 
   const handleSearchNotes = async (value: string) => {
     try {
@@ -39,8 +39,11 @@ export default function NotesSearch() {
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleClick(searchNotes);
+    const foundNote = searchResults.find(
+      (note) => note?.title.toLowerCase() === searchNotes.toLowerCase()
+    );
+    if (foundNote) {
+      handleClick(foundNote?._id);
     }
   };
 
