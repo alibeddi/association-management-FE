@@ -24,7 +24,11 @@ const initialState: NotificationInitialState = {
 const slice = createSlice({
   name: 'notifications',
   initialState,
-  reducers: {},
+  reducers: {
+    resetStatus: (state) => {
+      state.status = IStatus.IDLE;
+    },
+  },
   extraReducers: (builder) => {
     // GET ALL
     builder
@@ -79,5 +83,5 @@ const slice = createSlice({
       });
   },
 });
-
+export const { resetStatus } = slice.actions;
 export default slice.reducer;

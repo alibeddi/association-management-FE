@@ -2,17 +2,20 @@ import { Button, Card, Container, Divider, Grid, Stack, Tab, Tabs } from '@mui/m
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Notification } from '../@types/Notification';
+import { IStatus } from '../@types/status';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import EmptyContent from '../components/empty-content';
 import Iconify from '../components/iconify';
 import { TablePaginationCustom, useTable } from '../components/table';
 import { NotificationRow } from '../layouts/dashboard/header/NotificationsPopover';
 import { useLocales } from '../locales';
+import { resetStatus } from '../redux/slices/notifications';
 import {
   getAllNotifications,
   marlAllNotificationsAsRead,
 } from '../redux/slices/notifications/actions';
 import { RootState, dispatch, useSelector } from '../redux/store';
+import TodoSkeleton from '../sections/@dashboard/todos/list/TodoSkeleton';
 
 export default function Notifications() {
   const {
@@ -33,7 +36,7 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [filterStatus, setFilterStatus] = useState('all');
 
-  const isNotFound = !notifications.length;
+  const isNotFound = !fetchedNotifcations.docs.length;
 
   useEffect(() => {
     dispatch(getAllNotifications({ page, limit: rowsPerPage, filterStatus }));
@@ -42,9 +45,9 @@ export default function Notifications() {
   useEffect(() => {
     setNotifications(fetchedNotifcations.docs);
   }, [fetchedNotifcations]);
-  const handleFilterStatus = (event: React.SyntheticEvent<Element, Event>, newValue: string) => {
+  const handleFilterStatus = (_event: React.SyntheticEvent<Element, Event>, newValue: string) => {
     setPage(0);
-    setFilterStatus('all');
+    dispatch(resetStatus());
     setFilterStatus(newValue);
   };
 
@@ -88,10 +91,9 @@ export default function Notifications() {
             </Stack>
           )}
           <Grid sx={{ my: 2 }} item xs={12} md={6} lg={8}>
-            {notifications.map((notification) => (
-              <NotificationRow notification={notification} />
-            ))}
-            {isNotFound && (
+            {!isNotFound ? (
+              notifications.map((notification) => <NotificationRow notification={notification} />)
+            ) : (
               <EmptyContent
                 title="No Data"
                 sx={{
@@ -99,6 +101,7 @@ export default function Notifications() {
                 }}
               />
             )}
+
             <TablePaginationCustom
               count={fetchedNotifcations.meta.totalDocs || 0}
               page={page}
