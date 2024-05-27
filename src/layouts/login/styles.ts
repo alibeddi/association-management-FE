@@ -38,14 +38,16 @@ export const StyledSectionBg = styled('div')(({ theme }) => ({
 }));
 
 export const StyledContent = styled('div')(({ theme }) => ({
-  width: 480,
+  width: 780,
   margin: 'auto',
   display: 'flex',
   minHeight: '100vh',
   justifyContent: 'center',
+
   padding: theme.spacing(15, 2),
   [theme.breakpoints.up('md')]: {
     flexShrink: 0,
     padding: theme.spacing(30, 8, 0, 8),
   },
+  textAlign: 'center',
 }));

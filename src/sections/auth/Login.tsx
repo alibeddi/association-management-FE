@@ -1,53 +1,37 @@
-import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Dialog, DialogTitle, Stack, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Alert, Tooltip, Stack, Typography, Link, Box } from '@mui/material';
 // auth
+import { useAuthContext } from '../../auth/useAuthContext';
+// routes
+import { PATH_AUTH } from '../../routes/paths';
 // layouts
 import LoginLayout from '../../layouts/login';
 //
 import AuthLoginForm from './AuthLoginForm';
-
+import AuthWithSocial from './AuthWithSocial';
 
 // ----------------------------------------------------------------------
 
 export default function Login() {
-   const [openForm, setOpenForm] = useState(false);
-   const handleOpenModal = () => {
-    setOpenForm(true);
-  };
-  const handleCloseModal = () => {
-    setOpenForm(false);
-  };
+  const { method } = useAuthContext();
+
   return (
     <LoginLayout>
-      <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h4">Sign in to مقراتنا</Typography>
-      </Stack>
-       <LoadingButton
-        fullWidth
-        color="inherit"
-        size="large"
-        type="submit"
-        variant="contained"
-        onClick={()=>handleOpenModal()}
-        sx={{
-          bgcolor: 'text.primary',
-          color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-          '&:hover': {
-            bgcolor: 'text.primary',
-            color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-          },
-          mt:4
-        }}
+      <Stack
+        spacing={0}
+        sx={{ mb: 5, position: 'relative', textAlign: 'center', alignItems: 'center' }}
       >
-        Login with takiacademy
-      </LoadingButton>
-      <Dialog fullWidth maxWidth="xs" open={openForm} onClose={handleCloseModal}>
-        <DialogTitle>Login</DialogTitle>
-       
-        <AuthLoginForm />
-      </Dialog>
+        <Typography variant="h4">Sign in</Typography>
+
+        <Stack direction="row" spacing={0.5}>
+          <Typography variant="body2">Sign in to stay connected.</Typography>
+        </Stack>
+      </Stack>
+
+      <AuthLoginForm />
+
+      <AuthWithSocial />
     </LoginLayout>
   );
 }

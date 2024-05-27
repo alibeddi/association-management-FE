@@ -1,17 +1,27 @@
 import { useState } from 'react';
 import * as Yup from 'yup';
+import { Link as RouterLink } from 'react-router-dom';
 // form
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Alert, IconButton, InputAdornment, Stack } from '@mui/material';
+import {
+  Alert,
+  Checkbox,
+  IconButton,
+  InputAdornment,
+  Link,
+  Stack,
+  Typography,
+} from '@mui/material';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // components
 import FormProvider from '../../components/hook-form/FormProvider';
 import RHFTextField from '../../components/hook-form/RHFTextField';
 import Iconify from '../../components/iconify';
+import { PATH_AUTH } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -48,22 +58,31 @@ export default function AuthLoginForm() {
   } = methods;
 
   const onSubmit = async (data: FormValuesProps) => {
+    const fakeEmail = 'fake@example.com';
+    const fakePassword = 'password123';
+
     try {
-      await login(data.email, data.password);
+      if (data.email === fakeEmail && data.password === fakePassword) {
+        // Simulate login success
+        console.log('Logged in with fake credentials');
+      } else {
+        // Use the actual login method if credentials do not match the fake ones
+        await login(data.email, data.password);
+      }
     } catch (error) {
       setError('afterSubmit', {
         ...error,
-        message: error?.message || 'invalid credential',
+        message: error?.message || 'Invalid credentials',
       });
     }
   };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4} sx={{ m: 2, p: 2 }}>
+      <Stack spacing={0} sx={{ p: 1 }}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label="Email address" sx={{ my: 2 }} />
 
         <RHFTextField
           name="password"
@@ -79,6 +98,26 @@ export default function AuthLoginForm() {
             ),
           }}
         />
+        <Stack
+          direction="row"
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          spacing={0}
+        >
+          <Stack
+            direction="row"
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            spacing={0}
+          >
+            <Checkbox />
+            <Typography variant="body2">Remember me?</Typography>
+          </Stack>
+          <Typography variant="body2" style={{ color: '#3A57E8' }}>
+            Forget password
+          </Typography>
+        </Stack>
+        <Link component={RouterLink} to={PATH_AUTH.register} variant="subtitle2">
+          Create an account
+        </Link>
       </Stack>
 
       <LoadingButton
@@ -88,14 +127,14 @@ export default function AuthLoginForm() {
         variant="contained"
         loading={isSubmitSuccessful || isSubmitting}
         sx={{
-          bgcolor: 'text.primary',
+          bgcolor: '#3A57E8',
           color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
           '&:hover': {
             bgcolor: 'text.primary',
             color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
           },
           m: '1rem 2.5rem',
-          width: '80%',
+          width: '50%',
         }}
       >
         Login

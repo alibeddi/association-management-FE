@@ -18,6 +18,7 @@ import {
   Kpis,
   KpiView,
   LoginPage,
+  RegisterPage,
   MyTodoList,
   UserList,
   Page404,
@@ -54,6 +55,14 @@ export default function Router() {
           element: (
             <GuestGuard>
               <LoginPage />
+            </GuestGuard>
+          ),
+        },
+        {
+          path: 'register',
+          element: (
+            <GuestGuard>
+              <RegisterPage />
             </GuestGuard>
           ),
         },

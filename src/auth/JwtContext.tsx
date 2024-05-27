@@ -138,11 +138,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // LOGIN
   const login = useCallback(async (email: string, password: string) => {
     const response = await axios.post('/auth/login-takiacademy', {
-      credential:email,
-      password
+      credential: email,
+      password,
     });
     const { token, user } = response.data.data;
-    
+
     setSession(token);
 
     dispatch({

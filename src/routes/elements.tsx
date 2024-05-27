@@ -14,6 +14,7 @@ const Loadable = (Component: ElementType) => (props: any) =>
 // ----------------------------------------------------------------------
 
 export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
+export const RegisterPage = Loadable(lazy(() => import('../pages/RegisterPage')));
 export const PermissionGroup = Loadable(lazy(() => import('../pages/PermissionGroup')));
 ///
 export const UserList = Loadable(lazy(() => import('../pages/User/UserList')));
