@@ -1,0 +1,24 @@
+import { Helmet } from 'react-helmet-async';
+
+import { useParams } from 'src/routes/hooks';
+import { PostDetailsHomeView } from 'src/sections/blog/view';
+
+
+// ----------------------------------------------------------------------
+
+export default function PostDetailsHomePage() {
+  const params = useParams();
+
+  const { id } = params;
+console.log(params);
+
+  return (
+    <>
+      <Helmet>
+        <title> Post: Details</title>
+      </Helmet>
+
+      <PostDetailsHomeView id={`${id}`} />
+    </>
+  );
+}
