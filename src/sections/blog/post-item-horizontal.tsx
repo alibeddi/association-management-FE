@@ -26,6 +26,7 @@ import { Button } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { dispatch } from 'src/redux/store';
 import { deletePost } from 'src/redux/slices/posts/projectThunks';
+
 export const HOST_API = import.meta.env.VITE_HOST_API;
 // ----------------------------------------------------------------------
 

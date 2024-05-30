@@ -10,7 +10,6 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { POST_SORT_OPTIONS } from 'src/_mock';
 import { useGetPosts, useSearchPosts } from 'src/api/blog';
 
 import Label from 'src/components/label';
@@ -20,8 +19,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { IPostItem, IPostFilters, IPostFilterValue } from 'src/types/blog';
 
-import PostSort from '../post-sort';
-import PostSearch from '../post-search';
 import PostListHorizontal from '../post-list-horizontal';
 import { useDebounce } from 'src/hooks/use-debounce';
 
