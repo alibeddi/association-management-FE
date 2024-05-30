@@ -58,15 +58,7 @@ export default function PostDetailsHomeView({ id }: Props) {
     </>
   );
 
-  const renderLatestPosts = (
-    <>
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Recent Posts
-      </Typography>
 
-   
-    </>
-  );
 
   return (
     <>

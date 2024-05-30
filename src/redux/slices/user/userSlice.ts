@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMe } from './userThunks';
+import { fetchUserById, fetchUsers } from './userThunks';
 import { IUserTypes } from './userTypes';
 
 interface UserType {
-  me: IUserTypes;
+  user: IUserTypes;
   users: IUserTypes[];
   loading: boolean;
   error: string;
 }
 
 const initialState: UserType = {
-  me: {
+  user: {
     email: '',
     organization: '',
     username: '',
@@ -28,22 +28,39 @@ export const UserSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMe.pending, (state) => {
+      .addCase(fetchUserById.pending, (state) => {
         state.loading = true;
 
       })
-      .addCase(fetchMe.fulfilled, (state, { payload }) => {
+      .addCase(fetchUserById.fulfilled, (state, { payload }) => {
 
  
         
         state.loading = false;
-        state.me = payload;
+        state.user = payload.docs;
 
       })
-      .addCase(fetchMe.rejected, (state, action) => {
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.loading = false;
+        //   state.error = error;
+      })
+       .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+
+      })
+      .addCase(fetchUsers.fulfilled, (state, { payload }) => {
+
+ 
+        
+        state.loading = false;
+        state.users =  payload.docs;
+
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         //   state.error = error;
       });
+      
   },
 });
 

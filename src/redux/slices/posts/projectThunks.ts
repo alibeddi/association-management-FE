@@ -41,7 +41,6 @@ export const updatePost: any = createAsyncThunk(
   // eslint-disable-next-line consistent-return
   async ({ id, data }: { id: string; data: any }, { rejectWithValue }) => {
     // const organization = sessionStorage.getItem('organization');
-console.log(id,'helooo mf');
 
     try {
       const response = await axios.patch(`${baseUrl}/api/v1/posts/${id}`, { ...data });

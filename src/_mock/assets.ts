@@ -530,3 +530,13 @@ export const _postType = [
   'EVENT',
 'ARTICLE' 
 ];
+export const _roleType = [
+  'USER',
+  'ADMIN',
+ 
+];
+export const _userType = [
+  'MEMEBER',
+ 'SPONSOR',
+ 'OFFICE MEMEBER'
+];

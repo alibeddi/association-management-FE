@@ -2,30 +2,20 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { _userList } from 'src/_mock';
-
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import UserNewEditForm from '../user-new-edit-form';
-import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
-type Props = {
-  id: string;
-};
-
-export default function UserEditView({ id }: Props) {
+export default function UserCreateView() {
   const settings = useSettingsContext();
-
-  const { user, next, count, previous } = useSelector((state: any) => state.user);
-console.log(user ,'jjgjgjgj');
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Create a new user"
         links={[
           {
             name: 'Dashboard',
@@ -33,16 +23,16 @@ console.log(user ,'jjgjgjgj');
           },
           {
             name: 'User',
-            href: paths.dashboard.user.root,
+            href: paths.dashboard.root,
           },
-          { name: user?.name },
+          { name: 'New user' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <UserNewEditForm currentUser={user} id={user?.id} />
+      <UserNewEditForm />
     </Container>
   );
 }

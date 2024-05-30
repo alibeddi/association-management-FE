@@ -93,22 +93,23 @@ export type IUserCard = {
 };
 
 export type IUserItem = {
+  password:string
   id: string;
   name: string;
+  firstName:string
   city: string;
   role: string;
   email: string;
-  state: string;
+  userType: string;
   status: string;
   address: string;
   country: string;
   zipCode: string;
   company: string;
-  avatarUrl: string;
+  profilePicUrl: string;
   phoneNumber: string;
-  isVerified: boolean;
+ verified: boolean;
 };
-
 export type IUserAccount = {
   email: string;
   isPublic: boolean;

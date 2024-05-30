@@ -3,6 +3,7 @@ import storage from 'redux-persist/lib/storage';
 
 import userSlice from './slices/user/userSlice';
 import projectSlice from './slices/posts/projectSlice';
+import userTypeSlice from './slices/userType/userTypeSlice';
 
 
 export const rootPersistConfig = {
@@ -22,6 +23,7 @@ export const productPersistConfig = {
 const rootReducer = combineReducers({
   project: projectSlice,
   user: userSlice,
+  userType:userTypeSlice
   
 });
 
